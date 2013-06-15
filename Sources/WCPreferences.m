@@ -997,6 +997,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	[_bookmarksTableView reloadData];
 	[_bookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:firstIndex] byExtendingSelection:NO];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 	
 	return YES;
 }
@@ -1045,6 +1047,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	}
 
 	[_trackerBookmarksTableView reloadData];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 	
 	return YES;
 }
