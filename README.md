@@ -25,7 +25,7 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 
 5. Select scheme `Wired Client` and be sure to use "Debug" Build Configuration
 
-6. Wired Client.app should launch automatically
+6. Launch Build, Wired Client.app should launch automatically when finished
 
 
 ## Troubleshooting
