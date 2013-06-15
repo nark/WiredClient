@@ -902,8 +902,10 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 
 - (void)boardsDidChangeUnreadCount:(NSNotification *)notification {
-	[self _updateToolbarForConnection:[[self selectedChatController] connection]];
-    [self _updateTabViewItemForConnection:[[self selectedChatController] connection]];
+    for(WCChatController *cc in [self chatControllers]) {
+        [self _updateToolbarForConnection:[cc connection]];
+        [self _updateTabViewItemForConnection:[cc connection]];
+    }
     
     [_serversOutlineView reloadData];
 }
@@ -911,8 +913,10 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 
 - (void)messagesDidChangeUnreadCount:(NSNotification *)notification {
-	[self _updateToolbarForConnection:[[self selectedChatController] connection]];
-    [self _updateTabViewItemForConnection:[[self selectedChatController] connection]];
+    for(WCChatController *cc in [self chatControllers]) {
+        [self _updateToolbarForConnection:[cc connection]];
+        [self _updateTabViewItemForConnection:[cc connection]];
+    }
     
     [_serversOutlineView reloadData];
 }
@@ -943,6 +947,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem {
 	[self _updateToolbarForConnection:[[self selectedChatController] connection]];
+    [self _updateTabViewItemForConnection:[[self selectedChatController] connection]];
 }
 
 
