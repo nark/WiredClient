@@ -1,0 +1,96 @@
+/**/
+
+* {
+    padding:0;
+    margin:0;
+}
+
+body {
+	font: normal <? fontsize ?> "<? fontname ?>", sans-serif;
+	color: <? textcolor ?>;
+    background-color: #444;
+    text-shadow: 0px 1px 0px white;
+}
+
+a {
+	color: <? urltextcolor ?>;
+}
+
+#chat-content {
+	width:100%;
+	overflow:hidden;
+}
+
+.chat-line {
+    width: 100%;
+    min-height : 10px;
+	background-color: <? backgroundcolor ?>;
+    box-shadow: inset 0px -1px 1px rgba(0,0,0,0.22);
+    border-top: 1px solid rgba(255,255,255,0.65);
+}
+
+.chat-event {
+	background-color: rgba(63,76,107,1);
+	background: -webkit-linear-gradient(top, rgba(96,108,136,1) 0%,rgba(63,76,107,1) 100%); 
+	color: <? eventcolor ?>;
+	text-shadow: 0px 1px 0px black;
+	text-align: center;
+	min-height : 10px;
+	padding: 5px;
+	padding-bottom: 7px;
+	border-top: 1px solid rgba(255,255,255,0.50);
+}
+
+span.timestamp {
+	float : left;
+    color: <? timestampcolor ?>;
+}
+
+span.timestamp {
+    color: #959595;
+}
+
+.chat-line span.timestamp {
+    text-shadow: 0px 1px 0px #fff;
+}
+
+.chat-event span.timestamp {
+    text-shadow: 0px 1px 0px #333;
+}
+
+
+span.nick {
+    width: 80px;
+
+    float : right;
+
+    color: #444;
+    text-align: right;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+table {
+	border: none;
+	border-collapse: collapse;
+}
+
+td {
+	vertical-align: top;
+	padding: 5px;
+	padding-bottom: 8px;
+}
+
+td.sidebar {
+	width: 130px;
+ 	background-color: rgba(224,224,224,1);
+	background: -webkit-linear-gradient(top, rgba(238,238,238,1) 17%,rgba(224,224,224,1) 100%);
+	box-shadow: inset 0px -1px 1px rgba(0,0,0,0.22);
+}
+
+td.content {
+
+}
+

@@ -1,0 +1,140 @@
+* {
+    padding:0;
+    margin:0;
+}
+
+body {
+	font: normal <? fontsize ?> "<? fontname ?>", sans-serif;
+	color: <? textcolor ?>;
+	background-color: #444;
+	text-shadow: 0px 1px 0px white;
+	box-shadow: inset 0px 0px 25px rgba(0,0,0,0.7);
+}
+
+div.post {
+	padding-bottom: 10px;
+	box-shadow: inset 0px -1px 10px rgba(0,0,0,0.10);
+	background-color: <? backgroundcolor ?>;
+}
+
+
+div.postheader { 
+    font: normal 12px "Helvetica", sans-serif; 
+    background-color: rgba(238,238,238,1);
+    background: -webkit-linear-gradient(top, rgba(238,238,238,1) 17%,rgba(224,224,224,1) 100%);
+    padding: 7px;
+    min-height: 33px;
+    box-shadow: 0px 1px 1px rgba(0,0,0,0.22);
+    border-top: 1px solid rgba(255,255,255,0.75);
+}
+
+div.postinfo {
+	width: 165px;
+	float: left;
+}
+
+
+div.postheadertitles {
+	float: left;
+}
+
+span.postheadertitle {
+	font-weight: bold;
+	display: block;
+	color: gray;
+	text-align: right;
+	width: 45px;
+	margin-left: 10px;
+	padding-right: 5px;
+}
+
+div.postheadervalues {
+
+}
+
+span.postheadervalue {
+	display: block;
+}
+
+
+span.postfrom {
+	font-weight: bold;
+	margin-left: 10px;
+}
+
+span.postpostdatestring, span.posteditdatestring {
+	font-size: 9px;
+}
+
+span.postpostdate, span.posteditdate {
+	font-size: 9px;
+}
+
+
+div.posticon { float: left; }
+
+.postunread {
+	float: right;
+	display: block;
+	padding-top: 6px;
+}
+
+div.postbuttons {
+	padding: 5px;
+	margin-right: 5px;
+	text-align: right;
+	width: 180px;
+	float: right;
+}
+
+input.deletebutton {
+	background-color: rgba(255,0,0,0.1);
+}
+
+
+input {
+	font: bold 10px "Helvetica", sans-serif;
+	color: #999;
+	text-align: center;
+	cursor: pointer;
+    width: 50px;
+    height: 24px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    box-shadow: inset 0px -1px 0px rgba(0,0,0,0.15);
+    background-color: rgba(0,0,0,0.05);
+    padding: 3px;
+}
+
+input:hover {
+	background-color: rgba(0,0,0,0.1);
+}
+
+
+div.postbody {
+	margin: 10px 0 10px 0;
+	padding: 10px;
+	clear: both;
+}
+
+div.reply {
+	padding: 10px;
+	background-color: rgba(238,238,238,1);
+	background: -webkit-linear-gradient(top, rgba(238,238,238,1) 17%,rgba(224,224,224,1) 100%);
+}
+
+div.reply input {
+	width: 75px;
+	background-color: rgba(0,255,10,0.1);
+}
+
+blockquote {
+	margin: 0px 0px 0px 15px;
+	padding: 8px;
+	border: 1px solid #bfbfbf;
+	background-color: #e8e8e8;
+}
+
+pre { margin: 0px; }
+
+div.center { text-align: center; };

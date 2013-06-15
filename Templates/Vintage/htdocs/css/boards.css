@@ -1,0 +1,90 @@
+* {
+	padding: 0;
+	margin: 0; 
+}
+
+html {
+	padding: 0;
+	margin: 0; 
+}
+
+body {
+	font: normal <? fontsize ?> "<? fontname ?>", sans-serif;
+	background-color: <? backgroundcolor ?>;
+	background: <? backgroundcolor ?> url(../img/scanlines-bg.png) repeat;
+	color: <? textcolor ?>;
+	text-shadow: 0px 0px 3px <? textcolor ?>;
+}
+
+a {
+	color: yellow;
+	text-shadow: 0px 0px 3px yellow;
+}
+
+div.post {
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+}
+
+img.postunread { margin-left: 6px; }
+
+div.postheader { 
+	font: normal 12px "Helvetica", sans-serif; 
+	background-color: green;
+	color: #35ff1a;
+	text-shadow: 0px 0px 2px #35ff1a;
+	padding: 5px;
+	min-height: 32px;
+}
+
+span.postheadertitle {
+	font-weight: bold;
+	color: white;
+	text-align: right;
+	vertical-align: top;
+	float: left;
+	width: 6em;
+	padding-right: 0.5em;
+	text-shadow: 0px 1px 0px black;
+}
+
+div.posticon { float: right; }
+
+div.postbody {
+	margin: 10px 0 10px 0;
+	padding: 5px;
+	padding-top: 10px;
+	clear: both;
+	
+}
+
+div.postbuttons {
+	float: right;
+	padding: 5px;
+	padding-top: 8px;
+	padding-right: 10px;
+}
+
+
+form.reply {
+	padding: 5px;
+	background-color: green;
+}
+
+input.postbutton {
+	font: normal 10px "Helvetica", sans-serif;
+}
+
+blockquote {
+	margin: 0px 0px 0px 15px;
+	padding: 8px;
+	border: 1px solid #bfbfbf;	
+	background-color: <? textcolor ?>;
+	color: white;
+}
+
+pre { 
+	margin: 0px; 
+}
+
+div.center { text-align: center; };

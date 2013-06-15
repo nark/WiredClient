@@ -1,0 +1,68 @@
+body {
+	font: normal <? fontsize ?> "<? fontname ?>", sans-serif;
+	background: <? backgroundcolor ?> url(../img/scanlines-bg.png) repeat;
+	color: <? textcolor ?>;
+	text-shadow: 0px 0px 3px <? textcolor ?>;
+	margin: 0;
+}
+
+a {
+	color: <? urltextcolor ?>;
+	text-shadow: 0px 0px 3px <? urltextcolor ?>;
+}
+
+
+#chat-content { padding: 5px; }
+
+
+.chat-media-frame {
+	display: block;
+	margin-top: 10px;
+	padding-top: 20px;
+	margin-bottom: 10px;
+	padding-bottom: 20px;
+	width: 100%;
+	text-align: center;
+}
+
+.chat-media-frame img {
+	max-width: 300px;
+}
+
+
+.chat-message span.nick {
+	display: inline-block;
+	min-width: 80px;
+	text-align: right;
+	font-weight: bold;
+	-webkit-font-smoothing: none;
+	
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+
+.chat-message span.message {
+	word-wrap: break-word;
+}
+
+
+
+.chat-event span.message {
+	color: <? eventcolor ?>;
+	text-shadow: 0px 0px 3px <? eventcolor ?>;
+}
+
+
+
+span.timestamp {
+	display: inline;
+	width: 35px;
+	color: <? timestampcolor ?>;
+	text-shadow: 0px 0px 3px <? timestampcolor ?>;
+	
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
