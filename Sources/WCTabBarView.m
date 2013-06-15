@@ -23,4 +23,24 @@
 }
 
 
+#pragma mark -
+
+- (BOOL)isWindowActive {
+    NSWindow *window = [self window];
+    
+    BOOL windowActive = NO;
+    BOOL hasSheet = ([window attachedSheet] != nil);
+        
+    if(hasSheet) {
+        windowActive = YES;
+    } else {
+        if ([window isKeyWindow]) {
+            windowActive = YES;
+        } else if ([window isKindOfClass:[NSPanel class]] && [NSApp isActive]) {
+            windowActive = YES;
+        }
+    }
+    return windowActive;
+}
+
 @end
