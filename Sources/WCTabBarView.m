@@ -23,10 +23,4 @@
 }
 
 
-#pragma mark -
-
-- (BOOL)isWindowActive {
-    return [[self window] isMainWindow];
-}
-
 @end
