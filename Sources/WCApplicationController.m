@@ -26,6 +26,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Sparkle/SUStandardVersionComparator.h>
+#import <Sparkle/SUHost.h>
+
 #import "WCAboutWindow.h"
 #import "WCAccountsController.h"
 #import "WCAdministration.h"
@@ -204,9 +207,6 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 		[_disconnectMenuItem setTitle:NSLS(@"Disconnect", @"Disconnect menu item")];
 	
 	[_updater setAutomaticallyChecksForUpdates:[[WCSettings settings] boolForKey:WCCheckForUpdate]];
-    
-    if([[WCSettings settings] boolForKey:WCCheckForUpdate])
-        [self checkForUpdate];
 }
 
 
@@ -1037,6 +1037,56 @@ static WCApplicationController		*sharedController;
 	return NO;
 }
 
+//- (SUAppcastItem *)bestValidUpdateInAppcast:(SUAppcast *)appcast
+//                                 forUpdater:(SUUpdater *)bundle {
+//    
+//    NSString        *appVersion, *appBuild;
+//    SUAppcastItem   *latest = nil;
+//    BOOL            new = NO;
+//    
+//    appVersion  = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+//    appBuild    = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+//    
+//    NSLog(@"appVersion: %@", appVersion);
+//    NSLog(@"appBuild: %@", appBuild);
+//    
+//    if([[appcast items] count] > 0) {
+//        latest  = [[appcast items] objectAtIndex:0];
+//        
+//        NSLog(@"[host displayVersion]: %@", appVersion);
+//        NSLog(@"[latest displayVersionString]: %@", [latest displayVersionString]);
+//        
+//        new = ([[SUStandardVersionComparator defaultComparator] compareVersion:appVersion
+//                                                                    toVersion:[latest displayVersionString]] == NSOrderedAscending);
+//        
+//        NSLog(@"isNew : %@", new ? @"YES" : @"NO");
+//        
+//        if(new == YES) {
+//            NSLog(@"latest : %@", latest);
+//            return latest;
+//            
+//        } else {
+//            NSLog(@"[host version]: %@", appBuild);
+//            NSLog(@"[latest versionString]: %@", [latest versionString]);
+//            
+//            new = [[SUStandardVersionComparator defaultComparator] compareVersion:appBuild
+//                                                                        toVersion:[latest versionString]] == NSOrderedAscending;
+//            NSLog(@"isNew : %@", new ? @"YES" : @"NO");
+//            if(new) {
+//                return latest;
+//            }
+//        }
+//    }
+//    return nil;
+//}
+//
+//- (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
+//    NSLog(@"didFindValidUpdate");
+//}
+//
+//- (void)updaterDidNotFindUpdate:(SUUpdater *)update {
+//    NSLog(@"updaterDidNotFindUpdate");
+//}
 
 
 #pragma mark -
