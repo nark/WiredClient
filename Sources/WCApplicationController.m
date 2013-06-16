@@ -204,6 +204,9 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 		[_disconnectMenuItem setTitle:NSLS(@"Disconnect", @"Disconnect menu item")];
 	
 	[_updater setAutomaticallyChecksForUpdates:[[WCSettings settings] boolForKey:WCCheckForUpdate]];
+    
+    if([[WCSettings settings] boolForKey:WCCheckForUpdate])
+        [self checkForUpdate];
 }
 
 
