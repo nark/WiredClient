@@ -564,9 +564,6 @@ static WCApplicationController		*sharedController;
 
     if([[WCSettings settings] boolForKey:WCShowChatWindowAtStartup])
 		[[WCPublicChat publicChat] showWindow:self];
-    
-//	if([[WCSettings settings] boolForKey:WCShowServersAtStartup])
-//		[[WCServers servers] showWindow:self];
 
 	if([[WCSettings settings] boolForKey:WCShowConnectAtStartup])
 		[[WCConnect connect] showWindow:self];
@@ -633,6 +630,12 @@ static WCApplicationController		*sharedController;
 		return [[WCTransfers transfers] addTransferAtPath:filename];
 	
 	return NO;
+}
+
+
+- (BOOL)applicationOpenUntitledFile:(NSApplication *)sender {
+    [[WCPublicChat publicChat] showWindow:self];
+    return NO;
 }
 
 

@@ -34,7 +34,7 @@ extern NSString * const						WCExceptionHandlerReceivedBacktraceNotification;
 extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 
 
-@interface WCApplicationController : WIObject <GrowlApplicationBridgeDelegate> {
+@interface WCApplicationController : WIObject <NSApplicationDelegate, GrowlApplicationBridgeDelegate> {
 	IBOutlet NSMenu							*_connectionMenu;
 	IBOutlet NSMenuItem						*_disconnectMenuItem;
 	IBOutlet NSMenuItem						*_newDocumentMenuItem;

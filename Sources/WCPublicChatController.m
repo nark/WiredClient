@@ -101,8 +101,11 @@
 	[[self connection] sendMessage:message fromObserver:self selector:@selector(wiredChatJoinChatReply:)];
 	
 	[[WCPublicChat publicChat] addChatController:self];
-	[[WCPublicChat publicChat] selectChatController:self];
-	[[WCPublicChat publicChat] showWindow:self];
+    
+    if([[WCSettings settings] boolForKey:WCOrderFrontWhenDisconnected]) {
+        [[WCPublicChat publicChat] selectChatController:self];
+        [[WCPublicChat publicChat] showWindow:self];
+    }
 	
 	[super linkConnectionLoggedIn:notification];
 }

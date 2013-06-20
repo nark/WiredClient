@@ -60,23 +60,24 @@
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
-					<object class="NSButton" id="603343097">
+					<object class="NSButton" id="420140483">
 						<reference key="NSNextResponder" ref="112193721"/>
 						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{168, 52}, {224, 18}}</string>
+						<string key="NSFrame">{{168, 52}, {264, 18}}</string>
 						<reference key="NSSuperview" ref="112193721"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="NSEnabled">YES</bool>
-						<object class="NSButtonCell" key="NSCell" id="698205589">
+						<object class="NSButtonCell" key="NSCell" id="950522801">
 							<int key="NSCellFlags">67108864</int>
 							<int key="NSCellFlags2">0</int>
-							<string key="NSContents">Order Front When Disconnected</string>
+							<string key="NSContents">Order Front On Disconnect/Reconnect</string>
 							<object class="NSFont" key="NSSupport" id="297170613">
 								<string key="NSName">LucidaGrande</string>
 								<double key="NSSize">13</double>
 								<int key="NSfFlags">1044</int>
 							</object>
-							<reference key="NSControlView" ref="603343097"/>
+							<reference key="NSControlView" ref="420140483"/>
 							<int key="NSButtonFlags">1211912448</int>
 							<int key="NSButtonFlags2">2</int>
 							<object class="NSButtonImageSource" key="NSAlternateImage" id="413510896">
@@ -155,7 +156,7 @@
 						<string key="NSFrame">{{168, 121}, {111, 18}}</string>
 						<reference key="NSSuperview" ref="112193721"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
+						<reference key="NSNextKeyView" ref="271259257"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="156088264">
 							<int key="NSCellFlags">67108864</int>
@@ -400,6 +401,7 @@
 						<string key="NSFrame">{{168, 72}, {215, 18}}</string>
 						<reference key="NSSuperview" ref="112193721"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="420140483"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="508834131">
 							<int key="NSCellFlags">67108864</int>
@@ -7117,7 +7119,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">_orderFrontOnDisconnectButton</string>
 						<reference key="source" ref="97218294"/>
-						<reference key="destination" ref="603343097"/>
+						<reference key="destination" ref="420140483"/>
 					</object>
 					<int key="connectionID">3597</int>
 				</object>
@@ -7125,7 +7127,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<object class="IBActionConnection" key="connection">
 						<string key="label">changePreferences:</string>
 						<reference key="source" ref="97218294"/>
-						<reference key="destination" ref="603343097"/>
+						<reference key="destination" ref="420140483"/>
 					</object>
 					<int key="connectionID">3598</int>
 				</object>
@@ -7438,7 +7440,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="741838079"/>
 							<reference ref="39306280"/>
 							<reference ref="1019101555"/>
-							<reference ref="603343097"/>
+							<reference ref="420140483"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">General</string>
@@ -10425,16 +10427,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">3594</int>
-						<reference key="object" ref="603343097"/>
+						<reference key="object" ref="420140483"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="698205589"/>
+							<reference ref="950522801"/>
 						</array>
 						<reference key="parent" ref="112193721"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">3595</int>
-						<reference key="object" ref="698205589"/>
-						<reference key="parent" ref="603343097"/>
+						<reference key="object" ref="950522801"/>
+						<reference key="parent" ref="420140483"/>
 					</object>
 				</array>
 			</object>

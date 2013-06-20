@@ -312,11 +312,10 @@ NSString * const WCServerConnectionEventInfo2Key						= @"WCServerConnectionEven
 			} else {
 				[_chatController printEvent:[NSSWF:NSLS(@"Disconnected from %@", @"Disconnected chat message (server)"),
 					[self name], reason]];
-			}
-			
-			[[WCPublicChat publicChat] selectChatController:_chatController];
+			}			
             
             if([[WCSettings settings] boolForKey:WCOrderFrontWhenDisconnected]) {
+                [[WCPublicChat publicChat] selectChatController:_chatController];
                 [[WCPublicChat publicChat] showWindow:self];
             }
 		}
