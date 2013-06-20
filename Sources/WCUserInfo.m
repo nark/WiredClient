@@ -74,9 +74,12 @@
 
 - (void)_showUserInfo {
 	NSMutableArray		*groups;
+    NSMutableString     *groupString, *groupsString;
 	NSRect				rect;
 	CGFloat				height;
 
+    groupsString    = [NSMutableString string];
+    
 	[_iconImageView setImage:[_user iconWithIdleTint:NO]];
 	[_nickTextField setStringValue:[_user nick]];
 	[_statusTextField setStringValue:[_user status]];
@@ -84,15 +87,30 @@
 	
 	if([_user account]) {
 		groups = [[[[_user account] groups] mutableCopy] autorelease];
-		
+        
+		if ([groups containsObject:@""]) {
+            [groups removeObject:@""];
+        }
+        
 		if([[[_user account] group] length] > 0) {
 			if([groups count] > 0)
 				[groups insertObject:[[_user account] group] atIndex:0];
 			else
 				[groups addObject:[[_user account] group]];
 		}
-		
-		[_groupsTextField setStringValue:[groups componentsJoinedByString:@", "]];
+
+        if([groups count] > 1 ) {
+            for(NSString *group in groups) {
+                if(![group isEqualToString:[groups lastObject]])
+                    [groupsString appendFormat:@"%@, ", group];
+                else
+                    [groupsString appendFormat:@"%@", group];
+            }
+        } else if([groups count] == 1) {
+            [groupsString appendFormat:@"%@", [groups lastObject]];
+        }
+
+		[_groupsTextField setStringValue:groupsString];
 	}
 
 	[_addressTextField setStringValue:[_user address]];
