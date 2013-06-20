@@ -83,6 +83,7 @@ NSString * const WCHideServerList                       = @"WCHideServerList";
 
 NSString * const WCConfirmDisconnect					= @"WCConfirmDisconnect";
 NSString * const WCAutoReconnect						= @"WCAutoReconnect";
+NSString * const WCOrderFrontWhenDisconnected           = @"WCOrderFrontWhenDisconnected";
 
 NSString * const WCTheme								= @"WCTheme";
 
@@ -530,6 +531,7 @@ static NSString         *basicThemeIdentifier;
     /* Update from 2.0 (263) to 2.0 (264 - application menu) */
     if(![self objectForKey:WCApplicationMenuEnabled])
         [self setObject:[NSNumber numberWithBool:NO] forKey:WCApplicationMenuEnabled];
+
 }
 
 
@@ -751,6 +753,10 @@ static NSString         *basicThemeIdentifier;
 	}
     
     [settings synchronize];
+    
+    /* Update to 2.0.1 */
+    if(![settings objectForKey:WCOrderFrontWhenDisconnected])
+        [settings setObject:[NSNumber numberWithBool:NO] forKey:WCOrderFrontWhenDisconnected];
 	
 	return settings;
 }
@@ -786,6 +792,8 @@ static NSString         *basicThemeIdentifier;
 				WCConfirmDisconnect,
 			[NSNumber numberWithBool:NO],
 				WCAutoReconnect,
+            [NSNumber numberWithBool:NO],
+                WCOrderFrontWhenDisconnected,
 			
             [NSNumber numberWithBool:NO],
                 WCHideServerList,

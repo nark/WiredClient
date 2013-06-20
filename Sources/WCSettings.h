@@ -43,6 +43,7 @@ extern NSString * const						WCHideServerList;
 
 extern NSString * const						WCConfirmDisconnect;
 extern NSString * const						WCAutoReconnect;
+extern NSString * const						WCOrderFrontWhenDisconnected;
 
 extern NSString * const						WCTheme;
 

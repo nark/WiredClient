@@ -60,6 +60,7 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSButton								*_showServersAtStartupButton;
 	IBOutlet NSButton								*_confirmDisconnectButton;
 	IBOutlet NSButton								*_autoReconnectButton;
+    IBOutlet NSButton								*_orderFrontOnDisconnectButton;
 	
 	IBOutlet NSTableView							*_themesTableView;
 	IBOutlet NSTableColumn							*_themesNameTableColumn;

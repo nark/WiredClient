@@ -794,7 +794,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_showServersAtStartupButton setState:[[WCSettings settings] boolForKey:WCShowServersAtStartup]];
 	[_confirmDisconnectButton setState:[[WCSettings settings] boolForKey:WCConfirmDisconnect]];
 	[_autoReconnectButton setState:[[WCSettings settings] boolForKey:WCAutoReconnect]];
-
+    [_orderFrontOnDisconnectButton setState:[[WCSettings settings] boolForKey:WCOrderFrontWhenDisconnected]];
+    
 	[_bookmarksNickTextField setPlaceholderString:[_nickTextField stringValue]];
 	[_bookmarksStatusTextField setPlaceholderString:[_statusTextField stringValue]];
 	
@@ -1095,7 +1096,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[[WCSettings settings] setBool:[_showServersAtStartupButton state] forKey:WCShowServersAtStartup];
 	[[WCSettings settings] setBool:[_confirmDisconnectButton state] forKey:WCConfirmDisconnect];
 	[[WCSettings settings] setBool:[_autoReconnectButton state] forKey:WCAutoReconnect];
-
+    [[WCSettings settings] setBool:[_orderFrontOnDisconnectButton state] forKey:WCOrderFrontWhenDisconnected];
+    
 	[[WCSettings settings] setBool:[_chatHistoryScrollbackButton state] forKey:WCChatHistoryScrollback];
 	[[WCSettings settings] setInt:[_chatHistoryScrollbackModifierPopUpButton tagOfSelectedItem] forKey:WCChatHistoryScrollbackModifier];
 	[[WCSettings settings] setBool:[_chatTabCompleteNicksButton state] forKey:WCChatTabCompleteNicks];

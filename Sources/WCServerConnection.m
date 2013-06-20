@@ -315,7 +315,10 @@ NSString * const WCServerConnectionEventInfo2Key						= @"WCServerConnectionEven
 			}
 			
 			[[WCPublicChat publicChat] selectChatController:_chatController];
-			[[WCPublicChat publicChat] showWindow:self];
+            
+            if([[WCSettings settings] boolForKey:WCOrderFrontWhenDisconnected]) {
+                [[WCPublicChat publicChat] showWindow:self];
+            }
 		}
 		
 		if(!_manuallyReconnecting && !_disconnecting && autoReconnect) {
