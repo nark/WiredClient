@@ -1174,14 +1174,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 - (void)_removeTransfer:(WCTransfer *)transfer {
 	[[transfer progressIndicator] removeFromSuperview];
 
-	[_transfers removeObject:transfer];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
-                                                            object:[transfer connection]
-                                                          userInfo:nil];
-    });
+    [[NSNotificationCenter defaultCenter] mainThreadPostNotificationName:WCTransfersQueueUpdatedNotification
+                                                                  object:[transfer connection]];
 
+    [_transfers removeObject:transfer];
 	[self _saveTransfers];
 }
 
@@ -1191,23 +1187,25 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     WCTransfer		*transfer;
-	
-	if(![self _validateClear])
-		return;
     
-	while((transfer = [self _transferWithState:WCTransferFinished]))
-		[self _removeTransfer:transfer];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
-                                                            object:[transfer connection]
-                                                          userInfo:nil];
+    @synchronized(_transfers) {
+        if(![self _validateClear])
+            return;
         
-        [_transfersTableView setNeedsDisplay:YES];
-        [_transfersTableView reloadData];
-        [self _validate];
+        while((transfer = [self _transferWithState:WCTransferFinished]))
+            [self _removeTransfer:transfer];
         
-    });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
+                                                                object:[transfer connection]
+                                                              userInfo:nil];
+            
+            [_transfersTableView setNeedsDisplay:YES];
+            [_transfersTableView reloadData];
+            [self _validate];
+            
+        });
+    }
     
     [pool release];
 }
