@@ -838,10 +838,10 @@ typedef enum _WCChatActivity				WCChatActivity;
     WCTabBarItem            *tabViewItemModel;
 	WCServerConnection		*connection;
 	WCChatActivity			activity;
-	
+    	
 	connection          = [notification object];
 	activity            = [[_chatActivity objectForKey:[connection identifier]] integerValue];
-	tabViewItem         = [_chatTabView tabViewItemWithIdentifier:[connection identifier]];
+	tabViewItem         = [_tabBarView tabViewItemWithIdentifier:[connection identifier]];
 	tabViewItemModel    = [tabViewItem identifier];
     
 	if(tabViewItem != [_chatTabView selectedTabViewItem] && activity < WCChatRegularChatActivity) {
