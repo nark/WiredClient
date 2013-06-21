@@ -220,7 +220,7 @@
 			nick			= [components objectAtIndex:0];
 			server			= [components objectAtIndex:1];
 			date			= [[NSDate dateWithTimeIntervalSince1970:[[components objectAtIndex:2] doubleValue]] description];
-			archiveString   = [NSString stringWithContentsOfFile:archivePath encoding:NSUTF8StringEncoding error:&error];
+			archiveString   = [NSString stringWithContentsOfFile:archivePath encoding:NSASCIIStringEncoding error:&error];
 			
 			if([nick containsSubstring:searchString]) {
 				[_filteredArchives addObject:archivePath];
@@ -236,6 +236,8 @@
 				[_filteredArchives addObject:archivePath];
 				continue;
 			}
+            
+            NSLog(@"archiveString: %@", archiveString);
 			
 			if([archiveString containsSubstring:searchString]) {
 				[_filteredArchives addObject:archivePath];

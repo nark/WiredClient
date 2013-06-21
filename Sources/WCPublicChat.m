@@ -1125,6 +1125,12 @@ typedef enum _WCChatActivity				WCChatActivity;
 }
 
 
+- (void)windowDidBecomeKey:(NSNotification *)notification {    
+    [_tabBarView update:NO];
+}
+
+
+
 
 
 
