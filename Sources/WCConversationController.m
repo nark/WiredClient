@@ -605,6 +605,9 @@
 	return NULL;
 }
 
+- (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
+    // useless but required
+}
 
 
 @end
