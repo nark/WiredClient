@@ -414,27 +414,25 @@ typedef enum _WCChatFormat					WCChatFormat;
 	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
 	formattedDate	= [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]];
 	
-    
-    templateString = [NSString stringWithContentsOfFile:[template pathForResource:@"ChatMessage" ofType:@"html" inDirectory:@"htdocs"]
-                                               encoding:NSUTF8StringEncoding
-                                                  error:&error];
-    
-    chatMessage = [WCDOMChatMessage chatMessageElementForFrame:[_chatOutputWebView mainFrame]
-                                                  withTemplate:templateString];
-    
-    if(timestamp)
-        [chatMessage setTimestamp:formattedDate];
-    
-    [chatMessage setNick:nick];
-    [chatMessage setMessage:html];
-    
-    [_chatOutputWebView appendElement:[chatMessage element] toBottomOfElementWithID:@"chat-content" scroll:YES];
-    
-    //[[_chatOutputWebView windowScriptObject] evaluateWebScript:@""];
-    
-    if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
-        [[[WCApplicationController sharedController] logController] appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@: %@\n", formattedDate, nick, html]
-                                                                           forConnectionName:[[self connection] name]];
+		
+		templateString = [NSString stringWithContentsOfFile:[template pathForResource:@"ChatMessage" ofType:@"html" inDirectory:@"htdocs"] 
+												   encoding:NSUTF8StringEncoding
+													  error:&error];
+		
+		chatMessage = [WCDOMChatMessage chatMessageElementForFrame:[_chatOutputWebView mainFrame] 
+													  withTemplate:templateString];
+		
+		if(timestamp)
+			[chatMessage setTimestamp:formattedDate];
+		
+		[chatMessage setNick:nick];
+		[chatMessage setMessage:html];
+		
+		[_chatOutputWebView appendElement:[chatMessage element] toBottomOfElementWithID:@"chat-content" scroll:YES];
+		
+		if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
+			[[[WCApplicationController sharedController] logController] appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@: %@\n", formattedDate, nick, html]
+																			   forConnectionName:[[self connection] name]];
 	
 }
 
@@ -2605,9 +2603,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 }
 
 
-//- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
-//    return nil; 
-//}
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
+    return nil; 
+}
 
 
 -(NSURLRequest *)webView:(WebView *)sender
@@ -2673,20 +2671,6 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 			[[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
 	}
 }
-
-- (void)webView:(WebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame {
-    NSAlert *alert = [[NSAlert alloc] init];
-    [alert addButtonWithTitle:@"OK"];
-    [alert setMessageText:message];
-    [alert runModal];
-    [alert release];
-}
-
-
-- (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
-    // useless but required
-}
-
 
 
 #pragma mark -

@@ -534,7 +534,7 @@ static WCApplicationController		*sharedController;
 #endif
     
 	[_updater setSendsSystemProfile:YES];
-    [_updater performSelector:@selector(checkForUpdatesInBackground) afterDelay:5.0f];
+    [_updater checkForUpdatesInBackground];
 	
 	path = [[NSBundle mainBundle] pathForResource:@"wired" ofType:@"xml"];
 	

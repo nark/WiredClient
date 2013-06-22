@@ -53,7 +53,7 @@
 		}
 	}
 	
-	if(event && !handled)
+	if(!handled)
 		[super sendEvent:event];
 }
 
