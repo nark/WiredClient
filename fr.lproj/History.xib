@@ -55,7 +55,7 @@
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{407, 340}, {569, 388}}</string>
 				<int key="NSWTFlags">1618477056</int>
-				<string key="NSWindowTitle">Historique de chat</string>
+				<string key="NSWindowTitle">Chat History</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<object class="NSToolbar" key="NSViewClass" id="72916171">
 					<object class="NSMutableString" key="NSToolbarIdentifier">
@@ -73,8 +73,8 @@
 							<object class="NSMutableString" key="NSToolbarItemIdentifier">
 								<characters key="NS.bytes">0E8958AD-BE41-4AA4-88A7-E367FD1DFCC6</characters>
 							</object>
-							<string key="NSToolbarItemLabel">Effacer l'historique</string>
-							<string key="NSToolbarItemPaletteLabel">Effacer l'historique</string>
+							<string key="NSToolbarItemLabel">Clear History</string>
+							<string key="NSToolbarItemPaletteLabel">Clear History</string>
 							<nil key="NSToolbarItemToolTip"/>
 							<nil key="NSToolbarItemView"/>
 							<object class="NSCustomResource" key="NSToolbarItemImage">
@@ -95,16 +95,13 @@
 							<object class="NSMutableString" key="NSToolbarItemIdentifier">
 								<characters key="NS.bytes">0EA3B542-71A8-430E-B5A3-8A31699C628B</characters>
 							</object>
-							<string key="NSToolbarItemLabel">Rechercher</string>
-							<string key="NSToolbarItemPaletteLabel">Rechercher</string>
+							<string key="NSToolbarItemLabel">Search</string>
+							<string key="NSToolbarItemPaletteLabel">Search</string>
 							<nil key="NSToolbarItemToolTip"/>
 							<object class="NSSearchField" key="NSToolbarItemView" id="710299481">
-								<reference key="NSNextResponder"/>
+								<nil key="NSNextResponder"/>
 								<int key="NSvFlags">268</int>
 								<string key="NSFrame">{{0, 14}, {96, 22}}</string>
-								<reference key="NSSuperview"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSSearchFieldCell" key="NSCell" id="864331644">
@@ -189,8 +186,8 @@
 							<object class="NSMutableString" key="NSToolbarItemIdentifier">
 								<characters key="NS.bytes">8C5CD934-9090-41D7-91E4-095FC8D4A7EB</characters>
 							</object>
-							<string key="NSToolbarItemLabel">Afficher dans le Finder</string>
-							<string key="NSToolbarItemPaletteLabel">Afficher dans le Finder</string>
+							<string key="NSToolbarItemLabel">Reveal in Finder</string>
+							<string key="NSToolbarItemPaletteLabel">Reveal in Finder</string>
 							<nil key="NSToolbarItemToolTip"/>
 							<nil key="NSToolbarItemView"/>
 							<object class="NSCustomResource" key="NSToolbarItemImage">
@@ -530,7 +527,7 @@
 																					<object class="NSTableHeaderCell" key="NSHeaderCell">
 																						<int key="NSCellFlags">75497536</int>
 																						<int key="NSCellFlags2">2048</int>
-																						<string key="NSContents">Pseudonyme</string>
+																						<string key="NSContents">Nick</string>
 																						<reference key="NSSupport" ref="26"/>
 																						<object class="NSColor" key="NSBackgroundColor" id="242981945">
 																							<int key="NSColorSpace">3</int>
@@ -560,7 +557,7 @@
 																					<object class="NSTableHeaderCell" key="NSHeaderCell">
 																						<int key="NSCellFlags">75497536</int>
 																						<int key="NSCellFlags2">2048</int>
-																						<string key="NSContents">Serveur</string>
+																						<string key="NSContents">Server</string>
 																						<reference key="NSSupport" ref="26"/>
 																						<object class="NSColor" key="NSBackgroundColor">
 																							<int key="NSColorSpace">3</int>
@@ -747,6 +744,7 @@
 																<dictionary class="NSMutableDictionary" key="Values">
 																	<integer value="12" key="WebKitDefaultFixedFontSize"/>
 																	<integer value="12" key="WebKitDefaultFontSize"/>
+																	<boolean value="NO" key="WebKitJavaEnabled"/>
 																	<integer value="1" key="WebKitMinimumFontSize"/>
 																</dictionary>
 															</object>
@@ -794,7 +792,7 @@
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="998136825"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<string key="NSFrameAutosaveName">WCChatHistoryWindow</string>
 				<bool key="NSWindowIsRestorable">NO</bool>
