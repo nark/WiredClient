@@ -207,7 +207,7 @@
 
 	_dismissingWindow = YES;
     
-    if([_url pathExtension])
+    if([[_url pathExtension] length] > 0)
         [WCTransfers downloadFileAtPath:[_url path] forConnection:_connection];
 	
 	[self close];

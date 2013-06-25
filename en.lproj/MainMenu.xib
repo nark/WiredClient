@@ -55,7 +55,7 @@
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="939549340">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">About Wired Client</string>
+									<string key="NSTitle">À propos de Wired Client</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="393497551"/>
@@ -63,7 +63,7 @@
 								</object>
 								<object class="NSMenuItem" id="238638365">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Check for Update…</string>
+									<string key="NSTitle">Vérifier les mises à jour…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="393497551"/>
@@ -82,7 +82,7 @@
 								</object>
 								<object class="NSMenuItem" id="797634259">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Preferences...</string>
+									<string key="NSTitle">Préférences...</string>
 									<string key="NSKeyEquiv">,</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -130,7 +130,7 @@
 								</object>
 								<object class="NSMenuItem" id="900098065">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Hide Wired Client</string>
+									<string key="NSTitle">Masquer Wired Client</string>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -139,7 +139,7 @@
 								</object>
 								<object class="NSMenuItem" id="957021986">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Hide Others</string>
+									<string key="NSTitle">Masquer les autres</string>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -148,7 +148,7 @@
 								</object>
 								<object class="NSMenuItem" id="525829994">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Show All</string>
+									<string key="NSTitle">Tout afficher</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -168,7 +168,7 @@
 								</object>
 								<object class="NSMenuItem" id="1068109002">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Quit Wired Client</string>
+									<string key="NSTitle">Quitter Wired Client</string>
 									<string key="NSKeyEquiv">q</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -2989,7 +2989,6 @@
 					<string key="superclassName">WIObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="about:">id</string>
-						<string key="addBookmark:">id</string>
 						<string key="administration:">id</string>
 						<string key="boards:">id</string>
 						<string key="broadcast:">id</string>
@@ -3002,7 +3001,6 @@
 						<string key="deleteDocument:">id</string>
 						<string key="disconnect:">id</string>
 						<string key="files:">id</string>
-						<string key="insertSmiley:">id</string>
 						<string key="manual:">id</string>
 						<string key="messages:">id</string>
 						<string key="newDocument:">id</string>
@@ -3022,10 +3020,6 @@
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="about:">
 							<string key="name">about:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="addBookmark:">
-							<string key="name">addBookmark:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="administration:">
@@ -3074,10 +3068,6 @@
 						</object>
 						<object class="IBActionInfo" key="files:">
 							<string key="name">files:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="insertSmiley:">
-							<string key="name">insertSmiley:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="manual:">
@@ -5014,6 +5004,7 @@
 						<string key="_networkConnectionTimeoutTextField">NSTextField</string>
 						<string key="_networkReadTimeoutTextField">NSTextField</string>
 						<string key="_nickTextField">NSTextField</string>
+						<string key="_orderFrontOnDisconnectButton">NSButton</string>
 						<string key="_selectThemeButton">NSButton</string>
 						<string key="_showConnectAtStartupButton">NSButton</string>
 						<string key="_showServersAtStartupButton">NSButton</string>
@@ -5333,6 +5324,10 @@
 						<object class="IBToOneOutletInfo" key="_nickTextField">
 							<string key="name">_nickTextField</string>
 							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_orderFrontOnDisconnectButton">
+							<string key="name">_orderFrontOnDisconnectButton</string>
+							<string key="candidateClassName">NSButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="_selectThemeButton">
 							<string key="name">_selectThemeButton</string>

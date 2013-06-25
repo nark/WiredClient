@@ -315,19 +315,19 @@ typedef enum _WCChatActivity				WCChatActivity;
     NSDictionary                *bookmark;
 	WCConnect                   *connect;
 	WCError                     *error;
-    
-    bookmark = NULL;
-    chatController = nil;
-	
+
+    bookmark        = NULL;
+    chatController  = nil;
+    	
 	if([item isKindOfClass:[WCServerBookmarkServer class]] ||
 	   [item isKindOfClass:[WCServerBonjourServer class]] ||
 	   [item isKindOfClass:[WCServerTrackerServer class]]) {
+        
 		if([item isKindOfClass:[WCServerBonjourServer class]]) {
 			url = [item URLWithError:&error];
 			
 			if(!url) {
 				[[error alert] beginSheetModalForWindow:[self window]];
-				
 				return;
 			}
 		} else {
