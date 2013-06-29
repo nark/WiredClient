@@ -12,8 +12,13 @@
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSCustomObject</string>
+			<string>NSCustomView</string>
+			<string>NSImageCell</string>
+			<string>NSImageView</string>
 			<string>NSMenu</string>
 			<string>NSMenuItem</string>
+			<string>NSTextField</string>
+			<string>NSTextFieldCell</string>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -55,7 +60,7 @@
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="939549340">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">About Wired Client</string>
+									<string key="NSTitle">À propos de Wired Client</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="393497551"/>
@@ -63,7 +68,7 @@
 								</object>
 								<object class="NSMenuItem" id="238638365">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Check for Update…</string>
+									<string key="NSTitle">Vérifier les mises à jour…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="393497551"/>
@@ -82,7 +87,7 @@
 								</object>
 								<object class="NSMenuItem" id="797634259">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Preferences...</string>
+									<string key="NSTitle">Préférences...</string>
 									<string key="NSKeyEquiv">,</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -130,7 +135,7 @@
 								</object>
 								<object class="NSMenuItem" id="900098065">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Hide Wired Client</string>
+									<string key="NSTitle">Masquer Wired Client</string>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -139,7 +144,7 @@
 								</object>
 								<object class="NSMenuItem" id="957021986">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Hide Others</string>
+									<string key="NSTitle">Masquer les autres</string>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -148,7 +153,7 @@
 								</object>
 								<object class="NSMenuItem" id="525829994">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Show All</string>
+									<string key="NSTitle">Tout afficher</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -168,7 +173,7 @@
 								</object>
 								<object class="NSMenuItem" id="1068109002">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Quit Wired Client</string>
+									<string key="NSTitle">Quitter Wired Client</string>
 									<string key="NSKeyEquiv">q</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -193,7 +198,7 @@
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="346936077">
 									<reference key="NSMenu" ref="905514725"/>
-									<string key="NSTitle">Connect…</string>
+									<string key="NSTitle">New Connection…</string>
 									<string key="NSKeyEquiv">k</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -968,6 +973,87 @@
 			<object class="NSCustomObject" id="429619541">
 				<string key="NSClassName">SUUpdater</string>
 			</object>
+			<object class="NSCustomView" id="215021197">
+				<reference key="NSNextResponder"/>
+				<int key="NSvFlags">256</int>
+				<array class="NSMutableArray" key="NSSubviews">
+					<object class="NSImageView" id="1038568189">
+						<reference key="NSNextResponder" ref="215021197"/>
+						<int key="NSvFlags">268</int>
+						<set class="NSMutableSet" key="NSDragTypes">
+							<string>Apple PDF pasteboard type</string>
+							<string>Apple PICT pasteboard type</string>
+							<string>Apple PNG pasteboard type</string>
+							<string>NSFilenamesPboardType</string>
+							<string>NeXT Encapsulated PostScript v1.2 pasteboard type</string>
+							<string>NeXT TIFF v4.0 pasteboard type</string>
+						</set>
+						<string key="NSFrame">{{20, 17}, {24, 24}}</string>
+						<reference key="NSSuperview" ref="215021197"/>
+						<reference key="NSWindow"/>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSImageCell" key="NSCell" id="1048121108">
+							<int key="NSCellFlags">134217728</int>
+							<int key="NSCellFlags2">33554432</int>
+							<object class="NSCustomResource" key="NSContents">
+								<string key="NSClassName">NSImage</string>
+								<string key="NSResourceName">Warning</string>
+							</object>
+							<int key="NSAlign">0</int>
+							<int key="NSScale">2</int>
+							<int key="NSStyle">0</int>
+							<bool key="NSAnimates">NO</bool>
+						</object>
+						<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
+						<bool key="NSEditable">YES</bool>
+					</object>
+					<object class="NSTextField" id="734052380">
+						<reference key="NSNextResponder" ref="215021197"/>
+						<int key="NSvFlags">268</int>
+						<string key="NSFrame">{{49, 20}, {368, 17}}</string>
+						<reference key="NSSuperview" ref="215021197"/>
+						<reference key="NSWindow"/>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSTextFieldCell" key="NSCell" id="595553534">
+							<int key="NSCellFlags">68157504</int>
+							<int key="NSCellFlags2">272630784</int>
+							<string key="NSContents">The file will contain your passwords in unencrypted form.</string>
+							<object class="NSFont" key="NSSupport">
+								<string key="NSName">LucidaGrande</string>
+								<double key="NSSize">13</double>
+								<int key="NSfFlags">1044</int>
+							</object>
+							<reference key="NSControlView" ref="734052380"/>
+							<object class="NSColor" key="NSBackgroundColor">
+								<int key="NSColorSpace">6</int>
+								<string key="NSCatalogName">System</string>
+								<string key="NSColorName">controlColor</string>
+								<object class="NSColor" key="NSColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
+								</object>
+							</object>
+							<object class="NSColor" key="NSTextColor">
+								<int key="NSColorSpace">6</int>
+								<string key="NSCatalogName">System</string>
+								<string key="NSColorName">controlTextColor</string>
+								<object class="NSColor" key="NSColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MAA</bytes>
+								</object>
+							</object>
+						</object>
+						<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
+					</object>
+				</array>
+				<string key="NSFrameSize">{434, 57}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
+				<object class="NSMutableString" key="NSClassName">
+					<characters key="NS.bytes">NSView</characters>
+				</object>
+				<string key="NSExtension">NSResponder</string>
+			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<array class="NSMutableArray" key="connectionRecords">
@@ -1570,6 +1656,14 @@
 						<reference key="destination" ref="876843122"/>
 					</object>
 					<int key="connectionID">919</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_bookmarksExportView</string>
+						<reference key="source" ref="569324035"/>
+						<reference key="destination" ref="215021197"/>
+					</object>
+					<int key="connectionID">925</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -2326,6 +2420,42 @@
 						<reference key="object" ref="876843122"/>
 						<reference key="parent" ref="764705616"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">920</int>
+						<reference key="object" ref="215021197"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="1038568189"/>
+							<reference ref="734052380"/>
+						</array>
+						<reference key="parent" ref="0"/>
+						<string key="objectName">Bookmarks Export Panel</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">921</int>
+						<reference key="object" ref="1038568189"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="1048121108"/>
+						</array>
+						<reference key="parent" ref="215021197"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">922</int>
+						<reference key="object" ref="734052380"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="595553534"/>
+						</array>
+						<reference key="parent" ref="215021197"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">923</int>
+						<reference key="object" ref="595553534"/>
+						<reference key="parent" ref="734052380"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">924</int>
+						<reference key="object" ref="1048121108"/>
+						<reference key="parent" ref="1038568189"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -2437,12 +2567,17 @@
 				<string key="913.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="918.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="92.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="920.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="921.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="922.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="923.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="924.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">919</int>
+			<int key="maxID">925</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2989,7 +3124,6 @@
 					<string key="superclassName">WIObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="about:">id</string>
-						<string key="addBookmark:">id</string>
 						<string key="administration:">id</string>
 						<string key="boards:">id</string>
 						<string key="broadcast:">id</string>
@@ -3001,8 +3135,8 @@
 						<string key="crashReports:">id</string>
 						<string key="deleteDocument:">id</string>
 						<string key="disconnect:">id</string>
+						<string key="exportBookmarks:">id</string>
 						<string key="files:">id</string>
-						<string key="insertSmiley:">id</string>
 						<string key="manual:">id</string>
 						<string key="messages:">id</string>
 						<string key="newDocument:">id</string>
@@ -3022,10 +3156,6 @@
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="about:">
 							<string key="name">about:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="addBookmark:">
-							<string key="name">addBookmark:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="administration:">
@@ -3072,12 +3202,12 @@
 							<string key="name">disconnect:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="files:">
-							<string key="name">files:</string>
+						<object class="IBActionInfo" key="exportBookmarks:">
+							<string key="name">exportBookmarks:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="insertSmiley:">
-							<string key="name">insertSmiley:</string>
+						<object class="IBActionInfo" key="files:">
+							<string key="name">files:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="manual:">
@@ -3142,6 +3272,7 @@
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="_bookmarksExportView">NSView</string>
 						<string key="_bookmarksMenu">NSMenu</string>
 						<string key="_closeWindowMenuItem">NSMenuItem</string>
 						<string key="_connectionMenu">NSMenu</string>
@@ -3157,6 +3288,10 @@
 						<string key="_windowMenu">NSMenu</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="_bookmarksExportView">
+							<string key="name">_bookmarksExportView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="_bookmarksMenu">
 							<string key="name">_bookmarksMenu</string>
 							<string key="candidateClassName">NSMenu</string>
@@ -3699,6 +3834,38 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/WCBoards.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">WCBookmarkController</string>
+					<string key="superclassName">WISheetController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="_bookmarksAddressTextField">NSTextField</string>
+						<string key="_bookmarksLoginTextField">NSTextField</string>
+						<string key="_bookmarksNameTextField">NSTextField</string>
+						<string key="_bookmarksPasswordTextField">NSSecureTextField</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="_bookmarksAddressTextField">
+							<string key="name">_bookmarksAddressTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_bookmarksLoginTextField">
+							<string key="name">_bookmarksLoginTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_bookmarksNameTextField">
+							<string key="name">_bookmarksNameTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_bookmarksPasswordTextField">
+							<string key="name">_bookmarksPasswordTextField</string>
+							<string key="candidateClassName">NSSecureTextField</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCBookmarkController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -5014,6 +5181,7 @@
 						<string key="_networkConnectionTimeoutTextField">NSTextField</string>
 						<string key="_networkReadTimeoutTextField">NSTextField</string>
 						<string key="_nickTextField">NSTextField</string>
+						<string key="_orderFrontOnDisconnectButton">NSButton</string>
 						<string key="_selectThemeButton">NSButton</string>
 						<string key="_showConnectAtStartupButton">NSButton</string>
 						<string key="_showServersAtStartupButton">NSButton</string>
@@ -5334,6 +5502,10 @@
 							<string key="name">_nickTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="_orderFrontOnDisconnectButton">
+							<string key="name">_orderFrontOnDisconnectButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="_selectThemeButton">
 							<string key="name">_selectThemeButton</string>
 							<string key="candidateClassName">NSButton</string>
@@ -5593,6 +5765,8 @@
 						<string key="console:">id</string>
 						<string key="deleteServerOrTrackerBookmark:">id</string>
 						<string key="disconnect:">id</string>
+						<string key="duplicateBookmark:">id</string>
+						<string key="editBookmark:">id</string>
 						<string key="files:">id</string>
 						<string key="getInfo:">id</string>
 						<string key="getTrackerServerInfo:">id</string>
@@ -5673,6 +5847,14 @@
 						</object>
 						<object class="IBActionInfo" key="disconnect:">
 							<string key="name">disconnect:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="duplicateBookmark:">
+							<string key="name">duplicateBookmark:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="editBookmark:">
+							<string key="name">editBookmark:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="files:">
@@ -5777,10 +5959,12 @@
 						<string key="_noConnectionTextField">NSTextField</string>
 						<string key="_progressIndicator">NSProgressIndicator</string>
 						<string key="_resourcesSplitView">WISplitView</string>
+						<string key="_serverBookmarkController">WCServerBookmarkController</string>
 						<string key="_serversOutlineMenu">NSMenu</string>
 						<string key="_serversOutlineView">WIOutlineView</string>
 						<string key="_splitResizeView">NSImageView</string>
 						<string key="_tabBarView">WCTabBarView</string>
+						<string key="_trackerBookmarkController">WCTrackerBookmarkController</string>
 						<string key="_viewsSegmentedControl">NSSegmentedControl</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -5800,6 +5984,10 @@
 							<string key="name">_resourcesSplitView</string>
 							<string key="candidateClassName">WISplitView</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="_serverBookmarkController">
+							<string key="name">_serverBookmarkController</string>
+							<string key="candidateClassName">WCServerBookmarkController</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="_serversOutlineMenu">
 							<string key="name">_serversOutlineMenu</string>
 							<string key="candidateClassName">NSMenu</string>
@@ -5816,6 +6004,10 @@
 							<string key="name">_tabBarView</string>
 							<string key="candidateClassName">WCTabBarView</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="_trackerBookmarkController">
+							<string key="name">_trackerBookmarkController</string>
+							<string key="candidateClassName">WCTrackerBookmarkController</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="_viewsSegmentedControl">
 							<string key="name">_viewsSegmentedControl</string>
 							<string key="candidateClassName">NSSegmentedControl</string>
@@ -5824,6 +6016,43 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/WCPublicChat.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">WCServerBookmarkController</string>
+					<string key="superclassName">WCBookmarkController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="_bookmarksAutoConnectButton">NSButton</string>
+						<string key="_bookmarksAutoReconnectButton">NSButton</string>
+						<string key="_bookmarksNickTextField">NSTextField</string>
+						<string key="_bookmarksStatusTextField">NSTextField</string>
+						<string key="_bookmarksThemePopUpButton">NSPopUpButton</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="_bookmarksAutoConnectButton">
+							<string key="name">_bookmarksAutoConnectButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_bookmarksAutoReconnectButton">
+							<string key="name">_bookmarksAutoReconnectButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_bookmarksNickTextField">
+							<string key="name">_bookmarksNickTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_bookmarksStatusTextField">
+							<string key="name">_bookmarksStatusTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_bookmarksThemePopUpButton">
+							<string key="name">_bookmarksThemePopUpButton</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCServerBookmarkController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -6085,6 +6314,14 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">WCTrackerBookmarkController</string>
+					<string key="superclassName">WCBookmarkController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WCTrackerBookmarkController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">WCTransfers</string>
 					<string key="superclassName">WIWindowController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
@@ -6276,6 +6513,44 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">WISheetController</string>
+					<string key="superclassName">WIObject</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="cancel:">id</string>
+						<string key="close:">id</string>
+						<string key="ok:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="cancel:">
+							<string key="name">cancel:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="close:">
+							<string key="name">close:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="ok:">
+							<string key="name">ok:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">_sheetWindow</string>
+						<string key="NS.object.0">NSWindow</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">_sheetWindow</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">_sheetWindow</string>
+							<string key="candidateClassName">NSWindow</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/WISheetController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">WISplitView</string>
 					<string key="superclassName">NSSplitView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -6411,6 +6686,7 @@
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="NSMenuCheckmark">{11, 11}</string>
 			<string key="NSMenuMixedState">{10, 3}</string>
+			<string key="Warning">{24, 24}</string>
 		</dictionary>
 	</data>
 </archive>

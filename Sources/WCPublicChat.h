@@ -28,31 +28,35 @@
 
 @class WCPublicChatController, WCServerConnection;
 @class WCErrorQueue, WCServerContainer, WCServerBonjour, WCServerBookmarks;
+@class WCServerBookmarkController, WCTrackerBookmarkController;
 @class WCTabBarView;
 
 @interface WCPublicChat : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSNetServiceBrowserDelegate, NSNetServiceDelegate, NSMenuDelegate> {
-	IBOutlet NSTabView					*_chatTabView;
-    IBOutlet WCTabBarView               *_tabBarView;
-    IBOutlet WISplitView                *_resourcesSplitView;
-    IBOutlet NSImageView                *_splitResizeView;
-    IBOutlet WIOutlineView              *_serversOutlineView;
-    IBOutlet NSTextField				*_noConnectionTextField;
-    IBOutlet NSProgressIndicator        *_progressIndicator;
-    IBOutlet NSSegmentedControl         *_viewsSegmentedControl;
-	IBOutlet NSMenu                     *_serversOutlineMenu;
+	IBOutlet NSTabView                      *_chatTabView;
+    IBOutlet WCTabBarView                   *_tabBarView;
+    IBOutlet WISplitView                    *_resourcesSplitView;
+    IBOutlet NSImageView                    *_splitResizeView;
+    IBOutlet WIOutlineView                  *_serversOutlineView;
+    IBOutlet NSTextField                    *_noConnectionTextField;
+    IBOutlet NSProgressIndicator            *_progressIndicator;
+    IBOutlet NSSegmentedControl             *_viewsSegmentedControl;
+	IBOutlet NSMenu                         *_serversOutlineMenu;
     
-	NSMutableDictionary					*_chatControllers;
-	NSMutableDictionary					*_chatActivity;
+    IBOutlet WCServerBookmarkController     *_serverBookmarkController;
+    IBOutlet WCTrackerBookmarkController    *_trackerBookmarkController;
     
-    NSNetServiceBrowser					*_browser;
+	NSMutableDictionary                     *_chatControllers;
+	NSMutableDictionary                     *_chatActivity;
+    
+    NSNetServiceBrowser                     *_browser;
 	
-	WISizeFormatter						*_sizeFormatter;
-	WCErrorQueue						*_errorQueue;
+	WISizeFormatter                         *_sizeFormatter;
+	WCErrorQueue                            *_errorQueue;
     
-	WCServerContainer					*_servers;
-    WCServerContainer					*_trackers;
-	WCServerBonjour						*_bonjour;
-	WCServerBookmarks					*_bookmarks;
+	WCServerContainer                       *_servers;
+    WCServerContainer                       *_trackers;
+	WCServerBonjour                         *_bonjour;
+	WCServerBookmarks                       *_bookmarks;
 }
 
 + (id)publicChat;
@@ -93,6 +97,8 @@
 - (IBAction)connect:(id)sender;
 - (IBAction)addServerBookmark:(id)sender;
 - (IBAction)addTrackerBookmark:(id)sender;
+- (IBAction)editBookmark:(id)sender;
+- (IBAction)duplicateBookmark:(id)sender;
 - (IBAction)deleteServerOrTrackerBookmark:(id)sender;
 
 - (IBAction)openServer:(id)sender;

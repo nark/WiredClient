@@ -67,7 +67,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (void)_reloadChatLogsFolder;
 
-- (NSImage *)_imageForTheme:(NSDictionary *)theme size:(NSSize)size;
 - (void)_reloadBookmark;
 - (void)_reloadEvents;
 - (void)_reloadEvent;
@@ -133,7 +132,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	while((theme = [enumerator nextObject])) {
 		item = [NSMenuItem itemWithTitle:[theme objectForKey:WCThemesName]];
 		[item setRepresentedObject:[theme objectForKey:WCThemesIdentifier]];
-		[item setImage:[self _imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
+		[item setImage:[self imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
 		
 		[[_bookmarksThemePopUpButton menu] addItem:item];
 	}
@@ -188,50 +187,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 }
 
 
-
-
-
-- (NSImage *)_imageForTheme:(NSDictionary *)theme size:(NSSize)size {
-	NSMutableDictionary		*attributes;
-	NSBezierPath			*path;
-	NSImage					*image;
-	NSSize					largeSize;
-	
-	largeSize	= NSMakeSize(64.0, 48.0);
-	image		= [[NSImage alloc] initWithSize:largeSize];
-	
-	[image lockFocus];
-	
-	path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(1.0, 1.0, largeSize.width - 2.0, largeSize.height - 2.0) cornerRadius:4.0];
-	
-	[WIColorFromString([theme objectForKey:WCThemesChatBackgroundColor]) set];
-	[path fill];
-
-	[[NSColor lightGrayColor] set];
-	[path setLineWidth:2.0];
-	[path stroke];
-	
-	attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-		[NSFont fontWithName:[WIFontFromString([theme objectForKey:WCThemesChatFont]) fontName] size:12.0],
-			NSFontAttributeName,
-		WIColorFromString([theme objectForKey:WCThemesChatTextColor]),
-			NSForegroundColorAttributeName,
-		NULL];
-
-	[@"hello," drawAtPoint:NSMakePoint(8.0, largeSize.height - 19.0) withAttributes:attributes];
-	[@"world!" drawAtPoint:NSMakePoint(8.0, largeSize.height - 31.0) withAttributes:attributes];
-	
-	[attributes setObject:WIColorFromString([theme objectForKey:WCThemesChatEventsColor]) forKey:NSForegroundColorAttributeName];
-	
-	[@"<< ! >>" drawAtPoint:NSMakePoint(8.0, largeSize.height - 43.0) withAttributes:attributes];
-
-	[image unlockFocus];
-	
-	[image setScalesWhenResized:YES];
-	[image setSize:size];
-	
-	return [image autorelease];
-}
 
 
 
@@ -732,9 +687,9 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 					   name:NSLS(@"Themes", @"Themes preferences")
 					  image:[NSImage imageNamed:@"Themes"]];
 
-	[self addPreferenceView:_bookmarksView
-					   name:NSLS(@"Bookmarks", @"Bookmarks preferences")
-					  image:[NSImage imageNamed:@"Bookmarks"]];
+//	[self addPreferenceView:_bookmarksView
+//					   name:NSLS(@"Bookmarks", @"Bookmarks preferences")
+//					  image:[NSImage imageNamed:@"Bookmarks"]];
 	
 	[self addPreferenceView:_chatView
 					   name:NSLS(@"Chat", @"Chat preferences")
@@ -748,9 +703,9 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 					   name:NSLS(@"Files", @"Files preferences")
 					  image:[NSImage imageNamed:@"Folder"]];
 	
-	[self addPreferenceView:_trackersView
-					   name:NSLS(@"Trackers", @"Trackers preferences")
-					  image:[NSImage imageNamed:@"Trackers"]];
+//	[self addPreferenceView:_trackersView
+//					   name:NSLS(@"Trackers", @"Trackers preferences")
+//					  image:[NSImage imageNamed:@"Trackers"]];
 	
     [self addPreferenceView:_advancedView
 					   name:NSLS(@"Advanced", @"Advanced preferences")
@@ -963,8 +918,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSString				*password;
 	NSUInteger				firstIndex;
 	
-	[self showWindow:self];
-	[self selectPreferenceView:_bookmarksView];
+//	[self showWindow:self];
+//	[self selectPreferenceView:_bookmarksView];
 	
 	array = [NSArray arrayWithContentsOfFile:path];
 	
@@ -996,8 +951,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 			firstIndex = [[[WCSettings settings] objectForKey:WCBookmarks] count] - 1;
 	}
 	
-	[_bookmarksTableView reloadData];
-	[_bookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:firstIndex] byExtendingSelection:NO];
+//	[_bookmarksTableView reloadData];
+//	[_bookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:firstIndex] byExtendingSelection:NO];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 	
@@ -1014,8 +969,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSString				*password;
 	NSUInteger				firstIndex;
 	
-	[self showWindow:self];
-	[self selectPreferenceView:_trackersView];
+//	[self showWindow:self];
+//	[self selectPreferenceView:_trackersView];
 
 	array = [NSArray arrayWithContentsOfFile:path];
 
@@ -1047,11 +1002,59 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 			firstIndex = [[[WCSettings settings] objectForKey:WCBookmarks] count] - 1;
 	}
 
-	[_trackerBookmarksTableView reloadData];
+	//[_trackerBookmarksTableView reloadData];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 	
 	return YES;
+}
+
+
+
+
+
+#pragma mark -
+
+- (NSImage *)imageForTheme:(NSDictionary *)theme size:(NSSize)size {
+	NSMutableDictionary		*attributes;
+	NSBezierPath			*path;
+	NSImage					*image;
+	NSSize					largeSize;
+	
+	largeSize	= NSMakeSize(64.0, 48.0);
+	image		= [[NSImage alloc] initWithSize:largeSize];
+	
+	[image lockFocus];
+	
+	path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(1.0, 1.0, largeSize.width - 2.0, largeSize.height - 2.0) cornerRadius:4.0];
+	
+	[WIColorFromString([theme objectForKey:WCThemesChatBackgroundColor]) set];
+	[path fill];
+    
+	[[NSColor lightGrayColor] set];
+	[path setLineWidth:2.0];
+	[path stroke];
+	
+	attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                  [NSFont fontWithName:[WIFontFromString([theme objectForKey:WCThemesChatFont]) fontName] size:12.0],
+                  NSFontAttributeName,
+                  WIColorFromString([theme objectForKey:WCThemesChatTextColor]),
+                  NSForegroundColorAttributeName,
+                  NULL];
+    
+	[@"hello," drawAtPoint:NSMakePoint(8.0, largeSize.height - 19.0) withAttributes:attributes];
+	[@"world!" drawAtPoint:NSMakePoint(8.0, largeSize.height - 31.0) withAttributes:attributes];
+	
+	[attributes setObject:WIColorFromString([theme objectForKey:WCThemesChatEventsColor]) forKey:NSForegroundColorAttributeName];
+	
+	[@"<< ! >>" drawAtPoint:NSMakePoint(8.0, largeSize.height - 43.0) withAttributes:attributes];
+    
+	[image unlockFocus];
+	
+	[image setScalesWhenResized:YES];
+	[image setSize:size];
+	
+	return [image autorelease];
 }
 
 
@@ -2429,7 +2432,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		else
 			[cell setFont:[[cell font] fontByAddingTrait:NSUnboldFontMask]];
 		
-		[cell setImage:[self _imageForTheme:theme size:NSMakeSize(32.0, 24.0)]];
+		[cell setImage:[self imageForTheme:theme size:NSMakeSize(32.0, 24.0)]];
         
 	} else if(tableView == _bookmarksTableView) {
         [cell setImage:[NSImage imageNamed:@"BookmarksSmall"]];

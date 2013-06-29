@@ -224,7 +224,7 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 	NSDictionary	*bookmark;
 	NSMenuItem		*item;
 	NSUInteger		i = 1;
-
+        
 	while((item = (NSMenuItem *) [_bookmarksMenu itemWithTag:0]))
 		[_bookmarksMenu removeItem:item];
 
@@ -257,6 +257,20 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 
 		i++;
 	}
+    
+    [_bookmarksMenu addItem:[NSMenuItem separatorItem]];
+    
+    [_bookmarksMenu addItem:[NSMenuItem itemWithTitle:NSLS(@"Export Server Bookmarks...", @"Bookmarks menu item title")
+                                               action:@selector(exportBookmarks:)
+                                        keyEquivalent:@""]];
+
+    [_bookmarksMenu addItem:[NSMenuItem itemWithTitle:NSLS(@"Export Tracker Bookmarks...", @"Bookmarks menu item title")
+                                               action:@selector(exportTrackerBookmarks:)
+                                        keyEquivalent:@""]];
+    
+    [_bookmarksMenu addItem:[NSMenuItem itemWithTitle:NSLS(@"Import Bookmarks...", @"Bookmarks menu item title")
+                                               action:@selector(importBookmarks:)
+                                        keyEquivalent:@""]];
 }
 
 
@@ -672,7 +686,7 @@ static WCApplicationController		*sharedController;
 		else
 			saveString = NULL;
 		
-		[_newDocumentMenuItem setTitle:newString ? newString : NSLS(@"New", @"New menu item")];
+		[_newDocumentMenuItem setTitle:newString ? newString : NSLS(@"New Thread", @"New menu item")];
 		[_deleteDocumentMenuItem setTitle:deleteString ? deleteString : NSLS(@"Delete", @"Delete menu item")];
 		[_reloadDocumentMenuItem setTitle:reloadString ? reloadString : NSLS(@"Reload", @"Reload menu item")];
 		[_quickLookMenuItem setTitle:quickLookString ? quickLookString : NSLS(@"Quick Look", @"Quick Look menu item")];
@@ -1114,6 +1128,9 @@ static WCApplicationController		*sharedController;
 	else if(selector == @selector(insertSmiley:)) {
 		return ([[[NSApp keyWindow] firstResponder] respondsToSelector:@selector(insertText:)]);
 	}
+    else if(selector == @selector(exportBookmarks:)) {
+        return ([[[WCSettings settings] objectForKey:WCBookmarks] count] > 0);
+    }
 
 	return YES;
 }
@@ -1349,6 +1366,111 @@ static WCApplicationController		*sharedController;
 - (void)bookmark:(id)sender {
 	[self _connectWithBookmark:[sender representedObject]];
 }
+
+
+- (IBAction)exportBookmarks:(id)sender {
+	__block NSSavePanel     *savePanel;
+    
+    [[WCPublicChat publicChat] showWindow:self];
+	
+	savePanel = [NSSavePanel savePanel];
+	[savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredBookmarks"]];
+	[savePanel setCanSelectHiddenExtension:YES];
+	[savePanel setAccessoryView:_bookmarksExportView];
+    [savePanel setNameFieldStringValue:[NSLS(@"Bookmarks", @"Default export bookmarks name")
+										stringByAppendingPathExtension:@"WiredBookmarks"]];
+    
+    [savePanel beginSheetModalForWindow:[[WCPublicChat publicChat] window] completionHandler:^(NSInteger result) {
+        NSEnumerator			*enumerator;
+        NSMutableArray			*bookmarks;
+        NSMutableDictionary		*bookmark;
+        NSDictionary			*dictionary;
+        NSString				*password;
+        
+        if(result == NSOKButton) {
+            bookmarks	= [NSMutableArray array];
+            enumerator	= [[[WCSettings settings] objectForKey:WCBookmarks] objectEnumerator];
+            
+            while((dictionary = [enumerator nextObject])) {
+                bookmark = [[dictionary mutableCopy] autorelease];
+                password = [[WCKeychain keychain] passwordForBookmark:bookmark];
+                
+                if(password)
+                    [bookmark setObject:password forKey:WCBookmarksPassword];
+                
+                [bookmark removeObjectForKey:WCBookmarksIdentifier];
+                
+                [bookmarks addObject:bookmark];
+            }
+            
+            [bookmarks writeToURL:[savePanel URL] atomically:YES];
+        }
+    }];
+}
+
+
+- (IBAction)exportTrackerBookmarks:(id)sender {
+    __block NSSavePanel     *savePanel;
+	
+	savePanel = [NSSavePanel savePanel];
+	[savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredTrackerBookmarks"]];
+	[savePanel setCanSelectHiddenExtension:YES];
+	[savePanel setAccessoryView:_bookmarksExportView];
+    [savePanel setNameFieldStringValue:[NSLS(@"Bookmarks", @"Default export bookmarks name")
+										stringByAppendingPathExtension:@"WiredTrackerBookmarks"]];
+    
+    [savePanel beginSheetModalForWindow:[[WCPublicChat publicChat] window] completionHandler:^(NSInteger result) {
+        NSEnumerator			*enumerator;
+        NSMutableArray			*bookmarks;
+        NSMutableDictionary		*bookmark;
+        NSDictionary			*dictionary;
+        NSString				*password;
+        
+        if(result == NSOKButton) {
+            bookmarks	= [NSMutableArray array];
+            enumerator	= [[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectEnumerator];
+            
+            while((dictionary = [enumerator nextObject])) {
+                bookmark = [[dictionary mutableCopy] autorelease];
+                password = [[WCKeychain keychain] passwordForTrackerBookmark:bookmark];
+                
+                if(password)
+                    [bookmark setObject:password forKey:WCTrackerBookmarksPassword];
+                
+                [bookmark removeObjectForKey:WCTrackerBookmarksIdentifier];
+                
+                [bookmarks addObject:bookmark];
+            }
+            
+            [bookmarks writeToURL:[savePanel URL] atomically:YES];
+        }
+    }];
+}
+
+
+
+- (IBAction)importBookmarks:(id)sender {
+	__block NSOpenPanel     *openPanel;
+	
+	openPanel = [NSOpenPanel openPanel];
+    
+	[openPanel setCanChooseFiles:YES];
+	[openPanel setCanChooseDirectories:NO];
+    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"WiredBookmarks", @"WiredTrackerBookmarks", nil]];
+    
+    [openPanel beginSheetModalForWindow:[[WCPublicChat publicChat] window] completionHandler:^(NSInteger result) {
+        if(result == NSOKButton) {
+            if([[[openPanel URL] pathExtension] isEqualToString:@"WiredBookmarks"]) {
+                [[WCPreferences preferences] importBookmarksFromFile:[[openPanel URL] path]];
+            }
+            else if([[[openPanel URL] pathExtension] isEqualToString:@"WiredTrackerBookmarks"]) {
+                [[WCPreferences preferences] importTrackerBookmarksFromFile:[[openPanel URL] path]];
+            }
+        }
+    }];
+}
+
+
 
 
 

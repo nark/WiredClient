@@ -184,6 +184,7 @@ extern NSString * const								WCIconDidChangeNotification;
 - (BOOL)importTemplateFromFile:(NSString *)path;
 - (BOOL)importBookmarksFromFile:(NSString *)path;
 - (BOOL)importTrackerBookmarksFromFile:(NSString *)path;
+- (NSImage *)imageForTheme:(NSDictionary *)theme size:(NSSize)size;
 
 - (IBAction)changePreferences:(id)sender;
 

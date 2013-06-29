@@ -51,6 +51,8 @@
 #import "WCConnect.h"
 #import "WCTabBarItem.h"
 #import "WCTransfers.h"
+#import "WCServerBookmarkController.h"
+#import "WCTrackerBookmarkController.h"
 
 
 #define WCBookmarkPboardType                        @"WCBookmarkPboardType"
@@ -356,6 +358,10 @@ typedef enum _WCChatActivity				WCChatActivity;
         } else {
             //NSLog(@"chatController: %@", chatController);
             [self selectChatController:chatController];
+            
+            if(![[chatController connection] isConnected]) {
+                [[chatController connection] reconnect];
+            }
         }
 	}
 
@@ -946,8 +952,44 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem {
-	[self _updateToolbarForConnection:[[self selectedChatController] connection]];
-    [self _updateTabViewItemForConnection:[[self selectedChatController] connection]];
+    WCChatController    *chatController;
+    NSString            *name;
+    NSDictionary        *bookmark;
+    NSInteger           toSelectRow;
+    
+    chatController  = [self selectedChatController];
+    
+	[self _updateToolbarForConnection:[chatController connection]];
+    [self _updateTabViewItemForConnection:[chatController connection]];
+    
+    chatController  = [self chatControllerForConnectionIdentifier:[[tabViewItem identifier] valueForKey:@"identifier"]];
+    
+    name            = [[chatController connection] name];
+    bookmark        = [[chatController connection] bookmark];
+    
+    if(bookmark) {
+        for(WCServerBookmarkServer *bs in [_bookmarks items]) {
+            if([bookmark isEqualToDictionary:[bs bookmark]]) {
+                toSelectRow = [_serversOutlineView rowForItem:bs];
+                
+                if(toSelectRow != -1) {
+                    [_serversOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:toSelectRow] byExtendingSelection:NO];
+                    return;
+                }
+            }
+        }
+    }
+    
+    for(WCServerBonjourServer *bs in [_bonjour items]) {
+        if([name isEqualToString:[bs name]]) {
+            toSelectRow = [_serversOutlineView rowForItem:bs];
+            
+            if(toSelectRow != -1) {
+                [_serversOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:toSelectRow] byExtendingSelection:NO];
+                return;
+            }
+        }
+    }
 }
 
 
@@ -975,25 +1017,25 @@ typedef enum _WCChatActivity				WCChatActivity;
         
     if([[chatController connection] isConnected]) {
         if(![[chatController connection] bookmark]) {
-            item = [menu addItemWithTitle:@"Add Bookmark" action:nil keyEquivalent:@""];
+            item = [menu addItemWithTitle:NSLS(@"Add Bookmark", @"Sidebar menu item title") action:nil keyEquivalent:@""];
             [item setTarget:self];
             [item setAction:@selector(addBookmark:)];
             
             [menu addItem:[NSMenuItem separatorItem]];
         }
             
-        item = [menu addItemWithTitle:@"Server Info" action:nil keyEquivalent:@""];
+        item = [menu addItemWithTitle:NSLS(@"Get Info", @"TabView menu item title") action:nil keyEquivalent:@""];
         [item setTarget:[[chatController connection] serverInfo]];
         [item setAction:@selector(showWindow:)];
         
         [menu addItem:[NSMenuItem separatorItem]];
         
-        item = [menu addItemWithTitle:@"Disconnect" action:nil keyEquivalent:@""];
+        item = [menu addItemWithTitle:NSLS(@"Disconnect", @"TabView menu item title") action:nil keyEquivalent:@""];
         [item setTarget:[chatController connection]];
         [item setAction:@selector(disconnect)];
     }
     else {
-        item = [menu addItemWithTitle:@"Reconnect" action:nil keyEquivalent:@""];
+        item = [menu addItemWithTitle:NSLS(@"Reconnect", @"TabView menu item title") action:nil keyEquivalent:@""];
         [item setTarget:[chatController connection]];
         [item setAction:@selector(reconnect)];
     }
@@ -1169,6 +1211,14 @@ typedef enum _WCChatActivity				WCChatActivity;
     
 	else if(selector == @selector(nextConnection:) || selector == @selector(previousConnection:))
 		return ([_chatControllers count] > 1);
+    
+    else if(selector == @selector(editBookmark:))
+		return ([[self _selectedItem] isKindOfClass:[WCServerBookmarkServer class]] ||
+                [[self _selectedItem] isKindOfClass:[WCServerTracker class]]);
+    
+    else if(selector == @selector(duplicateBookmark:))
+		return ([[self _selectedItem] isKindOfClass:[WCServerBookmarkServer class]] ||
+                [[self _selectedItem] isKindOfClass:[WCServerTracker class]]);
     
     else if(selector == @selector(openServer:))
 		return ([[self _selectedItem] isKindOfClass:[WCServerBookmarkServer class]] ||
@@ -1566,16 +1616,72 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 
 - (IBAction)addServerBookmark:(id)sender {
-    [[WCPreferences preferences] showWindow:sender];
-    [[WCPreferences preferences] selectViewWithName:@"Bookmarks"];
-    [[WCPreferences preferences] addBookmark:sender];
+    [_serverBookmarkController beginSheetWithParentWindow:[self window]];
 }
 
 
 - (IBAction)addTrackerBookmark:(id)sender {
-    [[WCPreferences preferences] showWindow:sender];
-    [[WCPreferences preferences] selectViewWithName:@"Trackers"];
-    [[WCPreferences preferences] addTrackerBookmark:sender];
+    [_trackerBookmarkController beginSheetWithParentWindow:[self window]];
+}
+
+
+- (IBAction)editBookmark:(id)sender {
+    NSMutableDictionary     *bookmark;
+    id                      item;
+    
+    item = [self _selectedItem];
+    
+    if(!item)
+        return;
+    
+    if([item class] == [WCServerBookmarkServer class]) {
+        bookmark = [[[item valueForKey:@"bookmark"] mutableCopy] autorelease];
+        
+        [_serverBookmarkController setBookmark:bookmark];
+        [_serverBookmarkController beginSheetWithParentWindow:[self window]];
+        
+    }
+    else if([item class] == [WCServerTracker class]) {
+        bookmark = [[[item valueForKey:@"bookmark"] mutableCopy] autorelease];
+                
+        [_trackerBookmarkController setBookmark:bookmark];
+        [_trackerBookmarkController beginSheetWithParentWindow:[self window]];
+    }
+}
+
+
+- (IBAction)duplicateBookmark:(id)sender {
+    NSMutableDictionary		*bookmark;
+	NSString				*password;
+    id                      item;
+    
+    item = [self _selectedItem];
+    
+    if(!item)
+        return;
+	
+    if([item class] == [WCServerBookmarkServer class]) {
+        bookmark = [[[item valueForKey:@"bookmark"] mutableCopy] autorelease];
+        password = [[WCKeychain keychain] passwordForBookmark:bookmark];
+        
+        [bookmark setObject:[NSString UUIDString] forKey:WCBookmarksIdentifier];
+        
+        [[WCKeychain keychain] setPassword:password forBookmark:bookmark];
+        
+        [[WCSettings settings] addObject:bookmark toArrayForKey:WCBookmarks];
+    }
+    else if([item class] == [WCServerTracker class]) {
+        bookmark = [[[item valueForKey:@"bookmark"] mutableCopy] autorelease];
+        password = [[WCKeychain keychain] passwordForTrackerBookmark:bookmark];
+        
+        [bookmark setObject:[NSString UUIDString] forKey:WCTrackerBookmarksIdentifier];
+        
+        [[WCKeychain keychain] setPassword:password forTrackerBookmark:bookmark];
+        
+        [[WCSettings settings] addObject:bookmark toArrayForKey:WCTrackerBookmarks];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 }
 
 
@@ -1653,6 +1759,7 @@ typedef enum _WCChatActivity				WCChatActivity;
                 [[WCSettings settings] removeObjectAtIndex:index fromArrayForKey:WCTrackerBookmarks];
         }
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
         [self _reloadServers];
 	}
 	
@@ -1728,6 +1835,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 		
 		[[WCSettings settings] addObject:bookmark toArrayForKey:WCBookmarks];
 		
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 		[self _reloadServers];
 	}
 }
@@ -1984,12 +2092,14 @@ typedef enum _WCChatActivity				WCChatActivity;
 #pragma mark -
 
 - (void)bookmarksDidChange:(NSNotification *)notification {
+    [[WCSettings settings] synchronize];
 	[self _reloadServers];
 }
 
 
 
 - (void)trackerBookmarksDidChange:(NSNotification *)notification {
+    [[WCSettings settings] synchronize];
 	[self _reloadServers];
 }
 
@@ -2104,7 +2214,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	else if([[message name] isEqualToString:@"wired.tracker.server_list.done"]) {
 		[tracker setState:WCServerTrackerLoaded];
         
-		[(id) [message contextInfo] terminate];
+		[(WCServerConnection *)[message contextInfo] terminate];
 		
 		[self _sortServers];
 		
@@ -2113,7 +2223,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 		//[self _updateStatus];
 	}
 	else if([[message name] isEqualToString:@"wired.error"]) {
-		[(id) [message contextInfo] terminate];
+		[(WCServerConnection *)[message contextInfo] terminate];
         
 		[_errorQueue showError:[WCError errorWithWiredMessage:message]];
 	}
@@ -2183,8 +2293,11 @@ typedef enum _WCChatActivity				WCChatActivity;
                 
                 if(chatController) {
                     if([[tableColumn identifier] isEqualToString:@"name"]) {
-                        [cell setImage:[NSImage imageNamed:@"BookmarksSmallConnected"]];
-
+                        if([[chatController connection] isConnected]) {
+                            [cell setImage:[NSImage imageNamed:@"BookmarksSmallConnected"]];
+                        } else {
+                            [cell setImage:[NSImage imageNamed:@"BookmarksSmallDisconnected"]];
+                        }
                     } else if([[tableColumn identifier] isEqualToString:@"badge"]) {
                         if([self numberOfUnreadsForConnection:[chatController connection]] > 0)
                             [cell setFont:[[cell font] fontByAddingTrait:NSBoldFontMask]];
@@ -2197,11 +2310,15 @@ typedef enum _WCChatActivity				WCChatActivity;
                 
                 
             } else if([item isKindOfClass:[WCServerBonjourServer class]]) {
-                chatController = [self chatControllerForURL:[item URL]];
+                chatController = [self chatControllerForURL:(WIURL *)[item URL]];
                 
                 if(chatController) {
                     if([[tableColumn identifier] isEqualToString:@"name"]) {
-                        [cell setImage:[NSImage imageNamed:@"BonjourConnected"]];
+                        if([[chatController connection] isConnected]) {
+                            [cell setImage:[NSImage imageNamed:@"BonjourConnected"]];
+                        } else {
+                            [cell setImage:[NSImage imageNamed:@"BonjourDisconnected"]];
+                        }
                         
                     } else if([[tableColumn identifier] isEqualToString:@"badge"]) {
                         if([self numberOfUnreadsForConnection:[chatController connection]] > 0)
@@ -2232,7 +2349,8 @@ typedef enum _WCChatActivity				WCChatActivity;
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
-    id		item;
+    WCPublicChatController      *chatController;
+    id                          item;
     
 	item = [self _selectedItem];
         
@@ -2240,11 +2358,11 @@ typedef enum _WCChatActivity				WCChatActivity;
         return;
         
     if([item isKindOfClass:[WCServerBookmarkServer class]]) {
-        WCPublicChatController *chatController = [self chatControllerForBookmarkIdentifier:[[item bookmark] objectForKey:WCBookmarksIdentifier]];        
+        chatController   = [self chatControllerForBookmarkIdentifier:[[item bookmark] objectForKey:WCBookmarksIdentifier]];        
         if(chatController) [self selectChatController:chatController firstResponder:NO];
         
-    } else {
-        WCPublicChatController *chatController = [self chatControllerForURL:[item URL]];
+    } else if(![item isKindOfClass:[WCServerContainer class]]) {
+        chatController   = [self chatControllerForURL:(WIURL *)[item URL]];
         if(chatController) [self selectChatController:chatController firstResponder:NO];
         
     }
@@ -2376,49 +2494,63 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 #pragma mark -
 
-- (void)menuWillOpen:(NSMenu *)menu {
-    NSInteger       clickedRow;
-    id              server;
+- (void)menuNeedsUpdate:(NSMenu *)menu {
+    WCPublicChatController      *chatController = nil;
+    id                          item;
     
     if(menu == _serversOutlineMenu) {
         [menu removeAllItems];
         
-        clickedRow = [_serversOutlineView clickedRow];
-        
-        if(clickedRow == -1)
+        item = [self _selectedItem];
+                
+        if(!item || [item isMemberOfClass:[WCServerContainer class]])
             return;
         
-        server = [_serversOutlineView itemAtRow:clickedRow];
-        
-        if(!server)
-            return;
-        
-        if([server isKindOfClass:[WCServerBonjourServer class]]) {
-            [menu addItemWithTitle:@"Connect" action:@selector(openServer:) keyEquivalent:@""];
+        if([item isKindOfClass:[WCServerBonjourServer class]]) {            
+            [menu addItemWithTitle:NSLS(@"Connect", @"Sidebar menu item title") action:@selector(openServer:) keyEquivalent:@""];
             [menu addItem:[NSMenuItem separatorItem]];
-            [menu addItemWithTitle:@"Add To Bookmarks" action:@selector(addToBookmarks:) keyEquivalent:@""];
+            [menu addItemWithTitle:NSLS(@"Add Bookmark", @"Sidebar menu item title") action:@selector(addToBookmarks:) keyEquivalent:@""];
+        }
+        else if([item isKindOfClass:[WCServerBookmarkServer class]]) {
+            chatController = [self chatControllerForBookmarkIdentifier:[[item bookmark] objectForKey:WCBookmarksIdentifier]];
             
-        } else if([server isKindOfClass:[WCServerBookmarkServer class]]) {
-            [menu addItemWithTitle:@"Connect" action:@selector(openServer:) keyEquivalent:@""];
-            [menu addItem:[NSMenuItem separatorItem]];
-            [menu addItemWithTitle:@"Delete" action:@selector(deleteServerOrTrackerBookmark:) keyEquivalent:@""];
-            
-        } else if([server isKindOfClass:[WCServerTrackerServer class]]) {
-            [menu addItemWithTitle:@"Connect" action:@selector(openServer:) keyEquivalent:@""];
-            [menu addItemWithTitle:@"Get Info" action:@selector(getTrackerServerInfo:) keyEquivalent:@""];
-            
-            if([server isTracker]) {
-                [menu addItem:[NSMenuItem separatorItem]];
-                [menu addItemWithTitle:@"Reload" action:@selector(reloadTracker:) keyEquivalent:@""];
+            if(chatController) {
+                if([[chatController connection] isConnected]) {
+                    [menu addItemWithTitle:NSLS(@"Disconnect", @"Sidebar menu item title") action:@selector(disconnect:) keyEquivalent:@""];
+                }
+                else {
+                    [menu addItemWithTitle:NSLS(@"Reconnect", @"Sidebar menu item title") action:@selector(reconnect:) keyEquivalent:@""];
+                }
+            }
+            else {
+                [menu addItemWithTitle:NSLS(@"Connect", @"Sidebar menu item title") action:@selector(openServer:) keyEquivalent:@""];
             }
             
             [menu addItem:[NSMenuItem separatorItem]];
-            [menu addItemWithTitle:@"Add To Bookmarks" action:@selector(addToBookmarks:) keyEquivalent:@""];
-            
-        } else if([server isKindOfClass:[WCServerTracker class]]) {
-            [menu addItemWithTitle:@"Reload" action:@selector(reloadTracker:) keyEquivalent:@""];
+            [menu addItemWithTitle:NSLS(@"Edit", @"Sidebar menu item title") action:@selector(editBookmark:) keyEquivalent:@""];
+            [menu addItemWithTitle:NSLS(@"Duplicate", @"Sidebar menu item title") action:@selector(duplicateBookmark:) keyEquivalent:@""];
             [menu addItem:[NSMenuItem separatorItem]];
-            [menu addItemWithTitle:@"Delete" action:@selector(deleteServerOrTrackerBookmark:) keyEquivalent:@""];
+            [menu addItemWithTitle:NSLS(@"Delete", @"Sidebar menu item title") action:@selector(deleteServerOrTrackerBookmark:) keyEquivalent:@""];
+        }
+        else if([item isKindOfClass:[WCServerTrackerServer class]]) {
+            [menu addItemWithTitle:NSLS(@"Connect", @"Sidebar menu item title") action:@selector(openServer:) keyEquivalent:@""];
+            [menu addItemWithTitle:NSLS(@"Get Info", @"Sidebar menu item title") action:@selector(getTrackerServerInfo:) keyEquivalent:@""];
+            
+            if([item isTracker]) {
+                [menu addItem:[NSMenuItem separatorItem]];
+                [menu addItemWithTitle:NSLS(@"Reload", @"Sidebar menu item title") action:@selector(reloadTracker:) keyEquivalent:@""];
+            }
+            
+            [menu addItem:[NSMenuItem separatorItem]];
+            [menu addItemWithTitle:NSLS(@"Add Bookmark", @"Sidebar menu item title") action:@selector(addToBookmarks:) keyEquivalent:@""];
+        }
+        else if([item isKindOfClass:[WCServerTracker class]]) {
+            [menu addItemWithTitle:NSLS(@"Reload", @"Sidebar menu item title") action:@selector(reloadTracker:) keyEquivalent:@""];
+            [menu addItem:[NSMenuItem separatorItem]];
+            [menu addItemWithTitle:NSLS(@"Edit", @"Sidebar menu item title") action:@selector(editBookmark:) keyEquivalent:@""];
+            [menu addItemWithTitle:NSLS(@"Duplicate", @"Sidebar menu item title") action:@selector(duplicateBookmark:) keyEquivalent:@""];
+            [menu addItem:[NSMenuItem separatorItem]];
+            [menu addItemWithTitle:NSLS(@"Delete", @"Sidebar menu item title") action:@selector(deleteServerOrTrackerBookmark:) keyEquivalent:@""];
         }
     }
 }

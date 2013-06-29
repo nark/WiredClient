@@ -43,6 +43,7 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 	IBOutlet NSMenuItem						*_quickLookMenuItem;
 	IBOutlet NSMenuItem						*_saveDocumentMenuItem;
 	IBOutlet NSMenu							*_bookmarksMenu;
+    IBOutlet NSView							*_bookmarksExportView;
 	IBOutlet NSMenu							*_insertSmileyMenu;
 	IBOutlet NSMenu							*_debugMenu;
 	IBOutlet NSMenu							*_windowMenu;
@@ -107,5 +108,9 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 - (IBAction)crashReports:(id)sender;
 - (IBAction)manual:(id)sender;
 - (IBAction)support:(id)sender;
+
+- (IBAction)exportBookmarks:(id)sender;
+- (IBAction)exportTrackerBookmarks:(id)sender;
+- (IBAction)importBookmarks:(id)sender;
 
 @end
