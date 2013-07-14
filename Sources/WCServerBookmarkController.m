@@ -112,6 +112,7 @@
 - (void)save {
     NSString        *password;
     NSInteger       row;
+    BOOL            passwordChanged = NO;
     
     if(_bookmark) {
         // update
@@ -137,13 +138,15 @@
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
             [self performSelector:@selector(_savePasswordForBookmark:)
                        withObject:[NSArray arrayWithObjects:_oldBookmark, _bookmark, password, NULL]
-                       afterDelay:1.0];
+                       afterDelay:0.0];
             
             [_bookmarksPassword release];
             _bookmarksPassword = [password copy];
+            
+            passwordChanged = YES;
         }
         
-        if(![_oldBookmark isEqualToDictionary:_bookmark]) {
+        if(![_oldBookmark isEqualToDictionary:_bookmark] || passwordChanged) {
             [[WCSettings settings] replaceObjectAtIndex:row withObject:_bookmark inArrayForKey:WCBookmarks];
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_bookmarkDidChange:) object:_oldBookmark];
@@ -156,6 +159,7 @@
         password    = [_bookmarksPasswordTextField stringValue];
         row         = [[WCSettings settings] indexOfObject:_oldBookmark inArrayForKey:WCBookmarks];
         
+        [_bookmark setObject:[NSString UUIDString] forKey:WCBookmarksIdentifier];
         [_bookmark setObject:[_bookmarksNameTextField stringValue] forKey:WCBookmarksName];
         [_bookmark setObject:[_bookmarksAddressTextField stringValue] forKey:WCBookmarksAddress];
         [_bookmark setObject:[_bookmarksLoginTextField stringValue] forKey:WCBookmarksLogin];

@@ -322,10 +322,8 @@
 			}
 		}
 		
-		[_downloadSpeedTextField setStringValue:[NSSWF:NSLS(@"%@/s", @"Monitor download speed"),
-			[_sizeFormatter stringFromSize:downloadSpeed]]];
-		[_uploadSpeedTextField setStringValue:[NSSWF:NSLS(@"%@/s", @"Monitor upload speed"),
-			[_sizeFormatter stringFromSize:uploadSpeed]]];
+		[_downloadSpeedTextField setStringValue:[NSSWF:@"%@/s", [_sizeFormatter stringFromSize:downloadSpeed]]];
+		[_uploadSpeedTextField setStringValue:[NSSWF:@"%@/s", [_sizeFormatter stringFromSize:uploadSpeed]]];
 		
 		[self _reloadFilter];
 		

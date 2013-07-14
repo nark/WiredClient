@@ -2774,8 +2774,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "rm -f \"English.lproj/Localizable.strings\"\nfind . -name \"*.[mc]\" | xargs genstrings -s NSLS -q -o \"English.lproj\" -a\n";
+			shellPath = /bin/bash;
+			shellScript = "rm -f \"en.lproj/Localizable.strings\"\nfind . -name \"*.[mc]\" | xargs genstrings -s NSLS -q -o \"en.lproj\" -a\n#sh \"$SRCROOT/../../wired_client_localize.sh\" || exit 1\n\n\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

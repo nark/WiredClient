@@ -1153,20 +1153,21 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 - (void)_finishTransfer:(WCTransfer *)transfer withError:(WCError *)error {
 	WCServerConnection		*connection;
 	
-	if(error)
-		[self _presentError:error forConnection:[transfer connection] transfer:transfer];
-	
-	[self _finishTransfer:transfer];
-	
-//	connection = [transfer connection];
-//	
-//	if(![[error domain] isEqualToString:WCWiredClientErrorDomain] &&
-//	   ![[error domain] isEqualToString:WCWiredProtocolErrorDomain] &&
-//	   [[WCSettings settings] boolForKey:WCAutoReconnect] &&
-//	   ([connection isConnected] || [connection isAutoReconnecting] || [connection willAutoReconnect]) &&
-//	   [transfer actualTransferred] > 0) {
-//		[self performSelector:@selector(_requestTransfer:) withObject:transfer afterDelay:2.0];
-//	}
+    connection = [transfer connection];
+        
+    if(error) {
+        [self _presentError:error forConnection:connection transfer:transfer];
+    }
+
+    [self _finishTransfer:transfer];
+    
+    if(![[error domain] isEqualToString:WCWiredClientErrorDomain] &&
+	   ![[error domain] isEqualToString:WCWiredProtocolErrorDomain] &&
+	   [[WCSettings settings] boolForKey:WCAutoReconnect] &&
+	   ([connection isConnected] || [connection isAutoReconnecting] || [connection willAutoReconnect]) &&
+	   [transfer actualTransferred] > 0) {
+		[self performSelector:@selector(_requestTransfer:) withObject:transfer afterDelay:2.0];
+	}
 }
 
 
@@ -1367,7 +1368,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	WIP7UInt32			queue, transaction;
 	
 	while([transfer isWorking]) {
-		message = [connection readMessageWithTimeout:1.0 error:error];
+		message = [connection readMessageWithTimeout:0.0 error:error];
 	
 		if(!message) {
 			code = [[[*error userInfo] objectForKey:WILibWiredErrorKey] code];

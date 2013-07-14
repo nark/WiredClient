@@ -83,7 +83,7 @@ div.postbuttons {
 	padding: 5px;
 	margin-right: 5px;
 	text-align: right;
-	width: 180px;
+	width: auto;
 	float: right;
 }
 
@@ -97,7 +97,10 @@ input {
 	color: #999;
 	text-align: center;
 	cursor: pointer;
-    width: 50px;
+    display: inline-block;
+    min-width: 80px;
+    padding-left: 15px;
+    padding-right: 15px;
     height: 24px;
     border: 1px solid #eee;
     border-radius: 4px;
@@ -124,7 +127,10 @@ div.reply {
 }
 
 div.reply input {
-	width: 75px;
+    display: inline-block;
+    min-width: 80px;
+    padding-left: 15px;
+    padding-right: 15px;
 	background-color: rgba(0,255,10,0.1);
 }
 

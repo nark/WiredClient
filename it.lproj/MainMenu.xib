@@ -60,7 +60,7 @@
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="939549340">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">À propos de Wired Client</string>
+									<string key="NSTitle">About Wired Client</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="393497551"/>
@@ -68,7 +68,7 @@
 								</object>
 								<object class="NSMenuItem" id="238638365">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Vérifier les mises à jour…</string>
+									<string key="NSTitle">Check For Updates…</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="393497551"/>
@@ -87,7 +87,7 @@
 								</object>
 								<object class="NSMenuItem" id="797634259">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Préférences...</string>
+									<string key="NSTitle">Preferences...</string>
 									<string key="NSKeyEquiv">,</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -135,7 +135,7 @@
 								</object>
 								<object class="NSMenuItem" id="900098065">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Masquer Wired Client</string>
+									<string key="NSTitle">Hide Wired Client</string>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -144,7 +144,7 @@
 								</object>
 								<object class="NSMenuItem" id="957021986">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Masquer les autres</string>
+									<string key="NSTitle">Hide Others</string>
 									<string key="NSKeyEquiv">h</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -153,7 +153,7 @@
 								</object>
 								<object class="NSMenuItem" id="525829994">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Tout afficher</string>
+									<string key="NSTitle">Show All</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -173,7 +173,7 @@
 								</object>
 								<object class="NSMenuItem" id="1068109002">
 									<reference key="NSMenu" ref="189293365"/>
-									<string key="NSTitle">Quitter Wired Client</string>
+									<string key="NSTitle">Quit Wired Client</string>
 									<string key="NSKeyEquiv">q</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -961,6 +961,14 @@
 									<reference key="NSOnImage" ref="393497551"/>
 									<reference key="NSMixedImage" ref="410793182"/>
 								</object>
+								<object class="NSMenuItem" id="530096258">
+									<reference key="NSMenu" ref="764705616"/>
+									<string key="NSTitle">Crash Reports</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="393497551"/>
+									<reference key="NSMixedImage" ref="410793182"/>
+								</object>
 							</array>
 						</object>
 					</object>
@@ -991,6 +999,7 @@
 						<string key="NSFrame">{{20, 17}, {24, 24}}</string>
 						<reference key="NSSuperview" ref="215021197"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="734052380"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSImageCell" key="NSCell" id="1048121108">
 							<int key="NSCellFlags">134217728</int>
@@ -1013,6 +1022,7 @@
 						<string key="NSFrame">{{49, 20}, {368, 17}}</string>
 						<reference key="NSSuperview" ref="215021197"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="595553534">
 							<int key="NSCellFlags">68157504</int>
@@ -1049,6 +1059,7 @@
 				<string key="NSFrameSize">{434, 57}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
+				<reference key="NSNextKeyView" ref="1038568189"/>
 				<object class="NSMutableString" key="NSClassName">
 					<characters key="NS.bytes">NSView</characters>
 				</object>
@@ -1666,6 +1677,14 @@
 					<int key="connectionID">925</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">crashReports:</string>
+						<reference key="source" ref="569324035"/>
+						<reference key="destination" ref="530096258"/>
+					</object>
+					<int key="connectionID">927</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="366230718"/>
@@ -2131,6 +2150,7 @@
 							<reference ref="427792182"/>
 							<reference ref="73453655"/>
 							<reference ref="876843122"/>
+							<reference ref="530096258"/>
 						</array>
 						<reference key="parent" ref="106292789"/>
 					</object>
@@ -2456,6 +2476,11 @@
 						<reference key="object" ref="1048121108"/>
 						<reference key="parent" ref="1038568189"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">926</int>
+						<reference key="object" ref="530096258"/>
+						<reference key="parent" ref="764705616"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -2572,12 +2597,13 @@
 				<string key="922.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="923.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="924.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="926.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">925</int>
+			<int key="maxID">927</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3136,7 +3162,9 @@
 						<string key="deleteDocument:">id</string>
 						<string key="disconnect:">id</string>
 						<string key="exportBookmarks:">id</string>
+						<string key="exportTrackerBookmarks:">id</string>
 						<string key="files:">id</string>
+						<string key="importBookmarks:">id</string>
 						<string key="manual:">id</string>
 						<string key="messages:">id</string>
 						<string key="newDocument:">id</string>
@@ -3206,8 +3234,16 @@
 							<string key="name">exportBookmarks:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="exportTrackerBookmarks:">
+							<string key="name">exportTrackerBookmarks:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="files:">
 							<string key="name">files:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="importBookmarks:">
+							<string key="name">importBookmarks:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="manual:">

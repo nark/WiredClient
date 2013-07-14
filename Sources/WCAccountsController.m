@@ -913,7 +913,7 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		[_shownAccounts count],
 		[_shownAccounts count] == 1
 			? NSLS(@"account", @"Account singular")
-			: NSLS(@"accounts", @"Account singular")]];
+			: NSLS(@"accounts", @"Account plural")]];
 }
 
 

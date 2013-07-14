@@ -212,8 +212,10 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 
 
 - (void)_updateApplicationIcon {
-	[NSApp setApplicationIconImage:
-		[[NSImage imageNamed:@"NSApplicationIcon"] badgedImageWithInt:_unread]];
+    if(_unread > 0)
+        [[NSApp dockTile] setBadgeLabel:[NSSWF:@"%ld", _unread]];
+    else
+        [[NSApp dockTile] setBadgeLabel:nil];
 }
 
 

@@ -2175,13 +2175,13 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 #pragma mark -
 
 - (NSString *)newDocumentMenuItemTitle {
-	return NSLS(@"New Thread\u2026", "New menu item");
+	return NSLS(@"New Thread", "New menu item");
 }
 
 
 
 - (NSString *)deleteDocumentMenuItemTitle {
-	return NSLS(@"Delete Thread\u2026", "Delete menu item");
+	return NSLS(@"Delete Thread", "Delete menu item");
 }
 
 
@@ -2193,7 +2193,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (NSString *)saveDocumentMenuItemTitle {
-	return NSLS(@"Save Thread\u2026", @"Save menu item");
+	return NSLS(@"Save Thread", @"Save menu item");
 }
 
 

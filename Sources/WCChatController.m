@@ -2065,7 +2065,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 #pragma mark -
 
 - (NSString *)saveDocumentMenuItemTitle {
-	return NSLS(@"Save Chat\u2026", @"Save menu item");
+	return NSLS(@"Save Chat", @"Save menu item");
 }
 
 
