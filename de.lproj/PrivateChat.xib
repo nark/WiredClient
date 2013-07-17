@@ -65,7 +65,7 @@
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{216.43700000000001, 107}</string>
 				<object class="NSView" key="NSWindowView" id="156337710">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSSplitView" id="926885866">
@@ -94,6 +94,7 @@
 																	<string key="NSFrame">{{0, -2}, {432, 5}}</string>
 																	<reference key="NSSuperview" ref="147163277"/>
 																	<reference key="NSNextKeyView" ref="691201383"/>
+																	<string key="NSReuseIdentifierKey">_NS:9</string>
 																	<string key="NSOffsets">{0, 0}</string>
 																	<object class="NSTextFieldCell" key="NSTitleCell">
 																		<int key="NSCellFlags">67108864</int>
@@ -129,6 +130,7 @@
 																	<string key="NSFrame">{{14, 7}, {15, 15}}</string>
 																	<reference key="NSSuperview" ref="147163277"/>
 																	<reference key="NSNextKeyView" ref="662177757"/>
+																	<string key="NSReuseIdentifierKey">_NS:9</string>
 																	<bool key="NSEnabled">YES</bool>
 																	<object class="NSButtonCell" key="NSCell" id="248661767">
 																		<int key="NSCellFlags">67108864</int>
@@ -139,6 +141,7 @@
 																			<double key="NSSize">11</double>
 																			<int key="NSfFlags">3100</int>
 																		</object>
+																		<string key="NSCellIdentifier">_NS:9</string>
 																		<reference key="NSControlView" ref="300024017"/>
 																		<int key="NSButtonFlags">-935051264</int>
 																		<int key="NSButtonFlags2">134</int>
@@ -159,12 +162,14 @@
 																	<string key="NSFrame">{{73, 7}, {324, 14}}</string>
 																	<reference key="NSSuperview" ref="147163277"/>
 																	<reference key="NSNextKeyView" ref="264485225"/>
+																	<string key="NSReuseIdentifierKey">_NS:1505</string>
 																	<bool key="NSEnabled">YES</bool>
 																	<object class="NSTextFieldCell" key="NSCell" id="368527296">
 																		<int key="NSCellFlags">69206081</int>
 																		<int key="NSCellFlags2">272763392</int>
 																		<string key="NSContents"/>
 																		<reference key="NSSupport" ref="26"/>
+																		<string key="NSCellIdentifier">_NS:1505</string>
 																		<reference key="NSControlView" ref="927338387"/>
 																		<object class="NSColor" key="NSBackgroundColor" id="116336996">
 																			<int key="NSColorSpace">1</int>
@@ -188,6 +193,7 @@
 																	<string key="NSFrame">{{28, 7}, {45, 14}}</string>
 																	<reference key="NSSuperview" ref="147163277"/>
 																	<reference key="NSNextKeyView" ref="927338387"/>
+																	<string key="NSReuseIdentifierKey">_NS:1505</string>
 																	<bool key="NSEnabled">YES</bool>
 																	<object class="NSTextFieldCell" key="NSCell" id="587220046">
 																		<int key="NSCellFlags">68157504</int>
@@ -198,6 +204,7 @@
 																			<double key="NSSize">11</double>
 																			<int key="NSfFlags">3357</int>
 																		</object>
+																		<string key="NSCellIdentifier">_NS:1505</string>
 																		<reference key="NSControlView" ref="662177757"/>
 																		<reference key="NSBackgroundColor" ref="116336996"/>
 																		<reference key="NSTextColor" ref="432903369"/>
@@ -208,6 +215,7 @@
 															<string key="NSFrame">{{0, 263}, {434, 28}}</string>
 															<reference key="NSSuperview" ref="642780363"/>
 															<reference key="NSNextKeyView" ref="300024017"/>
+															<string key="NSReuseIdentifierKey">_NS:9</string>
 															<string key="NSClassName">WCChatTopicView</string>
 														</object>
 														<object class="WebView" id="691201383">
@@ -233,13 +241,18 @@
 															<string key="NSFrameSize">{434, 263}</string>
 															<reference key="NSSuperview" ref="642780363"/>
 															<reference key="NSNextKeyView"/>
+															<string key="NSReuseIdentifierKey">_NS:9</string>
 															<string key="FrameName"/>
 															<string key="GroupName"/>
 															<object class="WebPreferences" key="Preferences">
 																<string key="Identifier"/>
 																<dictionary class="NSMutableDictionary" key="Values">
+																	<boolean value="NO" key="WebKitAllowAnimatedImageLoopingPreferenceKey"/>
+																	<boolean value="NO" key="WebKitAllowAnimatedImagesPreferenceKey"/>
 																	<integer value="12" key="WebKitDefaultFixedFontSize"/>
 																	<integer value="12" key="WebKitDefaultFontSize"/>
+																	<boolean value="NO" key="WebKitJavaEnabled"/>
+																	<boolean value="NO" key="WebKitJavaScriptCanOpenWindowsAutomatically"/>
 																	<integer value="1" key="WebKitMinimumFontSize"/>
 																</dictionary>
 															</object>
@@ -250,6 +263,7 @@
 													<string key="NSFrameSize">{434, 291}</string>
 													<reference key="NSSuperview" ref="680488153"/>
 													<reference key="NSNextKeyView" ref="147163277"/>
+													<string key="NSReuseIdentifierKey">_NS:9</string>
 													<string key="NSClassName">NSView</string>
 												</object>
 												<object class="NSCustomView" id="749858777">
@@ -271,28 +285,10 @@
 																				<object class="NSTextView" id="271457421">
 																					<reference key="NSNextResponder" ref="134212568"/>
 																					<int key="NSvFlags">2322</int>
-																					<set class="NSMutableSet" key="NSDragTypes">
-																						<string>Apple HTML pasteboard type</string>
-																						<string>Apple PDF pasteboard type</string>
-																						<string>Apple PICT pasteboard type</string>
-																						<string>Apple PNG pasteboard type</string>
-																						<string>Apple URL pasteboard type</string>
-																						<string>CorePasteboardFlavorType 0x6D6F6F76</string>
-																						<string>NSColor pasteboard type</string>
-																						<string>NSFilenamesPboardType</string>
-																						<string>NSStringPboardType</string>
-																						<string>NeXT Encapsulated PostScript v1.2 pasteboard type</string>
-																						<string>NeXT RTFD pasteboard type</string>
-																						<string>NeXT Rich Text Format v1.0 pasteboard type</string>
-																						<string>NeXT TIFF v4.0 pasteboard type</string>
-																						<string>NeXT font pasteboard type</string>
-																						<string>NeXT ruler pasteboard type</string>
-																						<string>WebURLsWithTitlesPboardType</string>
-																						<string>public.url</string>
-																					</set>
 																					<string key="NSFrameSize">{382, 23}</string>
 																					<reference key="NSSuperview" ref="134212568"/>
 																					<reference key="NSNextKeyView" ref="855747502"/>
+																					<string key="NSReuseIdentifierKey">_NS:13</string>
 																					<object class="NSTextContainer" key="NSTextContainer" id="294833130">
 																						<object class="NSLayoutManager" key="NSLayoutManager">
 																							<object class="NSTextStorage" key="NSTextStorage">
@@ -312,7 +308,7 @@
 																						<int key="NSTCFlags">1</int>
 																					</object>
 																					<object class="NSTextViewSharedData" key="NSSharedData">
-																						<int key="NSFlags">100674435</int>
+																						<int key="NSFlags">67120003</int>
 																						<int key="NSTextCheckingTypes">0</int>
 																						<nil key="NSMarkedAttributes"/>
 																						<reference key="NSBackgroundColor" ref="788754175"/>
@@ -357,6 +353,7 @@
 																			<string key="NSFrameSize">{382, 23}</string>
 																			<reference key="NSSuperview" ref="1021531832"/>
 																			<reference key="NSNextKeyView" ref="271457421"/>
+																			<string key="NSReuseIdentifierKey">_NS:11</string>
 																			<reference key="NSDocView" ref="271457421"/>
 																			<reference key="NSBGColor" ref="788754175"/>
 																			<object class="NSCursor" key="NSCursor">
@@ -386,6 +383,7 @@
 																			<string key="NSFrame">{{367, 0}, {15, 21}}</string>
 																			<reference key="NSSuperview" ref="1021531832"/>
 																			<reference key="NSNextKeyView" ref="320953851"/>
+																			<string key="NSReuseIdentifierKey">_NS:84</string>
 																			<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 																			<reference key="NSTarget" ref="1021531832"/>
 																			<string key="NSAction">_doScroller:</string>
@@ -398,6 +396,7 @@
 																			<string key="NSFrame">{{-100, -100}, {87, 18}}</string>
 																			<reference key="NSSuperview" ref="1021531832"/>
 																			<reference key="NSNextKeyView" ref="134212568"/>
+																			<string key="NSReuseIdentifierKey">_NS:33</string>
 																			<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 																			<int key="NSsFlags">1</int>
 																			<reference key="NSTarget" ref="1021531832"/>
@@ -409,6 +408,7 @@
 																	<string key="NSFrame">{{45, 4}, {382, 23}}</string>
 																	<reference key="NSSuperview" ref="517049432"/>
 																	<reference key="NSNextKeyView" ref="134212568"/>
+																	<string key="NSReuseIdentifierKey">_NS:9</string>
 																	<int key="NSsFlags">133648</int>
 																	<reference key="NSVScroller" ref="367221771"/>
 																	<reference key="NSHScroller" ref="855747502"/>
@@ -423,11 +423,13 @@
 																	<string key="NSFrame">{{0, 2}, {37, 25}}</string>
 																	<reference key="NSSuperview" ref="517049432"/>
 																	<reference key="NSNextKeyView" ref="1021531832"/>
+																	<string key="NSReuseIdentifierKey">_NS:868</string>
 																	<bool key="NSEnabled">YES</bool>
 																	<object class="NSPopUpButtonCell" key="NSCell" id="945729114">
 																		<int key="NSCellFlags">-2080374720</int>
 																		<int key="NSCellFlags2">134219776</int>
 																		<reference key="NSSupport" ref="682960347"/>
+																		<string key="NSCellIdentifier">_NS:868</string>
 																		<reference key="NSControlView" ref="327865501"/>
 																		<int key="NSButtonFlags">-2046672896</int>
 																		<int key="NSButtonFlags2">163</int>
@@ -477,12 +479,14 @@
 															<string key="NSFrameSize">{434, 31}</string>
 															<reference key="NSSuperview" ref="749858777"/>
 															<reference key="NSNextKeyView" ref="327865501"/>
+															<string key="NSReuseIdentifierKey">_NS:9</string>
 															<string key="NSClassName">WCWindowGradientView</string>
 														</object>
 													</array>
 													<string key="NSFrame">{{0, 292}, {434, 31}}</string>
 													<reference key="NSSuperview" ref="680488153"/>
 													<reference key="NSNextKeyView" ref="517049432"/>
+													<string key="NSReuseIdentifierKey">_NS:1192</string>
 													<string key="NSClassName">NSView</string>
 												</object>
 											</array>
@@ -536,11 +540,13 @@
 											<int key="NSvFlags">292</int>
 											<string key="NSFrame">{{16, 3}, {42, 25}}</string>
 											<reference key="NSSuperview" ref="320953851"/>
+											<string key="NSReuseIdentifierKey">_NS:868</string>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSPopUpButtonCell" key="NSCell" id="764000870">
 												<int key="NSCellFlags">-2080374720</int>
 												<int key="NSCellFlags2">134219776</int>
 												<reference key="NSSupport" ref="682960347"/>
+												<string key="NSCellIdentifier">_NS:868</string>
 												<reference key="NSControlView" ref="394052857"/>
 												<int key="NSButtonFlags">-2046672896</int>
 												<int key="NSButtonFlags2">163</int>
@@ -594,7 +600,7 @@
 														</object>
 														<object class="NSMenuItem" id="956935900">
 															<reference key="NSMenu" ref="126428859"/>
-															<string key="NSTitle">Account bearbeiten...</string>
+															<string key="NSTitle">Benutzerkonto bearbeiten...</string>
 															<string key="NSKeyEquiv"/>
 															<int key="NSKeyEquivModMask">1048576</int>
 															<int key="NSMnemonicLoc">2147483647</int>
@@ -873,9 +879,10 @@ WiAAAAAAAABW+AAArC8AAB0DWFlaIAAAAAAAACYiAAASfwAAsXA</bytes>
 						</object>
 					</array>
 					<string key="NSFrameSize">{642, 323}</string>
+					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="926885866"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1600, 878}}</string>
 				<string key="NSMinSize">{216.43700000000001, 129}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSAutorecalculatesContentBorderThicknessMinY">NO</bool>
@@ -905,7 +912,7 @@ WiAAAAAAAABW+AAArC8AAB0DWFlaIAAAAAAAACYiAAASfwAAsXA</bytes>
 					</object>
 					<object class="NSMenuItem" id="482991929">
 						<reference key="NSMenu" ref="710850544"/>
-						<string key="NSTitle">Accounts bearbeiten...</string>
+						<string key="NSTitle">Benutzerkonten bearbeiten...</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -1024,7 +1031,7 @@ WiAAAAAAAABW+AAArC8AAB0DWFlaIAAAAAAAACYiAAASfwAAsXA</bytes>
 												<int key="NSTCFlags">1</int>
 											</object>
 											<object class="NSTextViewSharedData" key="NSSharedData">
-												<int key="NSFlags">100666215</int>
+												<int key="NSFlags">67111783</int>
 												<int key="NSTextCheckingTypes">0</int>
 												<nil key="NSMarkedAttributes"/>
 												<reference key="NSBackgroundColor" ref="788754175"/>
@@ -1044,10 +1051,11 @@ WiAAAAAAAABW+AAArC8AAB0DWFlaIAAAAAAAACYiAAASfwAAsXA</bytes>
 											</object>
 											<int key="NSTVFlags">6</int>
 											<string key="NSMaxSize">{647, 10000000}</string>
+											<string key="NSMinize">{330, 72}</string>
 											<nil key="NSDelegate"/>
 										</object>
 									</array>
-									<string key="NSFrame">{{1, 1}, {315, 72}}</string>
+									<string key="NSFrame">{{1, 1}, {330, 72}}</string>
 									<reference key="NSSuperview" ref="835414563"/>
 									<reference key="NSNextKeyView" ref="440692969"/>
 									<reference key="NSDocView" ref="440692969"/>
@@ -1078,7 +1086,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 								<object class="NSScroller" id="210177160">
 									<reference key="NSNextResponder" ref="835414563"/>
 									<int key="NSvFlags">256</int>
-									<string key="NSFrame">{{316, 1}, {15, 72}}</string>
+									<string key="NSFrame">{{315, 1}, {16, 72}}</string>
 									<reference key="NSSuperview" ref="835414563"/>
 									<reference key="NSNextKeyView" ref="407489148"/>
 									<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -1187,7 +1195,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string key="NSFrameSize">{372, 179}</string>
 					<reference key="NSNextKeyView" ref="396225726"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1600, 878}}</string>
 				<string key="NSMinSize">{213, 129}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -1295,7 +1303,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					</array>
 					<string key="NSFrameSize">{323, 127}</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1600, 878}}</string>
 				<string key="NSMinSize">{213, 129}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -1444,14 +1452,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_chatSplitView</string>
-						<reference key="source" ref="217721819"/>
-						<reference key="destination" ref="680488153"/>
-					</object>
-					<int key="connectionID">402</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">_userListSplitView</string>
 						<reference key="source" ref="217721819"/>
 						<reference key="destination" ref="926885866"/>
@@ -1473,14 +1473,6 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<reference key="destination" ref="207125621"/>
 					</object>
 					<int key="connectionID">410</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_chatView</string>
-						<reference key="source" ref="217721819"/>
-						<reference key="destination" ref="166741756"/>
-					</object>
-					<int key="connectionID">411</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1587,6 +1579,22 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<int key="connectionID">437</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_chatSplitView</string>
+						<reference key="source" ref="217721819"/>
+						<reference key="destination" ref="680488153"/>
+					</object>
+					<int key="connectionID">402</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_chatView</string>
+						<reference key="source" ref="217721819"/>
+						<reference key="destination" ref="166741756"/>
+					</object>
+					<int key="connectionID">411</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">kick:</string>
 						<reference key="source" ref="217721819"/>
@@ -1628,27 +1636,19 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_splitResizeView</string>
-						<reference key="source" ref="217721819"/>
-						<reference key="destination" ref="87346112"/>
-					</object>
-					<int key="connectionID">469</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_chatOutputWebView</string>
-						<reference key="source" ref="217721819"/>
-						<reference key="destination" ref="691201383"/>
-					</object>
-					<int key="connectionID">491</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">_userListScrollView</string>
 						<reference key="source" ref="217721819"/>
 						<reference key="destination" ref="22660103"/>
 					</object>
 					<int key="connectionID">492</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_splitResizeView</string>
+						<reference key="source" ref="217721819"/>
+						<reference key="destination" ref="87346112"/>
+					</object>
+					<int key="connectionID">469</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1673,6 +1673,14 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<reference key="destination" ref="1021531832"/>
 					</object>
 					<int key="connectionID">511</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_chatOutputWebView</string>
+						<reference key="source" ref="217721819"/>
+						<reference key="destination" ref="691201383"/>
+					</object>
+					<int key="connectionID">491</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -2287,7 +2295,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				<string key="136.CustomClassName">WISplitView</string>
 				<string key="136.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="139.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="139.IBWindowTemplateEditedContentRect">{{877, 589}, {642, 323}}</string>
+				<string key="139.IBWindowTemplateEditedContentRect">{{20, 378}, {666, 321}}</string>
 				<string key="144.CustomClassName">WITableView</string>
 				<string key="144.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="146.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2304,14 +2312,14 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				<string key="248.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="249.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="250.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="250.IBWindowTemplateEditedContentRect">{{630, 806}, {372, 179}}</string>
+				<string key="250.IBWindowTemplateEditedContentRect">{{0, 677}, {372, 179}}</string>
 				<string key="251.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="252.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="256.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="259.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="267.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="291.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="291.IBWindowTemplateEditedContentRect">{{651, 806}, {323, 127}}</string>
+				<string key="291.IBWindowTemplateEditedContentRect">{{21, 879}, {323, 127}}</string>
 				<string key="292.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="293.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="294.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2379,438 +2387,7 @@ AAEAAQAAAT0AAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 			<nil key="sourceID"/>
 			<int key="maxID">523</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">NSObject</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="cancelSheet:">id</string>
-						<string key="submitSheet:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="cancelSheet:">
-							<string key="name">cancelSheet:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="submitSheet:">
-							<string key="name">submitSheet:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/NSObject.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCChatController</string>
-					<string key="superclassName">WIObject</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="editAccount:">id</string>
-						<string key="fileFormat:">id</string>
-						<string key="getInfo:">id</string>
-						<string key="hideUserList:">id</string>
-						<string key="ignore:">id</string>
-						<string key="insertSmiley:">id</string>
-						<string key="kick:">id</string>
-						<string key="saveChat:">id</string>
-						<string key="saveDocument:">id</string>
-						<string key="sendPrivateMessage:">id</string>
-						<string key="setTopic:">id</string>
-						<string key="showUserList:">id</string>
-						<string key="stats:">id</string>
-						<string key="toggleUserList:">id</string>
-						<string key="unignore:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="editAccount:">
-							<string key="name">editAccount:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="fileFormat:">
-							<string key="name">fileFormat:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="getInfo:">
-							<string key="name">getInfo:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="hideUserList:">
-							<string key="name">hideUserList:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="ignore:">
-							<string key="name">ignore:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="insertSmiley:">
-							<string key="name">insertSmiley:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="kick:">
-							<string key="name">kick:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="saveChat:">
-							<string key="name">saveChat:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="saveDocument:">
-							<string key="name">saveDocument:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="sendPrivateMessage:">
-							<string key="name">sendPrivateMessage:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="setTopic:">
-							<string key="name">setTopic:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="showUserList:">
-							<string key="name">showUserList:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="stats:">
-							<string key="name">stats:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="toggleUserList:">
-							<string key="name">toggleUserList:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="unignore:">
-							<string key="name">unignore:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="_chatInputScrollView">LNScrollView</string>
-						<string key="_chatInputTextView">NSTextView</string>
-						<string key="_chatOutputScrollView">NSScrollView</string>
-						<string key="_chatOutputWebView">LNWebView</string>
-						<string key="_chatSmileysMenu">NSMenu</string>
-						<string key="_chatSplitView">WISplitView</string>
-						<string key="_chatView">NSView</string>
-						<string key="_getInfoMenuItem">NSMenuItem</string>
-						<string key="_iconTableColumn">NSTableColumn</string>
-						<string key="_ignoreMenuItem">NSMenuItem</string>
-						<string key="_infoButton">NSButton</string>
-						<string key="_kickButton">NSButton</string>
-						<string key="_kickMessagePanel">NSPanel</string>
-						<string key="_kickMessageTextField">NSTextField</string>
-						<string key="_nickTableColumn">NSTableColumn</string>
-						<string key="_privateMessageButton">NSButton</string>
-						<string key="_saveChatFileFormatPopUpButton">NSPopUpButton</string>
-						<string key="_saveChatPlainTextEncodingPopUpButton">NSPopUpButton</string>
-						<string key="_saveChatView">NSView</string>
-						<string key="_sendPrivateMessageMenuItem">NSMenuItem</string>
-						<string key="_setTopicPanel">NSPanel</string>
-						<string key="_setTopicTextView">NSTextView</string>
-						<string key="_splitResizeView">NSImageView</string>
-						<string key="_topicNickTextField">NSTextField</string>
-						<string key="_topicTextField">NSTextField</string>
-						<string key="_userListMenu">NSMenu</string>
-						<string key="_userListScrollView">LNScrollView</string>
-						<string key="_userListSplitView">WISplitView</string>
-						<string key="_userListTableView">WITableView</string>
-						<string key="_userListView">NSView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="_chatInputScrollView">
-							<string key="name">_chatInputScrollView</string>
-							<string key="candidateClassName">LNScrollView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_chatInputTextView">
-							<string key="name">_chatInputTextView</string>
-							<string key="candidateClassName">NSTextView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_chatOutputScrollView">
-							<string key="name">_chatOutputScrollView</string>
-							<string key="candidateClassName">NSScrollView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_chatOutputWebView">
-							<string key="name">_chatOutputWebView</string>
-							<string key="candidateClassName">LNWebView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_chatSmileysMenu">
-							<string key="name">_chatSmileysMenu</string>
-							<string key="candidateClassName">NSMenu</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_chatSplitView">
-							<string key="name">_chatSplitView</string>
-							<string key="candidateClassName">WISplitView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_chatView">
-							<string key="name">_chatView</string>
-							<string key="candidateClassName">NSView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_getInfoMenuItem">
-							<string key="name">_getInfoMenuItem</string>
-							<string key="candidateClassName">NSMenuItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_iconTableColumn">
-							<string key="name">_iconTableColumn</string>
-							<string key="candidateClassName">NSTableColumn</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_ignoreMenuItem">
-							<string key="name">_ignoreMenuItem</string>
-							<string key="candidateClassName">NSMenuItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_infoButton">
-							<string key="name">_infoButton</string>
-							<string key="candidateClassName">NSButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_kickButton">
-							<string key="name">_kickButton</string>
-							<string key="candidateClassName">NSButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_kickMessagePanel">
-							<string key="name">_kickMessagePanel</string>
-							<string key="candidateClassName">NSPanel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_kickMessageTextField">
-							<string key="name">_kickMessageTextField</string>
-							<string key="candidateClassName">NSTextField</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_nickTableColumn">
-							<string key="name">_nickTableColumn</string>
-							<string key="candidateClassName">NSTableColumn</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_privateMessageButton">
-							<string key="name">_privateMessageButton</string>
-							<string key="candidateClassName">NSButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_saveChatFileFormatPopUpButton">
-							<string key="name">_saveChatFileFormatPopUpButton</string>
-							<string key="candidateClassName">NSPopUpButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_saveChatPlainTextEncodingPopUpButton">
-							<string key="name">_saveChatPlainTextEncodingPopUpButton</string>
-							<string key="candidateClassName">NSPopUpButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_saveChatView">
-							<string key="name">_saveChatView</string>
-							<string key="candidateClassName">NSView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_sendPrivateMessageMenuItem">
-							<string key="name">_sendPrivateMessageMenuItem</string>
-							<string key="candidateClassName">NSMenuItem</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_setTopicPanel">
-							<string key="name">_setTopicPanel</string>
-							<string key="candidateClassName">NSPanel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_setTopicTextView">
-							<string key="name">_setTopicTextView</string>
-							<string key="candidateClassName">NSTextView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_splitResizeView">
-							<string key="name">_splitResizeView</string>
-							<string key="candidateClassName">NSImageView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_topicNickTextField">
-							<string key="name">_topicNickTextField</string>
-							<string key="candidateClassName">NSTextField</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_topicTextField">
-							<string key="name">_topicTextField</string>
-							<string key="candidateClassName">NSTextField</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_userListMenu">
-							<string key="name">_userListMenu</string>
-							<string key="candidateClassName">NSMenu</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_userListScrollView">
-							<string key="name">_userListScrollView</string>
-							<string key="candidateClassName">LNScrollView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_userListSplitView">
-							<string key="name">_userListSplitView</string>
-							<string key="candidateClassName">WISplitView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_userListTableView">
-							<string key="name">_userListTableView</string>
-							<string key="candidateClassName">WITableView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="_userListView">
-							<string key="name">_userListView</string>
-							<string key="candidateClassName">NSView</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCChatController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCChatInputTextView</string>
-					<string key="superclassName">NSTextView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCChatInputTextView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCChatTopicView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCChatTopicView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCChatWindow</string>
-					<string key="superclassName">WIWindow</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCChatWindow.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCConnectionController</string>
-					<string key="superclassName">WIWindowController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCConnectionController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCPrivateChat</string>
-					<string key="superclassName">WCConnectionController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="getInfo:">id</string>
-						<string key="saveChat:">id</string>
-						<string key="saveDocument:">id</string>
-						<string key="setTopic:">id</string>
-						<string key="toggleUserList:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="getInfo:">
-							<string key="name">getInfo:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="saveChat:">
-							<string key="name">saveChat:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="saveDocument:">
-							<string key="name">saveDocument:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="setTopic:">
-							<string key="name">setTopic:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="toggleUserList:">
-							<string key="name">toggleUserList:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">_chatController</string>
-						<string key="NS.object.0">WCPrivateChatController</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">_chatController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">_chatController</string>
-							<string key="candidateClassName">WCPrivateChatController</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCPrivateChat.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCPrivateChatController</string>
-					<string key="superclassName">WCChatController</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">_privateChat</string>
-						<string key="NS.object.0">WCPrivateChat</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">_privateChat</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">_privateChat</string>
-							<string key="candidateClassName">WCPrivateChat</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCPrivateChatController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCUserCell</string>
-					<string key="superclassName">NSCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCUserCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WCWindowGradientView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WCWindowGradientView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WIObject</string>
-					<string key="superclassName">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WIObject.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WISplitView</string>
-					<string key="superclassName">NSSplitView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WISplitView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WITableView</string>
-					<string key="superclassName">NSTableView</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">showViewOptions:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">showViewOptions:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">showViewOptions:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WITableView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WIWindow</string>
-					<string key="superclassName">NSWindow</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WIWindow.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">WIWindowController</string>
-					<string key="superclassName">NSWindowController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/WIWindowController.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
