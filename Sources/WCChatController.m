@@ -460,16 +460,16 @@ typedef enum _WCChatFormat					WCChatFormat;
 		artist		= [[iTunes currentTrack] artist];
 		album		= [[iTunes currentTrack] album];
 		
-		if(!name || [name length] <= 0)
-			name	= @"Unknow Track";
+        if(!name || [name length] <= 0)
+			name	= NSLS(@"Unknow Track", @"Unknow Track");
 		
 		if(!artist || [artist length] <= 0)
-			artist	= @"Unknow Artist";
+			artist	= NSLS(@"Unknow Artist", @"Unknow Artist");
 		
 		if(!album || [album length] <= 0)
-			album	= @"Unknow Album";
+			album	= NSLS(@"Unknow Album", @"Unknow Album");
 		
-		chat = [NSSWF:@"is listening to %@ performed by %@ in album %@.",
+		chat = [NSSWF:NSLS(@"is listening to %@ performed by %@ in album %@.", @"Now playing message"),
 				name,
 				artist,
 				album];

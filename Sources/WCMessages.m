@@ -526,7 +526,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 #pragma mark -
 
 - (NSString *)saveDocumentMenuItemTitle {
-    return @"Save Conversation";
+    return NSLS(@"Save Conversation", @"Save conversation menu");
 }
 
 

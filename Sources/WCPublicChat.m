@@ -464,7 +464,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	_bookmarks		= [[WCServerBookmarks bookmarksItem] retain];
     
 	_servers		= [[WCServerContainer alloc] initWithName:@"<root>"];
-	_trackers       = [[WCServerContainer alloc] initWithName:@"TRACKERS"];
+	_trackers       = [[WCServerContainer alloc] initWithName:NSLS(@"TRACKERS",  @"Trackers server")];
     
 	_browser		= [[NSNetServiceBrowser alloc] init];
     
