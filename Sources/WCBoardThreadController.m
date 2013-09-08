@@ -508,9 +508,9 @@
 					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 					
 					if(isDirectory) {
-
-						file = [WCFile fileWithDirectory:path connection:[_thread connection]];
-						[WCFiles filesWithConnection:[_thread connection] file:file selectFile:file];
+                        [WCFiles filesWithConnection:[_thread connection]
+                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[_thread connection]]
+                                          selectFile:[WCFile fileWithDirectory:path connection:[_thread connection]]];
                         
 					} else {
                         file = [WCFile fileWithFile:path connection:[_thread connection]];

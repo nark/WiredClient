@@ -73,7 +73,6 @@ NSString * const WCChatHighlightColorKey						= @"WCChatHighlightColorKey";
 
 NSString * const WCUserPboardType								= @"WCUserPboardType";
 
-
 enum _WCChatFormat {
 	WCChatPlainText,
 	WCChatRTF,
@@ -1217,7 +1216,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[_timestampDateFormatter release];
 	[_timestampEveryLineDateFormatter release];
 	[_topicDateFormatter release];
-	
+    
 	[_pings release];
     
 	[super dealloc];
@@ -2653,8 +2652,9 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 					
 					if(isDirectory) {
-						file = [WCFile fileWithDirectory:path connection:[self connection]];
-						[WCFiles filesWithConnection:[self connection] file:file];
+                        [WCFiles filesWithConnection:[self connection]
+                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[self connection]]
+                                          selectFile:[WCFile fileWithDirectory:path connection:[self connection]]];
                         
 					} else {
                         file = [WCFile fileWithFile:path connection:[self connection]];

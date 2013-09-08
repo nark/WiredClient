@@ -96,6 +96,41 @@
 
 #pragma mark -
 
++ (NSString *) webScriptNameForSelector:(SEL)sel
+{
+    NSString *name;
+    
+    if (sel == @selector(JSONMessages))
+        name = @"JSONMessages";
+    
+    return name;
+}
+
++ (BOOL)isSelectorExcludedFromWebScript:(SEL)aSelector
+{
+    if (aSelector == @selector(JSONMessages)) return NO;
+    return YES;
+}
+
+
+#pragma mark -
+
+- (NSString *)JSONMessages {
+    SBJsonWriter    *jsonWriter;
+    NSString        *jsonString;
+    
+    jsonWriter      = [[SBJsonWriter alloc] init];
+    jsonString      = [jsonWriter stringWithObject:_messages];
+
+    [jsonWriter release];
+    
+    return jsonString;
+}
+
+
+
+#pragma mark -
+
 + (id)rootConversation {
 	return [[[self alloc] _initWithName:@"<root>" user:NULL expandable:YES connection:NULL] autorelease];
 }
@@ -105,7 +140,6 @@
 + (id)conversationWithUser:(WCUser *)user connection:(WCServerConnection *)connection {
 	return [[[self alloc] _initWithName:[user nick] user:user expandable:NO connection:connection] autorelease];
 }
-
 
 
 - (id)initWithConnection:(WCServerConnection *)connection {
@@ -347,6 +381,22 @@
 
 
 
+- (NSArray *)messagesFromOffset:(NSUInteger)offset withLimit:(NSUInteger)limit {
+    NSRange     range;
+    
+    if(!_messages || [_messages count] <= 0 || offset > [_messages count])
+        return nil;
+    
+    if((offset + limit) > [_messages count])
+        limit = (offset + limit) - [_messages count];
+        
+    range = NSMakeRange(offset, limit);
+
+    return [_messages subarrayWithRange:range];
+}
+
+
+
 - (NSArray *)unreadMessages {
 	NSMutableArray	*messages;
 	WCMessage		*message;
@@ -545,5 +595,8 @@
 + (id)rootConversation {
 	return [[[self alloc] _initWithName:NSLS(@"Broadcasts", @"Messages item") user:NULL expandable:YES connection:NULL] autorelease];
 }
+
+
+
 
 @end

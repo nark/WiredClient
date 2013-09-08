@@ -62,161 +62,167 @@
 @implementation WCConversationController(Private)
 
 
-- (void)_reloadDataAsynchronously {	
-	__block NSEnumerator				*enumerator;
-	__block NSMutableDictionary			*icons;
-	__block NSCalendar					*calendar;
-	__block NSDate						*previousDate;
-	__block NSDateComponents			*components;
-	__block NSMutableString				*mutableMessage;
-	__block NSString					*icon, *messageTemplate, *statusTemplate;
-	__block NSError						*error;
-	__block WITemplateBundle			*template;
-	__block WCMessage					*message;
-	__block WCDOMMessage				*messageElement;
-	__block WCDOMMessageStatus			*messageStatusElement;
-	__block NSInteger					day;
-	__block BOOL						changedUnread = NO, isKeyWindow;
-	
-	// launch background operation 
-	__block NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-		
-		// clean the webview in the main thread
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			[_conversationWebView clearChildrenElementsOfElementWithID:@"messages-content"];
-		});
-		
-		template		= [WITemplateBundle templateWithPath:_templatePath];
-	
-		messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
-		statusTemplate	= [NSString stringWithContentsOfFile:[template pathForResource:@"MessageStatus" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];
-		
-		// reload CSS in the main thread
-		dispatch_sync(dispatch_get_main_queue(), ^{
-			[self reloadTemplate];
-		});
-		
-		
-		if(_conversation && ![_conversation isExpandable]) {
-			
-			isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
-			
-			if([_conversation numberOfMessages] != 0) {
-				calendar		= [NSCalendar currentCalendar];
-				day				= -1;
-				previousDate	= nil;
-				icons			= [NSMutableDictionary dictionary];
-				enumerator		= [[_conversation messages] reverseObjectEnumerator];
-				
-				// for each message of the conversation, if operation is still running
-				while((message = [enumerator nextObject]) && ![operation isCancelled]) {	
-					
-					// check for status element
-					components	= [calendar components:NSDayCalendarUnit fromDate:[message date]];
-					
-					if(previousDate == nil) {
-						previousDate	= [message date];
-						
-					} else {
-						if([previousDate timeIntervalSinceDate:[message date]] > WC_MESSAGES_STATUS_INTERVAL) {
-							// append status element in the main thread
-							dispatch_sync(dispatch_get_main_queue(), ^{
-								messageStatusElement = [WCDOMMessageStatus messageStatusElementForFrame:[_conversationWebView mainFrame] withTemplate:statusTemplate];
-								[messageStatusElement setMessageStatus:[_messageStatusDateFormatter stringFromDate:previousDate]];
-								
-								[_conversationWebView appendElement:[messageStatusElement element] 
-											   toTopOfElementWithID:@"messages-content" 
-															 scroll:YES];
-							});	
-							previousDate = [message date];
-						}
-					}
-					
-					// compute icon as a base 64 string
-					icon = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
-					
-					if(!icon) {
-						icon = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
-						
-						if(icon)
-							[icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
-					}
-					
-					// compute message string (format HTML, URL, smileys)
-					mutableMessage = [NSMutableString stringWithString:[message message]];
-					
-					if(![WCChatController isHTMLString:mutableMessage]) {
-						
-						[WCChatController applyHTMLEscapingToMutableString:mutableMessage];
-						[WCChatController applyHTMLTagsForURLToMutableString:mutableMessage];
-						
-						if([[[_conversation connection] theme] boolForKey:WCThemesShowSmileys])
-							[WCChatController applyHTMLTagsForSmileysToMutableString:mutableMessage];
-						
-					}
-					
-					[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
-					
-					
-					// apend chat element in the main thread, re-check if operation is still running
-					if(![operation isCancelled]) {
-						dispatch_sync(dispatch_get_main_queue(), ^{
-							messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
-							[messageElement setServer:[message connectionName]];
-							[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
-							[messageElement setNick:[message nick]];
-							
-							if([message direction] == WCMessageTo)
-								[messageElement setDirection:@"to"];
-							else
-								[messageElement setDirection:@"from"];
-							
-							[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
-							[messageElement setMessageContent:mutableMessage];
-							
-							[_conversationWebView appendElement:[messageElement element] 
-										   toTopOfElementWithID:@"messages-content" 
-														 scroll:YES];
-						});
-					}
-					
-					// append status element in the main thread (if messages are all loaded, append the status date at the top)
-					if(message == [[_conversation messages] objectAtIndex:0]) {
-						dispatch_sync(dispatch_get_main_queue(), ^{
-							messageStatusElement = [WCDOMMessageStatus messageStatusElementForFrame:[_conversationWebView mainFrame] withTemplate:statusTemplate];
-							[messageStatusElement setMessageStatus:[_messageStatusDateFormatter stringFromDate:[message date]]];
-							
-							[_conversationWebView appendElement:[messageStatusElement element] 
-										   toTopOfElementWithID:@"messages-content" 
-														 scroll:YES];
-						});	
-					}
-					
-					// check messages unread
-					if([message isUnread] && isKeyWindow) {
-						[message setUnread:NO];
-						changedUnread = YES;
-					}
-				}
-			}
-			
-			// check conversation unread
-			if([_conversation isUnread] && isKeyWindow) {
-				[_conversation setUnread:NO];
-				changedUnread = YES;
-			}
-		}
-		
-		// notify in the main thread: messages changed
-		dispatch_sync(dispatch_get_main_queue(), ^{	
-			if(changedUnread)
-				[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-		});
-	}];
-	
-	// add operation to the queue if still valid
-	if(![operation isCancelled])
-		[_loadingQueue addOperation:operation];
+- (void)_reloadDataAsynchronously {
+    WITemplateBundle *template = [WITemplateBundle templateWithPath:_templatePath];
+    NSURL *url = [NSURL fileURLWithPath:[template pathForResource:@"index" ofType:@"html" inDirectory:@"htdocs"]];    
+    [[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
+    
+    //[[_conversationWebView windowScriptObject] setValue:_conversation forKey:@"Conversation"];
+    
+//	__block NSEnumerator				*enumerator;
+//	__block NSMutableDictionary			*icons;
+//	__block NSCalendar					*calendar;
+//	__block NSDate						*previousDate;
+//	__block NSDateComponents			*components;
+//	__block NSMutableString				*mutableMessage;
+//	__block NSString					*icon, *messageTemplate, *statusTemplate;
+//	__block NSError						*error;
+//	__block WITemplateBundle			*template;
+//	__block WCMessage					*message;
+//	__block WCDOMMessage				*messageElement;
+//	__block WCDOMMessageStatus			*messageStatusElement;
+//	__block NSInteger					day;
+//	__block BOOL						changedUnread = NO, isKeyWindow;
+//	
+//	// launch background operation 
+//	__block NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+//		
+//		// clean the webview in the main thread
+//		dispatch_sync(dispatch_get_main_queue(), ^{
+//			[_conversationWebView clearChildrenElementsOfElementWithID:@"messages-content"];
+//		});
+//		
+//		template		= [WITemplateBundle templateWithPath:_templatePath];
+//	
+//		messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
+//		statusTemplate	= [NSString stringWithContentsOfFile:[template pathForResource:@"MessageStatus" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];
+//		
+//		// reload CSS in the main thread
+//		dispatch_sync(dispatch_get_main_queue(), ^{
+//			[self reloadTemplate];
+//		});
+//		
+//		
+//		if(_conversation && ![_conversation isExpandable]) {
+//			
+//			isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
+//			
+//			if([_conversation numberOfMessages] != 0) {
+//				calendar		= [NSCalendar currentCalendar];
+//				day				= -1;
+//				previousDate	= nil;
+//				icons			= [NSMutableDictionary dictionary];
+//				enumerator		= [[_conversation messages] reverseObjectEnumerator];
+//				
+//				// for each message of the conversation, if operation is still running
+//				while((message = [enumerator nextObject]) && ![operation isCancelled]) {	
+//					
+//					// check for status element
+//					components	= [calendar components:NSDayCalendarUnit fromDate:[message date]];
+//					
+//					if(previousDate == nil) {
+//						previousDate	= [message date];
+//						
+//					} else {
+//						if([previousDate timeIntervalSinceDate:[message date]] > WC_MESSAGES_STATUS_INTERVAL) {
+//							// append status element in the main thread
+//							dispatch_sync(dispatch_get_main_queue(), ^{
+//								messageStatusElement = [WCDOMMessageStatus messageStatusElementForFrame:[_conversationWebView mainFrame] withTemplate:statusTemplate];
+//								[messageStatusElement setMessageStatus:[_messageStatusDateFormatter stringFromDate:previousDate]];
+//								
+//								[_conversationWebView appendElement:[messageStatusElement element] 
+//											   toTopOfElementWithID:@"messages-content" 
+//															 scroll:YES];
+//							});	
+//							previousDate = [message date];
+//						}
+//					}
+//					
+//					// compute icon as a base 64 string
+//					icon = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
+//					
+//					if(!icon) {
+//						icon = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
+//						
+//						if(icon)
+//							[icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
+//					}
+//					
+//					// compute message string (format HTML, URL, smileys)
+//					mutableMessage = [NSMutableString stringWithString:[message message]];
+//					
+//					if(![WCChatController isHTMLString:mutableMessage]) {
+//						
+//						[WCChatController applyHTMLEscapingToMutableString:mutableMessage];
+//						[WCChatController applyHTMLTagsForURLToMutableString:mutableMessage];
+//						
+//						if([[[_conversation connection] theme] boolForKey:WCThemesShowSmileys])
+//							[WCChatController applyHTMLTagsForSmileysToMutableString:mutableMessage];
+//						
+//					}
+//					
+//					[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
+//					
+//					
+//					// apend chat element in the main thread, re-check if operation is still running
+//					if(![operation isCancelled]) {
+//						dispatch_sync(dispatch_get_main_queue(), ^{
+//							messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
+//							[messageElement setServer:[message connectionName]];
+//							[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
+//							[messageElement setNick:[message nick]];
+//							
+//							if([message direction] == WCMessageTo)
+//								[messageElement setDirection:@"to"];
+//							else
+//								[messageElement setDirection:@"from"];
+//							
+//							[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
+//							[messageElement setMessageContent:mutableMessage];
+//							
+//							[_conversationWebView appendElement:[messageElement element] 
+//										   toTopOfElementWithID:@"messages-content" 
+//														 scroll:YES];
+//						});
+//					}
+//					
+//					// append status element in the main thread (if messages are all loaded, append the status date at the top)
+//					if(message == [[_conversation messages] objectAtIndex:0]) {
+//						dispatch_sync(dispatch_get_main_queue(), ^{
+//							messageStatusElement = [WCDOMMessageStatus messageStatusElementForFrame:[_conversationWebView mainFrame] withTemplate:statusTemplate];
+//							[messageStatusElement setMessageStatus:[_messageStatusDateFormatter stringFromDate:[message date]]];
+//							
+//							[_conversationWebView appendElement:[messageStatusElement element] 
+//										   toTopOfElementWithID:@"messages-content" 
+//														 scroll:YES];
+//						});	
+//					}
+//					
+//					// check messages unread
+//					if([message isUnread] && isKeyWindow) {
+//						[message setUnread:NO];
+//						changedUnread = YES;
+//					}
+//				}
+//			}
+//			
+//			// check conversation unread
+//			if([_conversation isUnread] && isKeyWindow) {
+//				[_conversation setUnread:NO];
+//				changedUnread = YES;
+//			}
+//		}
+//		
+//		// notify in the main thread: messages changed
+//		dispatch_sync(dispatch_get_main_queue(), ^{	
+//			if(changedUnread)
+//				[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
+//		});
+//	}];
+//	
+//	// add operation to the queue if still valid
+//	if(![operation isCancelled])
+//		[_loadingQueue addOperation:operation];
 }
 
 
@@ -385,132 +391,143 @@
 #pragma mark -
 
 - (void)appendMessage:(WCMessage *)message {
-    NSMutableDictionary		*icons;
-	NSMutableString			*mutableMessage;
-    NSString				*icon, *messageTemplate;
-    WCDOMMessage			*messageElement;
-	WITemplateBundle		*template;
-	NSError					*error;
-	BOOL					changedUnread = NO, isKeyWindow;
-	
-	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[_conversation connection] theme] objectForKey:WCThemesTemplate]];
-	messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
-
-    if(_conversation && ![_conversation isExpandable]) {
-        icons       = [NSMutableDictionary dictionary];
-        icon        = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
-        isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
-        
-        if(!icon) {
-            icon    = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
-            
-            if(icon)
-                [icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
-        }
-		
-		mutableMessage = [NSMutableString stringWithString:[message message]];
-	
-
-		[WCChatController applyHTMLEscapingToMutableString:mutableMessage];
-		[WCChatController applyHTMLTagsForURLToMutableString:mutableMessage];
-		
-		if([[[_conversation connection] theme] boolForKey:WCThemesShowSmileys])
-			[WCChatController applyHTMLTagsForSmileysToMutableString:mutableMessage];
-		
-		[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
-
-		messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
-		[messageElement setServer:[message connectionName]];
-		[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
-		[messageElement setNick:[message nick]];
-		
-		if([message direction] == WCMessageTo)
-			[messageElement setDirection:@"to"];
-		else
-			[messageElement setDirection:@"from"];
-		
-		[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
-		[messageElement setMessageContent:mutableMessage];
-		
-		[_conversationWebView appendElement:[messageElement element] 
-					toBottomOfElementWithID:@"messages-content" 
-									 scroll:YES];
-				
-        if([message isUnread] && isKeyWindow) {
-            [message setUnread:NO];
-            
-            changedUnread = YES;
-        }
-        if([_conversation isUnread] && isKeyWindow) {
-            [_conversation setUnread:NO];
-            
-            changedUnread = YES;
-        }
-        if(changedUnread)
-            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-    }
+    SBJsonWriter    *jsonWriter;
+    NSString        *jsonString;
+    
+    jsonWriter      = [[SBJsonWriter alloc] init];
+    jsonString      = [jsonWriter stringWithObject:message];
+    
+    [jsonWriter release];
+    
+    [_conversationWebView stringByEvaluatingJavaScriptFromString:
+            [NSSWF:@"printMessage(%@);", jsonString]];
+    
+//    NSMutableDictionary		*icons;
+//	NSMutableString			*mutableMessage;
+//    NSString				*icon, *messageTemplate;
+//    WCDOMMessage			*messageElement;
+//	WITemplateBundle		*template;
+//	NSError					*error;
+//	BOOL					changedUnread = NO, isKeyWindow;
+//	
+//	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[_conversation connection] theme] objectForKey:WCThemesTemplate]];
+//	messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
+//
+//    if(_conversation && ![_conversation isExpandable]) {
+//        icons       = [NSMutableDictionary dictionary];
+//        icon        = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
+//        isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
+//        
+//        if(!icon) {
+//            icon    = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
+//            
+//            if(icon)
+//                [icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
+//        }
+//		
+//		mutableMessage = [NSMutableString stringWithString:[message message]];
+//	
+//
+//		[WCChatController applyHTMLEscapingToMutableString:mutableMessage];
+//		[WCChatController applyHTMLTagsForURLToMutableString:mutableMessage];
+//		
+//		if([[[_conversation connection] theme] boolForKey:WCThemesShowSmileys])
+//			[WCChatController applyHTMLTagsForSmileysToMutableString:mutableMessage];
+//		
+//		[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
+//
+//		messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
+//		[messageElement setServer:[message connectionName]];
+//		[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
+//		[messageElement setNick:[message nick]];
+//		
+//		if([message direction] == WCMessageTo)
+//			[messageElement setDirection:@"to"];
+//		else
+//			[messageElement setDirection:@"from"];
+//		
+//		[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
+//		[messageElement setMessageContent:mutableMessage];
+//		
+//		[_conversationWebView appendElement:[messageElement element] 
+//					toBottomOfElementWithID:@"messages-content" 
+//									 scroll:YES];
+//				
+//        if([message isUnread] && isKeyWindow) {
+//            [message setUnread:NO];
+//            
+//            changedUnread = YES;
+//        }
+//        if([_conversation isUnread] && isKeyWindow) {
+//            [_conversation setUnread:NO];
+//            
+//            changedUnread = YES;
+//        }
+//        if(changedUnread)
+//            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
+//    }
 }
 
 
 
 - (void)appendCommand:(WCMessage *)message {
-	NSMutableDictionary		*icons;
-	NSMutableString			*mutableMessage;
-    NSString				*icon, *messageTemplate;
-    WCDOMMessage			*messageElement;
-	WITemplateBundle		*template;
-	NSError					*error;
-	BOOL					changedUnread = NO, isKeyWindow;
-	
-	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[_conversation connection] theme] objectForKey:WCThemesTemplate]];
-	messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
-	
-    if(_conversation && ![_conversation isExpandable]) {
-        icons       = [NSMutableDictionary dictionary];
-        icon        = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
-        isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
-        
-        if(!icon) {
-            icon    = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
-            
-            if(icon)
-                [icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
-        }
-		
-		mutableMessage = [NSMutableString stringWithString:[message message]];
-		
-		[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
-		
-		messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
-		[messageElement setServer:[message connectionName]];
-		[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
-		[messageElement setNick:[message nick]];
-		
-		if([message direction] == WCMessageTo)
-			[messageElement setDirection:@"to"];
-		else
-			[messageElement setDirection:@"from"];
-		
-		[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
-		[messageElement setMessageContent:mutableMessage];
-		
-		[_conversationWebView appendElement:[messageElement element] 
-					toBottomOfElementWithID:@"messages-content" 
-									 scroll:YES];
-		
-        if([message isUnread] && isKeyWindow) {
-            [message setUnread:NO];
-            
-            changedUnread = YES;
-        }
-        if([_conversation isUnread] && isKeyWindow) {
-            [_conversation setUnread:NO];
-            
-            changedUnread = YES;
-        }
-        if(changedUnread)
-            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-    }
+//	NSMutableDictionary		*icons;
+//	NSMutableString			*mutableMessage;
+//    NSString				*icon, *messageTemplate;
+//    WCDOMMessage			*messageElement;
+//	WITemplateBundle		*template;
+//	NSError					*error;
+//	BOOL					changedUnread = NO, isKeyWindow;
+//	
+//	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[_conversation connection] theme] objectForKey:WCThemesTemplate]];
+//	messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
+//	
+//    if(_conversation && ![_conversation isExpandable]) {
+//        icons       = [NSMutableDictionary dictionary];
+//        icon        = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
+//        isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
+//        
+//        if(!icon) {
+//            icon    = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
+//            
+//            if(icon)
+//                [icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
+//        }
+//		
+//		mutableMessage = [NSMutableString stringWithString:[message message]];
+//		
+//		[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
+//		
+//		messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
+//		[messageElement setServer:[message connectionName]];
+//		[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
+//		[messageElement setNick:[message nick]];
+//		
+//		if([message direction] == WCMessageTo)
+//			[messageElement setDirection:@"to"];
+//		else
+//			[messageElement setDirection:@"from"];
+//		
+//		[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
+//		[messageElement setMessageContent:mutableMessage];
+//		
+//		[_conversationWebView appendElement:[messageElement element] 
+//					toBottomOfElementWithID:@"messages-content" 
+//									 scroll:YES];
+//		
+//        if([message isUnread] && isKeyWindow) {
+//            [message setUnread:NO];
+//            
+//            changedUnread = YES;
+//        }
+//        if([_conversation isUnread] && isKeyWindow) {
+//            [_conversation setUnread:NO];
+//            
+//            changedUnread = YES;
+//        }
+//        if(changedUnread)
+//            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
+//    }
 }
 
 
@@ -549,7 +566,18 @@
 #pragma mark -
 
 - (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame {
-	[webView scrollToBottom];
+    WITemplateBundle *template = [WITemplateBundle templateWithPath:_templatePath];
+    NSURL *jqueryURL = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
+    NSURL *mainURL = [NSURL fileURLWithPath:[template pathForResource:@"main" ofType:@"js" inDirectory:@"htdocs/js"]];
+    
+    [[webView windowScriptObject] setValue:_conversation forKey:@"Conversation"];
+    
+    [_conversationWebView appendScriptAtURL:jqueryURL];
+    [_conversationWebView appendScriptAtURL:mainURL];
+    
+    //[webView stringByEvaluatingJavaScriptFromString:@"$('body').append('<p>jQuery works</p>');"];
+    
+    [webView scrollToBottom];
 }
 
 
@@ -579,9 +607,9 @@
 					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 					
 					if(isDirectory) {
-                        
-						file = [WCFile fileWithDirectory:path connection:[_conversation connection]];
-						[WCFiles filesWithConnection:[_conversation connection] file:file];
+                        [WCFiles filesWithConnection:[_conversation connection]
+                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[_conversation connection]]
+                                          selectFile:[WCFile fileWithDirectory:path connection:[_conversation connection]]];
                         
 					} else {
                         file = [WCFile fileWithFile:path connection:[_conversation connection]];

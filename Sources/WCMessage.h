@@ -37,7 +37,7 @@ typedef enum _WCMessageDirection	WCMessageDirection;
 
 @class WCConversation, WCUser;
 
-@interface WCMessage : WCServerConnectionObject <NSSplitViewDelegate> {
+@interface WCMessage : WCServerConnectionObject <NSSplitViewDelegate, NSCoding> {
 	WCMessageDirection				_direction;
 	BOOL							_unread;
 	NSString						*_nick;
@@ -62,6 +62,8 @@ typedef enum _WCMessageDirection	WCMessageDirection;
 
 - (NSComparisonResult)compareUser:(WCMessage *)message;
 - (NSComparisonResult)compareDate:(WCMessage *)message;
+
+- (id)proxyForJson;
 
 @end
 

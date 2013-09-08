@@ -210,6 +210,19 @@
 	return [[self date] compare:[message date]];
 }
 
+#pragma mark -
+
+- (id)proxyForJson {
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+            _message,                                       @"message",
+            _nick,                                          @"nick",
+            [_date description],                            @"date",
+            [NSNumber numberWithBool:_unread],              @"unread",
+            [NSNumber numberWithInteger:_direction],        @"direction",
+            [NSNumber numberWithInteger:[_user userID]],    @"userID",
+            nil];
+}
+
 @end
 
 

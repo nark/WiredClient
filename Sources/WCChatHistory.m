@@ -121,7 +121,11 @@
 		
 		chatLogPath			= [[WCApplicationController sharedController] chatLogsPath];
 		
-		_categories			= [[NSArray alloc] initWithObjects:@"PUBLIC CHATS", @"PRIVATE CHATS", nil];
+		_categories			= [[NSArray alloc] initWithObjects:
+                               NSLS(@"PUBLIC CHATS", @"Chat History sidebar category"),
+                               NSLS(@"PRIVATE CHATS", @"Chat History sidebar category"),
+                               nil];
+        
 		_filteredArchives	= [[NSMutableArray alloc] init];
 		
 		[self window];
@@ -236,9 +240,7 @@
 				[_filteredArchives addObject:archivePath];
 				continue;
 			}
-            
-            NSLog(@"archiveString: %@", archiveString);
-			
+            			
 			if([archiveString containsSubstring:searchString]) {
 				[_filteredArchives addObject:archivePath];
 				continue;
@@ -299,10 +301,10 @@
 		count = [_categories count];
 		
 	} else if([_categories containsObject:item]) {
-		if([item isEqualTo:@"PUBLIC CHATS"]) {
+		if([item isEqualTo:NSLS(@"PUBLIC CHATS", @"Chat History sidebar category")]) {
 			count = [[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] folders] count];
 			
-		} else if([item isEqualTo:@"PRIVATE CHATS"]) {
+		} else if([item isEqualTo:NSLS(@"PRIVATE CHATS", @"Chat History sidebar category")]) {
 			count = [[[[[WCApplicationController sharedController] logController] privateChatHistoryBundle] folders] count];
 			
 		}
@@ -319,10 +321,10 @@
 		value = [_categories objectAtIndex:index];
 		
 	} else if([_categories containsObject:item]) {
-		if([item isEqualTo:@"PUBLIC CHATS"]) {
+		if([item isEqualTo:NSLS(@"PUBLIC CHATS", @"Chat History sidebar category")]) {
 			value = [[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] folders] objectAtIndex:index];
 			
-		} else if([item isEqualTo:@"PRIVATE CHATS"]) {
+		} else if([item isEqualTo:NSLS(@"PRIVATE CHATS", @"Chat History sidebar category")]) {
 			value = [[[[[WCApplicationController sharedController] logController] privateChatHistoryBundle] folders] objectAtIndex:index];
 		}
 	}

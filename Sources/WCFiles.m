@@ -211,7 +211,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	files = [self _filesForConnection:connection];
 	
 	[files setObject:file forKey:[file path]];
-	
+    
 	[self window];
 	
 	i = [_servers indexOfObject:connection];
@@ -1142,7 +1142,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	
 	connection		= [file connection];
 	directory		= [[self _directoriesForConnection:connection] objectForKey:[file path]];
-	
+    
 	if([directory count] > 0) {
 		if([_selectFiles count] == 0)
 			[_selectFiles setArray:[self _selectedFiles]];
@@ -1184,7 +1184,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	
 	connection		= [file connection];
 	directory		= [self _directoryForConnection:connection path:[file path]];
-	
+    	
 	[directory removeAllObjects];
 	
 	[_filesTreeView reloadData];
@@ -1454,7 +1454,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 		enumerator		= [_selectFiles objectEnumerator];
 		first			= YES;
 		complete		= YES;
-		
+        		
 		while((file = [enumerator nextObject])) {
 			count = [_filesOutlineView numberOfRows];
 			
@@ -1469,7 +1469,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 			}
 			
 			[_filesTreeView selectPath:[file path] byExtendingSelection:!first];
-			
+            
 			if([self _selectedStyle] == WCFilesStyleList) {
 				if(![[_currentDirectory path] isEqualToString:[file path]]) {
 					do {
@@ -1486,7 +1486,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 			
 			first = NO;
 		}
-		
+		      
 		if([indexes count] > 0) {
 			[_filesOutlineView selectRowIndexes:indexes byExtendingSelection:NO];
 			[_filesOutlineView scrollRowToVisible:[indexes firstIndex]];
@@ -1958,7 +1958,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 		enumerator		= [listedFiles objectEnumerator];
 		
 		[directory removeAllObjects];
-		
+        
 		while((listedFile = [enumerator nextObject])) {
 			[files setObject:listedFile forKey:[listedFile path]];
 			[directory addObject:listedFile];
