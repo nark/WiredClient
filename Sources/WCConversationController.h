@@ -26,12 +26,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@class WCConversation, LNWebView;
+#import "WCWebDataSource.h"
 
-@interface WCConversationController : WIObject {
-	IBOutlet LNWebView					*_conversationWebView;
+@class WDConversation, WDMessage;
+
+@interface WCConversationController : WIObject <WCWebDataSource> {
+	IBOutlet WebView					*_conversationWebView;
 	
-	WCConversation						*_conversation;
+    NSArray                             *_messages;
 	NSOperationQueue					*_loadingQueue;
 
 	NSString							*_templatePath;
@@ -43,24 +45,28 @@
 	WIDateFormatter						*_messageTimeDateFormatter;
 }
 
-- (void)setConversation:(WCConversation *)conversation;
-- (WCConversation *)conversation;
+- (void)appendMessage:(WDMessage *)message;
+- (void)appendCommand:(WDMessage *)message;
+
+- (void)reloadData;
+- (void)reloadTemplate;
+
+- (void)setMessages:(NSArray *)messages;
+- (NSArray *)messages;
+
 - (void)setTemplatePath:(NSString *)path;
 - (NSString *)templatePath;
+
 - (void)setFont:(NSFont *)font;
 - (NSFont *)font;
+
 - (void)setTextColor:(NSColor *)textColor;
 - (NSColor *)textColor;
+
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;
 
 - (LNWebView *)conversationWebView;
 - (NSString *)HTMLString;
-
-- (void)appendMessage:(WCMessage *)message;
-- (void)appendCommand:(WCMessage *)message;
-
-- (void)reloadData;
-- (void)reloadTemplate;
 
 @end

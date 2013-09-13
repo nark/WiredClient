@@ -27,6 +27,7 @@
  */
 
 #import "WCServerConnectionObject.h"
+#import "WCWebDataSource.h"
 
 @class WCMessage, WCUser;
 
@@ -66,7 +67,6 @@
 - (NSUInteger)numberOfMessages;
 - (NSUInteger)numberOfUnreadMessagesForConnection:(WCServerConnection *)connection includeChildConversations:(BOOL)includeChildConversations;
 - (NSArray *)messages;
-- (NSArray *)messagesFromOffset:(NSUInteger)offset withLimit:(NSUInteger)limit;
 - (NSArray *)unreadMessages;
 - (WCMessage *)messageAtIndex:(NSUInteger)index;
 - (void)addMessage:(WCMessage *)message;
@@ -78,11 +78,8 @@
 - (void)invalidateForUser:(WCUser *)user;
 - (void)revalidateForUser:(WCUser *)user;
 
-/* WebObject methods */
-- (NSString *)JSONMessages;
-
-+ (BOOL)isSelectorExcludedFromWebScript:(SEL)aSelector;
-+ (BOOL)isKeyExcludedFromWebScript:(const char *)name;
+//+ (BOOL)isSelectorExcludedFromWebScript:(SEL)aSelector;
+//+ (BOOL)isKeyExcludedFromWebScript:(const char *)name;
 
 @end
 

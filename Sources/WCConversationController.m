@@ -38,8 +38,9 @@
 #import "WCTransfers.h"
 #import "WCDOMMessage.h"
 #import "WCDOMMessageStatus.h"
+#import "WDWiredModel.h"
 
-
+#import "SBJsonWriter+WCJsonWriter.h"
 
 
 #define WC_MESSAGES_STATUS_INTERVAL 60*60*24
@@ -47,8 +48,10 @@
 
 
 
+
 @interface WCConversationController(Private)
 
+- (WDConversation *)_conversation;
 - (void)_reloadDataAsynchronously;
 
 @end
@@ -63,11 +66,16 @@
 
 
 - (void)_reloadDataAsynchronously {
-    WITemplateBundle *template = [WITemplateBundle templateWithPath:_templatePath];
-    NSURL *url = [NSURL fileURLWithPath:[template pathForResource:@"index" ofType:@"html" inDirectory:@"htdocs"]];    
-    [[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
+    NSURL                       *url;
+    WITemplateBundle            *template;
+        
+    template        = [WITemplateBundle templateWithPath:_templatePath];
+    url             = [NSURL fileURLWithPath: [template pathForResource:@"messages"
+                                                                 ofType:@"html"
+                                                            inDirectory:@"htdocs"]];
     
-    //[[_conversationWebView windowScriptObject] setValue:_conversation forKey:@"Conversation"];
+    [[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
+
     
 //	__block NSEnumerator				*enumerator;
 //	__block NSMutableDictionary			*icons;
@@ -227,6 +235,13 @@
 
 
 
+- (WDConversation *)_conversation {
+    if(!_messages || [_messages count] == 0)
+        return nil;
+    
+    return [[_messages objectAtIndex:0] conversation];
+}
+
 
 @end
 
@@ -258,7 +273,8 @@
 
 
 - (void)dealloc {
-	[_conversation release];
+    [_messages release];
+    
 	[_loadingQueue release];
 	
 	[_font release];
@@ -287,7 +303,7 @@
 	template		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
 	htmlPath		= [template htmlPathForType:WITemplateTypeMessages];
     	
-    [[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:htmlPath]]];
+    //[[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:htmlPath]]];
 }
 
 
@@ -296,17 +312,16 @@
 
 #pragma mark -
 
-- (void)setConversation:(WCConversation *)conversation {
-	[conversation retain];
-	[_conversation release];
-
-	_conversation	= conversation;
+- (void)setMessages:(NSArray *)messages {
+    [messages retain];
+	[_messages release];
+    
+	_messages	= messages;
 }
 
 
-
-- (WCConversation *)conversation {
-	return _conversation;
+- (NSArray *)messages {
+    return _messages;
 }
 
 
@@ -374,7 +389,7 @@
 
 #pragma mark -
 
-- (LNWebView *)conversationWebView {
+- (WebView *)conversationWebView {
 	return _conversationWebView;
 }
 
@@ -390,7 +405,7 @@
 
 #pragma mark -
 
-- (void)appendMessage:(WCMessage *)message {
+- (void)appendMessage:(WDMessage *)message {
     SBJsonWriter    *jsonWriter;
     NSString        *jsonString;
     
@@ -470,7 +485,7 @@
 
 
 
-- (void)appendCommand:(WCMessage *)message {
+- (void)appendCommand:(WDMessage *)message {
 //	NSMutableDictionary		*icons;
 //	NSMutableString			*mutableMessage;
 //    NSString				*icon, *messageTemplate;
@@ -565,31 +580,39 @@
 
 #pragma mark -
 
+//- (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowObject forFrame:(WebFrame *)frame
+//{
+//    [windowObject setValue:self forKey:@"Controller"];
+//}
+
 - (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame {
     WITemplateBundle *template = [WITemplateBundle templateWithPath:_templatePath];
-    NSURL *jqueryURL = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
-    NSURL *mainURL = [NSURL fileURLWithPath:[template pathForResource:@"main" ofType:@"js" inDirectory:@"htdocs/js"]];
     
-    [[webView windowScriptObject] setValue:_conversation forKey:@"Conversation"];
-    
+    NSURL *jqueryURL    = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
+    NSURL *functionsURL = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
+    NSURL *mainURL      = [NSURL fileURLWithPath:[template pathForResource:@"main" ofType:@"js" inDirectory:@"htdocs/js"]];
+
+    [[webView windowScriptObject] setValue:self forKey:@"Controller"];
+        
     [_conversationWebView appendScriptAtURL:jqueryURL];
+    [_conversationWebView appendScriptAtURL:functionsURL];
     [_conversationWebView appendScriptAtURL:mainURL];
-    
-    //[webView stringByEvaluatingJavaScriptFromString:@"$('body').append('<p>jQuery works</p>');"];
-    
-    [webView scrollToBottom];
+        
+    [_conversationWebView scrollToBottom];
 }
 
 
 
 - (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)action request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id <WebPolicyDecisionListener>)listener {
-    
+    WDConversation      *conversation;
     NSString			*path;
     NSURL               *url;
 	WIURL				*wiredURL;
 	WCFile				*file;
 	BOOL				handled     = NO;
 	BOOL                isDirectory = NO;
+    
+    conversation        = [self _conversation];
     
 	if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeOther) {
 		[listener use];
@@ -603,16 +626,16 @@
 		
 		if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
 			if([[wiredURL host] length] == 0) {
-				if([_conversation connection] && [[_conversation connection] isConnected]) {
+				if([conversation connection] && [[conversation connection] isConnected]) {
 					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 					
 					if(isDirectory) {
-                        [WCFiles filesWithConnection:[_conversation connection]
-                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[_conversation connection]]
-                                          selectFile:[WCFile fileWithDirectory:path connection:[_conversation connection]]];
+                        [WCFiles filesWithConnection:[conversation connection]
+                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[conversation connection]]
+                                          selectFile:[WCFile fileWithDirectory:path connection:[conversation connection]]];
                         
 					} else {
-                        file = [WCFile fileWithFile:path connection:[_conversation connection]];
+                        file = [WCFile fileWithFile:path connection:[conversation connection]];
                         [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file] 
                                                       toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
 					}
@@ -630,12 +653,99 @@
 
 
 - (NSArray *)webView:(WebView *)webView contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
-	return NULL;
+#ifdef WCConfigurationRelease
+    return NULL;
+#else
+    return defaultMenuItems;
+#endif
 }
 
 - (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
     // useless but required
 }
+
+
+
+
+#pragma mark -
+
++ (NSString *)webScriptNameForSelector:(SEL)selector
+{
+    NSString *name;
+    
+    if (selector == @selector(numberOfObjects))
+        name = @"numberOfObjects";
+    if (selector == @selector(JSONObjects))
+        name = @"JSONObjects";
+    if (selector == @selector(JSONObjectsFromOffset:withLimit:))
+        name = @"JSONObjectsFromOffsetWithLimit";
+    if (selector == @selector(JSONObjectAtIndex:))
+        name = @"JSONObjectAtIndex";
+    
+    return name;
+}
+
+
++ (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
+{
+    if (selector == @selector(numberOfObjects)) return NO;
+    if (selector == @selector(JSONObjects)) return NO;
+    if (selector == @selector(JSONObjectsFromOffset:withLimit:)) return NO;
+    if (selector == @selector(JSONObjectAtIndex:)) return NO;
+    return YES;
+}
+
+
+
+
+#pragma mark -
+
+- (NSUInteger)numberOfObjects {    
+    return [_messages count];
+}
+
+
+
+- (NSString *)JSONObjects {
+    NSString        *jsonString;
+    
+    jsonString = [[SBJsonWriter writer] stringWithObject:[_messages reversedArray]];
+    
+    return jsonString;
+}
+
+
+- (NSString *)JSONObjectsFromOffset:(NSUInteger)offset withLimit:(NSUInteger)limit {
+    NSString            *jsonString;
+    NSRange             range;
+    
+    if(!_messages || [_messages count] <= 0 || offset > [_messages count]-1)
+        return nil;
+    
+    range       = NSMakeRange(offset, limit);
+    jsonString  = [[SBJsonWriter writer] stringWithObject:[[_messages reversedArray] subarrayWithRange:range]];
+    
+    return jsonString;
+}
+
+
+- (NSString *)JSONObjectAtIndex:(NSUInteger)index {
+    NSString            *jsonString;
+    id                  object;
+        
+    if(index > [_messages count]-1)
+        return nil;
+    
+    object = [_messages objectAtIndex:index];
+    
+    if(!object)
+        return nil;
+    
+    jsonString = [[SBJsonWriter writer] stringWithObject:object];
+    
+    return jsonString;
+}
+
 
 
 @end

@@ -67,6 +67,8 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 - (NSString *)pathForSmiley:(NSString *)smiley;
 - (NSMenu *)insertSmileyMenu;
 
+- (NSURL *)applicationFilesDirectory;
+
 - (NSString *)chatLogsPath;
 - (WIChatLogController *)logController;
 - (void)reloadChatLogsWithPath:(NSString *)path;

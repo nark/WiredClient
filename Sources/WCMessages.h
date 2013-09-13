@@ -30,40 +30,40 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
 
 
 @class WCConversationController, WCSourceSplitView;
-@class WCConversation, WCMessageConversation, WCBroadcastConversation, WCUser;
+@class WDConversation, WCConversation, WCMessageConversation, WCBroadcastConversation, WCUser;
 
 @interface WCMessages : WIWindowController {
 	IBOutlet WCConversationController				*_conversationController;
 	
 	IBOutlet WCSourceSplitView						*_conversationsSplitView;
-	IBOutlet NSView									*_conversationsView;
-	IBOutlet NSView									*_messagesView;
 	IBOutlet WISplitView							*_messagesSplitView;
-	IBOutlet NSView									*_messageTopView;
-	IBOutlet NSView									*_messageBottomView;
-
+    
 	IBOutlet WIOutlineView							*_conversationsOutlineView;
-	IBOutlet NSTableColumn							*_conversationTableColumn;
-	IBOutlet NSTableColumn							*_unreadTableColumn;
+    IBOutlet NSTreeController                       *_conversationsTreeController;
+    IBOutlet NSPopUpButton                          *_conversationPopUpButton;
+    IBOutlet NSPopUpButton                          *_conversationsFiltersPopUpButton;
+    IBOutlet NSSearchField                          *_conversationsSearchField;
 	
-	IBOutlet NSButton								*_deleteConversationButton;
-	
-	IBOutlet NSTextView								*_messageTextView;
-
+	IBOutlet NSTextView								*_messageTextView;    
 	IBOutlet NSPanel								*_broadcastPanel;
 	IBOutlet NSTextView								*_broadcastTextView;
 	
 	IBOutlet NSMenu									*_chatSmileysMenu;
-
+    
 	WCConversation									*_conversations;
 	WCMessageConversation							*_messageConversations;
 	WCBroadcastConversation							*_broadcastConversations;
-	WCConversation									*_selectedConversation;
-	
-	NSImage											*_conversationIcon;
-	
+    
+	WDConversation									*_selectedConversation;
+		
 	WIDateFormatter									*_dialogDateFormatter;
+    
+    BOOL                                            *_sorting;
 }
+
+
+@property (readonly)            NSManagedObjectContext          *managedObjectContext;
+@property (readwrite, retain)   NSArray                         *sortDescriptors;
 
 + (id)messages;
 
@@ -77,8 +77,13 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
 - (IBAction)saveDocument:(id)sender;
 - (IBAction)saveConversation:(id)sender;
 
+- (IBAction)conversationsFilters:(id)sender;
+- (IBAction)conversationsSearch:(id)sender;
+
+- (IBAction)markAsRead:(id)sender;
+- (IBAction)markAllAsRead:(id)sender;
 - (IBAction)revealInUserList:(id)sender;
-- (IBAction)clearMessages:(id)sender;
 - (IBAction)deleteConversation:(id)sender;
+- (IBAction)deleteMessage:(id)sender;
 
 @end

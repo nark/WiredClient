@@ -919,6 +919,8 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 
 - (void)messagesDidChangeUnreadCount:(NSNotification *)notification {
+    [self _updateToolbarForConnection:NULL];
+    
     for(WCChatController *cc in [self chatControllers]) {
         [self _updateToolbarForConnection:[cc connection]];
         [self _updateTabViewItemForConnection:[cc connection]];

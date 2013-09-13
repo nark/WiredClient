@@ -34,6 +34,7 @@
 #import "WCAdministration.h"
 #import "WCApplicationController.h"
 #import "WCBanlistController.h"
+#import "WCDatabaseController.h"
 #import "WCBoards.h"
 #import "WCConnect.h"
 #import "WCConsole.h"
@@ -535,6 +536,8 @@ static WCApplicationController		*sharedController;
 	if(![[WCSettings settings] boolForKey:WCDebug])
 		[[NSApp mainMenu] removeItemAtIndex:[[NSApp mainMenu] indexOfItemWithSubmenu:_debugMenu]];
 #endif
+    
+    [[WCDatabaseController sharedController] secretKey];
 	
 	[WIDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 	[NSNumberFormatter setDefaultFormatterBehavior:NSNumberFormatterBehavior10_4];
@@ -879,7 +882,7 @@ static WCApplicationController		*sharedController;
 			
 		case WCEventsMessageReceived:
 			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Message received", @"Growl event message received title")
-										description:[NSSWF:@"%@: %@", [info1 nick], [info1 message]]
+										description:[NSSWF:@"%@: %@", [info1 nick], [info1 valueForKey:@"messageString"]]
 								   notificationName:WCGrowlMessageReceived
 										   iconData:[[(WCUser *) [info1 user] icon] TIFFRepresentation]
 										   priority:0.0
@@ -1219,6 +1222,28 @@ static WCApplicationController		*sharedController;
 
 - (void)connectWithBookmark:(NSDictionary *)bookmark {
     [self _connectWithBookmark:bookmark];
+}
+
+
+
+
+
+#pragma mark -
+
+- (NSURL *)applicationFilesDirectory
+{
+    NSError *error = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *appSupportURL = [[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
+    NSURL *url = [appSupportURL URLByAppendingPathComponent:@"Wired Client"];
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[url path]])
+        [[NSFileManager defaultManager] createDirectoryAtURL:url withIntermediateDirectories:YES attributes:nil error:&error];
+    
+    if(error)
+        NSLog(@"ERROR: Application Support Directory: %@", error);
+    
+    return url;
 }
 
 

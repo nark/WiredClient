@@ -265,4 +265,99 @@
 	}
 }
 
+
+
+#pragma mark -
+
+- (void)setSecretKey:(NSString *)string {
+    void                *password;
+    NSData				*data;
+    NSString            *accountName, *serviceName;
+    SecKeychainRef      keychain;
+    SecKeychainItemRef	item;
+    OSStatus            status;
+    u_int32_t           passwordLen;
+    
+    passwordLen         = 0;
+    keychain            = NULL;
+    password            = NULL;
+    accountName         = @"wiredclient";
+    serviceName         = @"wiredclient";
+    data                = [string dataUsingEncoding:NSUTF8StringEncoding];
+    
+    status = SecKeychainFindGenericPassword(keychain,
+                                            [serviceName UTF8StringLength],
+                                            [serviceName UTF8String],
+                                            [accountName UTF8StringLength],
+                                            [accountName UTF8String],
+                                            &passwordLen,
+                                            &password,
+                                            &item);
+    
+    if (status == noErr) {
+        status = SecKeychainItemModifyAttributesAndData(item,
+                                                        NULL,
+                                                        [data length],
+                                                        [data bytes]);
+        
+		if(status != noErr) {
+			NSLog(@"Error while SecKeychainItemModifyAttributesAndData: %d", status);
+            
+			return;
+		}
+    } else {
+        status = SecKeychainAddGenericPassword(keychain,
+                                               [serviceName UTF8StringLength],
+                                               [serviceName UTF8String],
+                                               [accountName UTF8StringLength],
+                                               [accountName UTF8String],
+                                               [data length],
+                                               [data bytes],
+                                               NULL);
+        
+        if (status != noErr) {
+            NSLog(@"Error while setting Secret Key");
+            
+            return;
+        }
+    }
+}
+
+
+- (NSString *)secretKey {
+    NSString            *result, *accountName, *serviceName;
+    NSData              *data;
+    void                *password;
+    SecKeychainRef      keychain;
+    u_int32_t           passwordLen;
+    OSStatus            status;
+    
+    passwordLen         = 0;
+    keychain            = NULL;
+    result              = NULL;
+    password            = NULL;
+    accountName         = @"wiredclient";
+    serviceName         = @"wiredclient";
+    status              = SecKeychainFindGenericPassword(keychain,
+                                                         [serviceName UTF8StringLength],
+                                                         [serviceName UTF8String],
+                                                         [accountName UTF8StringLength],
+                                                         [accountName UTF8String],
+                                                         &passwordLen,
+                                                         &password,
+                                                         NULL);
+    
+    if (status == noErr) {
+        data    = [NSData dataWithBytes:password length:passwordLen];
+        result  = [NSString stringWithData:data encoding:NSUTF8StringEncoding];
+        
+        SecKeychainItemFreeContent(NULL, (void*)password);
+    } else {
+        NSLog(@"Error while getting Secret Key");
+    }
+    return result;
+}
+
+
+
 @end

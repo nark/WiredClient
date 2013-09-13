@@ -1,13 +1,17 @@
 body {
 	font: normal <? fontsize ?> "<? fontname ?>", sans-serif;
-	background-color: #444;
+	background-color: rgba(227, 231, 237, 1);
 	color: <? textcolor ?>;
 	text-shadow: 0px 1px 0px white;
 	margin: 0;
+	margin-top: 20px;
 }
 
 div.messagewrapper {
-	background-color: <? backgroundcolor ?>;
+	background-color: rgba(227, 231, 237, 1);
+	padding-left: 10px;
+	padding-right: 12px;
+	padding-bottom: 20px;
 }
 
 div.message, div.messagestatus {
@@ -26,13 +30,18 @@ div.messageheader, div.messagebody, div.messagestatus {
 div.messageheader {
 	background-color: rgba(224,224,224,1);
 	background: -webkit-linear-gradient(top, rgba(238,238,238,1) 17%,rgba(224,224,224,1) 100%);
-	box-shadow: 0px 1px 1px rgba(0,0,0,0.22);
+	/*box-shadow: 0px 1px 1px rgba(0,0,0,0.22);*/
 	min-height: 32px;
+	border-bottom: 1px solid #999;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
 }
 
 div.message {
-	background-color: rgba(0,0,0,0.1);
-	background: -webkit-linear-gradient(top,rgba(255,255,255,0) 85%, rgba(0,0,0,0.1) 100%); 
+	background-color: <? backgroundcolor ?>;
+	border-radius: 3px;
+	border: 1px solid #999;
+	box-shadow: 0px 0px 4px #c2c2c2;
 }
 
 div.messagestatus {
@@ -49,17 +58,29 @@ div.icon {
 
 div.messageinfo span.nick {
 	display: block;
+	margin-bottom: 5px;
 }
 
 div.messageinfo span.time:after {
 	content: " - ";
-	font-size: 12px;
+	font-size: 10px;
 	color: #999999;
+}
+
+div.messageinfo span.time, div.messageinfo span.server {
+	font-size: 10px;
+}
+
+div.messageinfo img {
+	width: 16px;
+	height: 16px;
+	float: right;
+	margin-bottom: 8px;
 }
 
 div.messagebody { 
 	padding-bottom: 15px;
-    margin-left: 42px;
+    margin-left: 5px;
     margin-top: 5px;
 
 }

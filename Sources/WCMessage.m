@@ -213,13 +213,25 @@
 #pragma mark -
 
 - (id)proxyForJson {
+    [NSDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
+
+    NSString *dateString = [dateFormatter stringFromDate:_date];
+    [dateFormatter release];
+    
     return [NSDictionary dictionaryWithObjectsAndKeys:
-            _message,                                       @"message",
-            _nick,                                          @"nick",
-            [_date description],                            @"date",
-            [NSNumber numberWithBool:_unread],              @"unread",
-            [NSNumber numberWithInteger:_direction],        @"direction",
-            [NSNumber numberWithInteger:[_user userID]],    @"userID",
+            _message,                                                       @"message",
+            _nick,                                                          @"nick",
+            dateString,                                                     @"date",
+            [NSNumber numberWithBool:_unread],                              @"unread",
+            [NSNumber numberWithInteger:_direction],                        @"direction",
+            [NSNumber numberWithInteger:[_user userID]],                    @"userID",
+            [[[_user icon] TIFFRepresentation] base64EncodedString],        @"icon",
+            [_connection name],                                             @"server",
             nil];
 }
 

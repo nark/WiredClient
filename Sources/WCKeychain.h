@@ -46,4 +46,7 @@
 - (void)setPassword:(NSString *)password forURL:(WIURL *)url;
 - (void)deletePasswordForURL:(WIURL *)url;
 
+- (void)setSecretKey:(NSString *)string;
+- (NSString *)secretKey;
+
 @end

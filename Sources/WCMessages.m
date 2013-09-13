@@ -39,17 +39,32 @@
 #import "WCSourceSplitView.h"
 #import "WCStats.h"
 #import "WCUser.h"
+#import "WCDatabaseController.h"
+#import "WDWiredModel.h"
+#import "NSManagedObjectContext+Fetch.h"
 
 
 NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidChangeUnreadCountNotification";
 
 
-@interface WCMessages(Private)
+
+
+@interface WCMessages (Data)
+
+- (WDMessagesConversation *)        _messagesConversationForUser:(WCUser *)user;
+- (WDBroadcastsConversation *)      _broadcastsConversationForUser:(WCUser *)user;
+
+@end
+
+
+
+
+@interface WCMessages (Private)
 
 - (void)_validate;
 - (void)_themeDidChange;
 
-- (void)_showDialogForMessage:(WCMessage *)message;
+- (void)_showDialogForMessage:(WDMessage *)message;
 - (NSString *)_stringForMessageString:(NSString *)string;
 - (void)_sendMessage;
 
@@ -59,25 +74,112 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (NSArray *)_commands;
 - (BOOL)_runCommand:(NSString *)string;
 
-- (WCConversation *)_selectedConversation;
-- (void)_saveMessages;
+- (WDMessagesNode *)_selectedNode;
+- (WDConversation *)_selectedConversation;
+- (WDMessage *)_selectedMessage;
+
+- (void)_selectConversation:(WDConversation *)conversation;
 - (void)_updateSelectedConversation;
 
-- (void)_selectConversation:(WCConversation *)conversation;
+- (void)_sortConversations;
+- (void)_filterConversations;
+
+- (void)_revalidateConversationsWithConnection:(WCServerConnection *)connection;
+- (void)_invalidateConversationsWithConnection:(WCServerConnection *)connection;
+- (void)_revalidateConversationsWithUser:(WCUser *)user;
+- (void)_invalidateConversationsWithUser:(WCUser *)user;
+
+- (void)_markConversationAsRead:(WDConversation *)conversation;
+
+- (void)_migrateConversations:(NSArray *)conversations;
 
 @end
+
+
+
+
+@implementation WCMessages (Data)
+
+- (WDMessagesConversation *)_messagesConversationForUser:(WCUser *)user {
+    WDMessagesConversation      *conversation;
+    NSPredicate                 *predicate;
+    NSError                     *error = nil;
+    
+    predicate = [NSPredicate predicateWithFormat:
+                 @"(nick == %@) && (identifier == %@)",
+                 [user nick],
+                 [[user connection] URLIdentifier]];
+    
+    conversation = [self.managedObjectContext fetchEntityNammed:@"MessagesConversation"
+                                                  withPredicate:predicate
+                                                          error:&error];
+    
+    if(error) {
+        [NSApp presentError:error];
+        return nil;
+    }
+    
+    if(!conversation) {
+        conversation = [WDMessagesConversation conversationWithUser:user
+                                                         connection:[user connection]];
+        
+        [[WCDatabaseController sharedController] save];
+    } else {
+        [conversation setUser:user];
+        [conversation setConnection:[user connection]];
+    }
+    
+    return conversation;
+}
+
+
+- (WDBroadcastsConversation *)_broadcastsConversationForUser:(WCUser *)user {
+    WDBroadcastsConversation    *conversation;
+    NSPredicate                 *predicate;
+    NSError                     *error = nil;
+    
+    predicate = [NSPredicate predicateWithFormat:
+                 @"(nick == %@) && (identifier == %@)",
+                 [user nick],
+                 [[user connection] URLIdentifier]];
+    
+    conversation = [self.managedObjectContext fetchEntityNammed:@"BroadcastsConversation"
+                                                  withPredicate:predicate
+                                                          error:&error];
+    
+    if(error) {
+        [NSApp presentError:error];
+        return nil;
+    }
+    
+    if(!conversation) {
+        conversation = [WDBroadcastsConversation conversationWithUser:user
+                                                           connection:[user connection]];
+        
+        [[WCDatabaseController sharedController] save];
+    } else {
+        [conversation setUser:user];
+        [conversation setConnection:[user connection]];
+    }
+    
+    return conversation;
+}
+
+@end
+
+
+
 
 
 @implementation WCMessages(Private)
 
 - (void)_validate {
-	WCConversation		*conversation;
+	WDConversation		*conversation;
 	WCServerConnection	*connection;
 	
 	conversation	= [self _selectedConversation];
 	connection		= [conversation connection];
-	
-	[_deleteConversationButton setEnabled:(conversation != NULL)];
+    
 	[_messageTextView setEditable:(connection != NULL && [connection isConnected] && [conversation user] != NULL)];
 	
 	[[[self window] toolbar] validateVisibleItems];
@@ -181,29 +283,34 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	NSString				*string;
 	WIP7Message				*p7Message;
 	WCServerConnection		*connection;
-	WCConversation			*conversation;
-	WCMessage				*message;
-	WCUser					*user;
+	WDConversation			*conversation;
+	WDMessage               *message;
+	WCUser					*user, *selfUser;
 	
 	if([self _runCommand:[[_messageTextView textStorage] string]])
 		return;
     
+    conversation	= [self _selectedConversation];
 	string			= [WCChatController stringByDecomposingSmileyAttributesInAttributedString:[_messageTextView textStorage]];
-	conversation	= [self _selectedConversation];
-	connection		= [conversation connection];
-	user			= [[connection chatController] userWithUserID:[connection userID]];
-	message			= [WCPrivateMessage messageToSomeoneFromUser:user
+    selfUser        = [[[conversation connection] chatController] userWithUserID:[[conversation connection] userID]];
+	user			= [conversation user];
+    connection      = [user connection];
+	message			= [WDPrivateMessage messageToSomeoneFromUser:selfUser
 												   message:string
 												connection:connection];
+    
+    [message setUnreadValue:NO];
+    
+    [conversation setDate:[message date]];
+	[conversation addMessagesObject:message];
 	
-	[conversation addMessage:message];
-	
-	[self _saveMessages];
-	
+	[[WCDatabaseController sharedController] save];
+//    [self _sortConversations];
+
 	p7Message = [WIP7Message messageWithName:@"wired.message.send_message" spec:WCP7Spec];
 	[p7Message setUInt32:[[conversation user] userID] forName:@"wired.user.id"];
-	[p7Message setString:[self _stringForMessageString:[message message]] forName:@"wired.message.message"];
-	[[message connection] sendMessage:p7Message];
+	[p7Message setString:[self _stringForMessageString:[message messageString]] forName:@"wired.message.message"];
+	[[conversation connection] sendMessage:p7Message];
 	
 	[[WCStats stats] addUnsignedInt:1 forKey:WCStatsMessagesSent];
 	
@@ -221,25 +328,25 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	NSString				*string;
 	WIP7Message				*p7Message;
 	WCServerConnection		*connection;
-	WCConversation			*conversation;
-	WCMessage				*message;
+	WDConversation			*conversation;
+	WDMessage               *message;
 	WCUser					*user;
 	
 	string			= html;
 	conversation	= [self _selectedConversation];
 	connection		= [conversation connection];
 	user			= [[connection chatController] userWithUserID:[connection userID]];
-	message			= [WCPrivateMessage messageToSomeoneFromUser:user
+	message			= [WDPrivateMessage messageToSomeoneFromUser:user
 												   message:string
 												connection:connection];
 	
-	[conversation addMessage:message];
+	[conversation addMessagesObject:message];
 	
-	[self _saveMessages];
+	[[WCDatabaseController sharedController] save];
 	
 	p7Message = [WIP7Message messageWithName:@"wired.message.send_message" spec:WCP7Spec];
 	[p7Message setUInt32:[[conversation user] userID] forName:@"wired.user.id"];
-	[p7Message setString:[self _stringForMessageString:[message message]] forName:@"wired.message.message"];
+	[p7Message setString:[self _stringForMessageString:[message messageString]] forName:@"wired.message.message"];
 	[[message connection] sendMessage:p7Message];
 	
 	[[WCStats stats] addUnsignedInt:1 forKey:WCStatsMessagesSent];
@@ -374,44 +481,155 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 #pragma mark -
 
-- (WCConversation *)_selectedConversation {
+- (WDMessagesNode *)_selectedNode {
+    NSInteger		row;
+    
+    row = [_conversationsOutlineView clickedRow];
+	
+    if(row < 0)
+        row = [_conversationsOutlineView selectedRow];
+    
+	if(row >= 0) {
+		return [[_conversationsOutlineView itemAtRow:row] representedObject];
+	}
+    
+    return nil;
+}
+
+
+- (WDMessage *)_selectedMessage {
+    WDMessagesNode *node;
+    
+    node = [self _selectedNode];
+    
+    if([node isMemberOfClass:[WDMessage class]])
+        return (WDMessage *)node;
+    
+	return nil;
+}
+
+
+
+- (WDConversation *)_selectedConversation {
 	return _selectedConversation;
 }
 
 
 
-- (void)_saveMessages {
-	[[WCSettings settings] setObject:[NSKeyedArchiver archivedDataWithRootObject:[_messageConversations conversations]]
-							  forKey:WCMessageConversations];
-	
-	[[WCSettings settings] setObject:[NSKeyedArchiver archivedDataWithRootObject:[_broadcastConversations conversations]]
-							  forKey:WCBroadcastConversations];
-}
-
-
 
 - (void)_updateSelectedConversation {
+    WDMessagesNode  *node;
 	NSInteger		row;
 	id				item;
+    
+    node = [self _selectedNode];
+    
+    if(_selectedConversation)
+        [NSObject cancelPreviousPerformRequestsWithTarget:_selectedConversation];
     
 	[_selectedConversation release];
 	_selectedConversation = NULL;
 	
-	row = [_conversationsOutlineView selectedRow];
+	row = [_conversationsOutlineView clickedRow];
 	
-	if(row >= 0) {
-		item = [_conversationsOutlineView itemAtRow:row];
-		
-		if(item == _messageConversations || item == _broadcastConversations)
-			[_conversationsOutlineView deselectAll:self];
-		else
-			_selectedConversation = [item retain];
-	}
-	
-	[_conversationController setConversation:_selectedConversation];
+    if(row < 0)
+        row = [_conversationsOutlineView selectedRow];
     
-	[_conversationController reloadData];
+	if(row >= 0) {
+		item = [[_conversationsOutlineView itemAtRow:row] representedObject];
+        
+        if([item isKindOfClass:[WDConversation class]])
+            _selectedConversation = [item retain];
+        else    
+            _selectedConversation = [[item valueForKey:@"conversation"] retain];
+	}
+    
+    if([_selectedConversation isUnread]) {
+        [self performSelector:@selector(_markConversationAsRead:) withObject:_selectedConversation afterDelay:1.5];
+    }
+    
+    if([node isKindOfClass:[WDConversation class]]) {
+        [_conversationController setMessages:[_selectedConversation sortedMessages]];
+    }
+    else if([node isKindOfClass:[WDMessage class]]) {
+        [_conversationController setMessages:[NSArray arrayWithObject:node]];
+    }
+    else {
+        [_conversationController setMessages:nil];
+    }
 }
+
+
+
+
+#pragma mark -
+
+- (void)_sortConversations {
+    _sorting = YES;
+    [_conversationsTreeController rearrangeObjects];
+    _sorting = NO;
+}
+
+
+- (void)_filterConversations {
+    NSMutableString         *searchText;
+    NSMutableArray          *subPredicates;
+    NSPredicate             *predicate;
+    NSString                *title;
+    
+    subPredicates       = [[NSMutableArray alloc] init];
+    searchText          = [NSMutableString stringWithString:[_conversationsSearchField stringValue]];
+    title               = [[_conversationsFiltersPopUpButton selectedItem] title];
+        
+    if([title isEqualToString:@"All Messages"]) {
+        [_conversationsTreeController setEntityName:@"Conversation"];
+    }
+    else if([title isEqualToString:@"Conversations"]) {
+        [_conversationsTreeController setEntityName:@"MessagesConversation"];
+    }
+    else if([title isEqualToString:@"Broadcasts"]) {
+        [_conversationsTreeController setEntityName:@"BroadcastsConversation"];
+    }
+    else if([title isEqualToString:@"Drafts"]) {
+        
+    }
+    else if([title isEqualToString:@"Archives"]) {
+        
+    }
+    
+    while ([searchText rangeOfString:@"Â  "].location != NSNotFound) {
+        // Remove extraenous whitespace
+        [searchText replaceOccurrencesOfString:@"Â  " withString:@" " options:0 range:NSMakeRange(0, [searchText length])];
+    }
+    if ([searchText length] != 0) {
+        // Remove leading space
+        [searchText replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0,1)];
+    }
+    if ([searchText length] != 0) {
+        // Remove trailing space
+        [searchText replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange([searchText length]-1, 1)];
+    }
+    if ([searchText length] == 0) {
+        // Reset predicate
+        [_conversationsTreeController setFetchPredicate:nil];
+        return;
+    }
+    
+    predicate = [NSPredicate predicateWithFormat:
+                 @"(serverName contains[cd] %@) OR (nick contains[cd] %@) OR (identifier contains[cd] %@)",
+                 searchText,
+                 searchText,
+                 searchText];
+    
+    [subPredicates addObject:predicate];
+    
+    predicate = [NSCompoundPredicate andPredicateWithSubpredicates:subPredicates];
+    
+    [_conversationsTreeController setSortDescriptors:self.sortDescriptors];
+    [_conversationsTreeController setFetchPredicate:predicate];
+}
+
+
 
 
 
@@ -428,10 +646,159 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     }
 }
 
+
+- (void)_revalidateConversationsWithConnection:(WCServerConnection *)connection {
+    NSPredicate     *predicate;
+    NSArray         *conversations;
+    
+    predicate       = [NSPredicate predicateWithFormat:@"(identifier == %@)", [connection URLIdentifier]];
+    conversations   = [self.managedObjectContext fetchEntitiesNammed:@"Conversation"
+                                                       withPredicate:predicate
+                                                               error:nil];
+    
+    for(WDConversation *conversation in conversations) {
+        [conversation revalidateForConnection:connection];
+    }
+}
+
+- (void)_invalidateConversationsWithConnection:(WCServerConnection *)connection {
+    NSPredicate     *predicate;
+    NSArray         *conversations;
+    
+    predicate       = [NSPredicate predicateWithFormat:@"(identifier == %@)", [connection URLIdentifier]];
+    conversations   = [self.managedObjectContext fetchEntitiesNammed:@"Conversation"
+                                                       withPredicate:predicate
+                                                               error:nil];
+    
+    for(WDConversation *conversation in conversations) {
+        [conversation invalidateForConnection:connection];
+    }
+}
+
+
+- (void)_revalidateConversationsWithUser:(WCUser *)user {
+    NSPredicate     *predicate;
+    NSArray         *conversations;
+    
+    predicate       = [NSPredicate predicateWithFormat:
+                       @"(identifier == %@)",
+                       [[user connection] URLIdentifier]];
+    
+    conversations   = [self.managedObjectContext fetchEntitiesNammed:@"Conversation"
+                                                       withPredicate:predicate
+                                                               error:nil];
+    
+    for(WDConversation *conversation in conversations) {
+        [conversation revalidateForUser:user];
+    }
+}
+
+
+- (void)_invalidateConversationsWithUser:(WCUser *)user {
+    NSPredicate     *predicate;
+    NSArray         *conversations;
+    
+    predicate       = [NSPredicate predicateWithFormat:
+                       @"(identifier == %@)",
+                       [[user connection] URLIdentifier]];
+    
+    conversations   = [self.managedObjectContext fetchEntitiesNammed:@"Conversation"
+                                                       withPredicate:predicate
+                                                               error:nil];
+    
+    for(WDConversation *conversation in conversations) {
+        [conversation invalidateForUser:user];
+    }
+}
+
+
+
+
+#pragma mark -
+
+- (void)_markConversationAsRead:(WDConversation *)conversation {
+    if([conversation isUnread]) {
+        if([[self window] isKeyWindow]) {
+            [conversation setUnread:![conversation isUnread]];
+            
+            [[WCDatabaseController sharedController] save];
+            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification object:self];
+            
+            if(conversation == [self _selectedConversation])
+                [_conversationController reloadData];
+        }
+    }
+}
+
+
+
+
+#pragma mark - 
+
+- (void)_migrateConversations:(NSArray *)conversations {
+    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    
+    [context performBlock:^{
+        NSUInteger count = 0;
+        
+        for(WCConversation *conversation in conversations) {
+            if([conversation numberOfMessages] > 0) {
+                if([conversation isKindOfClass:[WCMessageConversation class]]) {
+                    WDConversation *newConversation = [WDMessagesConversation conversationWithConversation:(WCMessageConversation *)conversation];
+                    
+                    for(WCPrivateMessage *message in [conversation messages]) {
+                        WDPrivateMessage *newMessage = [WDPrivateMessage messageWithMessage:message];
+                        [newConversation addMessagesObject:newMessage];
+                    }
+                    [newConversation setDate:[[[newConversation sortedMessages] lastObject] date]];
+                }
+                else if([conversation isKindOfClass:[WCBroadcastConversation class]]) {
+                    WDConversation *newConversation = [WDBroadcastsConversation conversationWithConversation:(WCBroadcastConversation *)conversation];
+                    
+                    for(WCBroadcastMessage *message in [conversation messages]) {
+                        WDBroadcastMessage *newMessage = [WDBroadcastMessage messageWithMessage:message];
+                        [newConversation addMessagesObject:newMessage];
+                    }
+                    [newConversation setDate:[[[newConversation sortedMessages] lastObject] date]];
+                }
+            }
+            count++;
+        }
+        
+        if(count == [conversations count]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
+                [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
+            });
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [context save:nil];
+        });
+    }];
+}
+
 @end
 
 
+
+
+
+
+
+
 @implementation WCMessages
+
+
+#pragma mark -
+
+@dynamic managedObjectContext;
+@synthesize sortDescriptors = _sortDescriptors;
+
+
+
+
+#pragma mark -
 
 + (id)messages {
 	static WCMessages   *sharedMessages;
@@ -444,60 +811,67 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
+
 #pragma mark -
 
 - (id)init {
+    NSSortDescriptor *dateDescriptor;
+    
 	self = [super initWithWindowNibName:@"Messages"];
     
-	_conversationIcon = [[NSImage imageNamed:@"Conversation"] retain];
-	
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(applicationWillTerminate:)
-     name:NSApplicationWillTerminateNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(selectedThemeDidChange:)
-     name:WCSelectedThemeDidChangeNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(linkConnectionLoggedIn:)
-     name:WCLinkConnectionLoggedInNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(linkConnectionDidClose:)
-     name:WCLinkConnectionDidCloseNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(linkConnectionDidTerminate:)
-     name:WCLinkConnectionDidTerminateNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(chatUserNickDidChange:)
-     name:WCChatUserNickDidChangeNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(chatUserAppeared:)
-     name:WCChatUserAppearedNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(chatUserDisappeared:)
-     name:WCChatUserDisappearedNotification];
-    
-	[[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(messagesDidChangeUnreadCount:)
-     name:WCMessagesDidChangeUnreadCountNotification];
-	
-	[self window];
-	
+    if(self) {
+        dateDescriptor          = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
+        _sortDescriptors        = [[NSArray arrayWithObjects:dateDescriptor, nil] retain];
+        
+        _sorting                = NO;
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(applicationWillTerminate:)
+         name:NSApplicationWillTerminateNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(selectedThemeDidChange:)
+         name:WCSelectedThemeDidChangeNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(linkConnectionLoggedIn:)
+         name:WCLinkConnectionLoggedInNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(linkConnectionDidClose:)
+         name:WCLinkConnectionDidCloseNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(linkConnectionDidTerminate:)
+         name:WCLinkConnectionDidTerminateNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(chatUserNickDidChange:)
+         name:WCChatUserNickDidChangeNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(chatUserAppeared:)
+         name:WCChatUserAppearedNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(chatUserDisappeared:)
+         name:WCChatUserDisappearedNotification];
+        
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(messagesDidChangeUnreadCount:)
+         name:WCMessagesDidChangeUnreadCountNotification];
+        
+        [self window];
+	}
 	return self;
 }
 
@@ -506,15 +880,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	[_conversations release];
-	[_messageConversations release];
-	[_broadcastConversations release];
-	
 	[_selectedConversation release];
     
-	[_conversationIcon release];
-	
-	[_conversationIcon release];
+    [_sortDescriptors release];
 	
 	[_dialogDateFormatter release];
     
@@ -534,10 +902,13 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 #pragma mark -
 
 - (void)windowDidLoad {
-	NSData			*data;
-	NSArray			*array;
-	NSInvocation	*invocation;
-	NSUInteger		style;
+	NSData                  *data;
+	NSMutableArray			*array;
+	NSInvocation            *invocation;
+	NSUInteger              style;
+    
+    _dialogDateFormatter = [[WIDateFormatter alloc] init];
+	[_dialogDateFormatter setTimeStyle:NSDateFormatterShortStyle];
     
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"Messages"];
@@ -553,43 +924,41 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 		[invocation invoke];
 	}
     
-	[[_conversationTableColumn dataCell] setVerticalTextOffset:3.0];
-	[[_unreadTableColumn dataCell] setImageAlignment:NSImageAlignRight];
-	
-	[_conversationsOutlineView setTarget:self];
-	[_conversationsOutlineView setDeleteAction:@selector(deleteConversation:)];
-	
-	_conversations			= [[WCConversation rootConversation] retain];
-	_messageConversations	= [[WCMessageConversation rootConversation] retain];
-	_broadcastConversations	= [[WCBroadcastConversation rootConversation] retain];
-	
-	data = [[WCSettings settings] objectForKey:WCMessageConversations];
-	
-	if(data) {
-		array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-		
-		[_messageConversations addConversations:array];
-	}
-	
-	data = [[WCSettings settings] objectForKey:WCBroadcastConversations];
-	
-	if(data) {
-		array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-		
-		[_broadcastConversations addConversations:array];
-	}
+    array   = [NSMutableArray array];
+    data    = [[WCSettings settings] objectForKey:WCMessageConversations];
     
-	[_conversations addConversation:_messageConversations];
-	[_conversations addConversation:_broadcastConversations];
-	
-	[_conversationsOutlineView reloadData];
-	[_conversationsOutlineView expandItem:_messageConversations];
-	[_conversationsOutlineView expandItem:_broadcastConversations];
-	
-	_dialogDateFormatter = [[WIDateFormatter alloc] init];
-	[_dialogDateFormatter setTimeStyle:NSDateFormatterShortStyle];
-	
+    if(data) {
+        [array addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+    }
+    
+    data = [[WCSettings settings] objectForKey:WCBroadcastConversations];
+    
+    if(data) {
+        [array addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+    }
+    
+    if([array count] > 0) {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Messages Migration"
+                                         defaultButton:@"Migrate"
+                                       alternateButton:@"Cancel"
+                                           otherButton:nil
+                             informativeTextWithFormat:@"Local storage of Messages moved to Core Data. Choose 'Migrate' in order to recover old conversations. Choosing 'Cancel' will erase all your data. This cannot be undone."];
+        
+        NSInteger result = [alert runModal];
+        
+        if(result == NSAlertDefaultReturn)
+            [self _migrateConversations:array];
+        else {
+            [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
+            [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
+        }
+    }
+    
+    [_conversationsTreeController setFetchPredicate:nil];
+    [_conversationsTreeController setSortDescriptors:self.sortDescriptors];
+    
 	[self _themeDidChange];
+    [self _sortConversations];
 	[self _validate];
 }
 
@@ -597,18 +966,22 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 - (void)windowDidBecomeKey:(NSWindow *)window {
 	NSEnumerator		*enumerator;
-	WCConversation		*conversation;
-	WCMessage			*message;
+	WDConversation		*conversation;
+	WDMessage			*message;
 	BOOL				changedUnread = NO;
-	
+    	
 	conversation = [self _selectedConversation];
 	
 	if(conversation) {
+        if([conversation isUnread]) {
+            [_conversationsTreeController setFetchPredicate:nil];
+        }
+        
 		enumerator = [[conversation messages] objectEnumerator];
 		
 		while((message = [enumerator nextObject])) {
-			if([message isUnread]) {
-				[message setUnread:NO];
+			if([message unreadValue]) {
+				[message setUnreadValue:NO];
 				
 				changedUnread = YES;
 			}
@@ -620,8 +993,10 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 			changedUnread = YES;
 		}
 		
-		if(changedUnread)
+		if(changedUnread) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
+            [self _sortConversations];
+        }
 	}
 }
 
@@ -672,7 +1047,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 - (void)applicationWillTerminate:(NSNotification *)notification {
-	[self _saveMessages];
+	[[WCDatabaseController sharedController] save];
 }
 
 
@@ -685,7 +1060,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	if(![connection isKindOfClass:[WCServerConnection class]])
 		return;
     
-	[_conversations revalidateForConnection:connection];
+	[self _revalidateConversationsWithConnection:connection];
 	
 	[connection addObserver:self selector:@selector(wiredMessageMessage:) messageName:@"wired.message.message"];
 	[connection addObserver:self selector:@selector(wiredMessageBroadcast:) messageName:@"wired.message.broadcast"];
@@ -703,7 +1078,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	if(![connection isKindOfClass:[WCServerConnection class]])
 		return;
     
-	[_conversations invalidateForConnection:connection];
+	[self _invalidateConversationsWithConnection:connection];
 	
 	[connection removeObserver:self];
     
@@ -722,7 +1097,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	if(![connection isKindOfClass:[WCServerConnection class]])
 		return;
     
-	[_conversations invalidateForConnection:connection];
+	[self _invalidateConversationsWithConnection:connection];
 	
 	[connection removeObserver:self];
 	
@@ -738,7 +1113,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	
 	user = [notification object];
 	
-	[_conversations revalidateForUser:user];
+	[self _revalidateConversationsWithUser:user];
 	
 	if([[self _selectedConversation] user] == user)
 		[_conversationController reloadData];
@@ -781,7 +1156,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 - (void)messagesDidChangeUnreadCount:(NSNotification *)notification {
-	[self _saveMessages];
+	[[WCDatabaseController sharedController] save];
 	
 	[_conversationsOutlineView setNeedsDisplay:YES];
 }
@@ -791,34 +1166,31 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (void)wiredMessageMessage:(WIP7Message *)p7Message {
 	WCServerConnection		*connection;
 	WCUser					*user;
-	WCMessage				*message;
-	WCConversation			*conversation, *selectedConversation;
+	WDPrivateMessage        *message;
+	WDConversation			*conversation, *selectedConversation;
 	WIP7UInt32				uid;
 	
 	[p7Message getUInt32:&uid forName:@"wired.user.id"];
 	
-	connection = [p7Message contextInfo];
-	user = [[connection chatController] userWithUserID:uid];
+	connection  = [p7Message contextInfo];
+	user        = [[connection chatController] userWithUserID:uid];
 	
 	if(!user || [user isIgnored])
 		return;
 	
-	conversation = [_messageConversations conversationForUser:user connection:connection];
-	
-	if(!conversation) {
-		conversation = [WCMessageConversation conversationWithUser:user connection:connection];
-		[_messageConversations addConversation:conversation];
-	}
-	
-	selectedConversation = [self _selectedConversation];
+	conversation            = [self _messagesConversationForUser:user];
+	selectedConversation    = [self _selectedConversation];
     
-	message = [WCPrivateMessage messageFromUser:user
+	message = [WDPrivateMessage messageFromUser:user
 										message:[p7Message stringForName:@"wired.message.message"]
 									 connection:connection];
 	
-	[conversation addMessage:message];
+    [conversation setDate:[message date]];
+	[conversation addMessagesObject:message];
     
-	[_conversationsOutlineView reloadData];
+    [[WCDatabaseController sharedController] save];
+    
+    [self _sortConversations];
     
     if(selectedConversation == conversation) {
 		if([WCChatController isHTMLString:[p7Message stringForName:@"wired.message.message"]])
@@ -844,35 +1216,31 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (void)wiredMessageBroadcast:(WIP7Message *)p7Message {
 	WCServerConnection	*connection;
 	WCUser				*user;
-	WCMessage			*message;
-	WCConversation		*conversation, *selectedConversation;
+	WDBroadcastMessage  *message;
+	WDConversation		*conversation, *selectedConversation;
 	WIP7UInt32			uid;
-	
+    
 	[p7Message getUInt32:&uid forName:@"wired.user.id"];
 	
-	connection = [p7Message contextInfo];
-	user = [[connection chatController] userWithUserID:uid];
+	connection  = [p7Message contextInfo];
+	user        = [[connection chatController] userWithUserID:uid];
 	
 	if(!user || [user isIgnored])
 		return;
     
-	conversation = [_broadcastConversations conversationForUser:user connection:connection];
-	
-	if(!conversation) {
-		conversation = [WCBroadcastConversation conversationWithUser:user connection:connection];
-		[_broadcastConversations addConversation:conversation];
-	}
+	conversation = [self _broadcastsConversationForUser:user];
     
 	selectedConversation = [self _selectedConversation];
     
-	message = [WCBroadcastMessage broadcastFromUser:user
+	message = [WDBroadcastMessage broadcastFromUser:user
 											message:[p7Message stringForName:@"wired.message.broadcast"]
 										 connection:connection];
 	
-	[conversation addMessage:message];
+    [conversation setDate:[message date]];
+	[conversation addMessagesObject:message];
     
-	[_conversationsOutlineView reloadData];
-	
+    [[WCDatabaseController sharedController] save];
+    
 	[self _selectConversation:selectedConversation];
     
 	if([[[WCSettings settings] eventWithTag:WCEventsBroadcastReceived] boolForKey:WCEventsShowDialog])
@@ -886,10 +1254,490 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 }
 
 
-
 - (void)selectedThemeDidChange:(NSNotification *)notification {
 	[self _themeDidChange];
 }
+
+
+
+
+
+
+
+
+#pragma mark -
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+    SEL		selector;
+	
+	selector = [menuItem action];
+	
+	if(selector == @selector(revealInUserList:))
+		return ([[self _selectedConversation] user] != NULL);
+    
+    else if(selector == @selector(deleteConversation:))
+		return ([self _selectedConversation] != NULL);
+    
+	else if(selector == @selector(clearMessages:))
+		return ([_messageConversations numberOfConversations] > 0 || [_broadcastConversations numberOfConversations] > 0);
+	
+    else if(selector == @selector(saveDocument:))
+        return ([self _selectedConversation] != NULL);
+    
+	return YES;
+}
+
+
+
+
+
+#pragma mark -
+
+- (BOOL)showNextUnreadConversation {
+//	WCConversation	*conversation;
+//	NSRect			rect;
+//	
+//	if([[self window] firstResponder] == _messageTextView && [_messageTextView isEditable])
+//		return NO;
+//	
+//	rect = [[[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
+//	rect.origin.y += 0.9 * rect.size.height;
+//	
+//	if([[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
+//		return YES;
+//    
+//	conversation = [_conversations nextUnreadConversationStartingAtConversation:[self _selectedConversation]];
+//	
+//	if(!conversation)
+//		conversation = [_conversations nextUnreadConversationStartingAtConversation:NULL];
+//	
+//	if(conversation) {
+//		[self _selectConversation:conversation];
+//		
+//		return YES;
+//	}
+//	
+	return NO;
+}
+
+
+
+- (BOOL)showPreviousUnreadConversation {
+//	WCConversation	*conversation;
+//	NSRect			rect;
+//	
+//	if([[self window] firstResponder] == _messageTextView && [_messageTextView isEditable])
+//		return NO;
+//	
+//	rect = [[[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
+//	rect.origin.y -= 0.9 * rect.size.height;
+//	
+//	if([[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
+//		return YES;
+//	
+//	conversation = [_conversations previousUnreadConversationStartingAtConversation:[self _selectedConversation]];
+//	
+//	if(!conversation)
+//		conversation = [_conversations previousUnreadConversationStartingAtConversation:NULL];
+//    
+//	if(conversation) {
+//		[self _selectConversation:conversation];
+//		
+//		return YES;
+//	}
+//	
+	return NO;
+}
+
+
+
+- (void)showPrivateMessageToUser:(WCUser *)user {
+    WDMessagesConversation      *conversation;
+    
+    conversation = [self _messagesConversationForUser:user];
+    
+    [self _selectConversation:conversation];
+	
+	[self showWindow:self];
+	
+	[self _validate];
+	
+	[[self window] makeFirstResponder:_messageTextView];
+}
+
+
+
+- (void)showBroadcastForConnection:(WCServerConnection *)connection {
+	[self showWindow:self];
+    
+	[NSApp beginSheet:_broadcastPanel
+	   modalForWindow:[self window]
+		modalDelegate:self
+	   didEndSelector:@selector(broadcastSheetDidEnd:returnCode:contextInfo:)
+		  contextInfo:connection];
+}
+
+
+
+
+#pragma mark -
+
+- (NSUInteger)numberOfUnreadMessages {
+    NSArray         *conversations;
+    NSUInteger      unreads = 0;
+    
+    conversations = [self.managedObjectContext fetchEntitiesNammed:@"Conversation" withPredicate:nil error:nil];
+    
+    for(WDConversation *conversation in conversations) {
+        unreads += [conversation numberOfUnreadMessages];
+    }
+            
+	return unreads;
+}
+
+
+
+- (NSUInteger)numberOfUnreadMessagesForConnection:(WCServerConnection *)connection {
+    NSArray         *conversations;
+    NSPredicate     *predicate;
+    NSUInteger      unreads = 0;
+    
+    predicate       = [NSPredicate predicateWithFormat:@"(identifier == %@)", connection.URLIdentifier];
+    conversations   = [self.managedObjectContext fetchEntitiesNammed:@"Conversation" withPredicate:predicate error:nil];
+    
+    for(WDConversation *conversation in conversations) {
+        unreads += [conversation numberOfUnreadMessages];
+    }
+    
+	return unreads;
+}
+
+
+
+#pragma mark -
+
+- (void)broadcastSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+	WIP7Message				*message;
+	WCServerConnection		*connection = contextInfo;
+	
+	if(returnCode == NSAlertDefaultReturn) {
+		message = [WIP7Message messageWithName:@"wired.message.send_broadcast" spec:WCP7Spec];
+		[message setString:[self _stringForMessageString:[_broadcastTextView string]] forName:@"wired.message.broadcast"];
+		[connection sendMessage:message];
+	}
+    
+	[_broadcastPanel close];
+	[_broadcastTextView setString:@""];
+}
+
+
+- (IBAction)saveDocument:(id)sender {
+    [self saveConversation:sender];
+}
+
+
+- (IBAction)saveConversation:(id)sender {
+    __block NSSavePanel				*savePanel;
+	__block WDConversation			*conversation;
+	
+	conversation = [self _selectedConversation];
+	
+	if(!conversation)
+		return;
+    
+	savePanel = [NSSavePanel savePanel];
+	[savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"webarchive"]];
+	[savePanel setCanSelectHiddenExtension:YES];
+    [savePanel setNameFieldStringValue:[[conversation nick] stringByAppendingPathExtension:@"webarchive"]];
+    
+    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+        WebResource				*dataSource;
+        WebArchive				*archive;
+        
+        if(result == NSOKButton) {
+            dataSource = [[[[[_conversationController conversationWebView] mainFrame] DOMDocument] webArchive] mainResource];
+            
+            archive = [[WebArchive alloc]
+                       initWithMainResource:dataSource
+                       subresources:nil
+                       subframeArchives:nil];
+            
+            [[archive data] writeToFile:[[savePanel URL] path] atomically:YES];
+        }
+    }];
+}
+
+
+
+
+- (IBAction)revealInUserList:(id)sender {
+	WCUser				*user;
+	WCError				*error;
+	WDConversation		*conversation;
+	
+	conversation = [self _selectedConversation];
+	
+	if(!conversation)
+		return;
+	
+	user = [conversation user];
+	
+	if(user) {
+		[[WCPublicChat publicChat] selectChatController:[[conversation connection] chatController]];
+		[[[conversation connection] chatController] selectUser:user];
+		[[WCPublicChat publicChat] showWindow:self];
+	} else {
+		error = [WCError errorWithDomain:WCWiredClientErrorDomain code:WCWiredClientUserNotFound];
+		[[conversation connection] triggerEvent:WCEventsError info1:error];
+		[[error alert] beginSheetModalForWindow:[self window]];
+	}
+}
+
+
+- (IBAction)markAsRead:(id)sender {
+    WDMessagesNode      *selectedNode;
+    WDConversation      *conversation;
+    WDMessage           *message;
+    
+    selectedNode = [self _selectedNode];
+    
+    if([selectedNode isKindOfClass:[WDConversation class]]) {
+        conversation = (WDConversation *)selectedNode;
+        
+        [conversation setUnread:![conversation isUnread]];
+        [_conversationController reloadData];
+        
+    }
+    else if([selectedNode isKindOfClass:[WDMessage class]]) {
+        message = (WDMessage *)selectedNode;
+        
+        [message.conversation willChangeValueForKey:@"isUnread"];
+        [message setUnreadValue:![message unreadValue]];
+        [message.conversation didChangeValueForKey:@"isUnread"];
+    }
+    
+    [[WCDatabaseController sharedController] save];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification object:self];
+}
+
+
+
+
+- (IBAction)deleteConversation:(id)sender {
+	NSAlert				*alert;
+	WDConversation		*conversation;
+	
+	conversation = [self _selectedConversation];
+	
+	if(!conversation)
+		return;
+	
+	alert = [[[NSAlert alloc] init] autorelease];
+	[alert setMessageText:[NSSWF:NSLS(@"Are you sure you want to delete the conversation with \u201c%@\u201d?", @"Delete conversation dialog title"), [conversation nick]]];
+	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Delete conversation dialog description")];
+	[alert addButtonWithTitle:NSLS(@"Delete", @"Delete board button title")];
+	[alert addButtonWithTitle:NSLS(@"Cancel", @"Delete board button title")];
+	[alert beginSheetModalForWindow:[self window]
+					  modalDelegate:self
+					 didEndSelector:@selector(deleteConversationAlertDidEnd:returnCode:contextInfo:)
+						contextInfo:[conversation retain]];
+}
+
+
+
+- (void)deleteConversationAlertDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+	WDConversation		*conversation = contextInfo;
+	
+	if(returnCode == NSAlertFirstButtonReturn) {
+		
+        [[WCDatabaseController context] deleteObject:conversation];
+        [[WCDatabaseController sharedController] save];
+        
+		[_conversationsOutlineView reloadData];
+		
+		[self _updateSelectedConversation];
+		[self _validate];
+        
+		[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
+	}
+	
+	[conversation release];
+}
+
+
+
+- (IBAction)deleteMessage:(id)sender {
+	NSAlert				*alert;
+	WDMessage           *message;
+	
+	message = [self _selectedMessage];
+	
+	if(!message)
+		return;
+    
+	alert = [[[NSAlert alloc] init] autorelease];
+	[alert setMessageText:NSLS(@"Are you sure you want to delete this message?", @"Delete message dialog title")];
+	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Delete message dialog description")];
+	[alert addButtonWithTitle:NSLS(@"Delete", @"Delete message button title")];
+	[alert addButtonWithTitle:NSLS(@"Cancel", @"Delete message button title")];
+	[alert beginSheetModalForWindow:[self window]
+					  modalDelegate:self
+					 didEndSelector:@selector(deleteMessageAlertDidEnd:returnCode:contextInfo:)
+						contextInfo:[message retain]];}
+
+
+- (void)deleteMessageAlertDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+	WDMessage		*message = contextInfo;
+	
+	if(returnCode == NSAlertFirstButtonReturn) {
+		
+        [[WCDatabaseController context] deleteObject:message];
+        [[WCDatabaseController sharedController] save];
+        
+		[_conversationsOutlineView reloadData];
+		
+		[self _updateSelectedConversation];
+		[self _validate];
+        
+		[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
+	}
+	
+	[message release];
+}
+
+
+- (IBAction)conversationsFilters:(id)sender {
+    [self _filterConversations];
+}
+
+
+
+- (IBAction)conversationsSearch:(id)sender {
+    [self _filterConversations];
+}
+
+
+
+
+#pragma mark -
+
+- (void)menuNeedsUpdate:(NSMenu *)menu {
+    WDMessagesNode      *node;
+    WDConversation      *conversation;
+    WDMessage           *message;
+    NSMenuItem          *item;
+    
+    if(menu == _chatSmileysMenu) {
+		[[NSApp keyWindow] makeFirstResponder:_messageTextView];
+		[menu removeAllItems];
+		
+		item = [NSMenuItem itemWithTitle:@""];
+		[item setImage:[NSImage imageNamed:@"Smileys"]];
+		[menu addItem:item];
+		
+		for(item in [[[WCApplicationController sharedController] insertSmileyMenu] itemArray]) {
+			NSMenuItem *newItem = [item copy];
+			[menu addItem:newItem];
+		}
+	}
+    else if(menu == [_conversationPopUpButton menu]) {
+        node = [self _selectedNode];
+        
+        [menu removeAllItems];
+        
+        [menu addItem:[NSMenuItem itemWithTitle:@"" image:[NSImage imageNamed:@"NSActionTemplate"]]];
+        
+        if([node isKindOfClass:[WDConversation class]]) {
+            conversation = (WDConversation *)node;
+            
+            if([conversation isUnread]) {
+                item = [menu addItemWithTitle:@"Mark As Read" action:@selector(markAsRead:) keyEquivalent:@""];
+            } else {
+                item = [menu addItemWithTitle:@"Mark As Unread" action:@selector(markAsRead:) keyEquivalent:@""];
+            }
+            
+            [menu addItem:[NSMenuItem separatorItem]];
+            
+            item = [menu addItemWithTitle:@"Delete Conversation" action:@selector(deleteConversation:) keyEquivalent:@""];
+            [item setTarget:self];
+            
+            [menu addItem:[NSMenuItem separatorItem]];
+            
+            item = [menu addItemWithTitle:@"Reveal In User List" action:@selector(revealInUserList:) keyEquivalent:@""];
+            [item setTarget:self];
+        }
+        else if([node isKindOfClass:[WDMessage class]]) {
+            message = (WDMessage *)node;
+            
+            if([message unreadValue]) {
+                item = [menu addItemWithTitle:@"Mark As Read" action:@selector(markAsRead:) keyEquivalent:@""];
+                [item setTarget:self];
+            } else {
+                item = [menu addItemWithTitle:@"Mark As Unread" action:@selector(markAsRead:) keyEquivalent:@""];
+                [item setTarget:self];
+            }
+            [item setTarget:self];
+            
+            [menu addItem:[NSMenuItem separatorItem]];
+            
+            item = [menu addItemWithTitle:@"Delete Message" action:@selector(deleteMessage:) keyEquivalent:@""];
+            [item setTarget:self];
+        }
+    }
+}
+
+
+
+
+
+
+#pragma mark -
+
+- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+    NSTableCellView     *view;
+    NSTreeNode          *node = item;
+    
+    if(outlineView == _conversationsOutlineView) {
+        if([node.representedObject isKindOfClass:[WDConversation class]]) {
+            view = [outlineView makeViewWithIdentifier:@"ConversationCell" owner:self];
+        }
+        else if([node.representedObject isKindOfClass:[WDMessage class]]) {
+            view = [outlineView makeViewWithIdentifier:@"MessageCell" owner:self];
+        }
+    }
+    
+    return view;
+}
+
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+    NSTreeNode          *node = item;
+    
+    if(outlineView == _conversationsOutlineView) {
+        if([node.representedObject isKindOfClass:[WDConversation class]]) {
+            return 47.0f;
+        } else if([node.representedObject isKindOfClass:[WDMessage class]]) {
+            return 28.0f;
+        }
+    }
+    return [outlineView rowHeight];
+}
+
+
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification {
+    [self _updateSelectedConversation];
+    
+    if(!_sorting) {
+        [_conversationController reloadData];
+    }
+    
+	[self _validate];
+}
+
+
+
+
+
+#pragma mark -
 
 - (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
     
@@ -934,6 +1782,10 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
+
+
+#pragma mark -
+
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)selector {
 	if(textView == _broadcastTextView) {
 		if(selector == @selector(insertNewline:)) {
@@ -973,439 +1825,14 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
-#pragma mark -
-
-- (BOOL)validateToolbarItem:(NSToolbarItem *)item {
-	SEL		selector;
-	
-	selector = [item action];
-	
-	if(selector == @selector(revealInUserList:))
-		return ([[self _selectedConversation] user] != NULL);
-    
-	else if(selector == @selector(clearMessages:))
-		return ([_messageConversations numberOfConversations] > 0 || [_broadcastConversations numberOfConversations] > 0);
-	
-	return YES;
-}
-
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-    SEL		selector;
-	
-	selector = [menuItem action];
-	
-	if(selector == @selector(revealInUserList:))
-		return ([[self _selectedConversation] user] != NULL);
-    
-    else if(selector == @selector(deleteConversation:))
-		return ([self _selectedConversation] != NULL);
-    
-	else if(selector == @selector(clearMessages:))
-		return ([_messageConversations numberOfConversations] > 0 || [_broadcastConversations numberOfConversations] > 0);
-	
-    else if(selector == @selector(saveDocument:))
-        return ([self _selectedConversation] != NULL);
-    
-	return YES;
-}
-
-
-#pragma mark -
-
-- (BOOL)showNextUnreadConversation {
-	WCConversation	*conversation;
-	NSRect			rect;
-	
-	if([[self window] firstResponder] == _messageTextView && [_messageTextView isEditable])
-		return NO;
-	
-	rect = [[[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
-	rect.origin.y += 0.9 * rect.size.height;
-	
-	if([[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
-		return YES;
-    
-	conversation = [_conversations nextUnreadConversationStartingAtConversation:[self _selectedConversation]];
-	
-	if(!conversation)
-		conversation = [_conversations nextUnreadConversationStartingAtConversation:NULL];
-	
-	if(conversation) {
-		[self _selectConversation:conversation];
-		
-		return YES;
-	}
-	
-	return NO;
-}
-
-
-
-- (BOOL)showPreviousUnreadConversation {
-	WCConversation	*conversation;
-	NSRect			rect;
-	
-	if([[self window] firstResponder] == _messageTextView && [_messageTextView isEditable])
-		return NO;
-	
-	rect = [[[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
-	rect.origin.y -= 0.9 * rect.size.height;
-	
-	if([[[[[_conversationController conversationWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
-		return YES;
-	
-	conversation = [_conversations previousUnreadConversationStartingAtConversation:[self _selectedConversation]];
-	
-	if(!conversation)
-		conversation = [_conversations previousUnreadConversationStartingAtConversation:NULL];
-    
-	if(conversation) {
-		[self _selectConversation:conversation];
-		
-		return YES;
-	}
-	
-	return NO;
-}
-
-
-
-- (void)showPrivateMessageToUser:(WCUser *)user {
-	WCConversation		*conversation;
-	WCServerConnection	*connection;
-	
-	connection		= [user connection];
-	conversation	= [_messageConversations conversationForUser:user connection:connection];
-	
-	if(!conversation) {
-		conversation = [WCMessageConversation conversationWithUser:user connection:connection];
-		[_messageConversations addConversation:conversation];
-		[_conversationsOutlineView reloadData];
-	}
-	
-	[self _selectConversation:conversation];
-	
-	[self showWindow:self];
-	
-	[self _validate];
-	
-	[[self window] makeFirstResponder:_messageTextView];
-}
-
-
-
-- (void)showBroadcastForConnection:(WCServerConnection *)connection {
-	[self showWindow:self];
-    
-	[NSApp beginSheet:_broadcastPanel
-	   modalForWindow:[self window]
-		modalDelegate:self
-	   didEndSelector:@selector(broadcastSheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:connection];
-}
-
-
-
-- (NSUInteger)numberOfUnreadMessages {
-	return [_conversations numberOfUnreadMessagesForConnection:NULL includeChildConversations:YES];
-}
-
-
-
-- (NSUInteger)numberOfUnreadMessagesForConnection:(WCServerConnection *)connection {
-	return [_conversations numberOfUnreadMessagesForConnection:connection includeChildConversations:YES];
-}
 
 
 
 #pragma mark -
 
-- (void)broadcastSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	WIP7Message				*message;
-	WCServerConnection		*connection = contextInfo;
-	
-	if(returnCode == NSAlertDefaultReturn) {
-		message = [WIP7Message messageWithName:@"wired.message.send_broadcast" spec:WCP7Spec];
-		[message setString:[self _stringForMessageString:[_broadcastTextView string]] forName:@"wired.message.broadcast"];
-		[connection sendMessage:message];
-	}
-    
-	[_broadcastPanel close];
-	[_broadcastTextView setString:@""];
+- (NSManagedObjectContext *)managedObjectContext {
+    return [WCDatabaseController context];
 }
 
-
-- (IBAction)saveDocument:(id)sender {
-    [self saveConversation:sender];
-}
-
-
-- (IBAction)saveConversation:(id)sender {
-    __block NSSavePanel				*savePanel;
-	__block WCConversation			*conversation;
-	
-	conversation = [self _selectedConversation];
-	
-	if(!conversation)
-		return;
-    
-	savePanel = [NSSavePanel savePanel];
-	[savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"webarchive"]];
-	[savePanel setCanSelectHiddenExtension:YES];
-    [savePanel setNameFieldStringValue:[[conversation nick] stringByAppendingPathExtension:@"webarchive"]];
-    
-    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        WebResource				*dataSource;
-        WebArchive				*archive;
-        
-        if(result == NSOKButton) {
-            dataSource = [[[[[_conversationController conversationWebView] mainFrame] DOMDocument] webArchive] mainResource];
-            
-            archive = [[WebArchive alloc]
-                       initWithMainResource:dataSource
-                       subresources:nil
-                       subframeArchives:nil];
-            
-            [[archive data] writeToFile:[[savePanel URL] path] atomically:YES];
-        }
-    }];
-}
-
-
-
-
-- (IBAction)revealInUserList:(id)sender {
-	WCUser				*user;
-	WCError				*error;
-	WCConversation		*conversation;
-	
-	conversation = [self _selectedConversation];
-	
-	if(!conversation)
-		return;
-	
-	user = [conversation user];
-	
-	if(user) {
-		[[WCPublicChat publicChat] selectChatController:[[conversation connection] chatController]];
-		[[[conversation connection] chatController] selectUser:user];
-		[[WCPublicChat publicChat] showWindow:self];
-	} else {
-		error = [WCError errorWithDomain:WCWiredClientErrorDomain code:WCWiredClientUserNotFound];
-		[[conversation connection] triggerEvent:WCEventsError info1:error];
-		[[error alert] beginSheetModalForWindow:[self window]];
-	}
-}
-
-
-
-- (IBAction)clearMessages:(id)sender {
-	NSAlert			*alert;
-	
-	alert = [[NSAlert alloc] init];
-	[alert setMessageText:NSLS(@"Are you sure you want to clear the message history?", @"Clear messages dialog title")];
-	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Clear messages dialog description")];
-	[alert addButtonWithTitle:NSLS(@"Clear", @"Clear messages dialog button")];
-	[alert addButtonWithTitle:NSLS(@"Cancel", @"Clear messages dialog button")];
-	[alert beginSheetModalForWindow:[self window]
-					  modalDelegate:self
-					 didEndSelector:@selector(clearSheetDidEnd:returnCode:contextInfo:)
-						contextInfo:NULL];
-	[alert release];
-}
-
-
-
-- (void)clearSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	NSEnumerator		*enumerator;
-	WCConversation		*conversation;
-	
-	if(returnCode == NSAlertFirstButtonReturn) {
-		enumerator = [[_conversations conversations] objectEnumerator];
-		
-		while((conversation = [enumerator nextObject]))
-			[conversation removeAllConversations];
-		
-		[_conversationsOutlineView reloadData];
-		[_conversationsOutlineView deselectAll:self];
-		
-		[self _updateSelectedConversation];
-		[self _validate];
-        
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-	}
-}
-
-
-
-- (IBAction)deleteConversation:(id)sender {
-	NSAlert				*alert;
-	WCConversation		*conversation;
-	
-	conversation = [self _selectedConversation];
-	
-	if(!conversation || [conversation isExpandable])
-		return;
-	
-	alert = [[[NSAlert alloc] init] autorelease];
-	[alert setMessageText:[NSSWF:NSLS(@"Are you sure you want to delete the conversation with \u201c%@\u201d?", @"Delete conversation dialog title"), [conversation nick]]];
-	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Delete conversation dialog description")];
-	[alert addButtonWithTitle:NSLS(@"Delete", @"Delete board button title")];
-	[alert addButtonWithTitle:NSLS(@"Cancel", @"Delete board button title")];
-	[alert beginSheetModalForWindow:[self window]
-					  modalDelegate:self
-					 didEndSelector:@selector(deleteConversationAlertDidEnd:returnCode:contextInfo:)
-						contextInfo:[conversation retain]];
-}
-
-
-
-- (void)deleteConversationAlertDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	NSEnumerator		*enumerator;
-	WCConversation		*conversation = contextInfo, *eachConversation;
-	
-	if(returnCode == NSAlertFirstButtonReturn) {
-		enumerator = [[_conversations conversations] objectEnumerator];
-		
-		while((eachConversation = [enumerator nextObject]))
-			[eachConversation removeConversation:conversation];
-        
-		[_conversationsOutlineView reloadData];
-		
-		[self _updateSelectedConversation];
-		[self _validate];
-        
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-	}
-	
-	[conversation release];
-}
-
-
-
-
-
-
-#pragma mark -
-
-- (void)menuWillOpen:(NSMenu *)menu {
-	if(menu == _chatSmileysMenu) {
-		
-		[[NSApp keyWindow] makeFirstResponder:_messageTextView];
-		[menu removeAllItems];
-		
-		NSMenuItem *item = [NSMenuItem itemWithTitle:@""];
-		[item setImage:[NSImage imageNamed:@"Smileys"]];
-		[menu addItem:item];
-		
-		for(NSMenuItem *item in [[[WCApplicationController sharedController] insertSmileyMenu] itemArray]) {
-			NSMenuItem *newItem = [item copy];
-			[menu addItem:newItem];
-		}
-	}
-}
-
-
-
-
-
-
-#pragma mark -
-
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
-	if(!item)
-		item = _conversations;
-	
-	return [item numberOfConversations];
-}
-
-
-
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item {
-	if(!item)
-		item = _conversations;
-	
-	return [item conversationAtIndex:index];
-}
-
-
-
-- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
-	NSDictionary	*attributes;
-	NSString		*name;
-	
-	if(tableColumn == _conversationTableColumn) {
-		name = [item name];
-		
-		if(item == _messageConversations || item == _broadcastConversations) {
-			attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [NSColor colorWithCalibratedRed:96.0 / 255.0 green:110.0 / 255.0 blue:128.0 / 255.0 alpha:1.0],
-                          NSForegroundColorAttributeName,
-                          [NSFont boldSystemFontOfSize:11.0],
-                          NSFontAttributeName,
-                          NULL];
-			
-			return [NSAttributedString attributedStringWithString:[name uppercaseString] attributes:attributes];
-		}
-		
-		return name;
-	}
-	else if(tableColumn == _unreadTableColumn) {
-		return [NSImage imageWithPillForCount:[item numberOfUnreadMessagesForConnection:NULL includeChildConversations:NO]
-							   inActiveWindow:([NSApp keyWindow] == [self window])
-								onSelectedRow:([_conversationsOutlineView rowForItem:item] == [_conversationsOutlineView selectedRow])];
-	}
-	
-	return NULL;
-}
-
-
-
-- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-	if(tableColumn == _conversationTableColumn) {
-		if(item == _messageConversations || item == _broadcastConversations)
-			[cell setImage:NULL];
-		else
-			[cell setImage:_conversationIcon];
-	}
-}
-
-
-- (NSCell *)outlineView:(NSOutlineView *)outlineView dataCellForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-    NSTextFieldCell     *cell;
-    NSFont              *font;
-    
-    cell = [tableColumn dataCell];
-    font = [cell font];
-    
-    if([item numberOfUnreadMessagesForConnection:NULL includeChildConversations:NO] > 0)
-        [cell setFont:[[cell font] fontByAddingTrait:NSBoldFontMask]];
-    else
-        [cell setFont:[[cell font] fontByAddingTrait:NSUnboldFontMask]];
-    
-    return cell;
-}
-
-
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-	return [item isExpandable];
-}
-
-
-
-- (void)outlineViewSelectionDidChange:(NSNotification *)notification {
-	[self _updateSelectedConversation];
-	[self _validate];
-}
-
-
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item {
-	if(item == _messageConversations || item == _broadcastConversations)
-		return NO;
-	
-	return YES;
-}
 
 @end

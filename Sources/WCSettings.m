@@ -638,7 +638,7 @@ static NSString         *basicThemeIdentifier;
      WIStringFromColor([NSColor colorWithCalibratedRed:0.2000 green:0.6000 blue:0.8000 alpha:1.0000]), WCThemesChatURLsColor,
      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesMessagesFont,
      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesMessagesTextColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.8593 green:0.8772 blue:0.9117 alpha:1.0000]), WCThemesMessagesBackgroundColor,
+     WIStringFromColor([NSColor colorWithCalibratedRed:1 green:1 blue:1 alpha:1.0000]), WCThemesMessagesBackgroundColor,
      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesBoardsFont,
      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesBoardsTextColor,
      WIStringFromColor([NSColor colorWithCalibratedRed:0.8593 green:0.8772 blue:0.9117 alpha:1.0000]), WCThemesBoardsBackgroundColor,
