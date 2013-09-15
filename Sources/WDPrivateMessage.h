@@ -6,6 +6,6 @@
 + (WDPrivateMessage *)messageFromUser:(WCUser *)user message:(NSString *)message connection:(WCServerConnection *)connection;
 + (WDPrivateMessage *)messageToSomeoneFromUser:(WCUser *)user message:(NSString *)message connection:(WCServerConnection *)connection;
 
-+ (WDPrivateMessage *)messageWithMessage:(WCPrivateMessage *)message;
++ (WDPrivateMessage *)messageWithMessage:(WCPrivateMessage *)message context:(NSManagedObjectContext *)context;
 
 @end

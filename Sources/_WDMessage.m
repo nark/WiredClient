@@ -6,7 +6,6 @@
 const struct WDMessageAttributes WDMessageAttributes = {
 	.draft = @"draft",
 	.message = @"message",
-	.unread = @"unread",
 };
 
 const struct WDMessageRelationships WDMessageRelationships = {
@@ -46,10 +45,6 @@ const struct WDMessageFetchedProperties WDMessageFetchedProperties = {
 		NSSet *affectingKey = [NSSet setWithObject:@"draft"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 	}
-	if ([key isEqualToString:@"unreadValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"unread"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-	}
 
 	return keyPaths;
 }
@@ -85,32 +80,6 @@ const struct WDMessageFetchedProperties WDMessageFetchedProperties = {
 
 @dynamic message;
 
-
-
-
-
-
-@dynamic unread;
-
-
-
-- (BOOL)unreadValue {
-	NSNumber *result = [self unread];
-	return [result boolValue];
-}
-
-- (void)setUnreadValue:(BOOL)value_ {
-	[self setUnread:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveUnreadValue {
-	NSNumber *result = [self primitiveUnread];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveUnreadValue:(BOOL)value_ {
-	[self setPrimitiveUnread:[NSNumber numberWithBool:value_]];
-}
 
 
 

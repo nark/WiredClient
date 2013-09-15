@@ -39,215 +39,13 @@
 #import "WCDOMMessage.h"
 #import "WCDOMMessageStatus.h"
 #import "WDWiredModel.h"
+#import "WCDatabaseController.h"
 
 #import "SBJsonWriter+WCJsonWriter.h"
+#import "NSManagedObjectContext+Fetch.h"
 
 
 #define WC_MESSAGES_STATUS_INTERVAL 60*60*24
-
-
-
-
-
-@interface WCConversationController(Private)
-
-- (WDConversation *)_conversation;
-- (void)_reloadDataAsynchronously;
-
-@end
-
-
-
-
-
-
-
-@implementation WCConversationController(Private)
-
-
-- (void)_reloadDataAsynchronously {
-    NSURL                       *url;
-    WITemplateBundle            *template;
-        
-    template        = [WITemplateBundle templateWithPath:_templatePath];
-    url             = [NSURL fileURLWithPath: [template pathForResource:@"messages"
-                                                                 ofType:@"html"
-                                                            inDirectory:@"htdocs"]];
-    
-    [[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
-
-    
-//	__block NSEnumerator				*enumerator;
-//	__block NSMutableDictionary			*icons;
-//	__block NSCalendar					*calendar;
-//	__block NSDate						*previousDate;
-//	__block NSDateComponents			*components;
-//	__block NSMutableString				*mutableMessage;
-//	__block NSString					*icon, *messageTemplate, *statusTemplate;
-//	__block NSError						*error;
-//	__block WITemplateBundle			*template;
-//	__block WCMessage					*message;
-//	__block WCDOMMessage				*messageElement;
-//	__block WCDOMMessageStatus			*messageStatusElement;
-//	__block NSInteger					day;
-//	__block BOOL						changedUnread = NO, isKeyWindow;
-//	
-//	// launch background operation 
-//	__block NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-//		
-//		// clean the webview in the main thread
-//		dispatch_sync(dispatch_get_main_queue(), ^{
-//			[_conversationWebView clearChildrenElementsOfElementWithID:@"messages-content"];
-//		});
-//		
-//		template		= [WITemplateBundle templateWithPath:_templatePath];
-//	
-//		messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
-//		statusTemplate	= [NSString stringWithContentsOfFile:[template pathForResource:@"MessageStatus" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];
-//		
-//		// reload CSS in the main thread
-//		dispatch_sync(dispatch_get_main_queue(), ^{
-//			[self reloadTemplate];
-//		});
-//		
-//		
-//		if(_conversation && ![_conversation isExpandable]) {
-//			
-//			isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
-//			
-//			if([_conversation numberOfMessages] != 0) {
-//				calendar		= [NSCalendar currentCalendar];
-//				day				= -1;
-//				previousDate	= nil;
-//				icons			= [NSMutableDictionary dictionary];
-//				enumerator		= [[_conversation messages] reverseObjectEnumerator];
-//				
-//				// for each message of the conversation, if operation is still running
-//				while((message = [enumerator nextObject]) && ![operation isCancelled]) {	
-//					
-//					// check for status element
-//					components	= [calendar components:NSDayCalendarUnit fromDate:[message date]];
-//					
-//					if(previousDate == nil) {
-//						previousDate	= [message date];
-//						
-//					} else {
-//						if([previousDate timeIntervalSinceDate:[message date]] > WC_MESSAGES_STATUS_INTERVAL) {
-//							// append status element in the main thread
-//							dispatch_sync(dispatch_get_main_queue(), ^{
-//								messageStatusElement = [WCDOMMessageStatus messageStatusElementForFrame:[_conversationWebView mainFrame] withTemplate:statusTemplate];
-//								[messageStatusElement setMessageStatus:[_messageStatusDateFormatter stringFromDate:previousDate]];
-//								
-//								[_conversationWebView appendElement:[messageStatusElement element] 
-//											   toTopOfElementWithID:@"messages-content" 
-//															 scroll:YES];
-//							});	
-//							previousDate = [message date];
-//						}
-//					}
-//					
-//					// compute icon as a base 64 string
-//					icon = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
-//					
-//					if(!icon) {
-//						icon = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
-//						
-//						if(icon)
-//							[icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
-//					}
-//					
-//					// compute message string (format HTML, URL, smileys)
-//					mutableMessage = [NSMutableString stringWithString:[message message]];
-//					
-//					if(![WCChatController isHTMLString:mutableMessage]) {
-//						
-//						[WCChatController applyHTMLEscapingToMutableString:mutableMessage];
-//						[WCChatController applyHTMLTagsForURLToMutableString:mutableMessage];
-//						
-//						if([[[_conversation connection] theme] boolForKey:WCThemesShowSmileys])
-//							[WCChatController applyHTMLTagsForSmileysToMutableString:mutableMessage];
-//						
-//					}
-//					
-//					[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
-//					
-//					
-//					// apend chat element in the main thread, re-check if operation is still running
-//					if(![operation isCancelled]) {
-//						dispatch_sync(dispatch_get_main_queue(), ^{
-//							messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
-//							[messageElement setServer:[message connectionName]];
-//							[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
-//							[messageElement setNick:[message nick]];
-//							
-//							if([message direction] == WCMessageTo)
-//								[messageElement setDirection:@"to"];
-//							else
-//								[messageElement setDirection:@"from"];
-//							
-//							[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
-//							[messageElement setMessageContent:mutableMessage];
-//							
-//							[_conversationWebView appendElement:[messageElement element] 
-//										   toTopOfElementWithID:@"messages-content" 
-//														 scroll:YES];
-//						});
-//					}
-//					
-//					// append status element in the main thread (if messages are all loaded, append the status date at the top)
-//					if(message == [[_conversation messages] objectAtIndex:0]) {
-//						dispatch_sync(dispatch_get_main_queue(), ^{
-//							messageStatusElement = [WCDOMMessageStatus messageStatusElementForFrame:[_conversationWebView mainFrame] withTemplate:statusTemplate];
-//							[messageStatusElement setMessageStatus:[_messageStatusDateFormatter stringFromDate:[message date]]];
-//							
-//							[_conversationWebView appendElement:[messageStatusElement element] 
-//										   toTopOfElementWithID:@"messages-content" 
-//														 scroll:YES];
-//						});	
-//					}
-//					
-//					// check messages unread
-//					if([message isUnread] && isKeyWindow) {
-//						[message setUnread:NO];
-//						changedUnread = YES;
-//					}
-//				}
-//			}
-//			
-//			// check conversation unread
-//			if([_conversation isUnread] && isKeyWindow) {
-//				[_conversation setUnread:NO];
-//				changedUnread = YES;
-//			}
-//		}
-//		
-//		// notify in the main thread: messages changed
-//		dispatch_sync(dispatch_get_main_queue(), ^{	
-//			if(changedUnread)
-//				[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-//		});
-//	}];
-//	
-//	// add operation to the queue if still valid
-//	if(![operation isCancelled])
-//		[_loadingQueue addOperation:operation];
-}
-
-
-
-- (WDConversation *)_conversation {
-    if(!_messages || [_messages count] == 0)
-        return nil;
-    
-    return [[_messages objectAtIndex:0] conversation];
-}
-
-
-@end
-
-
-
-
 
 
 
@@ -259,6 +57,7 @@
 	self = [super init];
 	
 	_loadingQueue = [[NSOperationQueue alloc] init];
+    _conversation = nil;
 
 	_messageStatusDateFormatter = [[WIDateFormatter alloc] init];
 	[_messageStatusDateFormatter setTimeStyle:NSDateFormatterNoStyle];
@@ -273,8 +72,6 @@
 
 
 - (void)dealloc {
-    [_messages release];
-    
 	[_loadingQueue release];
 	
 	[_font release];
@@ -283,27 +80,18 @@
 	
 	[_messageStatusDateFormatter release];
 	[_messageTimeDateFormatter release];
+    
+    [_conversation release];
 	
 	[super dealloc];
 }
 
 
 - (void)awakeFromNib {
-	NSDictionary			*theme;
-	WITemplateBundle		*template;
-	NSString				*htmlPath;
-	
 	[_conversationWebView setUIDelegate:self];
     [_conversationWebView setFrameLoadDelegate:self];
 	[_conversationWebView setResourceLoadDelegate:self];
 	[_conversationWebView setPolicyDelegate:self];
-    	
-	// load the HTML default page following selected Themes > Templates
-	theme			= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-	template		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-	htmlPath		= [template htmlPathForType:WITemplateTypeMessages];
-    	
-    //[[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:htmlPath]]];
 }
 
 
@@ -312,16 +100,15 @@
 
 #pragma mark -
 
-- (void)setMessages:(NSArray *)messages {
-    [messages retain];
-	[_messages release];
+- (void)setConversation:(WDConversation *)conversation {
+    [conversation retain];
+	[_conversation release];
     
-	_messages	= messages;
+	_conversation	= conversation;
 }
 
-
-- (NSArray *)messages {
-    return _messages;
+- (WDConversation *)conversation {
+    return _conversation;
 }
 
 
@@ -416,71 +203,6 @@
     
     [_conversationWebView stringByEvaluatingJavaScriptFromString:
             [NSSWF:@"printMessage(%@);", jsonString]];
-    
-//    NSMutableDictionary		*icons;
-//	NSMutableString			*mutableMessage;
-//    NSString				*icon, *messageTemplate;
-//    WCDOMMessage			*messageElement;
-//	WITemplateBundle		*template;
-//	NSError					*error;
-//	BOOL					changedUnread = NO, isKeyWindow;
-//	
-//	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[_conversation connection] theme] objectForKey:WCThemesTemplate]];
-//	messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
-//
-//    if(_conversation && ![_conversation isExpandable]) {
-//        icons       = [NSMutableDictionary dictionary];
-//        icon        = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
-//        isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
-//        
-//        if(!icon) {
-//            icon    = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
-//            
-//            if(icon)
-//                [icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
-//        }
-//		
-//		mutableMessage = [NSMutableString stringWithString:[message message]];
-//	
-//
-//		[WCChatController applyHTMLEscapingToMutableString:mutableMessage];
-//		[WCChatController applyHTMLTagsForURLToMutableString:mutableMessage];
-//		
-//		if([[[_conversation connection] theme] boolForKey:WCThemesShowSmileys])
-//			[WCChatController applyHTMLTagsForSmileysToMutableString:mutableMessage];
-//		
-//		[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
-//
-//		messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
-//		[messageElement setServer:[message connectionName]];
-//		[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
-//		[messageElement setNick:[message nick]];
-//		
-//		if([message direction] == WCMessageTo)
-//			[messageElement setDirection:@"to"];
-//		else
-//			[messageElement setDirection:@"from"];
-//		
-//		[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
-//		[messageElement setMessageContent:mutableMessage];
-//		
-//		[_conversationWebView appendElement:[messageElement element] 
-//					toBottomOfElementWithID:@"messages-content" 
-//									 scroll:YES];
-//				
-//        if([message isUnread] && isKeyWindow) {
-//            [message setUnread:NO];
-//            
-//            changedUnread = YES;
-//        }
-//        if([_conversation isUnread] && isKeyWindow) {
-//            [_conversation setUnread:NO];
-//            
-//            changedUnread = YES;
-//        }
-//        if(changedUnread)
-//            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-//    }
 }
 
 
@@ -548,10 +270,20 @@
 
 
 - (void)reloadData {
-	
-	[_loadingQueue cancelAllOperations];
-	
-	[self _reloadDataAsynchronously];
+    NSURL                       *url;
+    WITemplateBundle            *template;
+    BOOL						isKeyWindow;
+    
+    template        = [WITemplateBundle templateWithPath:_templatePath];
+    isKeyWindow     = ([NSApp keyWindow] == [_conversationWebView window]);
+    
+    if(template) {
+        url = [NSURL fileURLWithPath: [template pathForResource:@"messages"
+                                                         ofType:@"html"
+                                                    inDirectory:@"htdocs"]];
+        
+        [[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
+    }
 }
 
 
@@ -580,11 +312,6 @@
 
 #pragma mark -
 
-//- (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowObject forFrame:(WebFrame *)frame
-//{
-//    [windowObject setValue:self forKey:@"Controller"];
-//}
-
 - (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame {
     WITemplateBundle *template = [WITemplateBundle templateWithPath:_templatePath];
     
@@ -612,7 +339,7 @@
 	BOOL				handled     = NO;
 	BOOL                isDirectory = NO;
     
-    conversation        = [self _conversation];
+    conversation        = [self conversation];
     
 	if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeOther) {
 		[listener use];
@@ -673,14 +400,12 @@
 {
     NSString *name;
     
-    if (selector == @selector(numberOfObjects))
-        name = @"numberOfObjects";
-    if (selector == @selector(JSONObjects))
-        name = @"JSONObjects";
-    if (selector == @selector(JSONObjectsFromOffset:withLimit:))
-        name = @"JSONObjectsFromOffsetWithLimit";
-    if (selector == @selector(JSONObjectAtIndex:))
-        name = @"JSONObjectAtIndex";
+    if (selector == @selector(loadScriptWithName:))
+        name = @"loadScriptWithName";
+    if (selector == @selector(JSONObjectsUntilDate:withLimit:))
+        name = @"JSONObjectsUntilDateWithLimit";
+    if (selector == @selector(lastMessageDate))
+        name = @"lastMessageDate";
     
     return name;
 }
@@ -688,64 +413,85 @@
 
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
 {
-    if (selector == @selector(numberOfObjects)) return NO;
-    if (selector == @selector(JSONObjects)) return NO;
-    if (selector == @selector(JSONObjectsFromOffset:withLimit:)) return NO;
-    if (selector == @selector(JSONObjectAtIndex:)) return NO;
+    if (selector == @selector(loadScriptWithName:)) return NO;
+    if (selector == @selector(JSONObjectsUntilDate:withLimit:)) return NO;
+    if (selector == @selector(lastMessageDate)) return NO;
     return YES;
 }
 
 
 
 
+
 #pragma mark -
 
-- (NSUInteger)numberOfObjects {    
-    return [_messages count];
+- (BOOL)loadScriptWithName:(NSString *)name {
+    WITemplateBundle        *template;
+    NSURL                   *scriptURL;
+    
+    template    = [WITemplateBundle templateWithPath:_templatePath];
+    scriptURL   = [NSURL fileURLWithPath:[template pathForResource:name ofType:@"js" inDirectory:@"htdocs/js"]];
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[scriptURL path]])
+        return NO;
+    
+    [_conversationWebView appendScriptAtURL:scriptURL];
+    
+    return YES;
 }
 
 
-
-- (NSString *)JSONObjects {
-    NSString        *jsonString;
+- (NSString *)lastMessageDate {
+    NSDateFormatter     *dateFormatter;
     
-    jsonString = [[SBJsonWriter writer] stringWithObject:[_messages reversedArray]];
+    dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
     
-    return jsonString;
+    return [dateFormatter stringFromDate:[_conversation date]];
 }
 
 
-- (NSString *)JSONObjectsFromOffset:(NSUInteger)offset withLimit:(NSUInteger)limit {
+- (NSString *)JSONObjectsUntilDate:(NSString *)dateString withLimit:(NSUInteger)limit {
+    NSPredicate         *predicate;
+    NSSortDescriptor    *descriptor;
+    NSDate              *date;
+    NSDateFormatter     *dateFormatter;
     NSString            *jsonString;
-    NSRange             range;
+    NSArray             *sortedMessages;
     
-    if(!_messages || [_messages count] <= 0 || offset > [_messages count]-1)
+    dateFormatter   = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
+    
+    
+    if(dateString != nil) {
+        date            = [dateFormatter dateFromString:dateString];    
+    } else {
+        date            = [_conversation date];
+    }
+    
+    if(!date) {
         return nil;
+    }
+
     
-    range       = NSMakeRange(offset, limit);
-    jsonString  = [[SBJsonWriter writer] stringWithObject:[[_messages reversedArray] subarrayWithRange:range]];
+    predicate       = [NSPredicate predicateWithFormat:@"(conversation == %@) && (date <= %@)", _conversation, date];
+    descriptor      = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
+    sortedMessages  = [[WCDatabaseController context] fetchEntitiesNammed:@"Message"
+                                                            withPredicate:predicate
+                                                               descriptor:descriptor
+                                                                    limit:limit
+                                                                    error:nil];
+    
+    jsonString      = [[SBJsonWriter writer] stringWithObject:sortedMessages];
+    
+    
+    [dateFormatter release];
     
     return jsonString;
 }
-
-
-- (NSString *)JSONObjectAtIndex:(NSUInteger)index {
-    NSString            *jsonString;
-    id                  object;
-        
-    if(index > [_messages count]-1)
-        return nil;
-    
-    object = [_messages objectAtIndex:index];
-    
-    if(!object)
-        return nil;
-    
-    jsonString = [[SBJsonWriter writer] stringWithObject:object];
-    
-    return jsonString;
-}
-
-
 
 @end

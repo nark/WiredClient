@@ -51,10 +51,16 @@
     return [secretKeyTextField stringValue];
 }
 
+
 - (NSString *)verifyKey {
     [verifyTextField validateEditing];
     
     return [verifyTextField stringValue];    
+}
+
+
+- (BOOL)verifyKeys {
+    return ([[self secretKey] length] > 0 && [[self secretKey] isEqualToString:[self verifyKey]]);
 }
 
 @end

@@ -91,6 +91,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 - (void)_markConversationAsRead:(WDConversation *)conversation;
 
+- (void)_migrateToCoreData;
 - (void)_migrateConversations:(NSArray *)conversations;
 
 @end
@@ -230,7 +231,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 #pragma mark -
 
-- (void)_showDialogForMessage:(WCMessage *)message {
+- (void)_showDialogForMessage:(WDMessage *)message {
 	NSAlert		*alert;
 	NSString	*title, *nick, *server, *time;
 	
@@ -238,19 +239,19 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	server	= [[message connection] name];
 	time	= [_dialogDateFormatter stringFromDate:[message date]];
 	
-	if([message isKindOfClass:[WCPrivateMessage class]])
+	if([message isKindOfClass:[WDPrivateMessage class]])
 		title = [NSSWF:NSLS(@"Private message from %@ on %@ at %@", @"Message dialog title (nick, server, time)"), nick, server, time];
 	else
 		title = [NSSWF:NSLS(@"Broadcast from %@ on %@ at %@", @"Broadcast dialog title (nick, server, time)"), nick, server, time];
 	
 	alert = [[NSAlert alloc] init];
 	[alert setMessageText:title];
-	[alert setInformativeText:[message message]];
+	[alert setInformativeText:[message messageString]];
 	[alert setAlertStyle:NSInformationalAlertStyle];
 	[alert runNonModal];
 	[alert release];
 	
-	[message setUnread:NO];
+	[message setUnreadValue:NO];
 }
 
 
@@ -295,6 +296,10 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     selfUser        = [[[conversation connection] chatController] userWithUserID:[[conversation connection] userID]];
 	user			= [conversation user];
     connection      = [user connection];
+    
+    if(![conversation direction])
+        [conversation setDirection:[NSNumber numberWithInteger:WCMessageTo]];
+    
 	message			= [WDPrivateMessage messageToSomeoneFromUser:selfUser
 												   message:string
 												connection:connection];
@@ -305,7 +310,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[conversation addMessagesObject:message];
 	
 	[[WCDatabaseController sharedController] save];
-//    [self _sortConversations];
+    [self _sortConversations];
 
 	p7Message = [WIP7Message messageWithName:@"wired.message.send_message" spec:WCP7Spec];
 	[p7Message setUInt32:[[conversation user] userID] forName:@"wired.user.id"];
@@ -545,18 +550,13 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	}
     
     if([_selectedConversation isUnread]) {
-        [self performSelector:@selector(_markConversationAsRead:) withObject:_selectedConversation afterDelay:1.5];
+        [self performSelector:@selector(_markConversationAsRead:)
+                   withObject:_selectedConversation
+                   afterDelay:1.5];
     }
     
-    if([node isKindOfClass:[WDConversation class]]) {
-        [_conversationController setMessages:[_selectedConversation sortedMessages]];
-    }
-    else if([node isKindOfClass:[WDMessage class]]) {
-        [_conversationController setMessages:[NSArray arrayWithObject:node]];
-    }
-    else {
-        [_conversationController setMessages:nil];
-    }
+    [_conversationController setConversation:_selectedConversation];
+    
 }
 
 
@@ -635,14 +635,13 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 #pragma mark -
 
-- (void)_selectConversation:(WCConversation *)conversation {
-	NSInteger		row;
-	
-    row = [_conversationsOutlineView rowForItem:conversation];
+- (void)_selectConversation:(WDConversation *)conversation {
+    NSIndexPath *indexPath;
     
-    if(row >= 0) {
-        [_conversationsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
-        [self _updateSelectedConversation];
+    indexPath = [_conversationsTreeController indexPathOfObject:conversation];
+    
+    if(indexPath) {
+        [_conversationsTreeController setSelectionIndexPath:indexPath];
     }
 }
 
@@ -719,13 +718,10 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (void)_markConversationAsRead:(WDConversation *)conversation {
     if([conversation isUnread]) {
         if([[self window] isKeyWindow]) {
-            [conversation setUnread:![conversation isUnread]];
+            [conversation setNumberOfUnreadsValue:0];
             
             [[WCDatabaseController sharedController] save];
             [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification object:self];
-            
-            if(conversation == [self _selectedConversation])
-                [_conversationController reloadData];
         }
     }
 }
@@ -735,48 +731,150 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 #pragma mark - 
 
-- (void)_migrateConversations:(NSArray *)conversations {
-    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+- (void)_migrateToCoreData {
+    NSData                  *data;
+	NSMutableArray			*array;
     
-    [context performBlock:^{
-        NSUInteger count = 0;
+    array   = [NSMutableArray array];
+    data    = [[WCSettings settings] objectForKey:WCMessageConversations];
+    
+    if(data) {
+        [array addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+    }
+    
+    data = [[WCSettings settings] objectForKey:WCBroadcastConversations];
+    
+    if(data) {
+        [array addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+    }
+    
+    if([array count] > 0) {
+        NSInteger nbMessage = 0;
+        for(WCConversation *conv in array) {
+            nbMessage += [conv numberOfMessages];
+        }
+        
+        NSAlert *alert = [NSAlert alertWithMessageText:NSLS(@"Messages Migration", @"Messages Migration Title")
+                                         defaultButton:NSLS(@"Migrate", @"Messages Migration Migrate Button")
+                                       alternateButton:NSLS(@"Erase", @"Messages Migration Erase Button")
+                                           otherButton:NSLS(@"Quit", @"Messages Migration Quit Button")
+                             informativeTextWithFormat:NSLS(@"Local storage of Messages moved to Core Data.\n\nChoose 'Migrate' in order to recover old messages. Choosing 'Erase' will erase all your messages and start on a fresh database (this cannot be undone).\n\nDepending to the number of messages (%d), the operation could take a while.", @"Messages Migration Message"), nbMessage];
+        
+        NSInteger result = [alert runModal];
+        
+        if(result == NSAlertDefaultReturn) {
+            [self _migrateConversations:array];
+        }
+        else if(result == NSAlertAlternateReturn) {
+            [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
+            [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
+        }
+        else if(result == NSAlertOtherReturn) {
+            exit(0);
+        }
+    }
+}
+
+
+- (void)_migrateConversations:(NSArray *)conversations {
+    __block NSManagedObjectContext      *context;
+    __block NSAutoreleasePool           *pool, *subpool;
+    __block NSString                    *title;
+    __block NSUInteger                  count, msgCount, totalMsgCount;
+    
+    NSBlockOperation                    *operation;
+    
+    title           = [[[self  window] title] copy];
+    count           = 0;
+    msgCount        = 0;
+    totalMsgCount   = 0;
+    
+    [[self  window] setTitle:[NSSWF:NSLS(@"%@ (Migrating...)", @"Migrating Window Title"), title]];
+    [self showWindow:self];
+    
+    context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    [context setPersistentStoreCoordinator:[[WCDatabaseController sharedController] persistentStoreCoordinator]];
+    [context setUndoManager:nil];
+    
+    operation   = [NSBlockOperation blockOperationWithBlock:^{
+        pool = [[NSAutoreleasePool alloc] init];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:[WCDatabaseController sharedController]
+                                                 selector:@selector(mergeChanges:)
+                                                     name:NSManagedObjectContextDidSaveNotification
+                                                   object:context];
         
         for(WCConversation *conversation in conversations) {
             if([conversation numberOfMessages] > 0) {
                 if([conversation isKindOfClass:[WCMessageConversation class]]) {
-                    WDConversation *newConversation = [WDMessagesConversation conversationWithConversation:(WCMessageConversation *)conversation];
+                    subpool = [[NSAutoreleasePool alloc] init];
                     
+                    WDConversation *newConversation = [WDMessagesConversation conversationWithConversation:(WCMessageConversation *)conversation context:context];
+                                        
                     for(WCPrivateMessage *message in [conversation messages]) {
-                        WDPrivateMessage *newMessage = [WDPrivateMessage messageWithMessage:message];
+                        if(![newConversation direction])
+                            [newConversation setDirection:[NSNumber numberWithInteger:[message direction]]];
+                        
+                        WDPrivateMessage *newMessage = [WDPrivateMessage messageWithMessage:message context:context];
                         [newConversation addMessagesObject:newMessage];
+                        [newConversation setDate:[newMessage date]];
+                        totalMsgCount++;
+                        msgCount++;
+                        
+                        if(msgCount > 50) {
+                            [[WCDatabaseController sharedController] saveContext:context];
+                            msgCount = 0;
+                        }
                     }
-                    [newConversation setDate:[[[newConversation sortedMessages] lastObject] date]];
+                    
+                    [subpool drain];
                 }
                 else if([conversation isKindOfClass:[WCBroadcastConversation class]]) {
-                    WDConversation *newConversation = [WDBroadcastsConversation conversationWithConversation:(WCBroadcastConversation *)conversation];
+                    subpool = [[NSAutoreleasePool alloc] init];
                     
+                    WDConversation *newConversation = [WDBroadcastsConversation conversationWithConversation:(WCBroadcastConversation *)conversation context:context];
+                                        
                     for(WCBroadcastMessage *message in [conversation messages]) {
-                        WDBroadcastMessage *newMessage = [WDBroadcastMessage messageWithMessage:message];
+                        WDBroadcastMessage *newMessage = [WDBroadcastMessage messageWithMessage:message context:context];
                         [newConversation addMessagesObject:newMessage];
+                        [newConversation setDate:[newMessage date]];
+                        totalMsgCount++;
+                        msgCount++;
+                        
+                        if(msgCount > 50) {
+                            [[WCDatabaseController sharedController] saveContext:context];
+                            msgCount = 0;
+                        }
                     }
-                    [newConversation setDate:[[[newConversation sortedMessages] lastObject] date]];
+                    
+                    [subpool drain];
                 }
             }
+            
+            [[WCDatabaseController sharedController] saveContext:context];
             count++;
         }
         
+        [pool drain];
+    }];
+    
+    [operation setCompletionBlock:^{
         if(count == [conversations count]) {
+            [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
+            [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
-                [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
+                [[self  window] setTitle:title];
+                [title autorelease];
             });
         }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [context save:nil];
-        });
     }];
+    
+    [[WCDatabaseController queue] addOperation:operation];
 }
+
+
+
 
 @end
 
@@ -822,6 +920,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     if(self) {
         dateDescriptor          = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
         _sortDescriptors        = [[NSArray arrayWithObjects:dateDescriptor, nil] retain];
+        
+        _dialogDateFormatter = [[WIDateFormatter alloc] init];
+        [_dialogDateFormatter setTimeStyle:NSDateFormatterShortStyle];
         
         _sorting                = NO;
         
@@ -902,57 +1003,13 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 #pragma mark -
 
 - (void)windowDidLoad {
-	NSData                  *data;
-	NSMutableArray			*array;
-	NSInvocation            *invocation;
-	NSUInteger              style;
-    
-    _dialogDateFormatter = [[WIDateFormatter alloc] init];
-	[_dialogDateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"Messages"];
 	
 	[_conversationsSplitView setAutosaveName:@"Conversations"];
 	[_messagesSplitView setAutosaveName:@"Messages"];
-    
-	if([_conversationsOutlineView respondsToSelector:@selector(setSelectionHighlightStyle:)]) {
-		style = 1; // NSTableViewSelectionHighlightStyleSourceList
         
-		invocation = [NSInvocation invocationWithTarget:_conversationsOutlineView action:@selector(setSelectionHighlightStyle:)];
-		[invocation setArgument:&style atIndex:2];
-		[invocation invoke];
-	}
-    
-    array   = [NSMutableArray array];
-    data    = [[WCSettings settings] objectForKey:WCMessageConversations];
-    
-    if(data) {
-        [array addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
-    }
-    
-    data = [[WCSettings settings] objectForKey:WCBroadcastConversations];
-    
-    if(data) {
-        [array addObjectsFromArray:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
-    }
-    
-    if([array count] > 0) {
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Messages Migration"
-                                         defaultButton:@"Migrate"
-                                       alternateButton:@"Cancel"
-                                           otherButton:nil
-                             informativeTextWithFormat:@"Local storage of Messages moved to Core Data. Choose 'Migrate' in order to recover old conversations. Choosing 'Cancel' will erase all your data. This cannot be undone."];
-        
-        NSInteger result = [alert runModal];
-        
-        if(result == NSAlertDefaultReturn)
-            [self _migrateConversations:array];
-        else {
-            [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
-            [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
-        }
-    }
+    [self _migrateToCoreData];
     
     [_conversationsTreeController setFetchPredicate:nil];
     [_conversationsTreeController setSortDescriptors:self.sortDescriptors];
@@ -965,36 +1022,16 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 - (void)windowDidBecomeKey:(NSWindow *)window {
-	NSEnumerator		*enumerator;
 	WDConversation		*conversation;
-	WDMessage			*message;
-	BOOL				changedUnread = NO;
     	
 	conversation = [self _selectedConversation];
 	
 	if(conversation) {
         if([conversation isUnread]) {
+            [conversation setNumberOfUnreadsValue:0];
             [_conversationsTreeController setFetchPredicate:nil];
-        }
-        
-		enumerator = [[conversation messages] objectEnumerator];
-		
-		while((message = [enumerator nextObject])) {
-			if([message unreadValue]) {
-				[message setUnreadValue:NO];
-				
-				changedUnread = YES;
-			}
-		}
-		
-		if([conversation isUnread]) {
-			[conversation setUnread:NO];
-			
-			changedUnread = YES;
-		}
-		
-		if(changedUnread) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
             [self _sortConversations];
         }
 	}
@@ -1181,12 +1218,16 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	conversation            = [self _messagesConversationForUser:user];
 	selectedConversation    = [self _selectedConversation];
     
+    if(![conversation direction])
+        [conversation setDirection:[NSNumber numberWithInteger:WCMessageFrom]];
+    
 	message = [WDPrivateMessage messageFromUser:user
 										message:[p7Message stringForName:@"wired.message.message"]
 									 connection:connection];
 	
     [conversation setDate:[message date]];
 	[conversation addMessagesObject:message];
+    [conversation setNumberOfUnreadsValue:([conversation numberOfUnreadsValue] + 1)];
     
     [[WCDatabaseController sharedController] save];
     
@@ -1228,9 +1269,11 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	if(!user || [user isIgnored])
 		return;
     
-	conversation = [self _broadcastsConversationForUser:user];
+	conversation            = [self _broadcastsConversationForUser:user];
+	selectedConversation    = [self _selectedConversation];
     
-	selectedConversation = [self _selectedConversation];
+    if(![conversation direction])
+        [conversation setDirection:[NSNumber numberWithInteger:WCMessageFrom]];
     
 	message = [WDBroadcastMessage broadcastFromUser:user
 											message:[p7Message stringForName:@"wired.message.broadcast"]
@@ -1238,8 +1281,11 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	
     [conversation setDate:[message date]];
 	[conversation addMessagesObject:message];
+    [conversation setNumberOfUnreadsValue:([conversation numberOfUnreadsValue] + 1)];
     
     [[WCDatabaseController sharedController] save];
+
+    [self _sortConversations];
     
 	[self _selectConversation:selectedConversation];
     
@@ -1356,6 +1402,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
     conversation = [self _messagesConversationForUser:user];
     
+    if(![conversation direction])
+        [conversation setDirection:[NSNumber numberWithInteger:WCMessageTo]];
+    
     [self _selectConversation:conversation];
 	
 	[self showWindow:self];
@@ -1391,7 +1440,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     for(WDConversation *conversation in conversations) {
         unreads += [conversation numberOfUnreadMessages];
     }
-            
+    
 	return unreads;
 }
 
@@ -1497,23 +1546,18 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (IBAction)markAsRead:(id)sender {
     WDMessagesNode      *selectedNode;
     WDConversation      *conversation;
-    WDMessage           *message;
     
     selectedNode = [self _selectedNode];
     
     if([selectedNode isKindOfClass:[WDConversation class]]) {
         conversation = (WDConversation *)selectedNode;
         
-        [conversation setUnread:![conversation isUnread]];
-        [_conversationController reloadData];
-        
-    }
-    else if([selectedNode isKindOfClass:[WDMessage class]]) {
-        message = (WDMessage *)selectedNode;
-        
-        [message.conversation willChangeValueForKey:@"isUnread"];
-        [message setUnreadValue:![message unreadValue]];
-        [message.conversation didChangeValueForKey:@"isUnread"];
+        if([conversation isUnread]) {
+            [conversation setNumberOfUnreadsValue:0];
+        } else {
+            NSUInteger unreads = [[conversation messages] count];
+            [conversation setNumberOfUnreadsValue:unreads];
+        }
     }
     
     [[WCDatabaseController sharedController] save];
@@ -1724,6 +1768,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
+    if([self _selectedConversation] == [self _selectedNode])
+        return;
+    
     [self _updateSelectedConversation];
     
     if(!_sorting) {
@@ -1731,6 +1778,11 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     }
     
 	[self _validate];
+}
+
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldShowOutlineCellForItem:(id)item {
+    return NO;
 }
 
 

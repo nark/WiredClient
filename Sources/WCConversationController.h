@@ -33,7 +33,7 @@
 @interface WCConversationController : WIObject <WCWebDataSource> {
 	IBOutlet WebView					*_conversationWebView;
 	
-    NSArray                             *_messages;
+    WDConversation                      *_conversation;
 	NSOperationQueue					*_loadingQueue;
 
 	NSString							*_templatePath;
@@ -51,8 +51,8 @@
 - (void)reloadData;
 - (void)reloadTemplate;
 
-- (void)setMessages:(NSArray *)messages;
-- (NSArray *)messages;
+- (void)setConversation:(WDConversation *)conversation;
+- (WDConversation *)conversation;
 
 - (void)setTemplatePath:(NSString *)path;
 - (NSString *)templatePath;

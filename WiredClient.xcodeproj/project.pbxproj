@@ -652,6 +652,34 @@
 			remoteGlobalIDString = 4C86C028155FDEAF00B93247;
 			remoteInfo = Vintage;
 		};
+		4CC6395017E34FEF009EE85B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CC6394717E34FEE009EE85B /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF97AB17498414008D9D13;
+			remoteInfo = "libMagicalRecord-iOS";
+		};
+		4CC6395217E34FEF009EE85B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CC6394717E34FEE009EE85B /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF97BB1749843F008D9D13;
+			remoteInfo = "libMagicalRecord-OSX";
+		};
+		4CC6395417E34FEF009EE85B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CC6394717E34FEE009EE85B /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF97FF174984CA008D9D13;
+			remoteInfo = "MagicalRecordTests-iOS";
+		};
+		4CC6395617E34FEF009EE85B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CC6394717E34FEE009EE85B /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF9816174984E4008D9D13;
+			remoteInfo = "MagicalRecordTests-OSX";
+		};
 		4CDBF1F014BC4CB8007142D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -1031,6 +1059,7 @@
 		4CC5CE0515619F1E00C2F624 /* WCDOMPostReplyElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCDOMPostReplyElement.m; path = Sources/WCDOMPostReplyElement.m; sourceTree = "<group>"; };
 		4CC6392617E31E8B009EE85B /* WCSecretKeyAccessoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCSecretKeyAccessoryViewController.h; path = Sources/WCSecretKeyAccessoryViewController.h; sourceTree = "<group>"; };
 		4CC6392717E31E8B009EE85B /* WCSecretKeyAccessoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCSecretKeyAccessoryViewController.m; path = Sources/WCSecretKeyAccessoryViewController.m; sourceTree = "<group>"; };
+		4CC6394717E34FEE009EE85B /* MagicalRecord.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MagicalRecord.xcodeproj; path = "MagicalRecord/Project Files/MagicalRecord.xcodeproj"; sourceTree = "<group>"; };
 		4CCDD70214F469480009F646 /* ClearChat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClearChat.png; sourceTree = "<group>"; };
 		4CDBF1FC14BC5318007142D3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../Sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		4CDBF1FE14BC5501007142D3 /* SUPublicDSAKeyFile.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SUPublicDSAKeyFile.pem; sourceTree = "<group>"; };
@@ -1666,6 +1695,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4CC6394817E34FEE009EE85B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CC6395117E34FEF009EE85B /* libMagicalRecord-iOS.a */,
+				4CC6395317E34FEF009EE85B /* libMagicalRecord-OSX.dylib */,
+				4CC6395517E34FEF009EE85B /* MagicalRecordTests-iOS.octest */,
+				4CC6395717E34FEF009EE85B /* MagicalRecordTests-OSX.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4CF094B51559D669005D77BB /* Templates */ = {
 			isa = PBXGroup;
 			children = (
@@ -2116,6 +2156,7 @@
 		A544C1C50758E107008446CF /* Subprojects */ = {
 			isa = PBXGroup;
 			children = (
+				4CC6394717E34FEE009EE85B /* MagicalRecord.xcodeproj */,
 				4C2206E717DC8DEC00F1FBBA /* SBJson.xcodeproj */,
 				4C6D6E3E176CEB9D0043677E /* Sparkle.xcodeproj */,
 				4C6D6E2D176CA54F0043677E /* MMTabBarView.xcodeproj */,
@@ -2530,6 +2571,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 4CC6394817E34FEE009EE85B /* Products */;
+					ProjectRef = 4CC6394717E34FEE009EE85B /* MagicalRecord.xcodeproj */;
+				},
+				{
 					ProductGroup = 4C6D6E2E176CA54F0043677E /* Products */;
 					ProjectRef = 4C6D6E2D176CA54F0043677E /* MMTabBarView.xcodeproj */;
 				},
@@ -2698,6 +2743,34 @@
 			fileType = wrapper.application;
 			path = finish_installation.app;
 			remoteRef = 4C6D6E4E176CEB9E0043677E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CC6395117E34FEF009EE85B /* libMagicalRecord-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libMagicalRecord-iOS.a";
+			remoteRef = 4CC6395017E34FEF009EE85B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CC6395317E34FEF009EE85B /* libMagicalRecord-OSX.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = "libMagicalRecord-OSX.dylib";
+			remoteRef = 4CC6395217E34FEF009EE85B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CC6395517E34FEF009EE85B /* MagicalRecordTests-iOS.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "MagicalRecordTests-iOS.octest";
+			remoteRef = 4CC6395417E34FEF009EE85B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CC6395717E34FEF009EE85B /* MagicalRecordTests-OSX.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "MagicalRecordTests-OSX.octest";
+			remoteRef = 4CC6395617E34FEF009EE85B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

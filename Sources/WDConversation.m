@@ -5,38 +5,6 @@
 
 
 
-@interface WDConversation (Private)
-
-- (NSArray *)       _sortedMessages;
-- (WDMessage *)     _lastMessage;
-
-@end
-
-
-@implementation WDConversation (Private)
-
-#pragma mark -
-
-- (NSArray *)_sortedMessages {
-    NSSortDescriptor *descriptor;
-    
-    descriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-    
-    return [self.messages sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-}
-
-
-
-- (WDMessage *)_lastMessage {
-    if(![self _sortedMessages] || [[self _sortedMessages] count] == 0)
-        return nil;
-    
-    return [[self _sortedMessages] objectAtIndex:0];
-}
-
-@end
-
-
 
 
 
@@ -48,8 +16,6 @@
 @dynamic broadcastIcon;
 @dynamic timeAgo;
 @dynamic conversationFullname;
-@dynamic lastMessage;
-@dynamic sortedMessages;
 @dynamic unreadsString;
 @dynamic hasUnreads;
 @dynamic isUnread;
@@ -68,20 +34,20 @@
     else if([key isEqualToString:@"timeAgo"]) {
         set = [NSSet setWithObjects:@"messages", nil];
     }
-    else if([key isEqualToString:@"lastMessage"]) {
-        set = [NSSet setWithObjects:@"messages", nil];
-    }
-    else if([key isEqualToString:@"sortedMessages"]) {
-        set = [NSSet setWithObjects:@"messages", nil];
-    }
     else if([key isEqualToString:@"userIcon"]) {
         set = [NSSet setWithObjects:@"user", @"connection", nil];
     }
+    else if([key isEqualToString:@"broadcastIcon"]) {
+        set = [NSSet setWithObjects:@"direction", nil];
+    }
     else if([key isEqualToString:@"unreadsString"]) {
-        set = [NSSet setWithObjects:@"isUnread", nil];
+        set = [NSSet setWithObjects:@"numberOfUnreads", nil];
     }
     else if([key isEqualToString:@"hasUnreads"]) {
-        set = [NSSet setWithObjects:@"isUnread", nil];
+        set = [NSSet setWithObjects:@"numberOfUnreads", nil];
+    }
+    else if([key isEqualToString:@"isUnread"]) {
+        set = [NSSet setWithObjects:@"numberOfUnreads", nil];
     }
     else {
         set = nil;
@@ -164,28 +130,6 @@
 
 
 
-
-
-#pragma mark -
-
-- (void)setUnread:(BOOL)unread {
-    [self willChangeValueForKey:@"isUnread"];
-    for(WDMessage *message in self.messages) {
-        [message setUnreadValue:unread];
-    }
-    [self didChangeValueForKey:@"isUnread"];
-}
-
-
-- (void)markAsRead {
-    [self willChangeValueForKey:@"isUnread"];
-    for(WDMessage *message in self.messages) {
-        [message setUnreadValue:NO];
-    }
-    [self didChangeValueForKey:@"isUnread"];
-}
-
-
 #pragma mark -
 
 - (NSString *)timeAgo {
@@ -195,23 +139,12 @@
         timeAgo = [self.date timeAgoWithLimit:3600*24*7];
     }
     
-    return [timeAgo stringByAppendingFormat:@" - %@", self.serverName];
+    return timeAgo;
 }
 
 
 - (NSString *)conversationFullname {
     return [NSString stringWithFormat:@"%@@%@", [self nick], [self serverName]];
-}
-
-
-- (NSString *)lastMessage {
-    return [[self _lastMessage] messageString];
-}
-
-
-
-- (NSArray *)sortedMessages {
-    return [self _sortedMessages];
 }
 
 
@@ -234,10 +167,17 @@
     NSImage *icon;
     
     if([self isKindOfClass:[WDBroadcastsConversation class]]) {
-        icon = [NSImage imageNamed:@"BroadcastsConversation"];
+        icon = [NSImage imageNamed:@"EventsAccounts"];
     }
-    else {
-        icon = nil;
+    else if([self isKindOfClass:[WDMessagesConversation class]]) {
+        if([self directionValue] == WCMessageFrom) {
+            icon = [NSImage imageNamed:@"EventsMessages"];
+        }
+        else if([self directionValue] == WCMessageTo) {
+            icon = [NSImage imageNamed:@"ReplyMessage"];
+        } else {
+            icon = [NSImage imageNamed:@"edit"];
+        }
     }
     
     return icon;
@@ -245,8 +185,11 @@
 
 
 
+
+#pragma mark -
+
 - (BOOL)isUnread {
-    return ([self numberOfUnreadMessages] > 0);
+    return ([self numberOfUnreadsValue] > 0);
 }
 
 
@@ -261,24 +204,17 @@
     NSString    *unreads = @"";
     NSInteger   unreadsCount = 0;
     
-    unreadsCount = [self numberOfUnreadMessages];
+    unreadsCount = [self numberOfUnreadsValue];
     
     if(unreadsCount > 0)
         unreads = [NSString stringWithFormat:@"%ld", (long)unreadsCount];
-        
+    
     return unreads;
 }
 
 
 - (NSInteger)numberOfUnreadMessages {
-    NSInteger unreads = 0;
-    
-    for(WDMessage *message in self.messages) {
-        if(message.unreadValue)
-            unreads++;
-    }
-    
-    return unreads;
+    return [self numberOfUnreadsValue];
 }
 
 @end

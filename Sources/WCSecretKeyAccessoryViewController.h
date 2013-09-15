@@ -19,4 +19,6 @@
 - (NSString *)secretKey;
 - (NSString *)verifyKey;
 
+- (BOOL)verifyKeys;
+
 @end

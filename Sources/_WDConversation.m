@@ -4,6 +4,7 @@
 #import "_WDConversation.h"
 
 const struct WDConversationAttributes WDConversationAttributes = {
+	.numberOfUnreads = @"numberOfUnreads",
 	.serverName = @"serverName",
 };
 
@@ -40,9 +41,39 @@ const struct WDConversationFetchedProperties WDConversationFetchedProperties = {
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"numberOfUnreadsValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"numberOfUnreads"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+	}
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic numberOfUnreads;
+
+
+
+- (int32_t)numberOfUnreadsValue {
+	NSNumber *result = [self numberOfUnreads];
+	return [result intValue];
+}
+
+- (void)setNumberOfUnreadsValue:(int32_t)value_ {
+	[self setNumberOfUnreads:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveNumberOfUnreadsValue {
+	NSNumber *result = [self primitiveNumberOfUnreads];
+	return [result intValue];
+}
+
+- (void)setPrimitiveNumberOfUnreadsValue:(int32_t)value_ {
+	[self setPrimitiveNumberOfUnreads:[NSNumber numberWithInt:value_]];
+}
+
 
 
 

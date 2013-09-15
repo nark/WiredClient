@@ -12,17 +12,25 @@
     NSPersistentStoreCoordinator    *_persistentStoreCoordinator;
     NSManagedObjectModel            *_managedObjectModel;
     NSManagedObjectContext          *_managedObjectContext;
+    
+    NSOperationQueue                *_queue;
 }
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel            *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext          *managedObjectContext;
 
-+ (id)sharedController;
+@property (readwrite, retain)           NSOperationQueue                *queue;
 
-+ (NSManagedObjectContext *)context;
++ (id)                              sharedController;
 
-- (NSString *)secretKey;
-- (BOOL)save;
++ (NSManagedObjectContext *)        context;
++ (NSOperationQueue *)              queue;
+
+- (NSString *)                      secretKey;
+
+- (BOOL)                            save;
+- (BOOL)                            saveContext:(NSManagedObjectContext *)context;
+- (void)                            mergeChanges:(NSNotification *)notification;
 
 @end

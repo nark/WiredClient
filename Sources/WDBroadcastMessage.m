@@ -22,10 +22,10 @@
 
 #pragma mark -
 
-+ (WDBroadcastMessage *)messageWithMessage:(WCBroadcastMessage *)message {
++ (WDBroadcastMessage *)messageWithMessage:(WCBroadcastMessage *)message context:(NSManagedObjectContext *)context {
     WDBroadcastMessage *broadcastMessage;
     
-    broadcastMessage = [[self class] insertInManagedObjectContext:[WCDatabaseController context]];
+    broadcastMessage = [[self class] insertInManagedObjectContext: context];
     
     [broadcastMessage setMessage:[message message]];
     [broadcastMessage setConnection:[message connection]];

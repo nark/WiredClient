@@ -7,7 +7,6 @@
 extern const struct WDMessageAttributes {
 	 NSString *draft;
 	 NSString *message;
-	 NSString *unread;
 } WDMessageAttributes;
 
 extern const struct WDMessageRelationships {
@@ -21,7 +20,6 @@ extern const struct WDMessageFetchedProperties {
 
 
 @class NSObject;
-
 
 @interface WDMessageID : NSManagedObjectID {}
 @end
@@ -55,18 +53,6 @@ extern const struct WDMessageFetchedProperties {
 
 
 
-@property (nonatomic, retain) NSNumber* unread;
-
-
-@property BOOL unreadValue;
-- (BOOL)unreadValue;
-- (void)setUnreadValue:(BOOL)value_;
-
-//- (BOOL)validateUnread:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, retain) WDConversation* conversation;
 
@@ -96,15 +82,6 @@ extern const struct WDMessageFetchedProperties {
 
 - (id)primitiveMessage;
 - (void)setPrimitiveMessage:(id)value;
-
-
-
-
-- (NSNumber*)primitiveUnread;
-- (void)setPrimitiveUnread:(NSNumber*)value;
-
-- (BOOL)primitiveUnreadValue;
-- (void)setPrimitiveUnreadValue:(BOOL)value_;
 
 
 

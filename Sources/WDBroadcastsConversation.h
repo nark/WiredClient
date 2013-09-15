@@ -6,6 +6,6 @@
 
 + (WDBroadcastsConversation *)conversationWithUser:(WCUser *)user connection:(WCServerConnection *)connection;
 
-+ (WDBroadcastsConversation *)conversationWithConversation:(WCBroadcastConversation *)oldConversation;
++ (WDBroadcastsConversation *)conversationWithConversation:(WCBroadcastConversation *)oldConversation context:(NSManagedObjectContext *)context;
 
 @end

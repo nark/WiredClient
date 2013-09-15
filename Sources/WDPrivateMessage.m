@@ -44,10 +44,10 @@
 
 #pragma mark -
 
-+ (WDPrivateMessage *)messageWithMessage:(WCPrivateMessage *)message {
++ (WDPrivateMessage *)messageWithMessage:(WCPrivateMessage *)message context:(NSManagedObjectContext *)context {
     WDPrivateMessage *privateMessage;
     
-    privateMessage = [[self class] insertInManagedObjectContext:[WCDatabaseController context]];
+    privateMessage = [[self class] insertInManagedObjectContext: context];
     
     [privateMessage setMessage:[message message]];
     [privateMessage setConnection:[message connection]];

@@ -54,10 +54,11 @@
 /***************
  * GLOBALS
  ***************/
-var PAGE_SIZE 		= 10;
+var PAGE_SIZE 			= 20;
 
-var PAGE_OFFSET 	= 0;
-var PAGE_LIMIT 		= 0;
+var PAGE_OFFSET 		= 0;
+var PAGE_LIMIT 			= 0;
+var OLD_MESSAGE_DATE 	= null;
 
 
 /***************
@@ -129,7 +130,6 @@ function _formatMessageAsHTHML(message) {
 					'<span class="nick">' + message["nick"] + '</span>' +
 					'<span class="time">' + date + '</span>' +
 					'<span class="server">' + server + '</span>' +
-					'<img src="data:image/tiff;base64,' + message["unread"] + '" />' +
 				'</div>' +
 			'</div>' +
 			'<div class="messagebody">' +
@@ -139,10 +139,83 @@ function _formatMessageAsHTHML(message) {
 	'</div>';
 }
 
+function _formatDateAsHTML() {
+	$('#messages-content').prepend('<div class="messagestatus">'+timeAgo(OLD_MESSAGE_DATE).tAgo+'</div>');
+}
+
 
 /* Scroll to the bottom of the HTML document */
 function _scrollToBottom() {
 	window.scrollTo(0,document.body.scrollHeight);
+}
+
+function _addPage(bFirst) {
+
+	bFirst = (typeof bFirst != 'boolean' ? false : bFirst );
+
+	var controller		= window.Controller;
+	var messages 		= eval(controller.JSONObjectsUntilDateWithLimit(OLD_MESSAGE_DATE, PAGE_SIZE));
+	var messagesLength 	= messages.length;
+
+	if(!bFirst) {
+		var oldHeight		= document.body.scrollHeight;
+		var newHeight 		= 0;
+
+		if(messagesLength > 0) {
+			_formatDateAsHTML();
+		}
+	}
+    
+   
+
+     // append all messages to the view
+	for (var i in messages) {
+		_prependMessage(messages[i]);
+
+		if(i == messagesLength - 1) {
+			OLD_MESSAGE_DATE = messages[i].date;
+		}
+	}
+
+
+
+	if(bFirst) {
+		// and scroll to bottom of the view
+		_scrollToBottom();
+	} else {
+		newHeight 			= document.body.scrollHeight;
+		window.scrollTo(0,(newHeight-oldHeight));
+	}
+
+
+}
+
+function _appendLoader() {
+	$('body').prepend($('<div>', {'class': 'loaderWrapper'}));
+	_animeLoaderToBottom();
+}
+
+function _animeLoaderToBottom() {
+	$('div.loaderWrapper').animate({
+		top: 0
+	}, 500, function() {
+		setTimeout(function() {
+			_animateLoaderToTop();
+		}, 500);
+	});
+}
+
+function _animateLoaderToTop() {
+	$('div.loaderWrapper').animate({
+		top: '-50px'
+	}, 500, function() {
+		_addPage();
+		removeLoader();
+	});
+}
+
+function removeLoader() {
+	//$('div.loaderWrapper').remove();
 }
 
 
@@ -153,31 +226,7 @@ function _scrollToBottom() {
 
 $(window).scroll(function() {
 	if($(window).height() < $(document).height() && $(window).scrollTop() == 0) {
-	    var controller 			= window.Controller;
-	    var numberOfMessages	= controller.numberOfObjects();
-	    var oldHeight			= document.body.scrollHeight;
-
-	    if(PAGE_OFFSET == 0 && PAGE_LIMIT == 0)
-	    	return;
-
-		PAGE_OFFSET	= (PAGE_OFFSET < PAGE_SIZE) ? 0 : (PAGE_OFFSET - PAGE_SIZE);
-		PAGE_LIMIT 	= (PAGE_OFFSET - PAGE_SIZE < 0) ? 
-						 PAGE_SIZE - (PAGE_SIZE - PAGE_OFFSET) : 
-						 ((numberOfMessages > PAGE_SIZE) ? PAGE_SIZE : numberOfMessages);
-
-		console.log(PAGE_OFFSET, "PAGE_OFFSET");
-		console.log(PAGE_LIMIT, "PAGE_LIMIT");
-
-	    var messages			= eval(controller.JSONObjectsFromOffsetWithLimit(PAGE_OFFSET, PAGE_LIMIT)); // test offset & limit
-
-	    $('#messages-content').prepend('<div class="messagestatus">'+PAGE_OFFSET+','+PAGE_LIMIT+'</div>');
-
-	    // prepend all messages to the view
-		for (var i in messages) {
-			_prependMessage(messages[i]);
-		}
-		var newHeight 			= document.body.scrollHeight;
-		window.scrollTo(0,(newHeight-oldHeight));
+		_appendLoader();	
 	}
 });
 
@@ -191,36 +240,14 @@ $(window).scroll(function() {
 
 /* Ready? ... Go! */
 $(document).ready(function(){
-	// find messages from Obj-C controller (window.Controller)
-    var controller			= window.Controller;
-    var numberOfMessages	= controller.numberOfObjects();
-   	PAGE_OFFSET 			= (numberOfMessages > PAGE_SIZE) ? (numberOfMessages - PAGE_SIZE) : 0;
-   	PAGE_LIMIT				= (numberOfMessages > PAGE_SIZE) ? PAGE_SIZE : numberOfMessages;
-	var messages 			= eval(controller.JSONObjectsFromOffsetWithLimit(PAGE_OFFSET, PAGE_LIMIT));
 
-    // append all messages to the view
-	for (var i in messages) {
-		_appendMessage(messages[i]);
+	if(!window.Controller.loadScriptWithName("tweenjs")) {
+		console.log("Error loading script: tweenjs");
 	}
 
-	// and scroll to bottom of the view
-	_scrollToBottom();
+	_addPage(true);
 });
 
-
-window.onload = function() {
-	// load all images on queue
-	// var imgs 	= $("img");
-
-	// imgs.each(index, function() {
-	// 	var src 		= imgs[index].attr('rel');
-	// 	var image 		= new Image();
-	// 	image.onload 	= function() {
-	// 		_scrollToBottom();
-	// 	};
-	// 	image.src 		= src;
-	// });
-};
 
 
 /* %99$ bottle$... */

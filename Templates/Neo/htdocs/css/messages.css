@@ -4,7 +4,6 @@ body {
 	color: <? textcolor ?>;
 	text-shadow: 0px 1px 0px white;
 	margin: 0;
-	margin-top: 20px;
 }
 
 div.messagewrapper {
@@ -12,6 +11,10 @@ div.messagewrapper {
 	padding-left: 10px;
 	padding-right: 12px;
 	padding-bottom: 20px;
+}
+
+div.messagewrapper:nth-child(1) {
+	margin-top:20px;
 }
 
 div.message, div.messagestatus {
@@ -41,7 +44,7 @@ div.message {
 	background-color: <? backgroundcolor ?>;
 	border-radius: 3px;
 	border: 1px solid #999;
-	box-shadow: 0px 0px 4px #c2c2c2;
+	box-shadow: 0px 0px 4px rgba(127, 131, 137, 0.7);
 }
 
 div.messagestatus {
@@ -49,6 +52,7 @@ div.messagestatus {
 	text-shadow: 0px 1px 0px black;
 	background-color: rgba(63,76,107,1);
 	background: -webkit-linear-gradient(top, rgba(96,108,136,1) 0%,rgba(63,76,107,1) 100%); 
+	margin-bottom: 20px;
 }
 
 div.icon { 
@@ -93,4 +97,15 @@ div.messagebody {
 .to span.nick {
 	font-weight: bold;
 	color: #ff0000;
+}
+
+div.loaderWrapper {
+	position:fixed;
+	z-index:10;
+	width:100%;
+	height: 50px;
+	left:0;
+	top:-50px;
+	height: 50px;
+	background:yellow;
 }

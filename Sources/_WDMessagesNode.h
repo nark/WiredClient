@@ -9,6 +9,7 @@ extern const struct WDMessagesNodeAttributes {
 	 NSString *direction;
 	 NSString *identifier;
 	 NSString *nick;
+	 NSString *unread;
 	 NSString *user;
 } WDMessagesNodeAttributes;
 
@@ -17,6 +18,7 @@ extern const struct WDMessagesNodeRelationships {
 
 extern const struct WDMessagesNodeFetchedProperties {
 } WDMessagesNodeFetchedProperties;
+
 
 
 
@@ -73,6 +75,18 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+@property (nonatomic, retain) NSNumber* unread;
+
+
+@property BOOL unreadValue;
+- (BOOL)unreadValue;
+- (void)setUnreadValue:(BOOL)value_;
+
+//- (BOOL)validateUnread:(id*)value_ error:(NSError**)error_;
+
+
+
+
 @property (nonatomic, retain) id user;
 
 
@@ -115,6 +129,15 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 - (NSString*)primitiveNick;
 - (void)setPrimitiveNick:(NSString*)value;
+
+
+
+
+- (NSNumber*)primitiveUnread;
+- (void)setPrimitiveUnread:(NSNumber*)value;
+
+- (BOOL)primitiveUnreadValue;
+- (void)setPrimitiveUnreadValue:(BOOL)value_;
 
 
 

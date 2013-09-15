@@ -5,6 +5,7 @@
 #import "WDMessagesNode.h"
 
 extern const struct WDConversationAttributes {
+	 NSString *numberOfUnreads;
 	 NSString *serverName;
 } WDConversationAttributes;
 
@@ -19,6 +20,7 @@ extern const struct WDConversationFetchedProperties {
 
 
 
+
 @interface WDConversationID : NSManagedObjectID {}
 @end
 
@@ -27,6 +29,18 @@ extern const struct WDConversationFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (WDConversationID*)objectID;
+
+
+
+
+@property (nonatomic, retain) NSNumber* numberOfUnreads;
+
+
+@property int32_t numberOfUnreadsValue;
+- (int32_t)numberOfUnreadsValue;
+- (void)setNumberOfUnreadsValue:(int32_t)value_;
+
+//- (BOOL)validateNumberOfUnreads:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -60,6 +74,15 @@ extern const struct WDConversationFetchedProperties {
 @end
 
 @interface _WDConversation (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveNumberOfUnreads;
+- (void)setPrimitiveNumberOfUnreads:(NSNumber*)value;
+
+- (int32_t)primitiveNumberOfUnreadsValue;
+- (void)setPrimitiveNumberOfUnreadsValue:(int32_t)value_;
+
+
 
 
 - (NSString*)primitiveServerName;

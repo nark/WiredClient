@@ -12,6 +12,59 @@
 #import "WCKeychain.h"
 
 
+
+@interface WCDatabaseController (Private)
+
+- (NSString *)_checkSecretKey;
+
+@end
+
+
+
+
+
+@implementation WCDatabaseController (Private)
+
+- (NSString *)_checkSecretKey {
+    WCSecretKeyAccessoryViewController      *controller;
+    NSAlert                                 *alert;
+    NSString                                *secretKey;
+    NSInteger                               result;
+    
+    secretKey = [[WCKeychain keychain] secretKey];
+    
+    if(!secretKey) {
+        alert = [NSAlert alertWithMessageText:NSLS(@"Define a Secret Key", @"Secret Key Alert Title")
+                                defaultButton:@"OK"
+                              alternateButton:nil
+                                  otherButton:nil
+                    informativeTextWithFormat:NSLS(@"You have not define a secret key yet. Wired Client uses a personnal secret key to encrypt/decrypt your local data. The key is stored into your Keychain to ensure its confidentiality.", @"Secret Key Alert Message")];
+        
+        controller = [WCSecretKeyAccessoryViewController viewController];
+        
+        [alert setAccessoryView:[controller view]];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        
+        result = [alert runModal];
+        
+        if (result == NSAlertDefaultReturn && [controller verifyKeys]) {
+            secretKey = [controller secretKey];
+            
+            [[WCKeychain keychain] setSecretKey:secretKey];
+        }
+        else {
+            exit(0);
+        }
+    }
+    
+    return secretKey;
+}
+
+@end
+
+
+
+
 @implementation WCDatabaseController
 
 
@@ -33,12 +86,20 @@ static WCDatabaseController *_controller = nil;
 }
 
 
++ (NSOperationQueue *)queue {
+    return [[[self class] sharedController] queue];
+}
+
+
+
 
 #pragma mark -
 
 @synthesize persistentStoreCoordinator      = _persistentStoreCoordinator;
 @synthesize managedObjectModel              = _managedObjectModel;
 @synthesize managedObjectContext            = _managedObjectContext;
+@synthesize queue                           = _queue;
+
 
 
 
@@ -49,7 +110,7 @@ static WCDatabaseController *_controller = nil;
 {
     self = [super init];
     if (self) {
-
+        _queue = [[NSOperationQueue alloc] init];
     }
     return self;
 }
@@ -62,6 +123,8 @@ static WCDatabaseController *_controller = nil;
     [_managedObjectModel release];
     [_managedObjectContext release];
     
+    [_queue release];
+    
     [super dealloc];
 }
 
@@ -71,55 +134,37 @@ static WCDatabaseController *_controller = nil;
 #pragma mark -
 
 - (BOOL)save {
-    NSError *error;
-    
-    error = nil;
-    
-    if(![self.managedObjectContext save:&error]) {
-        NSLog(@"ERROR: Core Data saving error: %@", error);
-        return  NO;
-    }
-    
-    return  YES;
+    [self saveContext:self.managedObjectContext];
+    return YES;
 }
 
 
+- (BOOL)saveContext:(NSManagedObjectContext *)context {
+    __block NSError *error;
+    
+    error = nil;
+    
+    //[context performBlock:^{
+        if(![context save:&error]) {
+            NSLog(@"ERROR: Core Data saving error: %@", error);
+        }
+    //}];
+    return YES;
+}
+
+
+- (void)mergeChanges:(NSNotification *)notification {
+    // Only interested in merging from master into main.
+    //if ([notification object] != self.managedObjectContext) return;
+    
+    [self.managedObjectContext performBlock:^{
+        [self.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+    }];
+}
+
 
 - (NSString *)secretKey {
-    WCSecretKeyAccessoryViewController      *controller;
-    NSAlert                                 *alert;
-    NSString                                *secretKey;
-    NSInteger                               result;
-    
-    secretKey = [[WCKeychain keychain] secretKey];
-        
-    if(!secretKey) {
-        alert = [NSAlert alertWithMessageText:@"Define a Secret Key"
-                                         defaultButton:@"OK"
-                                       alternateButton:nil
-                                           otherButton:nil
-                             informativeTextWithFormat:@"You have not define a secret key yet. Wired Client uses a personnal secret key to encrypt/decrypt your local data. This key is stored into the Keychain to ensure its confidentiality."];
-        
-        controller = [WCSecretKeyAccessoryViewController viewController];
-        
-        [alert setAccessoryView:[controller view]];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        
-        result = [alert runModal];
-        
-        if (result == NSAlertDefaultReturn &&
-            [[controller secretKey] isEqualToString:[controller verifyKey]] &&
-            [[controller secretKey] length] > 0) {
-            
-            secretKey = [controller secretKey]; 
-                        
-            [[WCKeychain keychain] setSecretKey:secretKey];
-        } else {
-            exit(0);
-        }
-    }
-    
-    return secretKey;
+    return [self _checkSecretKey];
 }
 
 

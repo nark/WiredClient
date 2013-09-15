@@ -19,10 +19,10 @@
 }
 
 
-+ (WDBroadcastsConversation *)conversationWithConversation:(WCBroadcastConversation *)oldConversation {
++ (WDBroadcastsConversation *)conversationWithConversation:(WCBroadcastConversation *)oldConversation context:(NSManagedObjectContext *)context {
     WDBroadcastsConversation *conversation;
     
-    conversation = [[self class] insertInManagedObjectContext:[WCDatabaseController context]];
+    conversation = [[self class] insertInManagedObjectContext:context];
     [conversation setServerName:[[oldConversation connection] name]];
     [conversation setNick:[oldConversation nick]];
     [conversation setIdentifier:[[oldConversation connection] URLIdentifier]];

@@ -37,6 +37,8 @@
 
 - (NSArray *)fetchEntitiesNammed:(NSString *)name withPredicate:(NSPredicate *)predicate descriptor:(NSSortDescriptor *)descriptor limit:(NSInteger)limit error:(NSError **)error {
     //NSError *error = nil;
+    
+   
 	
     NSArray *ret = nil;
     
@@ -56,6 +58,7 @@
         
         ret = [self executeFetchRequest:request error:error];
         [request release];
+        
     }
     return ret;
 }

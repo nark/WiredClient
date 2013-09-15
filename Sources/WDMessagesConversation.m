@@ -2,7 +2,7 @@
 #import "WCDatabaseController.h"
 
 #import "WCConversation.h"
-
+#import "WCMessage.h"
 
 @implementation WDMessagesConversation
 
@@ -20,10 +20,10 @@
 }
 
 
-+ (WDMessagesConversation *)conversationWithConversation:(WCMessageConversation *)oldConversation {
++ (WDMessagesConversation *)conversationWithConversation:(WCMessageConversation *)oldConversation context:(NSManagedObjectContext *)context {
     WDMessagesConversation *conversation;
     
-    conversation = [[self class] insertInManagedObjectContext:[WCDatabaseController context]];
+    conversation = [[self class] insertInManagedObjectContext:context];
     [conversation setServerName:[[oldConversation connection] name]];
     [conversation setNick:[oldConversation nick]];
     [conversation setIdentifier:[[oldConversation connection] URLIdentifier]];

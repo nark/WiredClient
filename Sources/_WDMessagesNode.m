@@ -8,6 +8,7 @@ const struct WDMessagesNodeAttributes WDMessagesNodeAttributes = {
 	.direction = @"direction",
 	.identifier = @"identifier",
 	.nick = @"nick",
+	.unread = @"unread",
 	.user = @"user",
 };
 
@@ -45,6 +46,10 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 	
 	if ([key isEqualToString:@"directionValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"direction"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+	}
+	if ([key isEqualToString:@"unreadValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"unread"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 	}
 
@@ -96,6 +101,32 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 
 @dynamic nick;
 
+
+
+
+
+
+@dynamic unread;
+
+
+
+- (BOOL)unreadValue {
+	NSNumber *result = [self unread];
+	return [result boolValue];
+}
+
+- (void)setUnreadValue:(BOOL)value_ {
+	[self setUnread:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveUnreadValue {
+	NSNumber *result = [self primitiveUnread];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveUnreadValue:(BOOL)value_ {
+	[self setPrimitiveUnread:[NSNumber numberWithBool:value_]];
+}
 
 
 
