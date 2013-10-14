@@ -8,6 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface WCConversationCellView : NSTableCellView
+@interface WCConversationCellView : NSTableCellView {
+@private
+    NSButton *_button;
+}
+
+@property(retain) IBOutlet NSButton *button;
+
 
 @end

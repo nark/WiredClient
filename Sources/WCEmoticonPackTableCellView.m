@@ -10,19 +10,11 @@
 
 @implementation WCEmoticonPackTableCellView
 
-- (id)initWithFrame:(NSRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
-}
-
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
-}
+@synthesize enabledButton;
+@synthesize emoticonImage1;
+@synthesize emoticonImage2;
+@synthesize emoticonImage3;
+@synthesize emoticonImage4;
+@synthesize emoticonImage5;
 
 @end

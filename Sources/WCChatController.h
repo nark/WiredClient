@@ -41,7 +41,7 @@ extern NSString * const WCChatHighlightColorKey;
 extern NSString * const WCUserPboardType;
 
 
-@class LNWebView, LNScrollView, WCChatTextView, WCChatWindow, WCServerConnection, WCErrorQueue, WCTopic, WCUser;
+@class SBJsonWriter, LNWebView, LNScrollView, WCChatTextView, WCChatWindow, WCServerConnection, WCErrorQueue, WCTopic, WCUser;
 
 @interface WCChatController : WIObject <NSMenuDelegate> {
 	IBOutlet WISplitView							*_userListSplitView;
@@ -56,7 +56,7 @@ extern NSString * const WCUserPboardType;
 	IBOutlet NSTextView								*_chatInputTextView;
 	IBOutlet NSMenu									*_chatSmileysMenu;
 	
-	IBOutlet LNWebView								*_chatOutputWebView;
+	IBOutlet WebView								*_chatOutputWebView;
 
 	IBOutlet NSView									*_userListView;
 	IBOutlet NSButton								*_privateMessageButton;
@@ -85,6 +85,7 @@ extern NSString * const WCUserPboardType;
 	WCServerConnection								*_connection;
 	
 	WCErrorQueue									*_errorQueue;
+    SBJsonWriter                                    *_jsonWriter;
 
 	NSMutableArray									*_commandHistory;
 	NSUInteger										_currentCommand;
@@ -101,7 +102,7 @@ extern NSString * const WCUserPboardType;
 	NSColor											*_timestampEveryLineColor;
 	NSMutableArray									*_highlightPatterns;
 	NSMutableArray									*_highlightColors;
-	BOOL											_showSmileys;
+    BOOL											_showSmileys;
 	
 	NSDate											*_timestamp;
 	WCTopic											*_topic;
@@ -123,13 +124,10 @@ extern NSString * const WCUserPboardType;
 + (BOOL)checkHTMLRestrictionsForString:(NSString *)string;
 
 + (NSString *)stringByDecomposingSmileyAttributesInAttributedString:(NSAttributedString *)attributedString;
-+ (NSString *)URLRegex;
-+ (NSString *)fileURLRegex;
-+ (NSString *)schemelessURLRegex;
-+ (NSString *)mailtoURLRegex;
 + (NSDictionary *)smileyRegexs;
 + (BOOL)isHTMLString:(NSString *)string;
 
+- (void)themeDidChange:(NSDictionary *)theme;
 - (void)linkConnectionLoggedIn:(NSNotification *)notification;
 - (void)wiredChatJoinChatReply:(WIP7Message *)message;
 
@@ -175,7 +173,7 @@ extern NSString * const WCUserPboardType;
 - (IBAction)toggleUserList:(id)sender;
 - (IBAction)showUserList:(id)sender;
 - (IBAction)hideUserList:(id)sender;
-- (IBAction)insertSmiley:(id)sender;
+- (IBAction)showEmoticons:(id)sender;
 - (IBAction)fileFormat:(id)sender;
 
 @end

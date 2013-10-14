@@ -189,7 +189,8 @@ NSString * const WCMonitorCellProgressIndicatorKey		= @"WCMonitorCellProgressInd
 		}
 
 		image = [NSImage imageNamed:[transfer isKindOfClass:[WCDownloadTransfer class]] ? @"Download" : @"Upload"];
-		[image compositeToPoint:imageRect.origin operation:NSCompositeSourceOver fraction:1.0];
+		//[image compositeToPoint:imageRect.origin operation:NSCompositeSourceOver fraction:1.0];
+        [image drawAtPoint:imageRect.origin fromRect:imageRect operation:NSCompositeSourceOver fraction:1.0];
 		
 		[_statusAttributes setObject:_truncatingHeadParagraphStyle forKey:NSParagraphStyleAttributeName];
 		

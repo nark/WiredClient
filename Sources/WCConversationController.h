@@ -28,25 +28,22 @@
 
 #import "WCWebDataSource.h"
 
-@class WDConversation, WDMessage;
+@class WDConversation, WDMessage, SBJsonWriter;
 
 @interface WCConversationController : WIObject <WCWebDataSource> {
 	IBOutlet WebView					*_conversationWebView;
 	
     WDConversation                      *_conversation;
-	NSOperationQueue					*_loadingQueue;
 
 	NSString							*_templatePath;
 	NSFont								*_font;
 	NSColor								*_textColor;
 	NSColor								*_backgroundColor;
-
-	WIDateFormatter						*_messageStatusDateFormatter;
-	WIDateFormatter						*_messageTimeDateFormatter;
+    
+    SBJsonWriter                        *_jsonWriter;
 }
 
 - (void)appendMessage:(WDMessage *)message;
-- (void)appendCommand:(WDMessage *)message;
 
 - (void)reloadData;
 - (void)reloadTemplate;
@@ -66,7 +63,7 @@
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;
 
-- (LNWebView *)conversationWebView;
+- (WebView *)conversationWebView;
 - (NSString *)HTMLString;
 
 @end

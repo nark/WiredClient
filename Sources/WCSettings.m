@@ -85,6 +85,9 @@ NSString * const WCConfirmDisconnect					= @"WCConfirmDisconnect";
 NSString * const WCAutoReconnect						= @"WCAutoReconnect";
 NSString * const WCOrderFrontWhenDisconnected           = @"WCOrderFrontWhenDisconnected";
 
+NSString * const WCEnabledEmoticonPacks                 = @"WCEnabledEmoticonPacks";
+NSString * const WCDisabledEmoticons                    = @"WCDisabledEmoticons";
+
 NSString * const WCTheme								= @"WCTheme";
 
 NSString * const WCThemes								= @"WCThemes";
@@ -157,6 +160,7 @@ NSString * const WCEventsSound							= @"WCEventsSound";
 NSString * const WCEventsBounceInDock					= @"WCEventsBounceInDock";
 NSString * const WCEventsPostInChat						= @"WCEventsPostInChat";
 NSString * const WCEventsShowDialog						= @"WCEventsShowDialog";
+NSString * const WCEventsNotificationCenter             = @"WCEventsNotificationCenter";
 
 NSString * const WCEventsVolume							= @"WCEventsVolume";
 

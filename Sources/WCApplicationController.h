@@ -34,7 +34,7 @@ extern NSString * const						WCExceptionHandlerReceivedBacktraceNotification;
 extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 
 
-@interface WCApplicationController : WIObject <NSApplicationDelegate, GrowlApplicationBridgeDelegate> {
+@interface WCApplicationController : WIObject <NSApplicationDelegate, NSUserNotificationCenterDelegate, GrowlApplicationBridgeDelegate> {
 	IBOutlet NSMenu							*_connectionMenu;
 	IBOutlet NSMenuItem						*_disconnectMenuItem;
 	IBOutlet NSMenuItem						*_newDocumentMenuItem;
@@ -53,6 +53,12 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 	
 	NSString								*_clientVersion;
 	NSMutableDictionary						*_smileys;
+    
+    NSMutableArray                          *_availableEmoticonPacks;
+    NSMutableArray                          *_enabledEmoticonPacks;
+    NSMutableArray                          *_emoticons;
+    NSMutableArray                          *_emoticonEquivalents;
+    
 	NSArray									*_sortedSmileys;
 	NSUInteger								_unread;
 	
@@ -62,10 +68,15 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 + (WCApplicationController *)sharedController;
 
 + (NSString *)copiedNameForName:(NSString *)name existingNames:(NSArray *)names;
++ (NSArray *)systemSounds;
 
-- (NSArray *)allSmileys;
-- (NSString *)pathForSmiley:(NSString *)smiley;
 - (NSMenu *)insertSmileyMenu;
+
+- (NSArray *)availableEmoticonPacks;
+- (NSArray *)enabledEmoticonPacks;
+- (NSArray *)computedEmoticonPacks;
+- (NSArray *)enabledEmoticons;
+- (WIEmoticon *)emoticonForPath:(NSString *)path;
 
 - (NSURL *)applicationFilesDirectory;
 

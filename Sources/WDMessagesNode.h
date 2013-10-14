@@ -7,7 +7,9 @@ enum _WDMessageDirection {
 typedef enum _WDMessageDirection	WDMessageDirection;
 
 
-@interface WDMessagesNode : _WDMessagesNode
+@interface WDMessagesNode : _WDMessagesNode {
+    WCServerConnection    *_connection;
+}
 
 @property (readonly) NSString                       *timeAgo;
 @property (readwrite, retain) WCServerConnection    *connection;

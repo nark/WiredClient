@@ -1241,20 +1241,18 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 
 - (BOOL)_sendUploadFileMessageOnConnection:(WCTransferConnection *)connection forFile:(WCFile *)file error:(WCError **)error {
 	WIP7Message		*message;
-	
+    NSDictionary    *attributes;
+    
 	message = [WIP7Message messageWithName:@"wired.transfer.upload_file" spec:WCP7Spec];
 	[message setString:[file path] forName:@"wired.file.path"];
 	[message setUInt64:[file uploadDataSize] forName:@"wired.transfer.data_size"];
 	[message setUInt64:[file uploadRsrcSize] forName:@"wired.transfer.rsrc_size"];
-    
-//    TODO: this needs to be tested in order to replace the fileAttributesAtPath:traverseLink: depreciated method
-//
-//    if([[[NSFileManager defaultManager] attributesOfItemAtPath:[[file transferLocalPath] stringByResolvingSymlinksInPath]
-//                                                         error:error] filePosixPermissions] & 0111)
-//        [message setBool:YES forName:@"wired.file.executable"];
 	
-	if([[[NSFileManager defaultManager] fileAttributesAtPath:[file transferLocalPath] traverseLink:YES] filePosixPermissions] & 0111)
-		[message setBool:YES forName:@"wired.file.executable"];
+    attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[file transferLocalPath] error:error];
+    
+    if ([[attributes valueForKey:NSFilePosixPermissions] shortValue] & 0111) {
+        [message setBool:YES forName:@"wired.file.executable"];
+    }
 	
 	return [connection writeMessage:message timeout:30.0 error:error];
 }

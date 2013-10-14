@@ -40,7 +40,7 @@
 	NSRect			rect;
     BOOL            keyWindow;
     
-    keyWindow       = [[self window] isKeyWindow];
+    keyWindow       = YES;//[[self window] isKeyWindow];
 	rect            = [self bounds];
     
     startColor      = (keyWindow) ? WC_VIEW_STARTING_KEY_COLOR  : WC_VIEW_STARTING_COLOR;
@@ -116,10 +116,12 @@
     [[NSGraphicsContext currentContext] saveGraphicsState];
     
     [self _drawGradientBackground];
-    [self _drawTopLine];
+    //[self _drawTopLine];
     [self _drawBottomLine];
     
     [[NSGraphicsContext currentContext] restoreGraphicsState];
+    
+    [super drawRect:dirtyRect];
 }
 
 @end

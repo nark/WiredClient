@@ -1,7 +1,7 @@
 #import "WDConversation.h"
 #import "WDWiredModel.h"
 #import "WCUser.h"
-
+#import "NSDate+TimeAgo.h"
 
 
 
@@ -63,22 +63,22 @@
 
 #pragma mark -
 
-- (BOOL)belongsToConnection:(WCServerConnection *)connection {
-	if(![self connection]) {
-		if([[[[self connection] URL] hostpair] isEqualToString:[connection URLIdentifier]] ||
-		   [[[[self connection] bookmark] objectForKey:WCBookmarksIdentifier] isEqualToString:[connection bookmarkIdentifier]])
-			return YES;
-	}
-	
-	return NO;
-}
+- (void)revalidateForConnection:(WCServerConnection *)connection {
+	WDMessage		*message;
+        
+	for(message in self.messages) {		
+		if([message belongsToConnection:connection])
+			[message setConnection:connection];
 
+	}
+    [self setConnection:connection];
+}
 
 
 - (void)invalidateForConnection:(WCServerConnection *)connection {
 	WDMessage		*message;
-	   
-	for(message in self.messages) {		
+    
+	for(message in self.messages) {
 		if([message connection] == connection) {
 			[message setConnection:NULL];
 			[message setUser:NULL];
@@ -91,17 +91,6 @@
 
 
 
-- (void)revalidateForConnection:(WCServerConnection *)connection {
-	WDMessage		*message;
-        
-	for(message in self.messages) {		
-		if([message belongsToConnection:connection])
-			[message setConnection:connection];
-
-	}
-    
-    [self setConnection:connection];
-}
 
 
 
@@ -121,12 +110,16 @@
 		
 	for(message in self.messages) {
         if([[user nick] isEqualToString:[message nick]])
-            [message setUser:user];
+            if(![message user] && [message connection] == [user connection])
+                [message setUser:user];
 	}
     
     if([[user nick] isEqualToString:[self nick]])
-        [self setUser:user];
+        if(![self user] && [self connection] == [user connection])
+            [self setUser:user];
 }
+
+
 
 
 

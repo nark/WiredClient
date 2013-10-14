@@ -28,6 +28,7 @@
 
 extern NSString * const								WCPreferencesDidChangeNotification;
 extern NSString * const								WCThemeDidChangeNotification;
+extern NSString * const								WCEmoticonsDidChangeNotification;
 extern NSString * const								WCSelectedThemeDidChangeNotification;
 extern NSString * const								WCChatLogsFolderPathChangedNotification;
 extern NSString * const								WCBookmarksDidChangeNotification;
@@ -39,10 +40,12 @@ extern NSString * const								WCNickDidChangeNotification;
 extern NSString * const								WCStatusDidChangeNotification;
 extern NSString * const								WCIconDidChangeNotification;
 
+@class WCEmoticonPreferences;
 
 @interface WCPreferences : WIPreferencesController <NSMenuDelegate, NSTableViewDelegate> {
 	IBOutlet NSView									*_generalView;
 	IBOutlet NSView									*_themesView;
+    IBOutlet NSView									*_appearanceView;
 	IBOutlet NSView									*_bookmarksView;
 	IBOutlet NSView									*_chatView;
 	IBOutlet NSView									*_eventsView;
@@ -61,7 +64,11 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSButton								*_confirmDisconnectButton;
 	IBOutlet NSButton								*_autoReconnectButton;
     IBOutlet NSButton								*_orderFrontOnDisconnectButton;
+    
+    IBOutlet NSPopUpButton							*_emoticonPacksPopUpButton;
 	
+    IBOutlet NSWindow                               *_themesWindow;
+    IBOutlet NSPopUpButton							*_themesPopUpButton;
 	IBOutlet NSTableView							*_themesTableView;
 	IBOutlet NSTableColumn							*_themesNameTableColumn;
 	IBOutlet NSButton								*_addThemeButton;
@@ -147,7 +154,8 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSButton								*_eventsBounceInDockButton;
 	IBOutlet NSButton								*_eventsPostInChatButton;
 	IBOutlet NSButton								*_eventsShowDialogButton;
-	
+	IBOutlet NSButton								*_eventsNotificationCenterButton;
+    
 	IBOutlet NSPopUpButton							*_filesDownloadFolderPopUpButton;
 	IBOutlet NSMenuItem								*_filesDownloadFolderMenuItem;
 	IBOutlet NSButton								*_filesOpenFoldersInNewWindowsButton;
@@ -170,6 +178,8 @@ extern NSString * const								WCIconDidChangeNotification;
     IBOutlet NSButton                               *_networkCompressionButton;
     
 	IBOutlet NSView									*_bookmarksExportView;
+    
+    IBOutlet WCEmoticonPreferences                  *_emoticonPreferences;
 	
 	WITemplateBundleManager							*_privateTemplateManager;
 	WITemplateBundleManager							*_publicTemplateManager;
@@ -188,6 +198,11 @@ extern NSString * const								WCIconDidChangeNotification;
 
 - (IBAction)changePreferences:(id)sender;
 
+- (IBAction)customizeEmoticons:(id)sender;
+- (IBAction)selectEmoticonPack:(id)sender;
+
+- (IBAction)customizeTheme:(id)sender;
+- (IBAction)closeTheme:(id)sender;
 - (IBAction)addTheme:(id)sender;
 - (IBAction)deleteTheme:(id)sender;
 - (IBAction)duplicateTheme:(id)sender;

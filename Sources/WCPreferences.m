@@ -27,6 +27,7 @@
  */
 
 #import "WCApplicationController.h"
+#import "WCEmoticonPreferences.h"
 #import "WCChatHistory.h"
 #import "WCKeychain.h"
 #import "WCPreferences.h"
@@ -40,6 +41,7 @@
 
 
 NSString * const WCPreferencesDidChangeNotification			= @"WCPreferencesDidChangeNotification";
+NSString * const WCEmoticonsDidChangeNotification           = @"WCEmoticonsDidChangeNotification";
 NSString * const WCThemeDidChangeNotification				= @"WCThemeDidChangeNotification";
 NSString * const WCSelectedThemeDidChangeNotification		= @"WCSelectedThemeDidChangeNotification";
 NSString * const WCChatLogsFolderPathChangedNotification	= @"WCChatLogsFolderPathChangedNotification";
@@ -61,6 +63,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (void)_reloadThemes;
 - (void)_reloadTheme;
+
+- (void)_reloadEmoticons;
 
 - (void)_reloadTemplates;
 - (void)_reloadTemplatesForMenu:(NSMenu *)menu;
@@ -89,7 +93,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSDictionary		*theme;
 	NSInteger			row;
 	
-	row = [_themesTableView selectedRow];
+	row = [self _selectedThemeRow];
 	
 	if(row < 0) {
 		[_deleteThemeButton setEnabled:NO];
@@ -118,11 +122,70 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 #pragma mark -
 
+- (void)_reloadEmoticons {
+    NSMenuItem          *item;
+    NSArray             *packs, *enabledPacks;
+    WIEmoticonPack      *selectedPack;
+    NSInteger           index;
+    
+    [_emoticonPacksPopUpButton setAutoenablesItems:NO];
+    
+    while((index = [_emoticonPacksPopUpButton indexOfItemWithTag:0]) != -1)
+        [_emoticonPacksPopUpButton removeItemAtIndex:index];
+    
+    packs           = [[WCApplicationController sharedController] availableEmoticonPacks];
+    enabledPacks    = [[WCApplicationController sharedController] enabledEmoticonPacks];
+    selectedPack    = nil;
+    
+    if([enabledPacks count] > 1) {
+        item    = [NSMenuItem itemWithTitle:@"Multiple Selection"
+                                     action:@selector(customizeEmoticons:)];
+        
+        [item setRepresentedObject:enabledPacks];
+        [_emoticonPacksPopUpButton addItem:item];
+        [_emoticonPacksPopUpButton selectItem:item];
+    }
+    else if([enabledPacks count] == 1) {
+        selectedPack = [enabledPacks objectAtIndex:0];
+    }
+    else if([enabledPacks count] == 0) {
+        [_emoticonPacksPopUpButton selectItemAtIndex:0];
+    }
+    
+    [_emoticonPacksPopUpButton addItem:[NSMenuItem separatorItem]];
+    
+    for(WIEmoticonPack *pack in packs) {
+        item    = [NSMenuItem itemWithTitle:[pack name]
+                                     action:nil];
+        
+        [item setImage:[pack previewImage]];
+        [item setRepresentedObject:pack];
+        
+        [_emoticonPacksPopUpButton addItem:item];
+    }
+    
+    if(selectedPack)
+        [_emoticonPacksPopUpButton selectItemWithTitle:[selectedPack name]];
+}
+
+
+
+
+
+#pragma mark -
+
+- (NSInteger)_selectedThemeRow {
+    return [_themesPopUpButton indexOfItem:[_themesPopUpButton selectedItem]];
+}
+
+
 - (void)_reloadThemes {
 	NSEnumerator	*enumerator;
 	NSDictionary	*theme;
 	NSMenuItem		*item;
 	NSInteger		index;
+    
+    [_themesPopUpButton removeAllItems];
 	
 	while((index = [_bookmarksThemePopUpButton indexOfItemWithTag:0]) != -1)
 		[_bookmarksThemePopUpButton removeItemAtIndex:index];
@@ -134,17 +197,22 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		[item setRepresentedObject:[theme objectForKey:WCThemesIdentifier]];
 		[item setImage:[self imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
 		
+        [_themesPopUpButton addItem:[item copy]];
 		[[_bookmarksThemePopUpButton menu] addItem:item];
 	}
+    [_themesPopUpButton selectItemWithRepresentedObject:[[WCSettings settings] objectForKey:WCTheme]];
+    
+    [_themesPopUpButton addItem:[NSMenuItem separatorItem]];
+    [_themesPopUpButton addItemWithTitle:@"Add New Theme..."];
+    [_themesPopUpButton addItemWithTitle:@"Edit Themes..."];
 }
-
 
 
 - (void)_reloadTheme {
 	NSDictionary	*theme;
 	NSInteger		row;
 	
-	row = [_themesTableView selectedRow];
+	row = [[_themesPopUpButton menu] indexOfItem:[_themesPopUpButton selectedItem]];
 	
 	if(row >= 0 && (NSUInteger) row < [[[WCSettings settings] objectForKey:WCThemes] count]) {
 		theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
@@ -202,10 +270,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSString					*bundleName;
 	NSDictionary				*theme;
 	
-	if([_themesTableView selectedRow] == -1)
+	if([self _selectedThemeRow] == -1)
 		return;
 	
-	theme			= [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[_themesTableView selectedRow]];
+	theme			= [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]];
 	templates		= [NSMutableArray arrayWithArray:[_privateTemplateManager templates]];
 	
 	[templates addObjectsFromArray:[_publicTemplateManager templates]];
@@ -325,8 +393,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_eventsSoundsPopUpButton removeAllItems];
 
     // TODO: Tried to replace it but didn't worked 
-	enumerator = [[[NSFileManager defaultManager] libraryResourcesForTypes:[NSSound soundUnfilteredFileTypes] inDirectory:@"Sounds"] 
-		objectEnumerator];
+	enumerator = [[WCApplicationController systemSounds] objectEnumerator];
 
 	while((path = [enumerator nextObject]))
 		[_eventsSoundsPopUpButton addItemWithTitle:[[path lastPathComponent] stringByDeletingPathExtension]];
@@ -433,7 +500,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_eventsBounceInDockButton setState:[event boolForKey:WCEventsBounceInDock]];
 	[_eventsPostInChatButton setState:[event boolForKey:WCEventsPostInChat]];
 	[_eventsShowDialogButton setState:[event boolForKey:WCEventsShowDialog]];
-	
+	[_eventsNotificationCenterButton setState:[event boolForKey:WCEventsNotificationCenter]];
+    
 	if(tag == WCEventsUserJoined || tag == WCEventsUserChangedNick ||
 	   tag == WCEventsUserLeft || tag == WCEventsUserChangedStatus)
 		[_eventsPostInChatButton setEnabled:YES];
@@ -549,7 +617,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 							contextInfo:[theme retain]];
 		[alert release];
 	} else {
-		[[WCSettings settings] replaceObjectAtIndex:[_themesTableView selectedRow] withObject:theme inArrayForKey:WCThemes];
+		[[WCSettings settings] replaceObjectAtIndex:[self _selectedThemeRow] withObject:theme inArrayForKey:WCThemes];
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 
@@ -573,9 +641,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		
 		[[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
 		
-		[_themesTableView reloadData];
-		[_themesTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCThemes] count] - 1]
-					  byExtendingSelection:NO];
+		[self _reloadThemes];
 	}
 	
 	[theme release];
@@ -638,6 +704,11 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	_publicTemplateManager	= [[WITemplateBundleManager templateManagerForPath:[WCApplicationSupportPath stringByStandardizingPath] isPrivate:NO] retain];
 	
 	[self window];
+    
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(emoticonsDidChange:)
+               name:WCEmoticonsDidChangeNotification];
 
 	[[NSNotificationCenter defaultCenter]
 		addObserver:self
@@ -683,13 +754,13 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 					   name:NSLS(@"General", @"General preferences")
 					  image:[NSImage imageNamed:@"General"]];
 	
-	[self addPreferenceView:_themesView
-					   name:NSLS(@"Themes", @"Themes preferences")
-					  image:[NSImage imageNamed:@"Themes"]];
+//	[self addPreferenceView:_themesView
+//					   name:NSLS(@"Themes", @"Themes preferences")
+//					  image:[NSImage imageNamed:@"Themes"]];
 
-//	[self addPreferenceView:_bookmarksView
-//					   name:NSLS(@"Bookmarks", @"Bookmarks preferences")
-//					  image:[NSImage imageNamed:@"Bookmarks"]];
+	[self addPreferenceView:_appearanceView
+					   name:NSLS(@"Appearance", @"Appearance preferences")
+					  image:[NSImage imageNamed:@"Themes"]];
 	
 	[self addPreferenceView:_chatView
 					   name:NSLS(@"Chat", @"Chat preferences")
@@ -729,6 +800,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_ignoresTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	[_trackerBookmarksTableView registerForDraggedTypes:[NSArray arrayWithObject:WCTrackerBookmarkPboardType]];
 	
+    [self _reloadEmoticons];
 	[self _reloadThemes];
 	[self _reloadTheme];
 	[self _reloadTemplates];
@@ -780,6 +852,12 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[self _validate];
 	
 	[super windowDidLoad];
+}
+
+
+
+- (void)emoticonsDidChange:(NSNotification *)notification {
+    [self _reloadEmoticons];
 }
 
 
@@ -889,9 +967,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	[[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
 	
-	[_themesTableView reloadData];
-	[_themesTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCThemes] count] - 1]
-				  byExtendingSelection:NO];
+	[self _reloadThemes];
 	
 	return YES;
 }
@@ -1140,7 +1216,57 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 }
 
 
+
+
 #pragma mark -
+
+- (IBAction)customizeEmoticons:(id)sender {
+    [_emoticonPreferences open:sender];
+}
+
+
+- (IBAction)selectEmoticonPack:(id)sender {
+    WIEmoticonPack *pack;
+    id              object;
+    
+    if([_emoticonPacksPopUpButton selectedTag] == 1) {
+        [[WCSettings settings] setObject:nil forKey:WCEnabledEmoticonPacks];
+        
+        [self _reloadEmoticons];
+    }
+    else {
+        object = [[_emoticonPacksPopUpButton selectedItem] representedObject];
+        
+        if([object isKindOfClass:[WIEmoticonPack class]]) {
+            pack = (WIEmoticonPack *)object;
+            
+            [[WCSettings settings] setObject:[NSArray arrayWithObject:[pack packKey]]
+                                      forKey:WCEnabledEmoticonPacks];
+        }
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCEmoticonsDidChangeNotification];
+}
+
+
+
+#pragma mark -
+
+- (IBAction)customizeTheme:(id)sender {
+    [NSApp beginSheet:_themesWindow
+       modalForWindow:[self window]
+        modalDelegate:self
+       didEndSelector:nil
+          contextInfo:nil];
+}
+
+
+- (IBAction)closeTheme:(id)sender {
+    if([_themesWindow isVisible]) {
+        [NSApp endSheet:_themesWindow];
+        [_themesWindow orderOut:self];
+    }
+}
+
 
 - (IBAction)addTheme:(id)sender {
 	NSDictionary		*theme;
@@ -1173,10 +1299,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		NULL];
 
 	[[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-
-	[_themesTableView reloadData];
-	[_themesTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCThemes] count] - 1]
-				  byExtendingSelection:NO];
 	
 	[self _reloadThemes];
 }
@@ -1188,7 +1310,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSString		*name;
 	NSInteger		row;
 	
-	row = [_themesTableView selectedRow];
+	row = [self _selectedThemeRow];
 	
 	if(row < 0)
 		return;
@@ -1225,8 +1347,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		
 		[[WCSettings settings] removeObjectAtIndex:[row unsignedIntegerValue] fromArrayForKey:WCThemes];
 
-		[_themesTableView reloadData];
-		
+		[self _reloadThemes];
 		[self _reloadTheme];
 	}
 	
@@ -1239,7 +1360,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSMutableDictionary		*theme;
 	NSInteger				row;
 	
-	row = [_themesTableView selectedRow];
+	row = [self _selectedThemeRow];
 	
 	if(row < 0)
 		return;
@@ -1253,9 +1374,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	[[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
 	
-	[_themesTableView reloadData];
-	[_themesTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCThemes] count] - 1]
-				  byExtendingSelection:NO];
+	[self _reloadThemes];
 }
 
 
@@ -1265,7 +1384,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	__block NSMutableDictionary		*theme;
 	NSInteger                       row;
 	
-	row = [_themesTableView selectedRow];
+	row = [self _selectedThemeRow];
 	
 	if(row < 0)
 		return;
@@ -1311,7 +1430,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSDictionary		*theme;
 	NSInteger			row;
 	
-	row = [_themesTableView selectedRow];
+	row = [[_themesPopUpButton menu] indexOfItem:[_themesPopUpButton selectedItem]];
 	
 	if(row < 0)
 		return;
@@ -1321,8 +1440,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
-
-	[_themesTableView setNeedsDisplay:YES];
 }
 
 
@@ -1332,7 +1449,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSDictionary			*oldTheme;
 	NSInteger				row;
 	
-	row = [_themesTableView selectedRow];
+	row = [self _selectedThemeRow];
 	
 	if(row < 0)
 		return;
@@ -1379,8 +1496,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSDictionary		*theme;
 	NSFontManager		*fontManager;
 	
-	theme			= [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[_themesTableView selectedRow]];
+	theme			= [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]];
 	fontManager		= [NSFontManager sharedFontManager];
+    
+    [fontManager setTarget:self];
 	
 	if(sender == _themesChatFontButton) {
 		[fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesChatFont]) isMultiple:NO];
@@ -1404,7 +1523,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSMutableDictionary		*theme;
 	NSFont					*font, *newFont;
 	
-	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[_themesTableView selectedRow]] mutableCopy] autorelease];
+	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
 	font		= WIFontFromString([theme objectForKey:WCThemesChatFont]);
 	newFont		= [sender convertFont:font];
 	
@@ -1419,7 +1538,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSMutableDictionary		*theme;
 	NSFont					*font, *newFont;
 	
-	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[_themesTableView selectedRow]] mutableCopy] autorelease];
+	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
 	font		= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
 	newFont		= [sender convertFont:font];
 	
@@ -1434,7 +1553,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSMutableDictionary		*theme;
 	NSFont					*font, *newFont;
 	
-	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[_themesTableView selectedRow]] mutableCopy] autorelease];
+	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
 	font		= WIFontFromString([theme objectForKey:WCThemesBoardsFont]);
 	newFont		= [sender convertFont:font];
 	
@@ -1456,7 +1575,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	value			= [[sender representedObject] bundleIdentifier];
 	
 	if(value && [value isKindOfClass:[NSString class]]) {
-		theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[_themesTableView selectedRow]] mutableCopy] autorelease];
+		theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
 
 		[theme setValue:value forKey:WCThemesTemplate];
 		
@@ -2022,6 +2141,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 			[event setBool:[_eventsBounceInDockButton state] forKey:WCEventsBounceInDock];
 			[event setBool:[_eventsPostInChatButton state] forKey:WCEventsPostInChat];
 			[event setBool:[_eventsShowDialogButton state] forKey:WCEventsShowDialog];
+            [event setBool:[_eventsNotificationCenterButton state] forKey:WCEventsNotificationCenter];
 			
 			[events replaceObjectAtIndex:i withObject:event];
 			
@@ -2280,9 +2400,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 #pragma mark -
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	if(tableView == _themesTableView)
-		return [[[WCSettings settings] objectForKey:WCThemes] count];
-	else if(tableView == _bookmarksTableView)
+	if(tableView == _bookmarksTableView)
 		return [[[WCSettings settings] objectForKey:WCBookmarks] count];
 	else if(tableView == _highlightsTableView)
 		return [[[WCSettings settings] objectForKey:WCHighlights] count];
@@ -2302,13 +2420,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)column row:(NSInteger)row {
 	NSDictionary	*dictionary;
 		
-	if(tableView == _themesTableView) {
-		dictionary = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
-		
-		if(column == _themesNameTableColumn)
-			return [dictionary objectForKey:WCThemesName];
-	}
-	else if(tableView == _bookmarksTableView) {
+	if(tableView == _bookmarksTableView) {
 		dictionary = [[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row];
 		
 		if(column == _bookmarksNameTableColumn)
@@ -2347,14 +2459,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (BOOL)tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	NSDictionary		*dictionary;
-	
-	if(tableView == _themesTableView) {
-		dictionary = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
-		
-		return ([dictionary objectForKey:WCThemesBuiltinName] == NULL);
-		
-	} else if(tableView == _themesTemplatesTableView) 
+	if(tableView == _themesTemplatesTableView)
 		return NO;
 	
 	return YES;
@@ -2365,17 +2470,19 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	NSMutableDictionary		*dictionary;
 	
-	if(tableView == _themesTableView) {
-		dictionary = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] mutableCopy] autorelease];
-		
-		if(tableColumn == _themesNameTableColumn)
-			[dictionary setObject:object forKey:WCThemesName];
-		
-		[[WCSettings settings] replaceObjectAtIndex:row withObject:dictionary inArrayForKey:WCThemes];
-		
-		[self _reloadThemes];
-	}
-	else if(tableView == _bookmarksTableView) {
+//	if(tableView == _themesTableView) {
+//		dictionary = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] mutableCopy] autorelease];
+//		
+//		if(tableColumn == _themesNameTableColumn)
+//			[dictionary setObject:object forKey:WCThemesName];
+//		
+//		[[WCSettings settings] replaceObjectAtIndex:row withObject:dictionary inArrayForKey:WCThemes];
+//		
+//		[self _reloadThemes];
+//	}
+//	else
+    
+    if(tableView == _bookmarksTableView) {
 		dictionary = [[[[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row] mutableCopy] autorelease];
 		
 		if(tableColumn == _bookmarksNameTableColumn)
@@ -2424,41 +2531,12 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	NSDictionary		*theme;
 	
-	if(tableView == _themesTableView) {
-		theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
-		
-		if([[theme objectForKey:WCThemesIdentifier] isEqualToString:[[WCSettings settings] objectForKey:WCTheme]])
-			[cell setFont:[[cell font] fontByAddingTrait:NSBoldFontMask]];
-		else
-			[cell setFont:[[cell font] fontByAddingTrait:NSUnboldFontMask]];
-		
-		[cell setImage:[self imageForTheme:theme size:NSMakeSize(32.0, 24.0)]];
-        
-	} else if(tableView == _bookmarksTableView) {
+	if(tableView == _bookmarksTableView) {
         [cell setImage:[NSImage imageNamed:@"BookmarksSmall"]];
         
     } else if(tableView == _trackerBookmarksTableView) {
         [cell setImage:[NSImage imageNamed:@"WiredServer"]];
     }
-}
-
-
-- (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-    NSDictionary		*theme;
-    NSCell              *cell;
-    
-    cell = [tableColumn dataCell];
-	
-	if(tableView == _themesTableView) {
-		theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
-		
-		if([[theme objectForKey:WCThemesIdentifier] isEqualToString:[[WCSettings settings] objectForKey:WCTheme]])
-			[cell setFont:[[cell font] fontByAddingTrait:NSBoldFontMask]];
-		else
-			[cell setFont:[[cell font] fontByAddingTrait:NSUnboldFontMask]];
-    }
-    
-    return cell;
 }
 
 
@@ -2469,9 +2547,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	tableView = [notification object];
 	
-	if(tableView == _themesTableView) {
-		[self _reloadTheme];
-	} else if(tableView == _bookmarksTableView)
+	if(tableView == _bookmarksTableView)
 		[self _reloadBookmark];
 	else if(tableView == _trackerBookmarksTableView)
 		[self _reloadTrackerBookmark];
@@ -2486,13 +2562,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	index = [indexes firstIndex];
 	
-	if(tableView == _themesTableView) {
-		[pasteboard declareTypes:[NSArray arrayWithObject:WCThemePboardType] owner:NULL];
-		[pasteboard setString:[NSSWF:@"%d", (int)index] forType:WCThemePboardType];
-		
-		return YES;
-	}
-	else if(tableView == _bookmarksTableView) {
+	if(tableView == _bookmarksTableView) {
 		[pasteboard declareTypes:[NSArray arrayWithObject:WCBookmarkPboardType] owner:NULL];
 		[pasteboard setString:[NSSWF:@"%d", (int)index] forType:WCBookmarkPboardType];
 		

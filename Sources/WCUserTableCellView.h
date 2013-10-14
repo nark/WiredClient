@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface WCUserTableCellView : NSTableCellView
+@interface WCUserTableCellView : NSTableCellView {
+    IBOutlet NSTextField *statusTextField;
+}
+
+@property (assign) IBOutlet NSTextField *statusTextField;
 
 @end

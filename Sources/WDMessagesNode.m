@@ -3,7 +3,7 @@
 #import "WDMessage.h"
 
 #import "SBJsonWriter+WCJsonWriter.h"
-
+#import "NSDate+TimeAgo.h"
 
 
 @implementation WDMessagesNode
@@ -38,8 +38,15 @@
     
     _connection = [connection retain];
     
-    if(_connection)
+    if(_connection) {
+        [self willChangeValueForKey:@"identifier"];
         [self setIdentifier:[_connection URLIdentifier]];
+        [self didChangeValueForKey:@"identifier"];
+        
+        [self setActiveValue:YES];
+    } else {
+        [self setActiveValue:NO];
+    }
 }
 
 

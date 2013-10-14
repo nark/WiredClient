@@ -14,7 +14,6 @@
 
 - (NSInteger)numberOfUnreadMessages;
 
-- (BOOL)belongsToConnection:(WCServerConnection *)connection;
 - (void)invalidateForConnection:(WCServerConnection *)connection;
 - (void)revalidateForConnection:(WCServerConnection *)connection;
 - (void)invalidateForUser:(WCUser *)user;

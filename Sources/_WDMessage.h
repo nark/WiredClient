@@ -19,7 +19,7 @@ extern const struct WDMessageFetchedProperties {
 @class WDConversation;
 
 
-@class NSObject;
+
 
 @interface WDMessageID : NSManagedObjectID {}
 @end
@@ -45,7 +45,7 @@ extern const struct WDMessageFetchedProperties {
 
 
 
-@property (nonatomic, retain) id message;
+@property (nonatomic, retain) NSString* message;
 
 
 //- (BOOL)validateMessage:(id*)value_ error:(NSError**)error_;
@@ -80,8 +80,8 @@ extern const struct WDMessageFetchedProperties {
 
 
 
-- (id)primitiveMessage;
-- (void)setPrimitiveMessage:(id)value;
+- (NSString*)primitiveMessage;
+- (void)setPrimitiveMessage:(NSString*)value;
 
 
 

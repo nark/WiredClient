@@ -674,23 +674,23 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	
 	string = [[text mutableCopy] autorelease];
 	
-	[string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [WCChatController URLRegex]]
+	[string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString URLRegex]]
 						   withString:@"$1[url]$2[/url]$3$4"
 							  options:RKLCaseless | RKLMultiline];
 	
-	[string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [WCChatController schemelessURLRegex]]
+	[string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString schemelessURLRegex]]
 						   withString:@"$1[url]http://$2[/url]$3$4"
 							  options:RKLCaseless | RKLMultiline];
     
-    [string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [WCChatController schemelessURLRegex]]
+    [string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString schemelessURLRegex]]
 						   withString:@"$1[url]wiredp7:///$2[/url]$3$4"
 							  options:RKLCaseless | RKLMultiline];
     
-    [string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [WCChatController schemelessURLRegex]]
+    [string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString schemelessURLRegex]]
 						   withString:@"$1[url]wired:///$2[/url]$3$4"
 							  options:RKLCaseless | RKLMultiline];
 	
-	[string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [WCChatController mailtoURLRegex]]
+	[string replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString mailtoURLRegex]]
 						   withString:@"$1[email]$2[/email]$3$4"
 							  options:RKLCaseless | RKLMultiline];
 	

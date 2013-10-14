@@ -4,6 +4,7 @@
 #import "_WDMessagesNode.h"
 
 const struct WDMessagesNodeAttributes WDMessagesNodeAttributes = {
+	.active = @"active",
 	.date = @"date",
 	.direction = @"direction",
 	.identifier = @"identifier",
@@ -44,6 +45,10 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"activeValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"active"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+	}
 	if ([key isEqualToString:@"directionValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"direction"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -55,6 +60,32 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic active;
+
+
+
+- (BOOL)activeValue {
+	NSNumber *result = [self active];
+	return [result boolValue];
+}
+
+- (void)setActiveValue:(BOOL)value_ {
+	[self setActive:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveActiveValue {
+	NSNumber *result = [self primitiveActive];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveActiveValue:(BOOL)value_ {
+	[self setPrimitiveActive:[NSNumber numberWithBool:value_]];
+}
+
 
 
 

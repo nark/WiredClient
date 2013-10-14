@@ -43,8 +43,9 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
     IBOutlet NSPopUpButton                          *_conversationPopUpButton;
     IBOutlet NSPopUpButton                          *_conversationsFiltersPopUpButton;
     IBOutlet NSSearchField                          *_conversationsSearchField;
+    IBOutlet NSButton                               *_conversationsOnlineButton;
 	
-	IBOutlet NSTextView								*_messageTextView;    
+	IBOutlet NSTextField							*_messageTextField;
 	IBOutlet NSPanel								*_broadcastPanel;
 	IBOutlet NSTextView								*_broadcastTextView;
 	
@@ -53,11 +54,10 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
 	WCConversation									*_conversations;
 	WCMessageConversation							*_messageConversations;
 	WCBroadcastConversation							*_broadcastConversations;
-    
 	WDConversation									*_selectedConversation;
-		
 	WIDateFormatter									*_dialogDateFormatter;
     
+    NSArray                                         *_sortDescriptors;
     BOOL                                            *_sorting;
 }
 
@@ -81,9 +81,9 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
 - (IBAction)conversationsSearch:(id)sender;
 
 - (IBAction)markAsRead:(id)sender;
-- (IBAction)markAllAsRead:(id)sender;
 - (IBAction)revealInUserList:(id)sender;
 - (IBAction)deleteConversation:(id)sender;
 - (IBAction)deleteMessage:(id)sender;
+- (IBAction)showEmoticons:(id)sender;
 
 @end

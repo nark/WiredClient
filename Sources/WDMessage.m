@@ -1,6 +1,7 @@
 #import "WDMessage.h"
 #import "WDWiredModel.h"
 #import "WCChatController.h"
+#import "NSDate+TimeAgo.h"
 
 @implementation WDMessage
 
@@ -46,7 +47,7 @@
 
 - (BOOL)belongsToConnection:(WCServerConnection *)connection {
 	if(![self connection]) {
-		if([[[[self connection] URL] hostpair] isEqualToString:[connection URLIdentifier]] ||
+		if([[connection URLIdentifier] isEqualToString:[self identifier]] ||
 		   [[[[self connection] bookmark] objectForKey:WCBookmarksIdentifier] isEqualToString:[connection bookmarkIdentifier]])
 			return YES;
 	}
@@ -92,42 +93,30 @@
 #pragma mark -
 
 - (id)proxyForJson {
-    NSDateFormatter     *dateFormatter;
     NSMutableString     *messageString;
-    NSString            *dateString;
     NSImage             *icon;
     NSImage             *unread;
-    
-    [NSDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
-    
+        
     messageString = [NSMutableString stringWithString:self.message];
     
     if(![WCChatController isHTMLString:messageString]) {
-        
         [WCChatController applyHTMLEscapingToMutableString:messageString];
-        [WCChatController applyHTMLTagsForURLToMutableString:messageString];
+        
+        if([WCChatController checkHTMLRestrictionsForString:messageString])
+            [WCChatController applyHTMLTagsForURLToMutableString:messageString];
         
         if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
             [WCChatController applyHTMLTagsForSmileysToMutableString:messageString];
     }
     
-    [messageString replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
-    
-    dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
-    
-    dateString = [dateFormatter stringFromDate:self.date];
-    [dateFormatter release];
-    
-    icon       = (!self.conversation.connection || ![self user]) ? [NSImage imageNamed:@"SenderImagePlaceholder"] : [[self user] icon];
-    unread     = (self.unreadValue) ? self.unreadImage : [NSImage imageNamed:@"ReadThread"];
+    icon    = (!self.conversation.connection || ![self user]) ? [NSImage imageNamed:@"SenderImagePlaceholder"] : [[self user] icon];
+    unread = (self.unreadValue) ? self.unreadImage : [NSImage imageNamed:@"ReadThread"];
     
     return [NSDictionary dictionaryWithObjectsAndKeys:
             messageString,                                                  @"message",
             self.nick,                                                      @"nick",
-            dateString,                                                     @"date",
+            [self.date JSDate],                                             @"date",
+            [self.date timeAgoWithLimit:(3600*24*30)],                      @"timeAgo",
             [[unread TIFFRepresentation] base64EncodedString],              @"unread",
             self.direction,                                                 @"direction",
             [NSNumber numberWithInteger:[self.user userID]],                @"userID",

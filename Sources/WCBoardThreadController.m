@@ -129,7 +129,8 @@
 					if(isKeyWindow) {
 						[post setUnread:NO];
 						
-						[set addObject:[post postID]];
+                        //if(set)
+                            [set addObject:[post postID]];
 					}
 				});
 			}
@@ -142,6 +143,7 @@
 					if(isKeyWindow) {
 						[_thread setUnread:NO];
 						
+                        //if(set)
 						[set addObject:[_thread threadID]];
 					}
 					
@@ -230,28 +232,6 @@
 								  options:RKLCaseless | RKLDotAll] > 0)
 		;
 	
-	if([theme boolForKey:WCThemesShowSmileys]) {
-		regexs		= [WCChatController smileyRegexs];
-		enumerator	= [regexs keyEnumerator];
-		
-		while((smiley = [enumerator nextObject])) {
-			regex				= [regexs objectForKey:smiley];
-			path				= [[WCApplicationController sharedController] pathForSmiley:smiley];
-			smileyBase64String	= [_smileyBase64Strings objectForKey:smiley];
-			
-			if(!smileyBase64String) {
-				smileyBase64String = [[[NSImage imageWithContentsOfFile:path] TIFFRepresentation] base64EncodedString];
-				
-				[_smileyBase64Strings setObject:smileyBase64String forKey:smiley];
-			}
-			
-			[text replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)%@(\\s|$)", regex]
-								 withString:[NSSWF:@"$1<img src=\"data:image/tiff;base64,%@\" alt=\"%@\" />$2",
-											 smileyBase64String, smiley]
-									options:RKLCaseless | RKLMultiline];
-		}
-	}
-	
 	[text replaceOccurrencesOfRegex:@"\\[b\\](.+?)\\[/b\\]"
 						 withString:@"<b>$1</b>"
 							options:RKLCaseless | RKLDotAll];
@@ -313,6 +293,30 @@
 	[text replaceOccurrencesOfRegex:@"\\[quote\\](.+?)\\[/quote\\]"
 						 withString:@"<blockquote>$1</blockquote>"
 							options:RKLCaseless | RKLDotAll];
+    
+    [WCChatController applyHTMLTagsForSmileysToMutableString:text];
+    
+//    if([theme boolForKey:WCThemesShowSmileys]) {
+//		regexs		= [WCChatController smileyRegexs];
+//		enumerator	= [regexs keyEnumerator];
+//		
+//		while((smiley = [enumerator nextObject])) {
+//			regex				= [regexs objectForKey:smiley];
+//			path				= [[WCApplicationController sharedController] pathForSmiley:smiley];
+//			smileyBase64String	= [_smileyBase64Strings objectForKey:smiley];
+//			
+//			if(!smileyBase64String) {
+//				smileyBase64String = [[[NSImage imageWithContentsOfFile:path] TIFFRepresentation] base64EncodedString];
+//				
+//				[_smileyBase64Strings setObject:smileyBase64String forKey:smiley];
+//			}
+//			
+//			[text replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)%@(\\s|$)", regex]
+//								 withString:[NSSWF:@"$1<img src=\"data:image/tiff;base64,%@\" alt=\"%@\" />$2",
+//											 smileyBase64String, smiley]
+//									options:RKLCaseless | RKLMultiline];
+//		}
+//	}
 		
 	dispatch_sync(dispatch_get_main_queue(), ^{
 		

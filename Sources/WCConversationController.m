@@ -36,17 +36,11 @@
 #import "WCFiles.h"
 #import "WCFile.h"
 #import "WCTransfers.h"
-#import "WCDOMMessage.h"
-#import "WCDOMMessageStatus.h"
 #import "WDWiredModel.h"
 #import "WCDatabaseController.h"
 
 #import "SBJsonWriter+WCJsonWriter.h"
 #import "NSManagedObjectContext+Fetch.h"
-
-
-#define WC_MESSAGES_STATUS_INTERVAL 60*60*24
-
 
 
 
@@ -56,15 +50,8 @@
 - (id)init {
 	self = [super init];
 	
-	_loadingQueue = [[NSOperationQueue alloc] init];
+    _jsonWriter   = [[SBJsonWriter alloc] init];
     _conversation = nil;
-
-	_messageStatusDateFormatter = [[WIDateFormatter alloc] init];
-	[_messageStatusDateFormatter setTimeStyle:NSDateFormatterNoStyle];
-	[_messageStatusDateFormatter setDateStyle:NSDateFormatterLongStyle];
-	
-	_messageTimeDateFormatter = [[WIDateFormatter alloc] init];
-	[_messageTimeDateFormatter setTimeStyle:NSDateFormatterShortStyle];
 	
 	return self;
 }
@@ -72,14 +59,11 @@
 
 
 - (void)dealloc {
-	[_loadingQueue release];
-	
+	[_jsonWriter release];
+    
 	[_font release];
 	[_textColor release];
 	[_backgroundColor release];
-	
-	[_messageStatusDateFormatter release];
-	[_messageTimeDateFormatter release];
     
     [_conversation release];
 	
@@ -92,6 +76,8 @@
     [_conversationWebView setFrameLoadDelegate:self];
 	[_conversationWebView setResourceLoadDelegate:self];
 	[_conversationWebView setPolicyDelegate:self];
+    
+    [self reloadData];
 }
 
 
@@ -174,6 +160,7 @@
 
 
 
+
 #pragma mark -
 
 - (WebView *)conversationWebView {
@@ -193,81 +180,15 @@
 #pragma mark -
 
 - (void)appendMessage:(WDMessage *)message {
-    SBJsonWriter    *jsonWriter;
-    NSString        *jsonString;
-    
-    jsonWriter      = [[SBJsonWriter alloc] init];
-    jsonString      = [jsonWriter stringWithObject:message];
-    
-    [jsonWriter release];
-    
     [_conversationWebView stringByEvaluatingJavaScriptFromString:
-            [NSSWF:@"printMessage(%@);", jsonString]];
+            [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:message]]];
 }
 
 
 
-- (void)appendCommand:(WDMessage *)message {
-//	NSMutableDictionary		*icons;
-//	NSMutableString			*mutableMessage;
-//    NSString				*icon, *messageTemplate;
-//    WCDOMMessage			*messageElement;
-//	WITemplateBundle		*template;
-//	NSError					*error;
-//	BOOL					changedUnread = NO, isKeyWindow;
-//	
-//	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[_conversation connection] theme] objectForKey:WCThemesTemplate]];
-//	messageTemplate = [NSString stringWithContentsOfFile:[template pathForResource:@"Message" ofType:@"html" inDirectory:@"htdocs"] encoding:NSUTF8StringEncoding error:&error];;
-//	
-//    if(_conversation && ![_conversation isExpandable]) {
-//        icons       = [NSMutableDictionary dictionary];
-//        icon        = [icons objectForKey:[NSNumber numberWithInt:[[message user] userID]]];
-//        isKeyWindow = ([NSApp keyWindow] == [_conversationWebView window]);
-//        
-//        if(!icon) {
-//            icon    = [[[[message user] icon] TIFFRepresentation] base64EncodedString];
-//            
-//            if(icon)
-//                [icons setObject:icon forKey:[NSNumber numberWithInt:[[message user] userID]]];
-//        }
-//		
-//		mutableMessage = [NSMutableString stringWithString:[message message]];
-//		
-//		[mutableMessage replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
-//		
-//		messageElement = [WCDOMMessage messageElementForFrame:[_conversationWebView mainFrame] withTemplate:messageTemplate];
-//		[messageElement setServer:[message connectionName]];
-//		[messageElement setTime:[_messageTimeDateFormatter stringFromDate:[message date]]];
-//		[messageElement setNick:[message nick]];
-//		
-//		if([message direction] == WCMessageTo)
-//			[messageElement setDirection:@"to"];
-//		else
-//			[messageElement setDirection:@"from"];
-//		
-//		[messageElement setIcon:[NSSWF:@"data:image/tiff;base64,%@", icon]];
-//		[messageElement setMessageContent:mutableMessage];
-//		
-//		[_conversationWebView appendElement:[messageElement element] 
-//					toBottomOfElementWithID:@"messages-content" 
-//									 scroll:YES];
-//		
-//        if([message isUnread] && isKeyWindow) {
-//            [message setUnread:NO];
-//            
-//            changedUnread = YES;
-//        }
-//        if([_conversation isUnread] && isKeyWindow) {
-//            [_conversation setUnread:NO];
-//            
-//            changedUnread = YES;
-//        }
-//        if(changedUnread)
-//            [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
-//    }
-}
 
 
+#pragma mark -
 
 - (void)reloadData {
     NSURL                       *url;
@@ -276,7 +197,7 @@
     
     template        = [WITemplateBundle templateWithPath:_templatePath];
     isKeyWindow     = ([NSApp keyWindow] == [_conversationWebView window]);
-    
+        
     if(template) {
         url = [NSURL fileURLWithPath: [template pathForResource:@"messages"
                                                          ofType:@"html"
@@ -290,13 +211,24 @@
 - (void)reloadTemplate {
 	WITemplateBundle			*template;
 	
-	template		= [WITemplateBundle templateWithPath:_templatePath];
+	template  = [WITemplateBundle templateWithPath:_templatePath];
 
 	// reload CSS in the main thread
-	[template setCSSValue:[_font fontName] toAttribute:WITemplateAttributesFontName ofType:WITemplateTypeMessages];
-	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]] toAttribute:WITemplateAttributesFontSize ofType:WITemplateTypeMessages];
-	[template setCSSValue:[NSSWF:@"#%.6x", [_textColor HTMLValue]] toAttribute:WITemplateAttributesFontColor ofType:WITemplateTypeMessages];
-	[template setCSSValue:[NSSWF:@"#%.6x", [_backgroundColor HTMLValue]] toAttribute:WITemplateAttributesBackgroundColor ofType:WITemplateTypeMessages];
+	[template setCSSValue:[_font fontName]
+              toAttribute:WITemplateAttributesFontName
+                   ofType:WITemplateTypeMessages];
+    
+	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]]
+              toAttribute:WITemplateAttributesFontSize
+                   ofType:WITemplateTypeMessages];
+    
+	[template setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[_textColor HTMLValue]]
+              toAttribute:WITemplateAttributesFontColor
+                   ofType:WITemplateTypeMessages];
+    
+	[template setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[_backgroundColor HTMLValue]]
+              toAttribute:WITemplateAttributesBackgroundColor
+                   ofType:WITemplateTypeMessages];
 	
 	[template saveChangesForType:WITemplateTypeMessages];
 	
@@ -313,13 +245,29 @@
 #pragma mark -
 
 - (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame {
-    WITemplateBundle *template = [WITemplateBundle templateWithPath:_templatePath];
+    WITemplateBundle    *template;
+    NSURL               *jqueryURL, *functionsURL, *mainURL;
+ 
+    template        = [WITemplateBundle templateWithPath:_templatePath];
     
-    NSURL *jqueryURL    = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
-    NSURL *functionsURL = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
-    NSURL *mainURL      = [NSURL fileURLWithPath:[template pathForResource:@"main" ofType:@"js" inDirectory:@"htdocs/js"]];
+    if(!template) {
+        NSLog(@"Error: Template not found. (%@)", _templatePath);
+        return;
+    }
+    
+    jqueryURL       = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
+    functionsURL    = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
+    mainURL         = [NSURL fileURLWithPath:[template pathForResource:@"messages" ofType:@"js" inDirectory:@"htdocs/js"]];
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[jqueryURL path]] ||
+       ![[NSFileManager defaultManager] fileExistsAtPath:[functionsURL path]] ||
+       ![[NSFileManager defaultManager] fileExistsAtPath:[mainURL path]])
+    {
+        NSLog(@"Error: Invalid template. Missing script. (%@)", _templatePath);
+        return;
+    }
 
-    [[webView windowScriptObject] setValue:self forKey:@"Controller"];
+    [[_conversationWebView windowScriptObject] setValue:self forKey:@"Controller"];
         
     [_conversationWebView appendScriptAtURL:jqueryURL];
     [_conversationWebView appendScriptAtURL:functionsURL];
@@ -444,7 +392,7 @@
 - (NSString *)lastMessageDate {
     NSDateFormatter     *dateFormatter;
     
-    dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
@@ -460,23 +408,24 @@
     NSDateFormatter     *dateFormatter;
     NSString            *jsonString;
     NSArray             *sortedMessages;
+    NSCalendar          *calendar;
     
-    dateFormatter   = [[NSDateFormatter alloc] init];
+    calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
-    
+    [dateFormatter setCalendar:calendar];
     
     if(dateString != nil) {
-        date            = [dateFormatter dateFromString:dateString];    
+        date = [dateFormatter dateFromString:dateString];    
     } else {
-        date            = [_conversation date];
+        date = [_conversation date];
     }
     
     if(!date) {
         return nil;
     }
-
     
     predicate       = [NSPredicate predicateWithFormat:@"(conversation == %@) && (date <= %@)", _conversation, date];
     descriptor      = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
@@ -488,8 +437,9 @@
     
     jsonString      = [[SBJsonWriter writer] stringWithObject:sortedMessages];
     
-    
+    [descriptor release];
     [dateFormatter release];
+    [calendar release];
     
     return jsonString;
 }

@@ -44,9 +44,9 @@
 #import "WCTransfers.h"
 #import "WCBoards.h"
 #import "WCBoard.h"
-#import "WCDOMChatMessage.h"
-#import "WCDOMChatEvent.h"
 #import "WCPublicChat.h"
+#import "WCUserTableCellView.h"
+#import "WCEmoticonViewController.h"
 #import "iTunes.h"
 
 
@@ -88,7 +88,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)_setTopic:(WCTopic *)topic;
 
-- (void)_printString:(NSString *)message;
 - (void)_printTimestamp;
 - (void)_printTopic;
 - (void)_printUserJoin:(WCUser *)user;
@@ -114,6 +113,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (void)_applyChatAttributesToAttributedString:(NSMutableAttributedString *)attributedString;
 - (void)_applyHTMLTagsForHighlightsToMutableString:(NSMutableString *)mutableString;
 - (NSColor *)_highlightColorForChat:(NSString *)chat;
+
+- (NSDictionary *)_currentTheme;
+- (void)_loadTheme:(NSDictionary *)theme withTemplate:(WITemplateBundle *)template;
 
 @end
 
@@ -183,34 +185,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
+
 #pragma mark -
-
-- (void)_printString:(NSString *)string {
-    //	NSMutableAttributedString	*attributedString;
-    //	CGFloat						position;
-    //	BOOL						wasEnabled;
-    //
-    //	position	= [[_chatOutputScrollView verticalScroller] floatValue];
-    //	wasEnabled	= [[_chatOutputScrollView verticalScroller] isEnabled];
-    //
-    //	if([[_chatOutputTextView textStorage] length] > 0)
-    //		[[[_chatOutputTextView textStorage] mutableString] appendString:@"\n"];
-    //
-    //	attributedString = [NSMutableAttributedString attributedStringWithString:string];
-    //
-    //	[self _applyChatAttributesToAttributedString:attributedString];
-    //	[[self class] applyURLAttributesToAttributedString:attributedString];
-    //
-    //	if(_showSmileys)
-    //		[[self class] applySmileyAttributesToAttributedString:attributedString];
-    //
-    //	[[_chatOutputTextView textStorage] appendAttributedString:attributedString];
-    //
-    //	if(position == 1.0 || !wasEnabled)
-    //		[_chatOutputTextView performSelectorOnce:@selector(scrollToBottom) withObject:NULL afterDelay:0.05];
-}
-
-
 
 - (void)_printTimestamp {
 	NSDate			*date;
@@ -313,85 +289,74 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)_printChat:(NSString *)chat by:(WCUser *)user {
-	NSBundle			*template;
-	WCDOMChatMessage	*chatMessage;
-	NSString			*nick, *templateString, *formattedDate;
-	NSError				*error;
-	NSMutableString		*mutableOutput;
-	NSInteger			offset, length;
-	BOOL				timestamp;
+    WIChatLogController     *logController;
+	NSBundle                *template;
+	NSString                *nick, *formattedDate, *formattedLogs;
+	NSMutableString         *mutableOutput;
+    NSDictionary            *jsonProxy;
+	BOOL                    timestamp;
 	
 	mutableOutput = [NSMutableString stringWithString:chat];
 	
+    logController   = [[WCApplicationController sharedController] logController];
 	timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
-	offset			= timestamp ? WCChatPrepend - 4 : WCChatPrepend;
-	nick			= [[user nick] stringByAppendingString:[[WCSettings settings] stringForKey:WCChatTabCompleteNicksString]];
-	length			= offset - [nick length];
+	nick			= [user nick];
 	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
-	formattedDate	= [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]];
-	
-	[[self class] applyHTMLTagsForURLToMutableString:mutableOutput];
-	
+	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
+	formattedLogs   = [NSSWF:@"[%@]\t%@: %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], nick, chat];
+    
 	if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
 		[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
-	
-	templateString = [NSString stringWithContentsOfFile:[template pathForResource:@"ChatMessage" ofType:@"html" inDirectory:@"htdocs"]
-                                               encoding:NSUTF8StringEncoding
-                                                  error:&error];
-	
-	chatMessage = [WCDOMChatMessage chatMessageElementForFrame:[_chatOutputWebView mainFrame]
-                                                  withTemplate:templateString];
-	
-	if(timestamp)
-		[chatMessage setTimestamp:formattedDate];
-	
-	[chatMessage setNick:nick];
-	[chatMessage setMessage:mutableOutput];
-	
-	[_chatOutputWebView appendElement:[chatMessage element] toBottomOfElementWithID:@"chat-content" scroll:YES];
+    
+    [[self class] applyHTMLTagsForURLToMutableString:mutableOutput];
+    
+    jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
+                 formattedDate, @"timestamp",
+                 nick,          @"nick",
+                 mutableOutput, @"message", nil];
+    
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+        [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
-		[[[WCApplicationController sharedController] logController] appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@: %@\n", formattedDate, nick, chat]
-                                                                           forConnectionName:[[self connection] name]];
+		[logController appendChatLogAsPlainText:formattedLogs
+                              forConnectionName:[[self connection] name]];
 }
 
 
 
 - (void)_printActionChat:(NSString *)chat by:(WCUser *)user {
-	NSBundle			*template;
-	WCDOMChatMessage	*chatMessageElement;
-	NSString			*templateString, *formattedDate;
-	NSMutableString		*mutableOutput;
-	NSError				*error;
-	BOOL				timestamp;
+    WIChatLogController     *logController;
+	NSBundle                *template;
+	NSString                *formattedDate, *formattedNick, *formattedLogs;
+	NSMutableString         *mutableOutput;
+    NSDictionary            *jsonProxy;
+	BOOL                    timestamp;
 	
+    mutableOutput	= [NSMutableString stringWithString:chat];
+    logController   = [[WCApplicationController sharedController] logController];
 	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
 	timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
-	mutableOutput	= [NSMutableString stringWithString:chat];
-	formattedDate	= [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]];
-	templateString	= [NSString stringWithContentsOfFile:[template pathForResource:@"ChatMessage" ofType:@"html" inDirectory:@"htdocs"]
-											   encoding:NSUTF8StringEncoding
-												  error:&error];
-	
-	[[self class] applyHTMLTagsForURLToMutableString:mutableOutput];
+	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
+    formattedNick   = [NSSWF:@" *** %@", [user nick]];
+	formattedLogs   = [NSSWF:@"[%@]\t*** %@ %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], [user nick], chat];
 	
 	if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
 		[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
 	
-	chatMessageElement = [WCDOMChatMessage chatMessageElementForFrame:[_chatOutputWebView mainFrame]
-                                                         withTemplate:templateString];
-	
-	if(timestamp)
-		[chatMessageElement setTimestamp:formattedDate];
-	
-	[chatMessageElement setNick:[NSSWF:@" *** %@", [user nick]]];
-	[chatMessageElement setMessage:mutableOutput];
-	
-	[_chatOutputWebView appendElement:[chatMessageElement element] toBottomOfElementWithID:@"chat-content" scroll:YES];
+    [[self class] applyHTMLTagsForURLToMutableString:mutableOutput];
+    
+    jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
+                 @"true", @"action",
+                 formattedDate, @"timestamp",
+                 formattedNick, @"nick",
+                 mutableOutput, @"message", nil];
+    
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+        [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
-		[[[WCApplicationController sharedController] logController] appendChatLogAsPlainText:[NSSWF:@"[%@]\t*** %@ %@\n", formattedDate, [user nick], chat]
-                                                                           forConnectionName:[[self connection] name]];
+		[logController appendChatLogAsPlainText:formattedLogs forConnectionName:[[self connection] name]];
 }
 
 
@@ -399,40 +364,30 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)_printHTML:(NSString *)html by:(WCUser *)user {
-	NSBundle			*template;
-	WCDOMChatMessage	*chatMessage;
-	NSString			*nick, *templateString, *formattedDate;
-	NSError				*error;
-	NSInteger			offset, length;
-	BOOL				timestamp;
-    
-	timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
-	offset			= timestamp ? WCChatPrepend - 4 : WCChatPrepend;
-	nick			= [[user nick] stringByAppendingString:[[WCSettings settings] stringForKey:WCChatTabCompleteNicksString]];
-	length			= offset - [nick length];
+    WIChatLogController     *logController;
+	NSBundle                *template;
+	NSString                *nick, *formattedDate, *formattedLogs;
+    NSDictionary            *jsonProxy;
+	BOOL                    timestamp;
+
+    logController   = [[WCApplicationController sharedController] logController];
+    timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
+	nick			= [user nick];
 	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
-	formattedDate	= [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]];
-	
+	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
+	formattedLogs   = [NSSWF:@"[%@]\t*** %@ %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], [user nick], html];
     
-    templateString = [NSString stringWithContentsOfFile:[template pathForResource:@"ChatMessage" ofType:@"html" inDirectory:@"htdocs"]
-                                               encoding:NSUTF8StringEncoding
-                                                  error:&error];
+    jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
+                 formattedDate, @"timestamp",
+                 nick, @"nick",
+                 html, @"message", nil];
     
-    chatMessage = [WCDOMChatMessage chatMessageElementForFrame:[_chatOutputWebView mainFrame]
-                                                  withTemplate:templateString];
-    
-    if(timestamp)
-        [chatMessage setTimestamp:formattedDate];
-    
-    [chatMessage setNick:nick];
-    [chatMessage setMessage:html];
-    
-    [_chatOutputWebView appendElement:[chatMessage element] toBottomOfElementWithID:@"chat-content" scroll:YES];
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+     [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
     
     if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
-        [[[WCApplicationController sharedController] logController] appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@: %@\n", formattedDate, nick, html]
-                                                                           forConnectionName:[[self connection] name]];
-	
+        [logController appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@: %@\n", formattedDate, nick, html]
+                              forConnectionName:[[self connection] name]];
 }
 
 
@@ -874,7 +829,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 		string	= [mutableString substringWithRange:range];
         
 		if(string) {
-			highlightString	= [NSSWF:@"<span style='color:%@;'>%@</span>", [NSSWF:@"#%.6x", [color HTMLValue]], string];
+			highlightString	= [NSSWF:@"<span style='color:%@;'>%@</span>", [NSSWF:@"#%.6lx", (unsigned long)[color HTMLValue]], string];
 			[mutableString replaceOccurrencesOfString:string withString:highlightString];
 		}
 	}
@@ -905,6 +860,26 @@ typedef enum _WCChatFormat					WCChatFormat;
 	}
 	
 	return NULL;
+}
+
+
+#pragma mark -
+
+- (NSDictionary *)_currentTheme {
+    return ([[self connection] theme] ?
+            [[self connection] theme] :
+            [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]]);
+}
+
+- (void)_loadTheme:(NSDictionary *)theme withTemplate:(WITemplateBundle *)template {
+    NSString			*htmlPath;
+
+	htmlPath	= [template htmlPathForType:WITemplateTypeChat];
+    
+	[[_chatOutputWebView preferences] setAutosaves:YES];
+    [[_chatOutputWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:htmlPath]]];
+    
+    [self themeDidChange:theme];
 }
 
 @end
@@ -961,7 +936,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	/* Do this in a custom loop to avoid corrupted strings when using $1 multiple times */
 	do {
-		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [WCChatController URLRegex]]
+		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [NSString URLRegex]]
                                     options:RKLCaseless
                                     capture:1];
 		
@@ -973,7 +948,7 @@ typedef enum _WCChatFormat					WCChatFormat;
     
     /* Do this in a custom loop to avoid corrupted strings when using $1 multiple times */
 	do {
-		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [WCChatController fileURLRegex]]
+		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [NSString fileURLRegex]]
                                     options:RKLCaseless
                                     capture:1];
 		
@@ -986,7 +961,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	/* Do this in a custom loop to avoid corrupted strings when using $1 multiple times */
 	do {
-		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [WCChatController schemelessURLRegex]]
+		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [NSString schemelessURLRegex]]
                                     options:RKLCaseless
                                     capture:1];
 		
@@ -999,7 +974,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	/* Do this in a custom loop to avoid corrupted strings when using $1 multiple times */
 	do {
-		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [WCChatController mailtoURLRegex]]
+		range = [mutableString rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", [NSString mailtoURLRegex]]
                                     options:RKLCaseless
                                     capture:1];
 		
@@ -1014,21 +989,65 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 + (void)applyHTMLTagsForSmileysToMutableString:(NSMutableString *)mutableString {
-	NSEnumerator		*enumerator;
-	NSDictionary		*regexs;
-	NSString			*smiley, *path, *regex;
-	
-	regexs			= [WCChatController smileyRegexs];
-	enumerator		= [regexs keyEnumerator];
-	
-	while((smiley = [enumerator nextObject])) {
-		regex		= [regexs objectForKey:smiley];
-		path		= [[WCApplicationController sharedController] pathForSmiley:smiley];
-		
-		[mutableString replaceOccurrencesOfRegex:[NSSWF:@"(^|\\s)%@(\\s|$)", regex]
-									  withString:[NSSWF:@"$1<img src=\"%@\" alt=\"%@\" />$2", path, smiley]
-										 options:RKLCaseless | RKLMultiline];
-	}
+    __block WIEmoticon          *emoticon;
+    __block NSArray             *emoticons, *textEquivalents;
+    __block NSString            *html;
+    
+    emoticons   = [[WCApplicationController sharedController] enabledEmoticons];
+    
+    [emoticons enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        emoticon            = (WIEmoticon *)obj;
+        textEquivalents     = [emoticon sortedEquivalents];
+        
+        [textEquivalents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *substop) {
+            NSMutableString    *equivalent;
+            NSRange     range;
+            BOOL        match;
+            
+            match       = NO;
+            equivalent  = [NSMutableString stringWithString:obj];
+            
+            [[self class] applyHTMLEscapingToMutableString:equivalent];
+            NSLog(@"equivalent proposed: %@", equivalent);
+            
+            do {
+                range = [mutableString rangeOfString:equivalent options:NSCaseInsensitiveSearch];
+                
+                if(range.location != NSNotFound) {
+                    NSLog(@"equivalent found: %@", equivalent);
+                    
+                    // is exact string
+                    if(range.location == 0 && range.length == mutableString.length) {
+                        match = YES;
+                    }
+                    
+                    // has a space before
+                    if(!match && (mutableString.length >= range.location-1) && ([mutableString characterAtIndex:range.location-1] == ' ')) {
+                        match = YES;
+                    }
+                    
+                    // has a return line before
+                    if(!match && (mutableString.length >= range.location-1) && ([mutableString characterAtIndex:range.location-1] == '\n')) {
+                        match = YES;
+                    }
+                    
+                    // has a space after
+                    if(!match && (range.length < mutableString.length && range.location == 0) && ([mutableString characterAtIndex:range.location+range.length] == ' ')) {
+                        match = YES;
+                    }
+                    
+                    if(match) {
+                        html = [NSSWF:@"<img src=\"%@\" alt=\"%@\" />", [emoticon path], [emoticon name]];
+                        [mutableString replaceCharactersInRange:range withString:html];
+                    }
+                    else {
+                        substop = YES;
+                        return;
+                    }
+                }
+            } while(range.location != NSNotFound);
+        }];
+    }];
 }
 
 
@@ -1039,7 +1058,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[mutableString replaceOccurrencesOfString:@">" withString:@"&#62;"];
 	[mutableString replaceOccurrencesOfString:@"\"" withString:@"&#34;"];
 	[mutableString replaceOccurrencesOfString:@"\'" withString:@"&#39;"];
+    [mutableString replaceOccurrencesOfString:@"\n" withString:@"<br />\n"];
 }
+
 
 
 
@@ -1069,80 +1090,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-+ (NSString *)URLRegex {
-	return @"(?:[a-zA-Z0-9\\-]+)"										/* Scheme */
-    @"://"														/* "://" */
-    @"(?:(?:\\S+?)(?::(?:\\S+?))?@)?"							/* Password and user */
-    @"(?:[a-zA-Z0-9\\-.]+)"										/* Host name */
-    @"(?::(?:\\d+))?"											/* Port */
-    @"(?:(?:/[a-zA-Z0-9\\-._\\?,'+\\&;%#$=~*!():@\\\\]*)+)?";	/* Path */
-}
-
-
-+ (NSString *)fileURLRegex {
-	return @"(?:[a-zA-Z0-9\\-]+)"										/* Scheme */
-    @":///"														/* ":///" */
-    @"?(?:(?:/[a-zA-Z0-9\\-._\\?,'+\\&;%#$=~*!():@\\\\]*)+)?";	/* Path */
-}
-
-
-
-+ (NSString *)schemelessURLRegex {
-	return @"(?:www\\.[a-zA-Z0-9\\-.]+)"								/* Host name */
-    @"(?::(?:\\d+))?"											/* Port */
-    @"(?:(?:/[a-zA-Z0-9\\-._?,'+\\&;%#$=~*!():@\\\\]*)+)?";		/* Path */
-}
-
-
-
-+ (NSString *)mailtoURLRegex {
-	return @"(?:[a-zA-Z0-9%_.+\\-]+)"									/* User */
-    @"@"															/* "@" */
-    @"(?:[a-zA-Z0-9.\\-]+?\\.[a-zA-Z]{2,6})";					/* Host name */
-}
-
-
-+ (NSString *)htmlRegex {
-	return @"<([A-Z][A-Z0-9]*)\b[^>]*>(.*?)</\1>";						/* Any HTML tag */
-}
-
-
-+ (NSDictionary *)smileyRegexs {
-	static NSMutableDictionary	*smileyRegexs;
-	NSEnumerator				*enumerator;
-	NSMutableString				*regex;
-	NSString					*smiley;
-	
-	if(!smileyRegexs) {
-		smileyRegexs	= [[NSMutableDictionary alloc] init];
-		enumerator		= [[[WCApplicationController sharedController] allSmileys] objectEnumerator];
-		
-		while((smiley = [enumerator nextObject])) {
-			regex = [[smiley mutableCopy] autorelease];
-			
-			[regex replaceOccurrencesOfString:@"." withString:@"\\."];
-			[regex replaceOccurrencesOfString:@"*" withString:@"\\*"];
-			[regex replaceOccurrencesOfString:@"+" withString:@"\\+"];
-			[regex replaceOccurrencesOfString:@"^" withString:@"\\^"];
-			[regex replaceOccurrencesOfString:@"$" withString:@"\\$"];
-			[regex replaceOccurrencesOfString:@"(" withString:@"\\("];
-			[regex replaceOccurrencesOfString:@")" withString:@"\\)"];
-			[regex replaceOccurrencesOfString:@"[" withString:@"\\["];
-			[regex replaceOccurrencesOfString:@"]" withString:@"\\]"];
-			[regex replaceOccurrencesOfString:@"-" withString:@"\\-"];
-			
-			[smileyRegexs setObject:regex forKey:smiley];
-			
-			if([smiley containsSubstring:@">"]) {
-				[regex replaceOccurrencesOfString:@">" withString:@"&#62;"];
-				
-				[smileyRegexs setObject:regex forKey:smiley];
-			}
-		}
-	}
-	
-	return smileyRegexs;
-}
 
 
 + (BOOL)isHTMLString:(NSString *)string {
@@ -1165,6 +1112,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	_pings					= [[NSMutableDictionary alloc] init];
 	_highlightPatterns		= [[NSMutableArray alloc] init];
 	_highlightColors		= [[NSMutableArray alloc] init];
+    
+    _jsonWriter             = [[SBJsonWriter alloc] init];
 	
 	[[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -1218,6 +1167,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[_topicDateFormatter release];
     
 	[_pings release];
+    [_jsonWriter release];
     
 	[super dealloc];
 }
@@ -1227,7 +1177,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 #pragma mark -
 
 - (void)awakeFromNib {
-	NSString			*htmlPath;
 	NSDictionary		*theme;
 	WITemplateBundle	*template;
 	
@@ -1255,14 +1204,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	theme		= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
 	template	= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-	htmlPath	= [template htmlPathForType:WITemplateTypeChat];
-    
-	[[_chatOutputWebView preferences] setAutosaves:YES];
-    [[_chatOutputWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:htmlPath]]];
-	
-    //	[_chatOutputWebView setPattern:[NSImage imageNamed:@"WCScrollViewBackground"]];
-    //	[_chatInputScrollView setPattern:[NSImage imageNamed:@"WCScrollViewBackground"]];
-    //	[_userListScrollView setPattern:[NSImage imageNamed:@"WCScrollViewBackground"]];
+
+    NSLog(@"_loadTheme:withTemplate");
+    [self _loadTheme:theme withTemplate:template];
     
     if([[WCSettings settings] boolForKey:WCHideUserList])
         [self hideUserList:self];
@@ -1328,37 +1272,58 @@ typedef enum _WCChatFormat					WCChatFormat;
 		reload = YES;
 	}
     
-	[_userListTableView setUsesAlternatingRowBackgroundColors:[[theme objectForKey:WCThemesUserListAlternateRows] boolValue]];
-	
+    if([[theme objectForKey:WCThemesUserListAlternateRows] boolValue]) {
+        [_userListTableView setUsesAlternatingRowBackgroundColors:YES];
+        [_userListTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleRegular];
+    } else {
+        [_userListTableView setUsesAlternatingRowBackgroundColors:NO];
+        [_userListTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleSourceList];
+    }
+    	
 	switch([[theme objectForKey:WCThemesUserListIconSize] integerValue]) {
 		case WCThemesUserListIconSizeLarge:
 			[_userListTableView setRowHeight:35.0];
-			
-			[_iconTableColumn setWidth:[_iconTableColumn maxWidth]];
-			[[_nickTableColumn dataCell] setControlSize:NSRegularControlSize];
 			break;
             
 		case WCThemesUserListIconSizeSmall:
 			[_userListTableView setRowHeight:17.0];
-            
-			[_iconTableColumn setWidth:[_iconTableColumn minWidth]];
-			[[_nickTableColumn dataCell] setControlSize:NSSmallControlSize];
 			break;
 	}
 	
 	[_userListTableView sizeLastColumnToFit];
 	[_userListTableView setNeedsDisplay:YES];
+    [_userListTableView reloadData];
 	
 	// HTML/ CSS template reload
 	templateBundle			= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
 	
-	[templateBundle setCSSValue:[font fontName] toAttribute:WITemplateAttributesFontName ofType:WITemplateTypeChat];
-	[templateBundle setCSSValue:[NSSWF:@"%.0fpx", [font pointSize]] toAttribute:WITemplateAttributesFontSize ofType:WITemplateTypeChat];
-	[templateBundle setCSSValue:[NSSWF:@"#%.6x", [textColor HTMLValue]] toAttribute:WITemplateAttributesFontColor ofType:WITemplateTypeChat];
-	[templateBundle setCSSValue:[NSSWF:@"#%.6x", [backgroundColor HTMLValue]] toAttribute:WITemplateAttributesBackgroundColor ofType:WITemplateTypeChat];
-	[templateBundle setCSSValue:[NSSWF:@"#%.6x", [timestampColor HTMLValue]] toAttribute:WITemplateAttributesTimestampColor ofType:WITemplateTypeChat];
-	[templateBundle setCSSValue:[NSSWF:@"#%.6x", [eventColor HTMLValue]] toAttribute:WITemplateAttributesEventColor ofType:WITemplateTypeChat];
-	[templateBundle setCSSValue:[NSSWF:@"#%.6x", [urlColor HTMLValue]] toAttribute:WITemplateAttributesURLTextColor ofType:WITemplateTypeChat];
+	[templateBundle setCSSValue:[font fontName]
+                    toAttribute:WITemplateAttributesFontName
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"%.0fpx", [font pointSize]]
+                    toAttribute:WITemplateAttributesFontSize
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[textColor HTMLValue]]
+                    toAttribute:WITemplateAttributesFontColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[backgroundColor HTMLValue]]
+                    toAttribute:WITemplateAttributesBackgroundColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[timestampColor HTMLValue]]
+                    toAttribute:WITemplateAttributesTimestampColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[eventColor HTMLValue]]
+                    toAttribute:WITemplateAttributesEventColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[urlColor HTMLValue]]
+                    toAttribute:WITemplateAttributesURLTextColor
+                         ofType:WITemplateTypeChat];
 	
 	[templateBundle saveChangesForType:WITemplateTypeChat];
 	
@@ -1394,7 +1359,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	NSTimeInterval		interval;
 	NSUInteger			transaction;
 	
-	[message getUInt32:&transaction forName:@"wired.transaction"];
+	[message getUInt32:(WIP7UInt32 *)&transaction forName:@"wired.transaction"];
 	
 	number = [_pings objectForKey:[NSNumber numberWithUnsignedInt:transaction]];
 	
@@ -1737,11 +1702,13 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)wiredChatUserStatus:(WIP7Message *)message {
+    NSIndexSet      *indexSet;
 	NSString		*nick, *status;
 	WCUser			*user;
 	WIP7UInt32		cid, uid;
 	WIP7Enum		color;
 	WIP7Bool		idle;
+    NSInteger       index;
 	BOOL			nickChanged = NO;
 	
 	[message getUInt32:&cid forName:@"wired.chat.id"];
@@ -1787,7 +1754,13 @@ typedef enum _WCChatFormat					WCChatFormat;
 	if([message getEnum:&color forName:@"wired.account.color"])
 		[user setColor:color];
 	
-	[_userListTableView setNeedsDisplay:YES];
+    index = [_shownUsers indexOfObject:user];
+    
+    if(nickChanged && index != -1) {
+        indexSet = [NSIndexSet indexSetWithIndex:index];
+        [_userListTableView reloadDataForRowIndexes:indexSet
+                                      columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    }
 	
 	if(nickChanged)
 		[[self connection] postNotificationName:WCChatUserNickDidChangeNotification object:user];
@@ -1796,6 +1769,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)wiredChatUserIcon:(WIP7Message *)message {
+    NSIndexSet      *indexSet;
 	NSImage			*image;
 	WCUser			*user;
 	WIP7UInt32		cid, uid;
@@ -1816,70 +1790,14 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[user setIcon:image];
 	[image release];
 	
+    indexSet = [NSIndexSet indexSetWithIndex:[_shownUsers indexOfObject:user]];
+    
+	[_userListTableView reloadDataForRowIndexes:indexSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
 	[_userListTableView setNeedsDisplay:YES];
 }
 
 
 
-- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)offset {
-	if(splitView == _userListSplitView)
-		return 300.0;
-	
-	else if(splitView == _chatSplitView)
-		return proposedMin + 50.0;
-	
-	return proposedMin;
-}
-
-- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)offset {
-	if(splitView == _userListSplitView)
-		return proposedMax - 176.0;
-	
-	else if(splitView == _chatSplitView)
-		return proposedMax - 31.0;
-    
-	return proposedMax;
-}
-
-
-
-- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
-    if(splitView == _userListSplitView) {
-        if(view == [[splitView subviews] objectAtIndex:0])
-            return YES;
-        
-    } else if(splitView == _chatSplitView) {
-        if(view == [[splitView subviews] objectAtIndex:0])
-            return YES;
-    }
-    return NO;
-}
-
-
-
-- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview {
-    if(splitView == _userListSplitView)
-        if(subview == [[splitView subviews] objectAtIndex:1])
-            return YES;
-    
-    return NO;
-}
-
-- (BOOL)splitView:(NSSplitView *)splitView shouldHideDividerAtIndex:(NSInteger)dividerIndex {
-    if(splitView == _userListSplitView)
-        return YES;
-    else if(splitView == _chatSplitView)
-        return NO;
-	
-    return NO;
-}
-
-- (NSRect)splitView:(NSSplitView *)splitView additionalEffectiveRectOfDividerAtIndex:(NSInteger)dividerIndex {
-    if(splitView == _userListSplitView)
-        return [_splitResizeView convertRect:[_splitResizeView bounds] toView:splitView];
-    
-    return NSZeroRect;
-}
 
 
 
@@ -2278,11 +2196,11 @@ typedef enum _WCChatFormat					WCChatFormat;
 #pragma mark -
 
 - (void)printEvent:(NSString *)message {
-	NSBundle			*template;
-	WCDOMChatEvent		*chatEvent;
-	NSString			*output, *templateString, *formattedDate;
-	NSMutableString		*mutableOutput;
-	NSError				*error;
+    WIChatLogController     *logController;
+    NSBundle                *template;
+	NSString                *output, *formattedDate;
+	NSMutableString         *mutableOutput;
+    NSDictionary            *jsonProxy;
 	
 	output			= [NSSWF:NSLS(@"<<< %@ >>>", @"Chat event (message)"), message];
 	mutableOutput	= [NSMutableString stringWithString:output];
@@ -2291,24 +2209,17 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
 		[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
-	
-	templateString	= [NSString stringWithContentsOfFile:[template pathForResource:@"ChatEvent" ofType:@"html" inDirectory:@"htdocs"]
-											   encoding:NSUTF8StringEncoding
-												  error:&error];
-	
-	chatEvent		= [WCDOMChatEvent chatEventElementForFrame:[_chatOutputWebView mainFrame]
-                                             withTemplate:templateString];
-	
-	[chatEvent setTimestamp:formattedDate];
-	[chatEvent setMessage:mutableOutput];
-	
-	[_chatOutputWebView appendElement:[chatEvent element] toBottomOfElementWithID:@"chat-content" scroll:YES];
-	
-	[[self connection] postNotificationName:WCChatEventDidAppearNotification object:[self connection]];
+
+    jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
+                 formattedDate, @"timestamp",
+                 mutableOutput, @"message", nil];
+    
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+     [NSSWF:@"printEvent(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
-		[[[WCApplicationController sharedController] logController] appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@\n", formattedDate, output]
-                                                                           forConnectionName:[[self connection] name]];
+		[logController appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@\n", formattedDate, output]
+                              forConnectionName:[[self connection] name]];
 }
 
 
@@ -2551,19 +2462,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 }
 
 
-- (IBAction)insertSmiley:(id)sender {
-	NSFileWrapper		*wrapper;
-	NSTextAttachment	*attachment;
-	NSAttributedString	*attributedString;
-	
-	wrapper				= [[NSFileWrapper alloc] initWithPath:[sender representedObject]];
-	attachment			= [[WITextAttachment alloc] initWithFileWrapper:wrapper string:[sender toolTip]];
-	attributedString	= [NSAttributedString attributedStringWithAttachment:attachment];
-	
-	[[[NSApp keyWindow] firstResponder] tryToPerform:@selector(insertText:) with:attributedString];
-	
-	[attachment release];
-	[wrapper release];
+- (IBAction)showEmoticons:(id)sender {
+    [[WCEmoticonViewController emoticonController] popoverWithSender:sender
+                                                            textView:_chatInputTextView];
 }
 
 
@@ -2574,36 +2475,54 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-#pragma mark -
 
-- (void)menuWillOpen:(NSMenu *)menu {
-	if(menu == _chatSmileysMenu) {
-        
-		[[NSApp keyWindow] makeFirstResponder:_chatInputTextView];
-		[menu removeAllItems];
-		
-		NSMenuItem *item = [NSMenuItem itemWithTitle:@""];
-		[item setImage:[NSImage imageNamed:@"Smileys"]];
-		[menu addItem:item];
-		
-		for(NSMenuItem *item in [[[WCApplicationController sharedController] insertSmileyMenu] itemArray]) {
-			NSMenuItem *newItem = [item copy];
-			[menu addItem:newItem];
-		}
-	}
-}
+
 
 
 
 #pragma mark -
 
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
+    WITemplateBundle    *template;
+    NSURL               *jqueryURL, *functionsURL, *mainURL;
+    NSDictionary		*theme;
+
+	theme		= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
+	template	= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+        
+    if(!template) {
+        NSLog(@"Error: Template not found. (%@)", _chatTemplate);
+        return;
+    }
     
+    jqueryURL       = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
+    functionsURL    = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
+    mainURL         = [NSURL fileURLWithPath:[template pathForResource:@"chat" ofType:@"js" inDirectory:@"htdocs/js"]];
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[jqueryURL path]] ||
+       ![[NSFileManager defaultManager] fileExistsAtPath:[functionsURL path]] ||
+       ![[NSFileManager defaultManager] fileExistsAtPath:[mainURL path]])
+    {
+        NSLog(@"Error: Invalid template. Missing script. (%@)", _chatTemplate);
+        return;
+    }
+    
+    [[_chatOutputWebView windowScriptObject] setValue:self forKey:@"Controller"];
+    
+    [_chatOutputWebView appendScriptAtURL:jqueryURL];
+    [_chatOutputWebView appendScriptAtURL:functionsURL];
+    [_chatOutputWebView appendScriptAtURL:mainURL];
+    
+    [_chatOutputWebView scrollToBottom];
 }
 
 
-- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
-    return nil;
+- (NSArray *)webView:(WebView *)webView contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
+#ifdef WCConfigurationRelease
+    return NULL;
+#else
+    return defaultMenuItems;
+#endif
 }
 
 
@@ -2692,6 +2611,48 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 
 
 
+- (NSView *)tableView:(NSTableView *)tableView
+   viewForTableColumn:(NSTableColumn *)tableColumn
+                  row:(NSInteger)row {
+    
+    NSDictionary            *theme;
+    WCUserTableCellView     *cellView;
+    WCUser                  *user;
+    
+    theme       = [self _currentTheme];
+    user        = [self userAtIndex:row];
+    
+    switch([[theme objectForKey:WCThemesUserListIconSize] integerValue]) {
+		case WCThemesUserListIconSizeLarge: {
+            if([[user status] length] > 0)
+                cellView = [tableView makeViewWithIdentifier:@"WCLargeUserWithStatusTableCellView" owner:self];
+            else
+                cellView = [tableView makeViewWithIdentifier:@"WCLargeUserTableCellView" owner:self];
+        } break;
+            
+		case WCThemesUserListIconSizeSmall: {
+            if([[user status] length] > 0)
+                cellView = [tableView makeViewWithIdentifier:@"WCSmallUserWithStatusTableCellView" owner:self];
+            else
+                cellView = [tableView makeViewWithIdentifier:@"WCSmallUserTableCellView" owner:self];
+        } break;
+	}
+    
+    cellView.textField.stringValue = [user nick];
+    
+    if(row != [tableView selectedRow])
+        cellView.textField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
+    else
+        cellView.textField.textColor = [NSColor whiteColor];
+    
+    cellView.statusTextField.stringValue = [user status];
+    cellView.imageView.image = [user iconWithIdleTint:YES];
+    
+    return cellView;
+    
+}
+
+
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)column row:(NSInteger)row {
 	WCUser		*user;
 	
@@ -2751,7 +2712,7 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 	user = [self userAtIndex:[indexes firstIndex]];
 	
 	[pasteboard declareTypes:[NSArray arrayWithObjects:WCUserPboardType, NSStringPboardType, NULL] owner:NULL];
-	[pasteboard setString:[NSSWF:@"%u", [user userID]] forType:WCUserPboardType];
+	[pasteboard setString:[NSSWF:@"%lu", (unsigned long)[user userID]] forType:WCUserPboardType];
 	[pasteboard setString:[user nick] forType:NSStringPboardType];
 	
 	return YES;
@@ -2769,6 +2730,9 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 	[pasteboard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, NULL] owner:NULL];
 	[pasteboard setString:[user nick] forType:NSStringPboardType];
 }
+
+
+
 
 
 #pragma mark -
@@ -2804,6 +2768,75 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
     
     return success;
 }
+
+
+
+
+
+#pragma mark -
+
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)offset {
+	if(splitView == _userListSplitView)
+		return 300.0;
+	
+	else if(splitView == _chatSplitView)
+		return proposedMin + 50.0;
+	
+	return proposedMin;
+}
+
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)offset {
+	if(splitView == _userListSplitView)
+		return proposedMax - 176.0;
+	
+	else if(splitView == _chatSplitView)
+		return proposedMax - 31.0;
+    
+	return proposedMax;
+}
+
+
+
+- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
+    if(splitView == _userListSplitView) {
+        if(view == [[splitView subviews] objectAtIndex:0])
+            return YES;
+        
+    } else if(splitView == _chatSplitView) {
+        if(view == [[splitView subviews] objectAtIndex:0])
+            return YES;
+    }
+    return NO;
+}
+
+
+
+- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview {
+    if(splitView == _userListSplitView)
+        if(subview == [[splitView subviews] objectAtIndex:1])
+            return YES;
+    
+    return NO;
+}
+
+- (BOOL)splitView:(NSSplitView *)splitView shouldHideDividerAtIndex:(NSInteger)dividerIndex {
+    if(splitView == _userListSplitView)
+        return YES;
+    else if(splitView == _chatSplitView)
+        return NO;
+	
+    return NO;
+}
+
+- (NSRect)splitView:(NSSplitView *)splitView additionalEffectiveRectOfDividerAtIndex:(NSInteger)dividerIndex {
+    if(splitView == _userListSplitView)
+        return [_splitResizeView convertRect:[_splitResizeView bounds] toView:splitView];
+    
+    return NSZeroRect;
+}
+
+
+
 
 
 @end

@@ -1173,7 +1173,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 
 - (void)_reloadFilesAtDirectory:(WCFile *)file selectFiles:(BOOL)selectFiles {
 	NSMutableArray			*directory;
-	WIP7Message				*message;
+    WIP7Message				*message;
 	WCServerConnection		*connection;
 	
 	if([file type] == WCFileDropBox && ![file isReadable])
@@ -1195,9 +1195,9 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	if(!selectFiles)
 		[_selectFiles removeAllObjects];
 	
-	message = [WIP7Message messageWithName:@"wired.file.list_directory" spec:WCP7Spec];
-	[message setString:[file path] forName:@"wired.file.path"];
-	[connection sendMessage:message fromObserver:self selector:@selector(wiredFileListPathReply:)];
+    message = [WIP7Message messageWithName:@"wired.file.list_directory" spec:WCP7Spec];
+    [message setString:[file path] forName:@"wired.file.path"];
+    [connection sendMessage:message fromObserver:self selector:@selector(wiredFileListPathReply:)];
 }
 
 

@@ -8,14 +8,6 @@
 
 @protocol WCWebDataSource <NSObject>
 
-///* Utils */
-//- (NSUInteger)numberOfObjects;
-//
-///* JSON Representations */
-//- (NSString *)JSONObjects;
-//- (NSString *)JSONObjectsFromOffset:(NSUInteger)offset withLimit:(NSUInteger)limit;
-//- (NSString *)JSONObjectAtIndex:(NSUInteger)index;
-
 - (BOOL)loadScriptWithName:(NSString *)name;
 
 - (NSString *)lastMessageDate;

@@ -26,8 +26,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Sparkle/SUStandardVersionComparator.h>
-#import <Sparkle/SUHost.h>
+//#import <Sparkle/SUStandardVersionComparator.h>
+//#import <Sparkle/SUHost.h>
 
 #import "WCAboutWindow.h"
 #import "WCAccountsController.h"
@@ -90,6 +90,8 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 	return 0;
 }
 
+static NSArray *_systemSounds;
+
 
 @interface WCApplicationController(Private)
 
@@ -103,6 +105,9 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 
 - (void)_connectWithBookmark:(NSDictionary *)bookmark;
 - (BOOL)_openConnectionWithURL:(WIURL *)url;
+
+- (void)_userNotificationWithNotification:(NSNotification *)notification;
+- (void)_handleNotificationWithUserInfo:(NSDictionary *)userInfo;
 
 @end
 
@@ -198,6 +203,90 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 }
 
 
+- (NSArray *)_emoticonPacksPaths {
+    NSArray             *bundleTypes, *bundleLocations, *fileNames;
+    NSMutableArray      *bundlePaths;
+    NSError             *error;
+    
+    bundlePaths     = [NSMutableArray array];
+    bundleTypes     = [NSArray arrayWithObjects:@"WiredEmoticons", @"AdiumEmoticonset", nil];
+    bundleLocations = [NSArray arrayWithObjects:
+                       [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Emoticons"],
+                       [[[self applicationFilesDirectory] path] stringByAppendingPathComponent:@"Emoticons"],
+                       nil];
+    
+    for(NSString *path in bundleLocations) {
+        fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
+        
+        for(NSString *fileName in fileNames) {
+            if([bundleTypes containsObject:[fileName pathExtension]])
+                [bundlePaths addObject:[path stringByAppendingPathComponent:fileName]];
+        }
+    }
+    
+    return bundlePaths;
+}
+
+
+- (void)_reloadEmoticons {
+    NSArray             *bundlePaths, *enabledKeys;
+    NSDictionary        *disabledEmoticons;
+    NSArray             *disabledNames;
+    
+    [_availableEmoticonPacks removeAllObjects];
+    [_enabledEmoticonPacks removeAllObjects];
+    [_emoticonEquivalents removeAllObjects];
+    [_emoticons removeAllObjects];
+    
+    bundlePaths = [self _emoticonPacksPaths];
+        
+    for(NSString *path in bundlePaths) {
+        [_availableEmoticonPacks addObject:[WIEmoticonPack emoticonPackFromPath:path]];
+    }
+    
+    enabledKeys = [[WCSettings settings] objectForKey:WCEnabledEmoticonPacks];
+    
+    for(WIEmoticonPack *pack in _availableEmoticonPacks) {
+        if([enabledKeys containsObject:[pack packKey]])
+            [_enabledEmoticonPacks addObject:pack];
+    }
+    
+    disabledEmoticons   = [[WCSettings settings] objectForKey:WCDisabledEmoticons];
+    
+    for(WIEmoticonPack *pack in _availableEmoticonPacks) {
+        disabledNames = [disabledEmoticons objectForKey:[pack packKey]];
+        
+        if([enabledKeys containsObject:[pack packKey]]) {
+            [pack setEnabled:YES];
+            [pack setDisabledEmoticons:disabledNames];
+        } else {
+            [pack setEnabled:NO];
+        }
+    }
+    
+    for(WIEmoticonPack *pack in _enabledEmoticonPacks) {        
+        for(WIEmoticon *emoticon in pack.enabledEmoticons) {
+            [_emoticons addObject:emoticon];
+            [_emoticonEquivalents addObjectsFromArray:emoticon.textEquivalents];
+            
+            
+//            [_emoticonEquivalents addObjectsFromArray:
+//             [emoticon.textEquivalents sortedArrayUsingFunction:_WCCompareSmileyLength
+//                                                        context:NULL]];
+        }
+    }
+    
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"length" ascending:YES] autorelease];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    
+    [_emoticonEquivalents sortUsingDescriptors:sortDescriptors];
+}
+
+
+
+
+
 
 #pragma mark -
 
@@ -244,15 +333,15 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 		[item setRepresentedObject:bookmark];
 		
 		if(i <= 10) {
-			[item setKeyEquivalent:[NSSWF:@"%u", (i == 10) ? 0 : i]];
+			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 10) ? 0 : i]];
 			[item setKeyEquivalentModifierMask:NSCommandKeyMask];
 		}
 		else if(i <= 20) {
-			[item setKeyEquivalent:[NSSWF:@"%u", (i == 20) ? 0 : i - 10]];
+			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 20) ? 0 : i - 10]];
 			[item setKeyEquivalentModifierMask:NSCommandKeyMask | NSAlternateKeyMask];
 		}
 		else if(i <= 30) {
-			[item setKeyEquivalent:[NSSWF:@"%u", (i == 30) ? 0 : i - 20]];
+			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 30) ? 0 : i - 20]];
 			[item setKeyEquivalentModifierMask:NSCommandKeyMask | NSShiftKeyMask];
 		}
 
@@ -394,6 +483,172 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 }
 
 
+
+#pragma mark -
+
+- (void)_userNotificationWithNotification:(NSNotification *)notification {
+    NSUserNotificationCenter    *center;
+    NSUserNotification          *note;
+    NSDictionary                *event, *userInfo;
+    WCServerConnection          *connection;
+    id                          info1, info2;
+    
+    center      = [NSUserNotificationCenter defaultUserNotificationCenter];
+    [center setDelegate:self];
+    
+    note        = [[NSUserNotification alloc] init];
+    event		= [notification object];
+	connection	= [[notification userInfo] objectForKey:WCServerConnectionEventConnectionKey];
+	info1		= [[notification userInfo] objectForKey:WCServerConnectionEventInfo1Key];
+	info2		= [[notification userInfo] objectForKey:WCServerConnectionEventInfo2Key];
+    
+    if(![event boolForKey:WCEventsNotificationCenter])
+        return;
+    
+    userInfo    = [NSDictionary dictionaryWithObjectsAndKeys: event, @"event",
+                                            [connection identifier], @"identifier", nil];
+    [note setUserInfo:userInfo];
+    
+    switch([event intForKey:WCEventsEvent]) {
+		case WCEventsServerConnected:
+            [note setTitle:NSLS(@"Connected", @"Growl event connected title")];
+            [note setInformativeText:[NSSWF:NSLS(@"Connected to %@", @"Growl event connected description (server)"), [connection name]]];
+			break;
+            
+		case WCEventsServerDisconnected:
+            [note setTitle:NSLS(@"Disconnected", @"Growl event disconnected title")];
+            [note setInformativeText:[NSSWF:NSLS(@"Disconnected from %@", @"Growl event disconnected description (server)"), [connection name]]];
+            
+			break;
+            
+		case WCEventsError:
+            [note setTitle:[info1 localizedDescription]];
+            [note setInformativeText:[info1 localizedFailureReason]];
+			break;
+            
+		case WCEventsUserJoined:
+            [note setTitle:NSLS(@"User joined", @"Growl event user joined title")];
+            [note setInformativeText:[info1 nick]];
+			break;
+            
+		case WCEventsUserChangedNick:
+            [note setTitle:NSLS(@"User changed nick", @"Growl event user changed nick title")];
+            [note setInformativeText:[NSSWF:NSLS(@"%@ is now known as %@", @"Growl event user changed nick description (oldnick, newnick)"), [info1 nick], info2]];
+			break;
+            
+		case WCEventsUserChangedStatus:
+            [note setTitle:NSLS(@"User changed status", @"Growl event user changed status title")];
+            [note setInformativeText:[NSSWF:NSLS(@"%@ changed status to %@", @"Growl event user changed status description (nick, status)"), [info1 nick], info2]];
+			break;
+            
+		case WCEventsUserLeft:
+            [note setTitle:NSLS(@"User left", @"Growl event user left title")];
+            [note setInformativeText:[info1 nick]];
+			break;
+            
+		case WCEventsChatReceived:
+            [note setTitle:NSLS(@"Chat received", @"Growl event chat received title")];
+            [note setInformativeText:[NSSWF:@"%@: %@", [info1 nick], info2]];
+			break;
+            
+		case WCEventsHighlightedChatReceived:
+            [note setTitle:NSLS(@"Chat received", @"Growl event chat received title")];
+            [note setInformativeText:[NSSWF:@"%@: %@", [info1 nick], info2]];            
+			break;
+            
+		case WCEventsChatInvitationReceived:
+            [note setTitle:NSLS(@"Private chat invitation received", @"Growl event private chat invitation received title")];
+            [note setInformativeText:[info1 nick]];
+			break;
+            
+		case WCEventsMessageReceived:
+            [note setTitle:NSLS(@"Message received", @"Growl event message received title")];
+            [note setInformativeText:[NSSWF:@"%@: %@", [info1 nick], [info1 valueForKey:@"messageString"]]];
+			break;
+            
+		case WCEventsBoardPostReceived:
+            [note setTitle:NSLS(@"Board post received", @"Growl event news posted title")];
+            [note setInformativeText:[NSSWF:@"%@: %@", info1, info2]];
+			break;
+            
+		case WCEventsBroadcastReceived:
+            [note setTitle:NSLS(@"Broadcast received", @"Growl event broadcast received title")];
+            [note setInformativeText:[NSSWF:@"%@: %@", [info1 nick], [info1 message]]];
+			break;
+            
+		case WCEventsTransferStarted:
+            [note setTitle:NSLS(@"Transfer started", @"Growl event transfer started title")];
+            [note setInformativeText:[info1 name]];
+			break;
+            
+		case WCEventsTransferFinished:
+            [note setTitle:NSLS(@"Transfer finished", @"Growl event transfer started title")];
+            [note setInformativeText:[info1 name]];
+			break;
+	}
+
+    [center deliverNotification:note];
+    [note release];
+}
+
+
+- (void)_handleNotificationWithUserInfo:(NSDictionary *)userInfo {
+    NSDictionary            *event;
+	NSEnumerator			*enumerator;
+	WCPublicChatController	*chatController;
+	
+	[NSApp activateIgnoringOtherApps:YES];
+	
+	enumerator  = [[[WCPublicChat publicChat] chatControllers] objectEnumerator];
+	
+	while((chatController = [enumerator nextObject])) {
+		if([[userInfo valueForKey:@"identifier"] isEqualToString:[[chatController connection] identifier]]) {
+            event = [userInfo valueForKey:@"event"];
+            
+            if([event intForKey:WCEventsEvent] == WCEventsServerConnected ||
+               [event intForKey:WCEventsEvent] == WCEventsServerDisconnected ||
+               [event intForKey:WCEventsEvent] == WCEventsError ||
+               [event intForKey:WCEventsEvent] == WCEventsUserJoined ||
+               [event intForKey:WCEventsEvent] == WCEventsUserChangedNick ||
+               [event intForKey:WCEventsEvent] == WCEventsUserChangedStatus ||
+               [event intForKey:WCEventsEvent] == WCEventsUserLeft ||
+               [event intForKey:WCEventsEvent] == WCEventsChatReceived ||
+               [event intForKey:WCEventsEvent] == WCEventsHighlightedChatReceived ||
+               [event intForKey:WCEventsEvent] == WCEventsChatInvitationReceived) {
+                
+                [[WCPublicChat publicChat] selectChatController:chatController];
+                [[WCPublicChat publicChat] showWindow:self];
+            }
+            else if([event intForKey:WCEventsEvent] == WCEventsMessageReceived) {
+                WCUser *user = [userInfo objectForKey:WCServerConnectionEventInfo1Key];
+                
+                [[WCMessages messages] showWindow:self];
+                
+                if(user)
+                    [[WCMessages messages] showPrivateMessageToUser:user];
+                
+            } else if ([event intForKey:WCEventsEvent] == WCEventsBroadcastReceived) {
+                [[WCMessages messages] showWindow:self];
+                [[WCMessages messages] showBroadcastForConnection:[chatController connection]];
+            }
+            else if([event intForKey:WCEventsEvent] == WCEventsBoardPostReceived) {
+                [[WCBoards boards] showWindow:self];
+                
+            }
+            else if([event intForKey:WCEventsEvent] == WCEventsTransferStarted ||
+                    [event intForKey:WCEventsEvent] == WCEventsTransferFinished) {
+                [[WCTransfers transfers] showWindow:self];
+            }
+            else {
+                [[WCPublicChat publicChat] selectChatController:chatController];
+                [[WCPublicChat publicChat] showWindow:self];
+            }
+		}
+	}
+}
+
+
+
 @end
 
 
@@ -430,14 +685,42 @@ static WCApplicationController		*sharedController;
 	}
 	
 	while([names containsObject:copiedName]) {
-		if([copiedName replaceOccurrencesOfRegex:@"(\\d+)$" withString:[NSSWF:@"%u", number]] == 0)
-			[copiedName appendFormat:[NSSWF:@" %u", number]];
+		if([copiedName replaceOccurrencesOfRegex:@"(\\d+)$" withString:[NSSWF:@"%lu", (unsigned long)number]] == 0)
+			[copiedName appendFormat:@" %lu", (unsigned long)number];
 		
 		number++;
 	}
 	
 	return copiedName;
 }
+
+
++ (NSArray *)systemSounds
+{
+    if ( !_systemSounds )
+    {
+        NSMutableArray *returnArr = [[NSMutableArray alloc] init];
+        NSEnumerator *librarySources = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask, YES) objectEnumerator];
+        NSString *sourcePath;
+        
+        while ( sourcePath = [librarySources nextObject] )
+        {
+            NSEnumerator *soundSource = [[NSFileManager defaultManager] enumeratorAtPath: [sourcePath stringByAppendingPathComponent: @"Sounds"]];
+            NSString *soundFile;
+            while ( soundFile = [soundSource nextObject] )
+                if ( [NSSound soundNamed: [soundFile stringByDeletingPathExtension]] )
+                    [returnArr addObject: [soundFile stringByDeletingPathExtension]];
+        }
+        
+        _systemSounds = [[NSArray alloc] initWithArray: [returnArr sortedArrayUsingSelector:@selector(compare:)]];
+        [returnArr release];
+    }
+    return _systemSounds;
+}
+
+
+
+
 
 
 
@@ -448,11 +731,21 @@ static WCApplicationController		*sharedController;
 	NSDate		*date;
 	
 	sharedController = self = [super init];
+
+    _availableEmoticonPacks     = [[NSMutableArray alloc] init];
+    _enabledEmoticonPacks       = [[NSMutableArray alloc] init];
+    _emoticonEquivalents        = [[NSMutableArray alloc] init];
+    _emoticons                  = [[NSMutableArray alloc] init];
 	
 #ifndef WCConfigurationRelease
 	[[WIExceptionHandler sharedExceptionHandler] enable];
 	[[WIExceptionHandler sharedExceptionHandler] setDelegate:self];
 #endif
+    
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(emoticonsDidChange:)
+               name:WCEmoticonsDidChangeNotification];
 	
 	[[NSNotificationCenter defaultCenter]
 		addObserver:self
@@ -517,6 +810,11 @@ static WCApplicationController		*sharedController;
 	[_sortedSmileys release];
 	
 	[_logController release];
+    
+    [_availableEmoticonPacks release];
+    [_enabledEmoticonPacks release];
+    [_emoticonEquivalents release];
+    [_emoticons release];
 
 	[super dealloc];
 }
@@ -579,6 +877,7 @@ static WCApplicationController		*sharedController;
 
 	[self _update];
 	[self _updateBookmarksMenu];
+    [self _reloadEmoticons];
 	[self _reloadChatLogsControllerWithPath:[self chatLogsPath]];
 
     if([[WCSettings settings] boolForKey:WCShowChatWindowAtStartup])
@@ -719,6 +1018,12 @@ static WCApplicationController		*sharedController;
 }
 
 
+- (void)emoticonsDidChange:(NSNotification *)notification {
+	[self _reloadEmoticons];
+}
+
+
+
 
 - (void)bookmarksDidChange:(NSNotification *)notification {
 	[self _updateBookmarksMenu];
@@ -753,7 +1058,7 @@ static WCApplicationController		*sharedController;
 
 - (void)serverConnectionTriggeredEvent:(NSNotification *)notification {
         
-	NSDictionary			*event;
+	NSDictionary			*event, *userInfo;
 	NSString				*sound;
 	WCServerConnection		*connection;
 	id						info1, info2;
@@ -762,6 +1067,9 @@ static WCApplicationController		*sharedController;
 	connection	= [[notification userInfo] objectForKey:WCServerConnectionEventConnectionKey];
 	info1		= [[notification userInfo] objectForKey:WCServerConnectionEventInfo1Key];
 	info2		= [[notification userInfo] objectForKey:WCServerConnectionEventInfo2Key];
+    
+    userInfo    = [NSDictionary dictionaryWithObjectsAndKeys:event,  @"event",
+                                            [connection identifier], @"identifier", nil];
 	
 	if([event boolForKey:WCEventsPlaySound]) {
 		sound = [event objectForKey:WCEventsSound];
@@ -772,6 +1080,10 @@ static WCApplicationController		*sharedController;
 	
 	if([event boolForKey:WCEventsBounceInDock])
 		[NSApp requestUserAttention:NSInformationalRequest];
+    
+    if ([NSUserNotification class] && [NSUserNotificationCenter class]) {
+        [self _userNotificationWithNotification:notification];
+    }
 	
 	switch([event intForKey:WCEventsEvent]) {
 		case WCEventsServerConnected:
@@ -782,7 +1094,7 @@ static WCApplicationController		*sharedController;
 										   iconData:NULL
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 
 		case WCEventsServerDisconnected:
@@ -793,7 +1105,7 @@ static WCApplicationController		*sharedController;
 										   iconData:NULL
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsError:
@@ -803,7 +1115,7 @@ static WCApplicationController		*sharedController;
 										   iconData:NULL
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsUserJoined:
@@ -813,7 +1125,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsUserChangedNick:
@@ -824,7 +1136,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsUserChangedStatus:
@@ -835,7 +1147,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsUserLeft:
@@ -845,7 +1157,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsChatReceived:
@@ -855,7 +1167,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 			
 		
@@ -867,7 +1179,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsChatInvitationReceived:
@@ -877,7 +1189,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 			
 		case WCEventsMessageReceived:
@@ -887,7 +1199,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[(WCUser *) [info1 user] icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsBoardPostReceived:
@@ -897,7 +1209,7 @@ static WCApplicationController		*sharedController;
 										   iconData:NULL
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsBroadcastReceived:
@@ -907,7 +1219,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[(WCUser *) [info1 user] icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsTransferStarted:
@@ -917,7 +1229,7 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 		
 		case WCEventsTransferFinished:
@@ -927,12 +1239,14 @@ static WCApplicationController		*sharedController;
 										   iconData:[[info1 icon] TIFFRepresentation]
 										   priority:0.0
 										   isSticky:NO
-									   clickContext:[connection identifier]];
+									   clickContext:userInfo];
 			break;
 	}
 }
 
 
+
+#pragma mark -
 
 - (void)handleAppleEvent:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
 	NSDictionary	*bookmark;
@@ -1004,6 +1318,10 @@ static WCApplicationController		*sharedController;
 
 
 
+
+
+#pragma mark -
+
 - (NSDictionary *)registrationDictionaryForGrowl {
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 		[NSArray arrayWithObjects:
@@ -1039,77 +1357,33 @@ static WCApplicationController		*sharedController;
 
 
 - (void)growlNotificationWasClicked:(id)clickContext {
-	NSEnumerator			*enumerator;
-	WCPublicChatController	*chatController;
-	
-	[NSApp activateIgnoringOtherApps:YES];
-	
-	enumerator = [[[WCPublicChat publicChat] chatControllers] objectEnumerator];
-	
-	while((chatController = [enumerator nextObject])) {
-		if([clickContext isEqualToString:[[chatController connection] identifier]]) {
-			[[WCPublicChat publicChat] selectChatController:chatController];
-			[[WCPublicChat publicChat] showWindow:self];
-		}
-	}
+    [self _handleNotificationWithUserInfo:clickContext];
 }
 
+
+
+
+
+#pragma mark -
+
+- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
+    [self _handleNotificationWithUserInfo:[notification userInfo]];
+}
+
+
+
+
+
+
+#pragma mark -
 
 
 - (BOOL)updaterShouldPromptForPermissionToCheckForUpdates:(SUUpdater *)updater {
 	return NO;
 }
 
-//- (SUAppcastItem *)bestValidUpdateInAppcast:(SUAppcast *)appcast
-//                                 forUpdater:(SUUpdater *)bundle {
-//    
-//    NSString        *appVersion, *appBuild;
-//    SUAppcastItem   *latest = nil;
-//    BOOL            new = NO;
-//    
-//    appVersion  = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-//    appBuild    = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-//    
-//    NSLog(@"appVersion: %@", appVersion);
-//    NSLog(@"appBuild: %@", appBuild);
-//    
-//    if([[appcast items] count] > 0) {
-//        latest  = [[appcast items] objectAtIndex:0];
-//        
-//        NSLog(@"[host displayVersion]: %@", appVersion);
-//        NSLog(@"[latest displayVersionString]: %@", [latest displayVersionString]);
-//        
-//        new = ([[SUStandardVersionComparator defaultComparator] compareVersion:appVersion
-//                                                                    toVersion:[latest displayVersionString]] == NSOrderedAscending);
-//        
-//        NSLog(@"isNew : %@", new ? @"YES" : @"NO");
-//        
-//        if(new == YES) {
-//            NSLog(@"latest : %@", latest);
-//            return latest;
-//            
-//        } else {
-//            NSLog(@"[host version]: %@", appBuild);
-//            NSLog(@"[latest versionString]: %@", [latest versionString]);
-//            
-//            new = [[SUStandardVersionComparator defaultComparator] compareVersion:appBuild
-//                                                                        toVersion:[latest versionString]] == NSOrderedAscending;
-//            NSLog(@"isNew : %@", new ? @"YES" : @"NO");
-//            if(new) {
-//                return latest;
-//            }
-//        }
-//    }
-//    return nil;
-//}
-//
-//- (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update {
-//    NSLog(@"didFindValidUpdate");
-//}
-//
-//- (void)updaterDidNotFindUpdate:(SUUpdater *)update {
-//    NSLog(@"updaterDidNotFindUpdate");
-//}
+
+
 
 
 #pragma mark -
@@ -1142,6 +1416,8 @@ static WCApplicationController		*sharedController;
 
 
 
+
+
 #pragma mark -
 
 - (void)dailyTimer:(NSTimer *)timer {
@@ -1150,23 +1426,8 @@ static WCApplicationController		*sharedController;
 
 
 
+
 #pragma mark -
-
-- (NSArray *)allSmileys {
-	if(!_sortedSmileys)
-		[self _loadSmileys];
-	
-	return _sortedSmileys;
-}
-
-
-
-- (NSString *)pathForSmiley:(NSString *)smiley {
-	if(!_smileys)
-		[self _loadSmileys];
-	
-	return [_smileys objectForKey:[smiley lowercaseString]];
-}
 
 
 - (NSMenu *)insertSmileyMenu {
@@ -1176,6 +1437,28 @@ static WCApplicationController		*sharedController;
 	return _insertSmileyMenu;
 }
 
+
+
+#pragma mark -
+
+- (NSArray *)availableEmoticonPacks {
+    return _availableEmoticonPacks;
+}
+
+
+- (NSArray *)enabledEmoticonPacks {
+    return _enabledEmoticonPacks;
+}
+
+
+- (NSArray *)computedEmoticonPacks {
+    return _availableEmoticonPacks;
+}
+
+
+- (NSArray *)enabledEmoticons {
+    return _emoticons;
+}
 
 
 

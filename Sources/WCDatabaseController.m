@@ -12,7 +12,6 @@
 #import "WCKeychain.h"
 
 
-
 @interface WCDatabaseController (Private)
 
 - (NSString *)_checkSecretKey;
@@ -195,9 +194,39 @@ static WCDatabaseController *_controller = nil;
         return _persistentStoreCoordinator;
     }
     
-    NSURL *storeURL = [[[WCApplicationController sharedController] applicationFilesDirectory] URLByAppendingPathComponent:@"WiredClient.sqlite"];
+//    // get the coordinator
+//    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+//    
+//    // add store
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    NSURL *applicationSupportURL = [[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
+//    [fileManager createDirectoryAtURL:applicationSupportURL withIntermediateDirectories:NO attributes:nil error:nil];
+//    NSURL *databaseURL = [applicationSupportURL URLByAppendingPathComponent:@"WiredClient.sqlite"];
+//    NSDictionary *options = @{
+//                              EncryptedStorePassphraseKey : [self secretKey],
+//                              NSMigratePersistentStoresAutomaticallyOption : @YES,
+//                              NSInferMappingModelAutomaticallyOption : @YES
+//                              };
+//    NSError *error = nil;
+//    NSPersistentStore *store = [_persistentStoreCoordinator
+//                                addPersistentStoreWithType:EncryptedStoreType
+//                                configuration:nil
+//                                URL:databaseURL
+//                                options:options
+//                                error:&error];
+//    
+//    NSAssert(store, @"Unable to add persistent store\n%@", error);
+
+    NSURL *storeURL;
     
+#ifdef WCConfigurationRelease
+    storeURL = [[[WCApplicationController sharedController] applicationFilesDirectory] URLByAppendingPathComponent:@"WiredClient.sqlite"];
+#else
+    storeURL = [[[WCApplicationController sharedController] applicationFilesDirectory] URLByAppendingPathComponent:@"WiredClientDebug.sqlite"];
+#endif
+        
     NSError *error = nil;
+    
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
     {
@@ -205,7 +234,6 @@ static WCDatabaseController *_controller = nil;
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
     }
 
-    
     return _persistentStoreCoordinator;
 }
 

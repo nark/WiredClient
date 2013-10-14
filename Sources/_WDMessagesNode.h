@@ -5,6 +5,7 @@
 
 
 extern const struct WDMessagesNodeAttributes {
+	 NSString *active;
 	 NSString *date;
 	 NSString *direction;
 	 NSString *identifier;
@@ -25,6 +26,7 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @class NSObject;
 
 @interface WDMessagesNodeID : NSManagedObjectID {}
@@ -35,6 +37,18 @@ extern const struct WDMessagesNodeFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (WDMessagesNodeID*)objectID;
+
+
+
+
+@property (nonatomic, retain) NSNumber* active;
+
+
+@property BOOL activeValue;
+- (BOOL)activeValue;
+- (void)setActiveValue:(BOOL)value_;
+
+//- (BOOL)validateActive:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -104,6 +118,15 @@ extern const struct WDMessagesNodeFetchedProperties {
 @end
 
 @interface _WDMessagesNode (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveActive;
+- (void)setPrimitiveActive:(NSNumber*)value;
+
+- (BOOL)primitiveActiveValue;
+- (void)setPrimitiveActiveValue:(BOOL)value_;
+
+
 
 
 - (NSDate*)primitiveDate;

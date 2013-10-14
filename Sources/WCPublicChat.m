@@ -94,7 +94,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 
 
-
+ 
 
 @implementation WCPublicChat(Private)
 
@@ -116,7 +116,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	[item setImage:[[NSImage imageNamed:@"Messages"] badgedImageWithInt:[[WCMessages messages] numberOfUnreadMessages]]];
     
 	item = [[[self window] toolbar] itemWithIdentifier:@"Boards"];
-	
+    
 	[item setImage:[[NSImage imageNamed:@"Boards"] badgedImageWithInt:[[WCBoards boards] numberOfUnreadThreads]]];
     
     item = [[[self window] toolbar] itemWithIdentifier:@"Transfers"];

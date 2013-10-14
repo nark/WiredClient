@@ -45,6 +45,10 @@ extern NSString * const						WCConfirmDisconnect;
 extern NSString * const						WCAutoReconnect;
 extern NSString * const						WCOrderFrontWhenDisconnected;
 
+
+extern NSString * const						WCEnabledEmoticonPacks;
+extern NSString * const						WCDisabledEmoticons;
+
 extern NSString * const						WCTheme;
 
 extern NSString * const						WCThemes;
@@ -163,6 +167,7 @@ extern NSString * const						WCEventsSound;
 extern NSString * const						WCEventsBounceInDock;
 extern NSString * const						WCEventsPostInChat;
 extern NSString * const						WCEventsShowDialog;
+extern NSString * const						WCEventsNotificationCenter;
 
 extern NSString * const						WCEventsVolume;
 

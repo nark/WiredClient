@@ -8,6 +8,14 @@
 
 #import <WiredFoundation/WiredFoundation.h>
 
-@interface WCEmoticonPreferences : WIObject
+@interface WCEmoticonPreferences : WIWindowController <NSTableViewDelegate, NSTableViewDataSource> {
+    IBOutlet NSTableView            *_emoticonPacksTableView;
+    IBOutlet NSTableView            *_emoticonsTableView;
+}
+
+- (IBAction)open:(id)sender;
+- (IBAction)close:(id)sender;
+
+- (IBAction)enablePack:(id)sender;
 
 @end
