@@ -30,19 +30,20 @@ a {
 
 .chat-message span.nick {
 	display: inline-block;
-	min-width: 80px;
+	max-width: 60px;
+	width: 60px;
 	text-align: right;
 	
 	white-space: nowrap;
-	text-overflow: ellipsis;
+	text-overflow:ellipsis;
 	overflow: hidden;
 }
 
 
 .chat-message span.message {
 	word-wrap:break-word;
+	line-height: 1.5em;
 }
-
 
 
 .chat-event span.message {
@@ -50,10 +51,10 @@ a {
 }
 
 
-
 span.timestamp {
 	display: inline;
 	width: 35px;
+	margin-right: 5px;
 	color: <? timestampcolor ?>;
 	
 	white-space: nowrap;

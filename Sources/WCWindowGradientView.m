@@ -37,6 +37,24 @@
 }
 
 
+- (void)_drawTopLine {
+    NSRect          rect, borderLineRect;
+    NSBezierPath    *borderLinePath;
+    NSColor         *borderColor;
+    BOOL            keyWindow;
+    
+    keyWindow       = [[self window] isKeyWindow];
+    rect            = [self bounds];
+    
+    borderLineRect  = NSMakeRect(0, 0, NSWidth(rect), 1.0);
+    borderLinePath  = [NSBezierPath bezierPathWithRect:borderLineRect];
+    borderColor     = (keyWindow ? [NSColor darkGrayColor] : [NSColor disabledControlTextColor]);
+    
+    [borderColor setFill];
+    [borderLinePath fill];
+}
+
+
 
 - (void)drawRect:(NSRect)dirtyRect {
 	NSGradient		*fade;
@@ -73,6 +91,8 @@
 
 	[fade drawInRect:bottomBarRect angle:-90.0];
 	[fade release];
+    
+    [self _drawTopLine];
 }
 
 

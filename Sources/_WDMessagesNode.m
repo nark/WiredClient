@@ -42,20 +42,23 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 	return (WDMessagesNodeID*)[super objectID];
 }
 
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
++ (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
 	if ([key isEqualToString:@"activeValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"active"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
 	}
 	if ([key isEqualToString:@"directionValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"direction"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
 	}
 	if ([key isEqualToString:@"unreadValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"unread"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
 	}
 
 	return keyPaths;

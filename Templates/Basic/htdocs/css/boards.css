@@ -5,28 +5,61 @@ body {
 	color: <? textcolor ?>;
 }
 
-div.post {
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #bfbfbf;
+
+div#thread-content {
+	padding: 10px;
 }
 
+div.post {
+	margin-bottom: 10px;
+	padding-bottom: 30px;
+	border-bottom: 1px solid #bfbfbf;
+}
 
 img.postunread { margin-left: 6px; }
 
 div.postheader { font: normal 12px "Helvetica", sans-serif; }
 
+div.posticon { float: left; }
+
+div.postattributes {
+
+}
+
+span.postfrom {
+	min-width: 80px;
+	text-align: left;
+	display: inline-block;
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+div.postheadertitles {
+	display: inline-block;
+	font-size: 0.8em;
+}
+
+div.postheadervalues {
+	display: inline-block;
+	font-size: 0.8em;
+}
+
 span.postheadertitle {
+	display: block;
 	font-weight: bold;
 	color: gray;
 	text-align: right;
 	vertical-align: top;
-	float: left;
-	width: 6em;
 	padding-right: 0.5em;
+	margin-left: 10px;
 }
 
-div.posticon { float: right; }
+span.postheadervalue {
+	display: block;
+	text-align: left;
+	vertical-align: top;
+	padding-right: 0.5em;
+}
 
 div.postbody {
 	margin: 10px 0 10px 0;
@@ -37,10 +70,13 @@ div.postbody {
 
 div.postbuttons {
 	text-align: right;
+	float: right;
+	margin-top: -25px;
 }
 
 input.postbutton {
 	font: normal 10px "Helvetica", sans-serif;
+	margin-right: 5px;
 }
 
 blockquote {

@@ -26,9 +26,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-@class WCBoardThread, WCBoardPost;
+@class WCBoardThread, WCBoardPost, WCBoard;
 
-@interface WCBoardThreadController : WIObject {
+@interface WCBoardThreadController : NSViewController {
 	IBOutlet WebView					*_threadWebView;
 	
 	WCBoard								*_board;

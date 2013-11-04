@@ -33,7 +33,8 @@
 
 - (void)sendEvent:(NSEvent *)event {
 	static NSMutableCharacterSet	*characterSet;
-	NSTextView						*textView;
+	NSTextField						*textField;
+    NSString                        *string;
 	BOOL							handled = NO;
 	
 	if([event type] == NSKeyDown) {
@@ -45,11 +46,29 @@
 			[characterSet removeCharactersInString:@"\t"];
 		}
 		
-		textView = [(WCPublicChat *)[self delegate] insertionTextView];
-		
-		if(textView && [self firstResponder] != textView) {
-			if([[event characters] isComposedOfCharactersFromSet:characterSet])
-				[self makeFirstResponder:textView];
+		textField = [(WCPublicChat *)[self delegate] insertionTextField];
+        NSText* fieldEditor = [self fieldEditor:YES forObject:textField];
+        
+		if(fieldEditor && [self firstResponder] != textField) {
+			if([[event characters] isComposedOfCharactersFromSet:characterSet]) {
+                // make the field first responder without losing selection
+                NSRange oldRange = fieldEditor.selectedRange;
+                    
+                [fieldEditor setSelectable:NO];
+                [self makeFirstResponder:textField];
+                [fieldEditor setSelectable:YES];
+                
+                if(oldRange.location != NSNotFound)
+                    [fieldEditor setSelectedRange:oldRange];
+                
+                if(fieldEditor.selectedRange.location != NSNotFound) {
+                    [textField setStringValue:[[textField stringValue] stringByReplacingCharactersInRange:fieldEditor.selectedRange withString:@""]];
+                    [fieldEditor setSelectedRange:NSMakeRange(fieldEditor.selectedRange.location,0)];
+                } else {
+                    [fieldEditor setSelectedRange:NSMakeRange([[fieldEditor string] length],0)];
+                }
+                [fieldEditor setNeedsDisplay:YES];
+            }
 		}
 	}
 	
@@ -60,13 +79,15 @@
 
 
 - (void)paste:(id)sender {
-	NSTextView		*textView;
+	NSTextField		*textField;
 
-	textView = [(WCPublicChat *)[self delegate] insertionTextView];
+	textField = [(WCPublicChat *)[self delegate] insertionTextField];
 	
-	if(textView) {
-		[self makeFirstResponder:textView];
-		[textView paste:sender];
+	if(textField) {
+        NSText* fieldEditor = [self fieldEditor:YES forObject:textField];
+        
+		[self makeFirstResponder:textField];
+		[fieldEditor paste:sender];
 	}
 }
 

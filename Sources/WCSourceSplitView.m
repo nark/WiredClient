@@ -31,7 +31,12 @@
 @implementation WCSourceSplitView
 
 - (CGFloat)dividerThickness {
-	return 1.0;
+    if(self.isVertical)
+        return 1.0;
+    else
+        return 0;
+    
+    return 1.0;
 }
 
 

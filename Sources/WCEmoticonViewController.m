@@ -22,8 +22,11 @@ static WCEmoticonViewController *_emoticonController;
 
 @implementation WCEmoticonViewController
 
+@synthesize delegate = _delegate;
+@dynamic    emoticons;
 
-@dynamic emoticons;
+
+
 
 #pragma mark -
 
@@ -57,17 +60,11 @@ static WCEmoticonViewController *_emoticonController;
 {
     [_textField release];
     [_popover release];
+    [_delegate release];
     
     [super dealloc];
 }
 
-
-
-#pragma mark -
-
-- (void)loadView {    
-    [super loadView];
-}
 
 
 
@@ -87,6 +84,8 @@ static WCEmoticonViewController *_emoticonController;
     if(_textView) [_textView release], _textView = nil;
     _textView = [view retain];
     
+    if(_textField) [_textField release], _textField = nil;
+    
     if(!_popover) {
         _popover = [[NSPopover alloc] init];
         
@@ -94,7 +93,7 @@ static WCEmoticonViewController *_emoticonController;
         _popover.contentSize = [[[WCEmoticonViewController emoticonController] view] frame].size;
         _popover.behavior = NSPopoverBehaviorTransient;
         _popover.delegate = self;
-        
+
         [_popover showRelativeToRect:[sender bounds]
                                        ofView:sender
                                 preferredEdge:NSMaxYEdge];
@@ -109,6 +108,8 @@ static WCEmoticonViewController *_emoticonController;
 - (void)popoverWithSender:(id)sender textField:(NSTextField *)view {
     if(_textField) [_textField release], _textField = nil;
     _textField = [view retain];
+    
+    if(_textView) [_textView release], _textView = nil;
     
     if(!_popover) {
         _popover = [[NSPopover alloc] init];
@@ -132,12 +133,23 @@ static WCEmoticonViewController *_emoticonController;
 
 #pragma mark -
 
+- (void)popoverWillShow:(NSNotification *)notification {
+    if([_popoverWindow isVisible]) {
+        [_popoverWindow close];
+    }
+}
+
 - (void)popoverDidClose:(NSNotification *)notification {
     if([notification object] == _popover) {
         [_popover release];
         _popover = nil;
     }
 }
+
+- (NSWindow *)detachableWindowForPopover:(NSPopover *)popover {
+    return _popoverWindow;
+}
+
 
 
 
@@ -154,20 +166,20 @@ static WCEmoticonViewController *_emoticonController;
     NSMutableString             *equivalent;
     
     emoticon            = (WIEmoticon *)[sender representedObject];
-	
 	wrapper				= [[NSFileWrapper alloc] initWithPath:[emoticon path]];
     equivalent          = [NSMutableString stringWithString:[emoticon equivalent]];
-    
-    [WCChatController applyHTMLEscapingToMutableString:equivalent];
-    
 	attachment			= [[WITextAttachment alloc] initWithFileWrapper:wrapper
                                                           string:equivalent];
     
 	attributedString	= [NSAttributedString attributedStringWithAttachment:attachment];
-	
+	   
     if(_textView) {
         [_textView tryToPerform:@selector(insertText:) with:attributedString];
         [_textView tryToPerform:@selector(insertText:) with:@" "];
+        
+        [self.delegate emoticonViewController:self
+                            didInsertEmoticon:emoticon
+                                    inControl:(NSControl *)_textView];
     }
     if(_textField) {
         oldString = [[NSMutableAttributedString alloc] initWithAttributedString:[_textField attributedStringValue]];
@@ -177,6 +189,10 @@ static WCEmoticonViewController *_emoticonController;
         
         [_textField setAttributedStringValue:oldString];
         [oldString release];
+        
+        [self.delegate emoticonViewController:self
+                            didInsertEmoticon:emoticon
+                                    inControl:(NSControl *)_textField];
     }
     
 	[attachment release];
@@ -189,7 +205,7 @@ static WCEmoticonViewController *_emoticonController;
 #pragma mark -
 
 - (NSArray *)emoticons {
-    return [[WCApplicationController sharedController] enabledEmoticons];
+    return [[[WCPreferences preferences] emoticonPreferences] enabledEmoticons];
 }
 
 @end

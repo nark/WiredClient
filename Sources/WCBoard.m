@@ -789,4 +789,8 @@
 
 @implementation WCSearchBoard
 
++ (id)searchBoard {
+	return [[[self alloc] _initWithPath:@"/SearchBoard" name:@"<root>" connection:NULL] autorelease];
+}
+
 @end

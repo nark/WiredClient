@@ -33,7 +33,9 @@ extern const struct WDMessageFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSNumber* draft;
+
 
 
 @property BOOL draftValue;
@@ -45,7 +47,9 @@ extern const struct WDMessageFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSString* message;
+
 
 
 //- (BOOL)validateMessage:(id*)value_ error:(NSError**)error_;
@@ -54,7 +58,7 @@ extern const struct WDMessageFetchedProperties {
 
 
 
-@property (nonatomic, retain) WDConversation* conversation;
+@property (nonatomic, retain) WDConversation *conversation;
 
 //- (BOOL)validateConversation:(id*)value_ error:(NSError**)error_;
 

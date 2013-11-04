@@ -47,7 +47,6 @@
 #import "WCPublicChat.h"
 #import "WCPublicChatController.h"
 #import "WCServerConnection.h"
-#import "WCServers.h"
 #import "WCStats.h"
 #import "WCTransfers.h"
 #import "WCChatHistory.h"
@@ -75,7 +74,7 @@ NSString * const WCDateDidChangeNotification						= @"WCDateDidChangeNotificatio
 NSString * const WCExceptionHandlerReceivedBacktraceNotification	= @"WCExceptionHandlerReceivedBacktraceNotification";
 NSString * const WCExceptionHandlerReceivedExceptionNotification	= @"WCExceptionHandlerReceivedExceptionNotification";
 
-
+/*
 static NSInteger _WCCompareSmileyLength(id, id, void *);
 
 static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
@@ -89,13 +88,12 @@ static NSInteger _WCCompareSmileyLength(id object1, id object2, void *context) {
 	
 	return 0;
 }
+*/
 
 static NSArray *_systemSounds;
 
 
 @interface WCApplicationController(Private)
-
-- (void)_loadSmileys;
 
 - (void)_update;
 - (void)_updateApplicationIcon;
@@ -107,186 +105,13 @@ static NSArray *_systemSounds;
 - (BOOL)_openConnectionWithURL:(WIURL *)url;
 
 - (void)_userNotificationWithNotification:(NSNotification *)notification;
-- (void)_handleNotificationWithUserInfo:(NSDictionary *)userInfo;
+- (void)_handleGrowlNotificationWithUserInfo:(NSDictionary *)userInfo;
+- (void)_handleUserNotification:(NSUserNotification *)userNotification;
 
 @end
 
 
 @implementation WCApplicationController(Private)
-
-- (void)_loadSmileys {
-	NSBundle			*bundle;
-	NSMenuItem			*item;
-	NSMutableArray		*array;
-	NSDictionary		*dictionary, *list, *map, *names;
-	NSEnumerator		*enumerator;
-	NSString			*path, *file, *name, *smiley, *title;
-	
-	bundle			= [self bundle];
-	path			= [bundle pathForResource:@"Smileys" ofType:@"plist"];
-	dictionary		= [NSDictionary dictionaryWithContentsOfFile:path];
-	list			= [dictionary objectForKey:@"List"];
-	map				= [dictionary objectForKey:@"Map"];
-	enumerator		= [map keyEnumerator];
-	_smileys		= [[NSMutableDictionary alloc] initWithCapacity:[map count]];
-
-	while((smiley = [enumerator nextObject])) {
-		file = [map objectForKey:smiley];
-		path = [bundle pathForResource:file ofType:NULL];
-		
-		if(path)
-			[_smileys setObject:path forKey:[smiley lowercaseString]];
-		else
-			NSLog(@"*** %@: Could not find image \"%@\"", [self class], file);
-	}
-	
-	array = [NSMutableArray arrayWithObjects:
-		@"Smile.tiff",
-		@"Wink.tiff",
-		@"Frown.tiff",
-		@"Slant.tiff",
-		@"Gasp.tiff",
-		@"Laugh.tiff",
-		@"Kiss.tiff",
-		@"Yuck.tiff",
-		@"Embarrassed.tiff",
-		@"Footinmouth.tiff",
-		@"Cool.tiff",
-		@"Angry.tiff",
-		@"Innocent.tiff",
-		@"Cry.tiff",
-		@"Sealed.tiff",
-		@"Moneymouth.tiff",
-		NULL];
-	
-	names = [NSDictionary dictionaryWithObjectsAndKeys:
-		NSLS(@"Smile", @"Smiley"),					@"Smile.tiff",
-		NSLS(@"Wink", @"Smiley"),					@"Wink.tiff",
-		NSLS(@"Frown", @"Smiley"),					@"Frown.tiff",
-		NSLS(@"Undecided", @"Smiley"),				@"Slant.tiff",
-		NSLS(@"Gasp", @"Smiley"),					@"Gasp.tiff",
-		NSLS(@"Laugh", @"Smiley"),					@"Laugh.tiff",
-		NSLS(@"Kiss", @"Smiley"),					@"Kiss.tiff",
-		NSLS(@"Sticking out tongue", @"Smiley"),	@"Yuck.tiff",
-		NSLS(@"Embarrassed", @"Smiley"),			@"Embarrassed.tiff",
-		NSLS(@"Foot in mouth", @"Smiley"),			@"Footinmouth.tiff",
-		NSLS(@"Cool", @"Smiley"),					@"Cool.tiff",
-		NSLS(@"Angry", @"Smiley"),					@"Angry.tiff",
-		NSLS(@"Innocent", @"Smiley"),				@"Innocent.tiff",
-		NSLS(@"Cry", @"Smiley"),					@"Cry.tiff",
-		NSLS(@"Lips are sealed", @"Smiley"),		@"Sealed.tiff",
-		NSLS(@"Money-mouth", @"Smiley"),			@"Moneymouth.tiff",
-		NULL];
-
-	[array addObjectsFromArray:[[[[NSSet setWithArray:[list allKeys]] setByMinusingSet:[NSSet setWithArray:array]] allObjects] 
-		sortedArrayUsingSelector:@selector(compare:)]];
-	
-	enumerator = [array objectEnumerator];
-	
-	while((name = [enumerator nextObject])) {
-		smiley	= [list objectForKey:name];
-		path	= [_smileys objectForKey:[smiley lowercaseString]];
-		title	= [names objectForKey:name];
-		
-		if(!title)
-			title = [name stringByDeletingPathExtension];
-		
-		item = [NSMenuItem itemWithTitle:title];
-		[item setRepresentedObject:path];
-		[item setImage:[[[NSImage alloc] initWithContentsOfFile:path] autorelease]];
-		[item setAction:@selector(insertSmiley:)];
-		[item setToolTip:smiley];
-		[_insertSmileyMenu addItem:item];
-	}
-	
-	_sortedSmileys = [[[_smileys allKeys] sortedArrayUsingFunction:_WCCompareSmileyLength context:NULL] retain];
-}
-
-
-- (NSArray *)_emoticonPacksPaths {
-    NSArray             *bundleTypes, *bundleLocations, *fileNames;
-    NSMutableArray      *bundlePaths;
-    NSError             *error;
-    
-    bundlePaths     = [NSMutableArray array];
-    bundleTypes     = [NSArray arrayWithObjects:@"WiredEmoticons", @"AdiumEmoticonset", nil];
-    bundleLocations = [NSArray arrayWithObjects:
-                       [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Emoticons"],
-                       [[[self applicationFilesDirectory] path] stringByAppendingPathComponent:@"Emoticons"],
-                       nil];
-    
-    for(NSString *path in bundleLocations) {
-        fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
-        
-        for(NSString *fileName in fileNames) {
-            if([bundleTypes containsObject:[fileName pathExtension]])
-                [bundlePaths addObject:[path stringByAppendingPathComponent:fileName]];
-        }
-    }
-    
-    return bundlePaths;
-}
-
-
-- (void)_reloadEmoticons {
-    NSArray             *bundlePaths, *enabledKeys;
-    NSDictionary        *disabledEmoticons;
-    NSArray             *disabledNames;
-    
-    [_availableEmoticonPacks removeAllObjects];
-    [_enabledEmoticonPacks removeAllObjects];
-    [_emoticonEquivalents removeAllObjects];
-    [_emoticons removeAllObjects];
-    
-    bundlePaths = [self _emoticonPacksPaths];
-        
-    for(NSString *path in bundlePaths) {
-        [_availableEmoticonPacks addObject:[WIEmoticonPack emoticonPackFromPath:path]];
-    }
-    
-    enabledKeys = [[WCSettings settings] objectForKey:WCEnabledEmoticonPacks];
-    
-    for(WIEmoticonPack *pack in _availableEmoticonPacks) {
-        if([enabledKeys containsObject:[pack packKey]])
-            [_enabledEmoticonPacks addObject:pack];
-    }
-    
-    disabledEmoticons   = [[WCSettings settings] objectForKey:WCDisabledEmoticons];
-    
-    for(WIEmoticonPack *pack in _availableEmoticonPacks) {
-        disabledNames = [disabledEmoticons objectForKey:[pack packKey]];
-        
-        if([enabledKeys containsObject:[pack packKey]]) {
-            [pack setEnabled:YES];
-            [pack setDisabledEmoticons:disabledNames];
-        } else {
-            [pack setEnabled:NO];
-        }
-    }
-    
-    for(WIEmoticonPack *pack in _enabledEmoticonPacks) {        
-        for(WIEmoticon *emoticon in pack.enabledEmoticons) {
-            [_emoticons addObject:emoticon];
-            [_emoticonEquivalents addObjectsFromArray:emoticon.textEquivalents];
-            
-            
-//            [_emoticonEquivalents addObjectsFromArray:
-//             [emoticon.textEquivalents sortedArrayUsingFunction:_WCCompareSmileyLength
-//                                                        context:NULL]];
-        }
-    }
-    
-    NSSortDescriptor *sortDescriptor;
-    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"length" ascending:YES] autorelease];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    
-    [_emoticonEquivalents sortUsingDescriptors:sortDescriptors];
-}
-
-
-
-
-
 
 #pragma mark -
 
@@ -303,7 +128,7 @@ static NSArray *_systemSounds;
 
 - (void)_updateApplicationIcon {
     if(_unread > 0)
-        [[NSApp dockTile] setBadgeLabel:[NSSWF:@"%ld", _unread]];
+        [[NSApp dockTile] setBadgeLabel:[NSSWF:@"%ld", (unsigned long)_unread]];
     else
         [[NSApp dockTile] setBadgeLabel:nil];
 }
@@ -496,7 +321,6 @@ static NSArray *_systemSounds;
     center      = [NSUserNotificationCenter defaultUserNotificationCenter];
     [center setDelegate:self];
     
-    note        = [[NSUserNotification alloc] init];
     event		= [notification object];
 	connection	= [[notification userInfo] objectForKey:WCServerConnectionEventConnectionKey];
 	info1		= [[notification userInfo] objectForKey:WCServerConnectionEventInfo1Key];
@@ -505,8 +329,18 @@ static NSArray *_systemSounds;
     if(![event boolForKey:WCEventsNotificationCenter])
         return;
     
-    userInfo    = [NSDictionary dictionaryWithObjectsAndKeys: event, @"event",
-                                            [connection identifier], @"identifier", nil];
+    note        = [[NSUserNotification alloc] init];
+    
+    if([info2 isKindOfClass:[WCUser class]]) {
+        userInfo = @{ @"event":             event,
+                      @"identifier":        [connection identifier],
+                      @"userID":            [NSNumber numberWithInteger:[(WCUser *)info2 userID]] };
+    }
+    else {
+        userInfo = @{ @"event":             event,
+                      @"identifier":        [connection identifier] };
+    }
+    
     [note setUserInfo:userInfo];
     
     switch([event intForKey:WCEventsEvent]) {
@@ -518,7 +352,6 @@ static NSArray *_systemSounds;
 		case WCEventsServerDisconnected:
             [note setTitle:NSLS(@"Disconnected", @"Growl event disconnected title")];
             [note setInformativeText:[NSSWF:NSLS(@"Disconnected from %@", @"Growl event disconnected description (server)"), [connection name]]];
-            
 			break;
             
 		case WCEventsError:
@@ -547,6 +380,8 @@ static NSArray *_systemSounds;
 			break;
             
 		case WCEventsChatReceived:
+            note.hasReplyButton = YES;
+            
             [note setTitle:NSLS(@"Chat received", @"Growl event chat received title")];
             [note setInformativeText:[NSSWF:@"%@: %@", [info1 nick], info2]];
 			break;
@@ -562,6 +397,7 @@ static NSArray *_systemSounds;
 			break;
             
 		case WCEventsMessageReceived:
+            note.hasReplyButton = YES;
             [note setTitle:NSLS(@"Message received", @"Growl event message received title")];
             [note setInformativeText:[NSSWF:@"%@: %@", [info1 nick], [info1 valueForKey:@"messageString"]]];
 			break;
@@ -592,7 +428,7 @@ static NSArray *_systemSounds;
 }
 
 
-- (void)_handleNotificationWithUserInfo:(NSDictionary *)userInfo {
+- (void)_handleGrowlNotificationWithUserInfo:(NSDictionary *)userInfo {
     NSDictionary            *event;
 	NSEnumerator			*enumerator;
 	WCPublicChatController	*chatController;
@@ -648,6 +484,37 @@ static NSArray *_systemSounds;
 }
 
 
+- (void)_handleUserNotification:(NSUserNotification *)userNotification {
+    NSDictionary            *userInfo, *event;
+	NSEnumerator			*enumerator;
+    NSString                *string;
+    NSInteger               userID;
+	WCPublicChatController	*chatController;
+    WCUser                  *user;
+	
+	[NSApp activateIgnoringOtherApps:NO];
+	
+    userInfo    = [userNotification userInfo];
+	enumerator  = [[[WCPublicChat publicChat] chatControllers] objectEnumerator];
+	
+	while((chatController = [enumerator nextObject])) {
+		if([[userInfo valueForKey:@"identifier"] isEqualToString:[[chatController connection] identifier]]) {
+            event   = [userInfo valueForKey:@"event"];
+            string = [[userNotification response] string];
+            
+            if([event intForKey:WCEventsEvent] == WCEventsChatReceived) {
+                [chatController sendChat:string];
+            }
+            else if([event intForKey:WCEventsEvent] == WCEventsMessageReceived) {
+                userID  = [userInfo integerForKey:@"userID"];
+                user    = [chatController userWithUserID:userID];
+                
+                if(user)
+                    [[WCMessages messages] sendMessage:string toUser:user];
+            }
+        }
+    }
+}
 
 @end
 
@@ -731,21 +598,16 @@ static WCApplicationController		*sharedController;
 	NSDate		*date;
 	
 	sharedController = self = [super init];
+    
+    _dateFormatter = [[WIDateFormatter alloc] init];
+	[_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+	[_dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+	[_dateFormatter setNaturalLanguageStyle:WIDateFormatterCapitalizedNaturalLanguageStyle];
 
-    _availableEmoticonPacks     = [[NSMutableArray alloc] init];
-    _enabledEmoticonPacks       = [[NSMutableArray alloc] init];
-    _emoticonEquivalents        = [[NSMutableArray alloc] init];
-    _emoticons                  = [[NSMutableArray alloc] init];
-	
 #ifndef WCConfigurationRelease
 	[[WIExceptionHandler sharedExceptionHandler] enable];
 	[[WIExceptionHandler sharedExceptionHandler] setDelegate:self];
 #endif
-    
-    [[NSNotificationCenter defaultCenter]
-        addObserver:self
-           selector:@selector(emoticonsDidChange:)
-               name:WCEmoticonsDidChangeNotification];
 	
 	[[NSNotificationCenter defaultCenter]
 		addObserver:self
@@ -806,15 +668,8 @@ static WCApplicationController		*sharedController;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[_clientVersion release];
-	[_smileys release];
-	[_sortedSmileys release];
-	
 	[_logController release];
-    
-    [_availableEmoticonPacks release];
-    [_enabledEmoticonPacks release];
-    [_emoticonEquivalents release];
-    [_emoticons release];
+    [_dateFormatter release];
 
 	[super dealloc];
 }
@@ -835,8 +690,6 @@ static WCApplicationController		*sharedController;
 		[[NSApp mainMenu] removeItemAtIndex:[[NSApp mainMenu] indexOfItemWithSubmenu:_debugMenu]];
 #endif
     
-    [[WCDatabaseController sharedController] secretKey];
-	
 	[WIDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 	[NSNumberFormatter setDefaultFormatterBehavior:NSNumberFormatterBehavior10_4];
 	
@@ -857,6 +710,9 @@ static WCApplicationController		*sharedController;
 	
     // verify the P7 specification in debug mode
 #ifdef WCConfigurationDebug
+    [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"WebKitDeveloperExtras"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
 //	if([[NSFileManager defaultManager] fileExistsAtPath:@"p7-specification.xsd"]) {
 //		if(![[[NSXMLDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSXMLDocumentValidate error:(NSError **) &error] autorelease]) {
 //			[[error alert] runModal];
@@ -877,7 +733,7 @@ static WCApplicationController		*sharedController;
 
 	[self _update];
 	[self _updateBookmarksMenu];
-    [self _reloadEmoticons];
+    //[self _reloadEmoticons];
 	[self _reloadChatLogsControllerWithPath:[self chatLogsPath]];
 
     if([[WCSettings settings] boolForKey:WCShowChatWindowAtStartup])
@@ -901,10 +757,12 @@ static WCApplicationController		*sharedController;
 #pragma mark -
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)application {
-	NSEnumerator			*enumerator;
-	WCPublicChatController	*chatController;
-	NSUInteger				count;
+    NSApplicationTerminateReply reply;
+	NSEnumerator                *enumerator;
+	WCPublicChatController      *chatController;
+	NSUInteger                  count;
 	
+    reply = NSTerminateNow;
 	enumerator = [[[WCPublicChat publicChat] chatControllers] objectEnumerator];
 	count = 0;
 	
@@ -914,9 +772,9 @@ static WCApplicationController		*sharedController;
 	}
 	
 	if([[WCSettings settings] boolForKey:WCConfirmDisconnect] && count > 0)
-		return [(WIApplication *) NSApp runTerminationDelayPanelWithTimeInterval:30.0];
-
-	return NSTerminateNow;
+		reply = [(WIApplication *) NSApp runTerminationDelayPanelWithTimeInterval:30.0];
+    
+	return reply;
 }
 
 
@@ -1005,21 +863,12 @@ static WCApplicationController		*sharedController;
 			[_closeWindowMenuItem setTitle:NSLS(@"Close Window", @"Close window menu item")];
 		}
 	}
-	else if(menu == _insertSmileyMenu) {
-		if(!_sortedSmileys)
-			[self _loadSmileys];
-	}
 }
 
 
 
 - (void)preferencesDidChange:(NSNotification *)notification {
 	[self _update];
-}
-
-
-- (void)emoticonsDidChange:(NSNotification *)notification {
-	[self _reloadEmoticons];
 }
 
 
@@ -1357,7 +1206,7 @@ static WCApplicationController		*sharedController;
 
 
 - (void)growlNotificationWasClicked:(id)clickContext {
-    [self _handleNotificationWithUserInfo:clickContext];
+    [self _handleGrowlNotificationWithUserInfo:clickContext];
 }
 
 
@@ -1367,7 +1216,12 @@ static WCApplicationController		*sharedController;
 #pragma mark -
 
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
-    [self _handleNotificationWithUserInfo:[notification userInfo]];
+    if(notification.activationType == NSUserNotificationActivationTypeReplied) {
+        [self _handleUserNotification:notification];
+    }
+    else if(notification.activationType == NSUserNotificationActivationTypeContentsClicked) {
+        [self _handleGrowlNotificationWithUserInfo:[notification userInfo]];
+    }
 }
 
 
@@ -1427,40 +1281,6 @@ static WCApplicationController		*sharedController;
 
 
 
-#pragma mark -
-
-
-- (NSMenu *)insertSmileyMenu {
-	if(!_smileys)
-		[self _loadSmileys];
-	
-	return _insertSmileyMenu;
-}
-
-
-
-#pragma mark -
-
-- (NSArray *)availableEmoticonPacks {
-    return _availableEmoticonPacks;
-}
-
-
-- (NSArray *)enabledEmoticonPacks {
-    return _enabledEmoticonPacks;
-}
-
-
-- (NSArray *)computedEmoticonPacks {
-    return _availableEmoticonPacks;
-}
-
-
-- (NSArray *)enabledEmoticons {
-    return _emoticons;
-}
-
-
 
 #pragma mark -
 
@@ -1486,6 +1306,13 @@ static WCApplicationController		*sharedController;
 }
 
 
+
+
+#pragma mark -
+
+- (WIDateFormatter *)dateFormatter {
+    return _dateFormatter;
+}
 
 
 
@@ -1801,7 +1628,7 @@ static WCApplicationController		*sharedController;
 
 
 - (IBAction)servers:(id)sender {
-	[[WCServers servers] showWindow:sender];
+
 }
 
 

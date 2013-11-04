@@ -86,6 +86,7 @@ NSString * const WCAutoReconnect						= @"WCAutoReconnect";
 NSString * const WCOrderFrontWhenDisconnected           = @"WCOrderFrontWhenDisconnected";
 
 NSString * const WCEnabledEmoticonPacks                 = @"WCEnabledEmoticonPacks";
+NSString * const WCEmoticonPacksOrdering                = @"WCEmoticonPacksOrdering";
 NSString * const WCDisabledEmoticons                    = @"WCDisabledEmoticons";
 
 NSString * const WCTheme								= @"WCTheme";
@@ -118,6 +119,8 @@ NSString * const WCThemesTransferListAlternateRows		= @"WCThemesTransferListAlte
 NSString * const WCThemesTrackerListAlternateRows		= @"WCThemesTrackerListAlternateRows";
 NSString * const WCThemesMonitorIconSize				= @"WCThemesMonitorIconSize";
 NSString * const WCThemesMonitorAlternateRows			= @"WCThemesMonitorAlternateRows";
+
+NSString * const WCThreadsSplitViewOrientation			= @"WCThreadsSplitViewOrientation";
 
 NSString * const WCMessageConversations					= @"WCMessageConversations";
 NSString * const WCBroadcastConversations				= @"WCBroadcastConversations";
@@ -566,7 +569,7 @@ static NSString         *basicThemeIdentifier;
      @"Basic",														WCThemesBuiltinName,
      [NSString UUIDString],											WCThemesIdentifier,
      @"fr.read-write.Basic",										WCThemesTemplate,
-     WIStringFromFont([NSFont userFixedPitchFontOfSize:9.0]),		WCThemesChatFont,
+     WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),		WCThemesChatFont,
      WIStringFromColor([NSColor blackColor]),						WCThemesChatTextColor,
      WIStringFromColor([NSColor whiteColor]),						WCThemesChatBackgroundColor,
      WIStringFromColor([NSColor redColor]),							WCThemesChatEventsColor,
@@ -579,9 +582,9 @@ static NSString         *basicThemeIdentifier;
      WIStringFromColor([NSColor blackColor]),						WCThemesBoardsTextColor,
      WIStringFromColor([NSColor whiteColor]),						WCThemesBoardsBackgroundColor,
      [NSNumber numberWithBool:YES],									WCThemesShowSmileys,
-     [NSNumber numberWithBool:NO],									WCThemesChatTimestampEveryLine,
+     [NSNumber numberWithBool:YES],									WCThemesChatTimestampEveryLine,
      [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],	WCThemesUserListIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesUserListAlternateRows,
+     [NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
      [NSNumber numberWithBool:YES],									WCThemesFileListAlternateRows,
      [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],	WCThemesFileListIconSize,
      [NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
@@ -615,7 +618,7 @@ static NSString         *basicThemeIdentifier;
      [NSNumber numberWithBool:YES],									WCThemesShowSmileys,
      [NSNumber numberWithBool:NO],									WCThemesChatTimestampEveryLine,
      [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],		WCThemesUserListIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesUserListAlternateRows,
+     [NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
      [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],		WCThemesFileListIconSize,
      [NSNumber numberWithBool:YES],									WCThemesFileListAlternateRows,
      [NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
@@ -636,20 +639,20 @@ static NSString         *basicThemeIdentifier;
      @"fr.read-write.Neo",                                                           WCThemesTemplate,
      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesChatFont,
      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesChatTextColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.8593 green:0.8772 blue:0.9117 alpha:1.0000]), WCThemesChatBackgroundColor,
+     WIStringFromColor([NSColor whiteColor]),                                        WCThemesChatBackgroundColor,
      WIStringFromColor([NSColor whiteColor]),                                        WCThemesChatEventsColor,
      WIStringFromColor([NSColor colorWithCalibratedWhite:0.8000 alpha:1.0000]),      WCThemesChatTimestampEveryLineColor,
      WIStringFromColor([NSColor colorWithCalibratedRed:0.2000 green:0.6000 blue:0.8000 alpha:1.0000]), WCThemesChatURLsColor,
      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesMessagesFont,
      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesMessagesTextColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:1 green:1 blue:1 alpha:1.0000]), WCThemesMessagesBackgroundColor,
+     WIStringFromColor([NSColor whiteColor]),                                        WCThemesMessagesBackgroundColor,
      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesBoardsFont,
      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesBoardsTextColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.8593 green:0.8772 blue:0.9117 alpha:1.0000]), WCThemesBoardsBackgroundColor,
+     WIStringFromColor([NSColor whiteColor]),                                       WCThemesBoardsBackgroundColor,
      [NSNumber numberWithBool:YES],									WCThemesShowSmileys,
      [NSNumber numberWithBool:YES],									WCThemesChatTimestampEveryLine,
      [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],		WCThemesUserListIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesUserListAlternateRows,
+     [NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
      [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],		WCThemesFileListIconSize,
      [NSNumber numberWithBool:YES],									WCThemesFileListAlternateRows,
      [NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
@@ -807,6 +810,9 @@ static NSString         *basicThemeIdentifier;
 			[NSNumber numberWithBool:YES],
 				WCCheckForUpdate,
 			
+            [NSArray arrayWithObject:@"Pack:Wired"],
+                WCEnabledEmoticonPacks,
+                    
 			basicThemeIdentifier,
 				WCTheme,
                     
@@ -816,6 +822,9 @@ static NSString         *basicThemeIdentifier;
 				[self _defaultNeoTheme],
 			 NULL],
 				WCThemes,
+                    
+            [NSNumber numberWithInteger:WCThreadsSplitViewOrientationVertical],
+                WCThreadsSplitViewOrientation,
                     
             [NSArray arrayWithObject:
                 [NSDictionary dictionaryWithObjectsAndKeys:

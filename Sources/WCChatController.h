@@ -53,8 +53,10 @@ extern NSString * const WCUserPboardType;
 	IBOutlet WISplitView							*_chatSplitView;
 	IBOutlet NSScrollView							*_chatOutputScrollView;
 	IBOutlet LNScrollView							*_chatInputScrollView;
-	IBOutlet NSTextView								*_chatInputTextView;
+	//IBOutlet NSTextView								*_chatInputTextView;
+    IBOutlet NSTextField							*_chatInputTextField;
 	IBOutlet NSMenu									*_chatSmileysMenu;
+    IBOutlet NSButton                               *_showEmoticonsButtons;
 	
 	IBOutlet WebView								*_chatOutputWebView;
 
@@ -152,8 +154,9 @@ extern NSString * const WCUserPboardType;
 - (WCUser *)userWithUserID:(NSUInteger)uid;
 - (void)selectUser:(WCUser *)user;
 - (NSUInteger)chatID;
-- (NSTextView *)insertionTextView;
+- (NSTextField *)insertionTextField;
 
+- (void)sendChat:(NSString *)message;
 - (void)printEvent:(NSString *)message;
 - (void)printChatNowPlaying;
 

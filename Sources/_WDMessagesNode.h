@@ -41,7 +41,9 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSNumber* active;
+
 
 
 @property BOOL activeValue;
@@ -53,7 +55,9 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSDate* date;
+
 
 
 //- (BOOL)validateDate:(id*)value_ error:(NSError**)error_;
@@ -61,7 +65,9 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSNumber* direction;
+
 
 
 @property int32_t directionValue;
@@ -73,7 +79,9 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSString* identifier;
+
 
 
 //- (BOOL)validateIdentifier:(id*)value_ error:(NSError**)error_;
@@ -81,7 +89,9 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSString* nick;
+
 
 
 //- (BOOL)validateNick:(id*)value_ error:(NSError**)error_;
@@ -89,7 +99,9 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSNumber* unread;
+
 
 
 @property BOOL unreadValue;
@@ -101,7 +113,9 @@ extern const struct WDMessagesNodeFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) id user;
+
 
 
 //- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;

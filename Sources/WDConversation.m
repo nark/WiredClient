@@ -1,6 +1,7 @@
 #import "WDConversation.h"
 #import "WDWiredModel.h"
 #import "WCUser.h"
+#import "WCApplicationController.h"
 #import "NSDate+TimeAgo.h"
 
 
@@ -126,10 +127,13 @@
 #pragma mark -
 
 - (NSString *)timeAgo {
-    NSString    *timeAgo = @"";
+    NSString            *timeAgo = @"";
+    WIDateFormatter     *df;
+    
+    df = [[WCApplicationController sharedController] dateFormatter];
 
     if(self.date) {
-        timeAgo = [self.date timeAgoWithLimit:3600*24*7];
+        timeAgo = [self.date timeAgoWithLimit:3600*24*7 dateFormatter:df];
     }
     
     return timeAgo;

@@ -3,18 +3,15 @@
 //  WiredFrameworks
 //
 //  Created by Rafaël Warnault on 12/03/13.
-//  Copyright (c) 2013 OPALE. All rights reserved.
+//  Copyright (c) 2013 Read-Write.fr. All rights reserved.
 //
 
 #import "WCDatabaseController.h"
 #import "WCApplicationController.h"
-#import "WCSecretKeyAccessoryViewController.h"
 #import "WCKeychain.h"
 
 
 @interface WCDatabaseController (Private)
-
-- (NSString *)_checkSecretKey;
 
 @end
 
@@ -23,41 +20,6 @@
 
 
 @implementation WCDatabaseController (Private)
-
-- (NSString *)_checkSecretKey {
-    WCSecretKeyAccessoryViewController      *controller;
-    NSAlert                                 *alert;
-    NSString                                *secretKey;
-    NSInteger                               result;
-    
-    secretKey = [[WCKeychain keychain] secretKey];
-    
-    if(!secretKey) {
-        alert = [NSAlert alertWithMessageText:NSLS(@"Define a Secret Key", @"Secret Key Alert Title")
-                                defaultButton:@"OK"
-                              alternateButton:nil
-                                  otherButton:nil
-                    informativeTextWithFormat:NSLS(@"You have not define a secret key yet. Wired Client uses a personnal secret key to encrypt/decrypt your local data. The key is stored into your Keychain to ensure its confidentiality.", @"Secret Key Alert Message")];
-        
-        controller = [WCSecretKeyAccessoryViewController viewController];
-        
-        [alert setAccessoryView:[controller view]];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        
-        result = [alert runModal];
-        
-        if (result == NSAlertDefaultReturn && [controller verifyKeys]) {
-            secretKey = [controller secretKey];
-            
-            [[WCKeychain keychain] setSecretKey:secretKey];
-        }
-        else {
-            exit(0);
-        }
-    }
-    
-    return secretKey;
-}
 
 @end
 

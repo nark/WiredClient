@@ -33,6 +33,6 @@
 
 @interface NSObject(WCChatWindowDelegate)
 
-- (NSTextView *)insertionTextView;
+- (NSTextField *)insertionTextField;
 
 @end

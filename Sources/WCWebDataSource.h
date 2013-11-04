@@ -12,6 +12,8 @@
 
 - (NSString *)lastMessageDate;
 
+- (NSString *)JSONObjects;
+
 - (NSString *)JSONObjectsUntilDate:(NSString *)date withLimit:(NSUInteger)limit;
 
 @end

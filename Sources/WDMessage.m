@@ -1,6 +1,7 @@
 #import "WDMessage.h"
 #import "WDWiredModel.h"
 #import "WCChatController.h"
+#import "WCApplicationController.h"
 #import "NSDate+TimeAgo.h"
 
 @implementation WDMessage
@@ -93,11 +94,15 @@
 #pragma mark -
 
 - (id)proxyForJson {
+    NSString            *string;
     NSMutableString     *messageString;
     NSImage             *icon;
     NSImage             *unread;
-        
-    messageString = [NSMutableString stringWithString:self.message];
+    WIDateFormatter     *df;
+    
+    string          = [[self.message componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
+    messageString   = [NSMutableString stringWithString:string];
+    df              = [[WCApplicationController sharedController] dateFormatter];
     
     if(![WCChatController isHTMLString:messageString]) {
         [WCChatController applyHTMLEscapingToMutableString:messageString];
@@ -116,7 +121,7 @@
             messageString,                                                  @"message",
             self.nick,                                                      @"nick",
             [self.date JSDate],                                             @"date",
-            [self.date timeAgoWithLimit:(3600*24*30)],                      @"timeAgo",
+            [self.date timeAgoWithLimit:(3600*24*30) dateFormatter:df],     @"timeAgo",
             [[unread TIFFRepresentation] base64EncodedString],              @"unread",
             self.direction,                                                 @"direction",
             [NSNumber numberWithInteger:[self.user userID]],                @"userID",

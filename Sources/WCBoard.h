@@ -126,4 +126,6 @@ typedef enum _WCBoardPermissions		WCBoardPermissions;
 
 @interface WCSearchBoard : WCSmartBoard
 
++ (id)searchBoard;
+
 @end

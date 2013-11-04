@@ -44,50 +44,42 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 	IBOutlet NSMenuItem						*_saveDocumentMenuItem;
 	IBOutlet NSMenu							*_bookmarksMenu;
     IBOutlet NSView							*_bookmarksExportView;
-	IBOutlet NSMenu							*_insertSmileyMenu;
 	IBOutlet NSMenu							*_debugMenu;
 	IBOutlet NSMenu							*_windowMenu;
 	IBOutlet NSMenuItem						*_closeWindowMenuItem;
-	
 	IBOutlet SUUpdater						*_updater;
 	
 	NSString								*_clientVersion;
-	NSMutableDictionary						*_smileys;
-    
-    NSMutableArray                          *_availableEmoticonPacks;
-    NSMutableArray                          *_enabledEmoticonPacks;
-    NSMutableArray                          *_emoticons;
-    NSMutableArray                          *_emoticonEquivalents;
-    
-	NSArray									*_sortedSmileys;
 	NSUInteger								_unread;
 	
+    WIDateFormatter                         *_dateFormatter;
 	WIChatLogController						*_logController;
 }
 
+// Singleton
 + (WCApplicationController *)sharedController;
 
+// Generic Methods
 + (NSString *)copiedNameForName:(NSString *)name existingNames:(NSArray *)names;
 + (NSArray *)systemSounds;
 
-- (NSMenu *)insertSmileyMenu;
-
-- (NSArray *)availableEmoticonPacks;
-- (NSArray *)enabledEmoticonPacks;
-- (NSArray *)computedEmoticonPacks;
-- (NSArray *)enabledEmoticons;
-- (WIEmoticon *)emoticonForPath:(NSString *)path;
-
+// Application Support
 - (NSURL *)applicationFilesDirectory;
 
+// Logs
 - (NSString *)chatLogsPath;
-- (WIChatLogController *)logController;
 - (void)reloadChatLogsWithPath:(NSString *)path;
+- (WIChatLogController *)logController;
+
+// Date Formatter
+- (WIDateFormatter *)dateFormatter;
 
 - (void)connectWithBookmark:(NSDictionary *)bookmark;
 
+// Sparkle Check for Update
 - (void)checkForUpdate;
 
+// Actions
 - (IBAction)about:(id)sender;
 - (IBAction)preferences:(id)sender;
 

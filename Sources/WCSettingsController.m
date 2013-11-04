@@ -139,7 +139,7 @@
 - (void)windowDidLoad {
 	NSComboBoxCell		*comboBoxCell;
 	
-	[_bannerImageView setMaxImageSize:NSMakeSize(200.0, 32.0)];
+	[_bannerImageView setMaxImageSize:NSMakeSize(400.0, 64.0)];
 	
 	[_trackersTableView registerForDraggedTypes:[NSArray arrayWithObject:WCTrackerPboardType]];
 	[_categoriesTableView registerForDraggedTypes:[NSArray arrayWithObject:WCCategoryPboardType]];

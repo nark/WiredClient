@@ -40,7 +40,7 @@ extern NSString * const								WCNickDidChangeNotification;
 extern NSString * const								WCStatusDidChangeNotification;
 extern NSString * const								WCIconDidChangeNotification;
 
-@class WCEmoticonPreferences;
+@class WCEmoticonPreferences, WCThemesPreferences;
 
 @interface WCPreferences : WIPreferencesController <NSMenuDelegate, NSTableViewDelegate> {
 	IBOutlet NSView									*_generalView;
@@ -65,12 +65,14 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSButton								*_autoReconnectButton;
     IBOutlet NSButton								*_orderFrontOnDisconnectButton;
     
+    IBOutlet NSMatrix								*_threadsSplitViewMatrix;
     IBOutlet NSPopUpButton							*_emoticonPacksPopUpButton;
 	
     IBOutlet NSWindow                               *_themesWindow;
+    IBOutlet NSWindow                               *_addThemeWindow;
+    IBOutlet NSWindow                               *_manageThemesWindow;
+    IBOutlet NSTextField                            *_addThemeNameTextField;
     IBOutlet NSPopUpButton							*_themesPopUpButton;
-	IBOutlet NSTableView							*_themesTableView;
-	IBOutlet NSTableColumn							*_themesNameTableColumn;
 	IBOutlet NSButton								*_addThemeButton;
 	IBOutlet NSButton								*_deleteThemeButton;
 	IBOutlet NSButton								*_selectThemeButton;
@@ -106,20 +108,6 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSButton								*_themesTrackerListAlternateRowsButton;
 	IBOutlet NSMatrix								*_themesMonitorIconSizeMatrix;
 	IBOutlet NSButton								*_themesMonitorAlternateRowsButton;
-	
-	IBOutlet NSTableView							*_bookmarksTableView;
-	IBOutlet NSTableColumn							*_bookmarksNameTableColumn;
-	IBOutlet NSButton								*_addBookmarkButton;
-	IBOutlet NSButton								*_deleteBookmarkButton;
-	
-	IBOutlet NSTextField							*_bookmarksAddressTextField;
-	IBOutlet NSTextField							*_bookmarksLoginTextField;
-	IBOutlet NSSecureTextField						*_bookmarksPasswordTextField;
-	IBOutlet NSPopUpButton							*_bookmarksThemePopUpButton;
-	IBOutlet NSButton								*_bookmarksAutoConnectButton;
-	IBOutlet NSButton								*_bookmarksAutoReconnectButton;
-	IBOutlet NSTextField							*_bookmarksNickTextField;
-	IBOutlet NSTextField							*_bookmarksStatusTextField;
 	
 	IBOutlet NSButton								*_chatHistoryScrollbackButton;
 	IBOutlet NSPopUpButton							*_chatHistoryScrollbackModifierPopUpButton;
@@ -162,15 +150,6 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSButton								*_filesQueueTransfersButton;
 	IBOutlet NSButton								*_filesCheckForResourceForksButton;
 	IBOutlet NSButton								*_filesRemoveTransfersButton;
-
-	IBOutlet NSTableView							*_trackerBookmarksTableView;
-	IBOutlet NSTableColumn							*_trackerBookmarksNameTableColumn;
-	IBOutlet NSButton								*_addTrackerBookmarkButton;
-	IBOutlet NSButton								*_deleteTrackerBookmarkButton;
-	
-	IBOutlet NSTextField							*_trackerBookmarksAddressTextField;
-	IBOutlet NSTextField							*_trackerBookmarksLoginTextField;
-	IBOutlet NSSecureTextField						*_trackerBookmarksPasswordTextField;
     
     IBOutlet NSTextField                            *_networkConnectionTimeoutTextField;
     IBOutlet NSTextField                            *_networkReadTimeoutTextField;
@@ -179,14 +158,17 @@ extern NSString * const								WCIconDidChangeNotification;
     
 	IBOutlet NSView									*_bookmarksExportView;
     
-    IBOutlet WCEmoticonPreferences                  *_emoticonPreferences;
-	
+    IBOutlet WCThemesPreferences                    *_themesPreferences;
+	IBOutlet WCEmoticonPreferences                  *_emoticonPreferences;
+    
 	WITemplateBundleManager							*_privateTemplateManager;
 	WITemplateBundleManager							*_publicTemplateManager;
 	
 	NSString										*_bookmarksPassword;
 	NSString										*_trackerBookmarksPassword;
 }
+
+@property (readwrite, retain) IBOutlet              WCEmoticonPreferences *emoticonPreferences;
 
 + (WCPreferences *)preferences;
 
@@ -204,6 +186,9 @@ extern NSString * const								WCIconDidChangeNotification;
 - (IBAction)customizeTheme:(id)sender;
 - (IBAction)closeTheme:(id)sender;
 - (IBAction)addTheme:(id)sender;
+- (IBAction)cancelAddTheme:(id)sender;
+- (IBAction)okAddTheme:(id)sender;
+- (IBAction)editTheme:(id)sender;
 - (IBAction)deleteTheme:(id)sender;
 - (IBAction)duplicateTheme:(id)sender;
 - (IBAction)exportTheme:(id)sender;
@@ -218,12 +203,10 @@ extern NSString * const								WCIconDidChangeNotification;
 - (IBAction)closeManageThemeTemplates:(id)sender;
 - (IBAction)deleteThemeTemplate:(id)sender;
 
-- (IBAction)addBookmark:(id)sender;
-- (IBAction)deleteBookmark:(id)sender;
-- (IBAction)duplicateBookmark:(id)sender;
 - (IBAction)exportBookmarks:(id)sender;
 - (IBAction)importBookmarks:(id)sender;
-- (IBAction)changeBookmark:(id)sender;
+- (IBAction)exportTrackerBookmarks:(id)sender;
+- (IBAction)importTrackerBookmarks:(id)sender;
 
 - (IBAction)chatRevealChatHistory:(id)sender;
 - (IBAction)chatRevealChatLogs:(id)sender;
@@ -239,14 +222,6 @@ extern NSString * const								WCIconDidChangeNotification;
 - (IBAction)changeEvent:(id)sender;
 
 - (IBAction)otherDownloadFolder:(id)sender;
-
-- (IBAction)addTrackerBookmark:(id)sender;
-- (IBAction)deleteTrackerBookmark:(id)sender;
-- (IBAction)duplicateTrackerBookmark:(id)sender;
-- (IBAction)exportTrackerBookmarks:(id)sender;
-- (IBAction)importTrackerBookmarks:(id)sender;
-- (IBAction)changeTrackerBookmark:(id)sender;
-
 - (IBAction)changeNetwork:(id)sender;
 
 @end

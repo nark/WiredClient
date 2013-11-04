@@ -96,6 +96,10 @@ function _appendMessage(message) {
 
 	// append element to wrapper element
 	$('#messages-content').append(html);
+
+//	$('img').load(function() {
+//	    _scrollToBottom();
+//	});
 }
 
 
@@ -106,6 +110,10 @@ function _prependMessage(message) {
 
 	// append element to wrapper element
 	$('#messages-content').prepend(html);
+
+//	$('img').load(function() {
+//	    _scrollToBottom();
+//	});
 }
 
 
@@ -115,8 +123,7 @@ function _formatMessageAsHTHML(message) {
 	var directionClass = (message["direction"] == 0) ? 
 								  "from" : 
 								  "to";
-	// date formatting
-	var date 	= timeAgo(message["date"]).tAgo;
+	// formatting
 	var server 	= (typeof message["server"] === 'undefined') ? "Not Connected" : message["server"];
 
 	// return a HTML string
@@ -128,7 +135,7 @@ function _formatMessageAsHTHML(message) {
 				'</div>' +
 				'<div class="messageinfo">' +
 					'<span class="nick">' + message["nick"] + '</span>' +
-					'<span class="time">' + date + '</span>' +
+					'<span class="time">' + message["timeAgo"] + '</span>' +
 					'<span class="server">' + server + '</span>' +
 				'</div>' +
 			'</div>' +
@@ -226,7 +233,7 @@ function removeLoader() {
 
 $(window).scroll(function() {
 	if($(window).height() < $(document).height() && $(window).scrollTop() == 0) {
-		_appendLoader();	
+		_addPage();	
 	}
 });
 

@@ -26,13 +26,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
+#import "WCEmoticonViewController.h"
 
+extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
 
 @class WCConversationController, WCSourceSplitView;
 @class WDConversation, WCConversation, WCMessageConversation, WCBroadcastConversation, WCUser;
 
-@interface WCMessages : WIWindowController {
+@interface WCMessages : NSWindowController <WCEmoticonViewControllerDelegate> {
 	IBOutlet WCConversationController				*_conversationController;
 	
 	IBOutlet WCSourceSplitView						*_conversationsSplitView;
@@ -46,14 +47,14 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
     IBOutlet NSButton                               *_conversationsOnlineButton;
 	
 	IBOutlet NSTextField							*_messageTextField;
+    IBOutlet NSButton								*_emoticonButton;
+    
 	IBOutlet NSPanel								*_broadcastPanel;
 	IBOutlet NSTextView								*_broadcastTextView;
-	
-	IBOutlet NSMenu									*_chatSmileysMenu;
     
-	WCConversation									*_conversations;
-	WCMessageConversation							*_messageConversations;
-	WCBroadcastConversation							*_broadcastConversations;
+    IBOutlet WebView                                *_conversationWebView;
+    IBOutlet NSView                                 *_messagesView;
+    
 	WDConversation									*_selectedConversation;
 	WIDateFormatter									*_dialogDateFormatter;
     
@@ -61,6 +62,8 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
     BOOL                                            *_sorting;
 }
 
+@property (assign) IBOutlet WebView                 *conversationWebView;
+@property (assign) IBOutlet NSView                  *messagesView;
 
 @property (readonly)            NSManagedObjectContext          *managedObjectContext;
 @property (readwrite, retain)   NSArray                         *sortDescriptors;
@@ -71,6 +74,7 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
 
 - (void)showPrivateMessageToUser:(WCUser *)user;
 - (void)showBroadcastForConnection:(WCServerConnection *)connection;
+- (void)sendMessage:(NSString *)string toUser:(WCUser *)user;
 - (NSUInteger)numberOfUnreadMessages;
 - (NSUInteger)numberOfUnreadMessagesForConnection:(WCServerConnection *)connection;
 

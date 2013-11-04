@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title></title>
   <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1187.39">
+  <meta name="CocoaVersion" content="1265">
   <style type="text/css">
     p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Helvetica; color: #919191}
     p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; min-height: 17.0px}
@@ -14,11 +14,12 @@
     p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #0000ee}
     p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; color: #919191; min-height: 17.0px}
     p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #919191}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-    p.p9 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Helvetica}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #919191; min-height: 14.0px}
-    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
-    p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
+    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #e32400}
+    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p10 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Helvetica}
+    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #919191; min-height: 14.0px}
+    p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
+    p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
     span.s1 {text-decoration: underline}
     span.s2 {text-decoration: underline ; color: #0000ee}
   </style>
@@ -34,9 +35,32 @@
 <p class="p2"><br></p>
 <p class="p3"><b>Version History</b></p>
 <p class="p6"><br></p>
+<p class="p7"><b>2.1</b></p>
+<p class="p8">- Important: the minimum required Mac OSX version is now 10.7 Lion. Mac OS 10.6 Snow Leopard is no longer supported.</p>
+<p class="p4">- New Messages window design and storage (move to Core Data)</p>
+<p class="p4">- Add search feature in Messages conversations</p>
+<p class="p4">- Add messages pagination with scroll-up detection to load more messages</p>
+<p class="p4">- New Boards window design</p>
+<p class="p4">- Add the ability to display Board threads vertically (a la Mail.app)</p>
+<p class="p4">- Add Recent Searches history in Boards sidebar</p>
+<p class="p4">- Add better management of Smart Boards</p>
+<p class="p4">- New Emoticon Packs feature, compliant with Adium Emoticon Packs</p>
+<p class="p4">- Add an emoticons Popover view in chat and messages window</p>
+<p class="p4">- Make emoticons Popover draggable as a separated window</p>
+<p class="p4">- Add support for User Notification Center to events (only available from 10.8)</p>
+<p class="p4">- Add quick-reply support to Chat and Message received event for User Notification (10.9 only)</p>
+<p class="p4">- Add contextual handling of Growl events on click action</p>
+<p class="p4">- Add Chats and Messages input text field grow automatically when needed</p>
+<p class="p4">- Fix bug when opening a Wired internal URL pointing to a directory, in List mode</p>
+<p class="p4">- Fix delay quit after 30 seconds</p>
+<p class="p4">- Better design and readability of Toolbar notification badges</p>
+<p class="p4">- Better Retina display support</p>
+<p class="p4">- Max user icon size is now 64px x 64px in order to support Retina display</p>
+<p class="p4">- Max server banner size is now 400px x 64px in order to support Retina display</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0.3</b></p>
 <p class="p4">- Fix bug where client try to overwrite the Downloads folder on tracker connections</p>
-<p class="p4">- Fix bug when opening a Wired internal URL pointing to a directory, in List mode</p>
 <p class="p4">- Server and tracker bookmarks management moves to the sidebar of the chat window (removed from Preferences)</p>
 <p class="p4">- Better contextual menus for the sidebar of the chat window</p>
 <p class="p4">- Better design<span class="Apple-converted-space">  </span>for the Dock notification badge</p>
@@ -44,8 +68,8 @@
 <p class="p4">- Transfers now auto-reconnect on error when Reconnect On Disconnect setting is true</p>
 <p class="p4">- Re-add the crash log GUI in the Help menu to facilitate shared debugging</p>
 <p class="p4">- Recover original localization files to Wired Frameworks (de, en, fr, it, ja)</p>
-<p class="p4">- Add french and german localizations</p>
-<p class="p8"><br></p>
+<p class="p4">- Add french and german localization (thanks to Prof Dr. Luigi)</p>
+<p class="p6"><br></p>
 <p class="p6"><br></p>
 <p class="p7"><b>2.0.2</b></p>
 <p class="p4">- Add a settings to order front or not the app on connection events (Preferences &gt; General)</p>
@@ -62,15 +86,15 @@
 <p class="p4">- Replace PSMTabBarControl by MMTabBarView</p>
 <p class="p4">- Add notification badges to tab items to display unread messages and posts</p>
 <p class="p4">- Add notification badge on Transfers icon in toolbar to display number of unfinished transfers</p>
-<p class="p9">- Fix bug where sidebar items was not reloaded when importing bookmarks</p>
+<p class="p10">- Fix bug where sidebar items was not reloaded when importing bookmarks</p>
 <p class="p4">- Reorganize sources and migrate to GitHub: <a href="https://github.com/nark/WiredClient"><span class="s2">https://github.com/nark/WiredClient</span></a></p>
 <p class="p4">- Migrate the main domain to <a href="http://wired.read-write.fr/"><span class="s2">wired.read-write.fr</span></a></p>
 <p class="p6"><br></p>
 <p class="p6"><br></p>
 <p class="p7"><b>2.0 (269)</b></p>
 <p class="p4">- Add download file directly from external URL Type (e.g. wiredp7://guest@localhost/file.txt)</p>
-<p class="p8"><br></p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0 (268)</b></p>
 <p class="p4">- Better support of older WebKit versions for Neo template</p>
 <p class="p6"><br></p>
@@ -79,26 +103,26 @@
 <p class="p4">- Fix a bug in data offset management of upload transfers when resume after suddenly disconnected</p>
 <p class="p4">- Fix some bugs in Smart Boards. Quote, Edit, Delete and Reply buttons now work.</p>
 <p class="p4">- Replace several depreciated methods and clean sources</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p6"><br></p>
 <p class="p7"><b>2.0b (263)</b></p>
 <p class="p4">- Add support to handle settings compatibility issues in order to prepare the release</p>
 <p class="p4">- Remove auto-reconnect support for disconnected transfers to prevent the transfer data to be corrupted (transfers are automatically removed from the Transfers Window when the connection suddenly disconnect)</p>
-<p class="p8"><br></p>
-<p class="p10"><br></p>
+<p class="p9"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>2.0b (262)</b></p>
 <p class="p4">- Add custom sorting and drag and drop support for Bookmarks and Trackers in the Sidebar</p>
 <p class="p4">- Fix bug in source lists for bold text of unread cell on Mountain Lion</p>
-<p class="p8"><br></p>
-<p class="p10"><br></p>
+<p class="p9"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>2.0b (261)</b></p>
 <p class="p4">- Add a dynamic menu when right-click an item of the Sidebar</p>
 <p class="p4">- Add an Info panel for server of trackers in the Sidebar (right-click)</p>
 <p class="p4">- Reorganize actions of the bottom menu of the Sidebar</p>
 <p class="p4">- Fix a bug where Sidebar is unavailable and Views toolbar item grayed</p>
 <p class="p4">- Remove the Servers window (useless now)</p>
-<p class="p10"><br></p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>2.0b (260)</b></p>
 <p class="p4">- Start moving the "Servers" window features to a source list on the left of the Chat Window</p>
 <p class="p4">- Add a "Views" toolbar button to toggle server list and user list split views</p>
@@ -106,23 +130,23 @@
 <p class="p4">- Re-add User Info, Private Message and Private Chat buttons</p>
 <p class="p4">- Fix some custom gradients on Mountain Lion</p>
 <p class="p4">- Note: the "Server" window is still available for the moment</p>
-<p class="p10"><br></p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>2.0b (259)</b></p>
 <p class="p4">- Add a template named "Neo" in Themes, exploiting new HTML/CSS abilities</p>
 <p class="p4">- Open WiredTemplate file by double-click to install them</p>
-<p class="p8"><br></p>
-<p class="p10"><br></p>
+<p class="p9"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>2.0b (258)</b></p>
 <p class="p4">- Add auto-update support for alpha version (debug mode enabled, different plist file)</p>
-<p class="p8"><br></p>
-<p class="p10"><br></p>
+<p class="p9"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>2.0b (251)</b></p>
 <p class="p4">- Fix boards notifications for unread posts at login</p>
 <p class="p4">- Correct a typo in iTunes Now Playing output text</p>
 <p class="p4">- Now compiled using 10.7 SDK (10.6 stay the minimum required operating system)</p>
-<p class="p8"><br></p>
-<p class="p10"><br></p>
+<p class="p9"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>2.0b (248)</b></p>
 <p class="p4">- Add full CSS template support for Wired themes</p>
 <p class="p4">- Chat views are now WebKit-based, as Message and Board views</p>
@@ -131,8 +155,8 @@
 <p class="p4">- Add Chat History and Plain Text Logs support</p>
 <p class="p4">- Improve Messages, Boards and Chat loading (10x faster)</p>
 <p class="p4">- Add full support for 32/64 bits architectures</p>
-<p class="p8"><br></p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (244)</b></p>
 <p class="p4">- Add Chat Sent event in Preferences &gt; Events</p>
 <p class="p4">- Add a Set Topic button in the chat window</p>
@@ -140,55 +164,55 @@
 <p class="p4">- The manual menu now redirect to the Wired Wiki</p>
 <p class="p4">- Fix the "Text Only" issue for toolbars of Files and Transfers windows</p>
 <p class="p4">- Wired Client is now built using Xcode 4.3</p>
-<p class="p8"><br></p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (243)</b></p>
 <p class="p4">- Triggers Chat Received event only when user isn't yourself</p>
 <p class="p4">- Fix error when delete focused highlight or ignore row in Preferences &gt; Chat</p>
 <p class="p4">- Fix memory leaks</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (242)</b></p>
 <p class="p4">- Fix a critical bug in the Messages window related to mixed messages from different conversations</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (241)</b></p>
 <p class="p4">- Add Clear toolbar item to clear the public chat text</p>
 <p class="p4">- Add Save Conversation action in the File menu</p>
 <p class="p4">- Add a contextual menu to the messages list</p>
 <p class="p4">- Improve messages interface speed and review window design</p>
 <p class="p4">- Fix private chat output text view which was editable</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (240)</b></p>
 <p class="p4">- Fix threads sorting by Latest Post Time</p>
 <p class="p4">- Fix can't import server/tracker bookmarks when the list is empty</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (239)</b></p>
 <p class="p4">- Add a Toggle User List menu action<span class="Apple-converted-space"> </span></p>
 <p class="p4">- Fix Board Post Added event not triggered</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (237)</b></p>
 <p class="p4">- Fix persistence of board tree expansion state</p>
 <p class="p4">- Fix persistence of manually unread threads</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (235)</b></p>
 <p class="p4">- Add ability to move a board with sub-boards into it</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (235)</b></p>
 <p class="p4">- Add Copy URL and Path contextual action in Files window</p>
 <p class="p4">- Add many new smileys from a well known collection</p>
 <p class="p4">- Improve the support of internal links to files</p>
 <p class="p4">- Fix UI design related issues in Boards and Messages windows</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (234)</b></p>
 <p class="p4">- Fix the built-in Growl issue</p>
 <p class="p4">- Fix issue where you cannot change permissions of a sub-board</p>
 <p class="p4">- Fix auto-update issue (wrong destination: Zanka) due to a conflict in the migration process</p>
 <p class="p4">- Remove the ability to move a board with sub boards into it</p>
 <p class="p4">- Remove Crash Logs menu</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>2.0b (233)</b></p>
 <p class="p4">- Fix the auto-update release logs</p>
 <p class="p4">- Fix error when perform menu File &gt; Set Topic with an empty uninitialized topic</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>1.3.3</b></p>
 <p class="p4">- File info panel can now display info for multiple files, and set folder type for multiple folders at once</p>
 <p class="p4">- Add ability to pause a transfer, which stops it without requesting the next transfer in the list</p>
@@ -198,7 +222,7 @@
 <p class="p4">- Fix problem with drag and drop of bookmarks</p>
 <p class="p4">- Fix problem with uploading a folder containing invisible folders</p>
 <p class="p4">- Add Italian translation</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.3.2</b></p>
 <p class="p4">- Mac OS X 10.5 support</p>
 <p class="p4">- Add Growl support</p>
@@ -218,7 +242,7 @@
 <p class="p4">- Use icon picker with iSight support from iChat/Address Book</p>
 <p class="p4">- Fix a crash when opening files window</p>
 <p class="p4">- Localization updates</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.3.1</b></p>
 <p class="p4">- Add Japanese, French and German localizations</p>
 <p class="p4">- Option to auto-connect at startup</p>
@@ -233,7 +257,7 @@
 <p class="p4">- Fix a queueing problem where a second download transfer would be started when an upload transfer finished</p>
 <p class="p4">- Fix a problem where the window layout was not saved when quitting the application</p>
 <p class="p4">- Fix a bug where completing a nick when there were multiple users with that nick would not append the completion string</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.3</b></p>
 <p class="p4">- Make binary universal</p>
 <p class="p4">- Support for IPv6</p>
@@ -256,7 +280,7 @@
 <p class="p4">- Add unread badge for news</p>
 <p class="p4">- New icon, thanks to Magnus Petersson</p>
 <p class="p4">- Warns when attempting to upload files with resource forks, which are not handled</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.2.6</b></p>
 <p class="p4">- Allow multiple selection in files, search and accounts</p>
 <p class="p4">- Reload and select target files window after successful upload</p>
@@ -268,7 +292,7 @@
 <p class="p4">- Speed up the trackers window somewhat</p>
 <p class="p4">- Make command-up in files open the parent folder, and map command-down to open</p>
 <p class="p4">- Make a context menu with the full file hierarchy pop up when command-clicking files window titles</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.2.5</b></p>
 <p class="p4">- Accept drag and drop in the private chat user list again</p>
 <p class="p4">- Fix a crash when dismissing broadcasts</p>
@@ -276,13 +300,13 @@
 <p class="p4">- Fix a drawing bug in the uploads field in user info</p>
 <p class="p4">- Fix a problem with join/leave/rename messages appearing from clients not on a private chat</p>
 <p class="p4">- Properly close the client end of the socket when a server disconnects</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.2.4</b></p>
 <p class="p4">- Remember which table column was selected, and in which direction its sorting had in files, etc</p>
 <p class="p4">- Fix a bug that would cause multiple copies of the same file to appear when reloading quickly</p>
 <p class="p4">- Fix a bug that caused folder uploads to fail with file not found errors</p>
 <p class="p4">- Another fix for the highlighting of nicks</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.2.3</b></p>
 <p class="p4">- When uploading, the local file would be stripped of its extension, this has been fixed</p>
 <p class="p4">- Reinstate the unintentionally disabled regular pinging of servers</p>
@@ -295,13 +319,13 @@
 <p class="p4">- Fix login using a password containing '#' and similar characters</p>
 <p class="p4">- Fix highlighting of nicks with spaces and numbers</p>
 <p class="p4">- Fix the show topic button in the account editor</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.2.2</b></p>
 <p class="p4">- Fix a bug that prevented tracker sockets to be disconnected</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.2.1</b></p>
 <p class="p4">- Fix a bug in the files window's view options that would cause the sheet to hang</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.2</b></p>
 <p class="p4">- Use updated protocol, version 1.1 (remains compatible with 1.0 clients)</p>
 <p class="p4">- Support for custom client icons</p>
@@ -317,7 +341,7 @@
 <p class="p4">- Add a spinning progress indicator to news</p>
 <p class="p4">- Add the ability to define highlight words in chat</p>
 <p class="p4">- Date stamps can now be set to a different color</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.1</b></p>
 <p class="p4">- Add support for tracker</p>
 <p class="p4">- Add sound preferences panel, with sound settings for most events</p>
@@ -342,7 +366,7 @@
 <p class="p4">- Fix a bug where preview windows would not close when the corresponding connection closed</p>
 <p class="p4">- Fix a bug where the files window would report that upload permission was denied, when it, in fact, was not</p>
 <p class="p4">- Fix a bug where login names or passwords containing special characters like "@", ":", "/" etc would result in parse errors<span class="Apple-converted-space"> </span></p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.0.2</b></p>
 <p class="p4">- Show number of online users in user list</p>
 <p class="p4">- Add settings for disabling user join/leave/rename messages</p>
@@ -352,29 +376,29 @@
 <p class="p4">- Improve the URL scanner</p>
 <p class="p4">- Fix a crash when hitting cancel in the connect window</p>
 <p class="p4">- Fix a memory leak</p>
-<p class="p10"><br></p>
+<p class="p11"><br></p>
 <p class="p7"><b>1.0.1</b></p>
 <p class="p4">- Minor interface fixes</p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
 <p class="p7"><b>1.0</b></p>
 <p class="p4">- Initial release</p>
-<p class="p8"><br></p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
 <p class="p3"><b>Contributors</b></p>
 <p class="p2"><br></p>
 <p class="p4">- Daniel Ericsson, sdz@lounging.com</p>
-<p class="p8"><br></p>
-<p class="p8"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
 <p class="p3"><b>License</b></p>
-<p class="p8"><br></p>
-<p class="p11">Copyright © 2003-2009 Axel Andersson</p>
-<p class="p11">All rights reserved.</p>
-<p class="p12"><br></p>
-<p class="p11">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<p class="p12"><br></p>
-<p class="p11">1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
-<p class="p11">2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
-<p class="p12"><br></p>
-<p class="p11">THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.<span class="Apple-converted-space">  </span>IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p class="p9"><br></p>
+<p class="p12">Copyright © 2003-2009 Axel Andersson</p>
+<p class="p12">All rights reserved.</p>
+<p class="p13"><br></p>
+<p class="p12">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<p class="p13"><br></p>
+<p class="p12">1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p>
+<p class="p12">2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
+<p class="p13"><br></p>
+<p class="p12">THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.<span class="Apple-converted-space">  </span>IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 </body>
 </html>

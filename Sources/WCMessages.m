@@ -50,6 +50,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
+
 @interface WCMessages (Data)
 
 - (WDMessagesConversation *)        _messagesConversationForUser:(WCUser *)user;
@@ -59,40 +60,43 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
-
 @interface WCMessages (Private)
 
-- (void)_validate;
-- (void)_themeDidChange;
+- (void)                    _validate;
+- (void)                    _themeDidChange;
+- (void)                    _adjustMessageTextFieldHeight;
 
-- (void)_showDialogForMessage:(WDMessage *)message;
-- (NSString *)_stringForMessageString:(NSString *)string;
-- (void)_sendMessage;
+- (void)                    _showDialogForMessage:(WDMessage *)message;
+- (NSString *)              _stringForMessageString:(NSString *)string;
+- (void)                    _sendMessage;
 
-- (NSArray *)_commands;
-- (BOOL)_runCommand:(NSString *)string;
+- (NSArray *)               _commands;
+- (BOOL)                    _runCommand:(NSString *)string;
 
-- (WDMessagesNode *)_selectedNode;
-- (WDConversation *)_selectedConversation;
-- (WDMessage *)_selectedMessage;
+- (WDMessagesNode *)        _selectedNode;
+- (WDConversation *)        _selectedConversation;
+- (WDMessage *)             _selectedMessage;
 
-- (void)_selectConversation:(WDConversation *)conversation;
-- (void)_updateSelectedConversation;
+- (void)                    _selectConversation:(WDConversation *)conversation;
+- (void)                    _updateSelectedConversation;
+- (NSInteger)               _numberOfConversations;
 
-- (void)_sortConversations;
-- (void)_filterConversations;
+- (void)                    _sortConversations;
+- (void)                    _filterConversations;
 
-- (void)_revalidateConversationsWithConnection:(WCServerConnection *)connection;
-- (void)_invalidateConversationsWithConnection:(WCServerConnection *)connection;
-- (void)_revalidateConversationsWithUser:(WCUser *)user;
-- (void)_invalidateConversationsWithUser:(WCUser *)user;
+- (void)                    _revalidateConversationsWithConnection:(WCServerConnection *)connection;
+- (void)                    _invalidateConversationsWithConnection:(WCServerConnection *)connection;
+- (void)                    _revalidateConversationsWithUser:(WCUser *)user;
+- (void)                    _invalidateConversationsWithUser:(WCUser *)user;
 
-- (void)_markConversationAsRead:(WDConversation *)conversation;
+- (void)                    _markConversationAsRead:(WDConversation *)conversation;
 
-- (void)_migrateToCoreData;
-- (void)_migrateConversations:(NSArray *)conversations;
+- (void)                    _migrateToCoreData;
+- (void)                    _migrateConversations:(NSArray *)conversations;
 
 @end
+
+
 
 
 
@@ -175,12 +179,15 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (void)_validate {
 	WDConversation		*conversation;
 	WCServerConnection	*connection;
+    BOOL                enabled;
 	
 	conversation	= [self _selectedConversation];
 	connection		= [conversation connection];
+    enabled         = (connection != NULL && [connection isConnected] && [conversation user] != NULL);
     
-	[_messageTextField setEditable:(connection != NULL && [connection isConnected] && [conversation user] != NULL)];
-	
+	[_messageTextField setEditable:enabled];
+	[_emoticonButton setEnabled:enabled];
+    
 	[[[self window] toolbar] validateVisibleItems];
 }
 
@@ -223,6 +230,12 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	
 	[_conversationController reloadTemplate];
     [_conversationController reloadData];
+}
+
+
+- (void)_adjustMessageTextFieldHeight {
+    [_messageTextField adjustHeightForTopView:_conversationWebView bottomView:_messagesView];
+    [_conversationWebView scrollToBottom];
 }
 
 
@@ -296,9 +309,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     selfUser        = [[[conversation connection] chatController] userWithUserID:[[conversation connection] userID]];
 	user			= [conversation user];
     connection      = [user connection];
-    
-    NSLog(@"string: %@", string);
-    
+        
     if(![conversation direction])
         [conversation setDirection:[NSNumber numberWithInteger:WCMessageTo]];
     
@@ -558,9 +569,28 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     }
     
     [_conversationController setConversation:_selectedConversation];
-    
 }
 
+- (NSInteger)_numberOfConversations {
+    NSFetchRequest  *request;
+    NSError         *err;
+    NSUInteger      count;
+    
+    request = [[NSFetchRequest alloc] init];
+    
+    [request setEntity:[NSEntityDescription entityForName:@"Conversation"
+                                   inManagedObjectContext:self.managedObjectContext]];
+    
+    [request setIncludesSubentities:NO]; //Omit subentities. Default is YES (i.e. include subentities)
+    
+    count = [self.managedObjectContext countForFetchRequest:request error:&err];
+    if(count == NSNotFound) {
+        return 0;
+    }
+    [request release];
+    
+    return count;
+}
 
 
 
@@ -598,15 +628,15 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         [_conversationsTreeController setEntityName:@"BroadcastsConversation"];
     }
     else if([_conversationsFiltersPopUpButton selectedTag] == 3) {
-        
+        // Draft
     }
     else if([_conversationsFiltersPopUpButton selectedTag] == 4) {
-        
+        // Archives
     }
     
-    while ([searchText rangeOfString:@"Â  "].location != NSNotFound) {
+    while ([searchText rangeOfString:@"Ã‚  "].location != NSNotFound) {
         // Remove extraenous whitespace
-        [searchText replaceOccurrencesOfString:@"Â  " withString:@" " options:0 range:NSMakeRange(0, [searchText length])];
+        [searchText replaceOccurrencesOfString:@"Ã‚  " withString:@" " options:0 range:NSMakeRange(0, [searchText length])];
     }
     if ([searchText length] != 0) {
         // Remove leading space
@@ -902,9 +932,11 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 #pragma mark -
 
-@dynamic managedObjectContext;
-@synthesize sortDescriptors = _sortDescriptors;
+@dynamic    managedObjectContext;
+@synthesize sortDescriptors         = _sortDescriptors;
 
+@synthesize conversationWebView     = _conversationWebView;
+@synthesize messagesView            = _messagesView;
 
 
 
@@ -1012,23 +1044,30 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
+
 #pragma mark -
 
 - (void)windowDidLoad {
 	[self setShouldCascadeWindows:NO];
-	[self setWindowFrameAutosaveName:@"Messages"];
-	
-//	[_conversationsSplitView setAutosaveName:@"Conversations"];
-//	[_messagesSplitView setAutosaveName:@"Messages"];
     
     [self _migrateToCoreData];
     
     [_conversationsTreeController setFetchPredicate:nil];
     [_conversationsTreeController setSortDescriptors:self.sortDescriptors];
     
+    [_conversationsOutlineView setTarget:self];
+    [_conversationsOutlineView setDeleteAction:@selector(deleteConversation:)];
+    
+    [_messagesView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    [_messageTextField setTranslatesAutoresizingMaskIntoConstraints:YES];
+    
 	[self _themeDidChange];
     [self _sortConversations];
 	[self _validate];
+}
+
+- (void)awakeFromNib {
+
 }
 
 
@@ -1041,7 +1080,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	if(conversation) {
         if([conversation isUnread]) {
             [conversation setNumberOfUnreadsValue:0];
-            [_conversationsTreeController setFetchPredicate:nil];
+            [_conversationsTreeController fetch:self];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
             [self _sortConversations];
@@ -1191,7 +1230,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	
 	user = [notification object];
 	
-	[_conversations invalidateForUser:user];
+	[self _invalidateConversationsWithUser:user];
 	
 	if([[self _selectedConversation] user] == user)
 		[_conversationController reloadData];
@@ -1252,7 +1291,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	
     [conversation setDate:[message date]];
 	[conversation addMessagesObject:message];
-    [conversation setNumberOfUnreadsValue:([conversation numberOfUnreadsValue] + 1)];
+    
+    if(![[self window] isKeyWindow])
+        [conversation setNumberOfUnreadsValue:([conversation numberOfUnreadsValue] + 1)];
     
     [[WCDatabaseController sharedController] save];
     
@@ -1269,7 +1310,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
 	
-	[connection triggerEvent:WCEventsMessageReceived info1:message];
+	[connection triggerEvent:WCEventsMessageReceived info1:message info2:user];
 	
 	[self _validate];
 }
@@ -1303,7 +1344,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	
     [conversation setDate:[message date]];
 	[conversation addMessagesObject:message];
-    [conversation setNumberOfUnreadsValue:([conversation numberOfUnreadsValue] + 1)];
+    
+    if(![[self window] isKeyWindow])
+        [conversation setNumberOfUnreadsValue:([conversation numberOfUnreadsValue] + 1)];
     
     [[WCDatabaseController sharedController] save];
 
@@ -1316,7 +1359,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCMessagesDidChangeUnreadCountNotification];
 	
-	[connection triggerEvent:WCEventsBroadcastReceived info1:message];
+	[connection triggerEvent:WCEventsMessageReceived info1:message info2:user];
 	
 	[self _validate];
 }
@@ -1347,7 +1390,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 		return ([self _selectedConversation] != NULL);
     
 	else if(selector == @selector(clearMessages:))
-		return ([_messageConversations numberOfConversations] > 0 || [_broadcastConversations numberOfConversations] > 0);
+		return ([self _numberOfConversations] > 0);
 	
     else if(selector == @selector(saveDocument:))
         return ([self _selectedConversation] != NULL);
@@ -1415,6 +1458,24 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 //	}
 //	
 	return NO;
+}
+
+
+
+- (void)sendMessage:(NSString *)string toUser:(WCUser *)user {
+    WDMessagesConversation      *conversation;
+    
+    conversation = [self _messagesConversationForUser:user];
+    
+    if(![conversation direction])
+        [conversation setDirection:[NSNumber numberWithInteger:WCMessageTo]];
+    
+    [self _selectConversation:conversation];
+	
+    [_messageTextField setStringValue:string];
+    [self _sendMessage];
+    
+    [self _markConversationAsRead:conversation];
 }
 
 
@@ -1743,9 +1804,26 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 - (IBAction)showEmoticons:(id)sender {
+    [[WCEmoticonViewController emoticonController] setDelegate:self];
     [[WCEmoticonViewController emoticonController] popoverWithSender:sender
                                                             textField:_messageTextField];
 }
+
+
+
+
+#pragma mark -
+
+- (void)emoticonViewController:(WCEmoticonViewController *)controller didInsertEmoticon:(WIEmoticon *)emoticon inControl:(NSControl *)control {
+    if(control == _messageTextField) {
+        NSLog(@"didInsertEmoticon");
+        [self _adjustMessageTextFieldHeight];
+    }
+}
+
+
+
+
 
 
 
@@ -1757,10 +1835,10 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
     if(outlineView == _conversationsOutlineView) {
         if([node.representedObject isKindOfClass:[WDConversation class]]) {
-            view = [outlineView makeViewWithIdentifier:@"ConversationCell" owner:self];
+            view = [outlineView makeViewWithIdentifier:@"ConversationCell" owner:outlineView];
         }
         else if([node.representedObject isKindOfClass:[WDMessage class]]) {
-            view = [outlineView makeViewWithIdentifier:@"MessageCell" owner:self];
+            view = [outlineView makeViewWithIdentifier:@"MessageCell" owner:outlineView];
         }
     }
     
@@ -1786,6 +1864,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         return;
     
     [self _updateSelectedConversation];
+    [self _adjustMessageTextFieldHeight];
     
     if(!_sorting) {
         [_conversationController reloadData];
@@ -1805,46 +1884,46 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 #pragma mark -
 
-//- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
-//    
-//    if(splitView == _conversationsSplitView) {
-//        if(view == [[_conversationsSplitView subviews] objectAtIndex:0])
-//            return NO;
-//    }
-//    else if(splitView == _messagesSplitView) {
-//        if(view == [[_messagesSplitView subviews] objectAtIndex:1])
-//            return NO;
-//    }
-//    
-//    return YES;
-//}
+- (BOOL)splitView:(NSSplitView *)splitView shouldAdjustSizeOfSubview:(NSView *)view {
+    
+    if(splitView == _conversationsSplitView) {
+        if(view == [[_conversationsSplitView subviews] objectAtIndex:0])
+            return NO;
+    }
+    else if(splitView == _messagesSplitView) {
+        if(view == [[_messagesSplitView subviews] objectAtIndex:1])
+            return NO;
+    }
+    
+    return YES;
+}
 
 
-//- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)offset {
-//	if(splitView == _conversationsSplitView)
-//		return proposedMax - 140.0;
-//	else if(splitView == _messagesSplitView)
-//		return proposedMax - 31.0;
-//	
-//	return proposedMax;
-//}
-//
-//
-//
-//- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)offset {
-//	if(splitView == _conversationsSplitView)
-//		return proposedMin + 140.0;
-//	else if(splitView == _messagesSplitView)
-//		return proposedMin + 31.0;
-//	
-//	return proposedMin;
-//}
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)offset {
+	if(splitView == _conversationsSplitView)
+		return proposedMax - 140.0;
+	else if(splitView == _messagesSplitView)
+		return proposedMax - 31.0;
+	
+	return proposedMax;
+}
 
 
 
-//- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview {
-//	return NO;
-//}
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)offset {
+	if(splitView == _conversationsSplitView)
+		return proposedMin + 140.0;
+	else if(splitView == _messagesSplitView)
+		return proposedMin + 31.0;
+	
+	return proposedMin;
+}
+
+
+
+- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview {
+	return NO;
+}
 
 
 
@@ -1852,10 +1931,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 #pragma mark -
 
-- (void)controlTextDidChange:(NSNotification *)obj {
-    if([obj object] == _messageTextField) {
-        
-    }
+-(void)controlTextDidChange:(NSNotification *)obj {
+    [self _adjustMessageTextFieldHeight];
 }
 
 
@@ -1865,11 +1942,14 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 			if([[_messageTextField stringValue] length] > 0)
 				[self _sendMessage];
             
-			return YES;
+			 [self _adjustMessageTextFieldHeight];
+            
+            return YES;
 		}
 		else if(selector == @selector(insertNewlineIgnoringFieldEditor:)) {
-			[_messageTextField insertNewline:self];
-			
+			[fieldEditor insertNewline:self];
+            [self _adjustMessageTextFieldHeight];
+            
 			return YES;
 		}
 		else if(selector == @selector(moveToBeginningOfDocument:) ||

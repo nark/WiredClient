@@ -177,8 +177,8 @@
 
 #pragma mark -
 
-- (NSTextView *)insertionTextView {
-	return [_chatController insertionTextView];
+- (NSTextField *)insertionTextField {
+	return [_chatController insertionTextField];
 }
 
 @end

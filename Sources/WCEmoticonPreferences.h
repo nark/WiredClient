@@ -7,14 +7,29 @@
 //
 
 #import <WiredFoundation/WiredFoundation.h>
+#import "WCPreferencesController.h"
 
-@interface WCEmoticonPreferences : WIWindowController <NSTableViewDelegate, NSTableViewDataSource> {
+@interface WCEmoticonPreferences : WCPreferencesController <NSTableViewDelegate, NSTableViewDataSource> {
     IBOutlet NSTableView            *_emoticonPacksTableView;
     IBOutlet NSTableView            *_emoticonsTableView;
+    
+    NSMutableArray                  *_availableEmoticonPacks;
+    NSMutableArray                  *_enabledEmoticonPacks;
+    NSMutableArray                  *_emoticons;
+    NSMutableArray                  *_emoticonEquivalents;
+    
+    NSIndexSet                      *_dragRows;
 }
 
-- (IBAction)open:(id)sender;
-- (IBAction)close:(id)sender;
+- (NSArray *)availableEmoticonPacks;
+- (NSArray *)enabledEmoticonPacks;
+- (NSArray *)computedEmoticonPacks;
+- (NSArray *)enabledEmoticons;
+- (NSArray *)emoticonEquivalents;
+
+- (WIEmoticon *)emoticonForEquivalent:(NSString *)equivalent;
+
+- (void)reloadEmoticons;
 
 - (IBAction)enablePack:(id)sender;
 

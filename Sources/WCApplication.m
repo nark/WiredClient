@@ -33,12 +33,25 @@
 - (id)init {
     self = [super init];
     if (self) {
+        [[NSImage imageNamed:@"Smileys"] setTemplate:YES];
+        
         [[NSImage imageNamed:@"Kick"] setTemplate:YES];
         [[NSImage imageNamed:@"UserInfo"] setTemplate:YES];
-        [[NSImage imageNamed:@"Group"] setTemplate:YES];
+        [[NSImage imageNamed:@"PrivateChat"] setTemplate:YES];
         [[NSImage imageNamed:@"PrivateMessage"] setTemplate:YES];
         [[NSImage imageNamed:@"RightViewNavigator"] setTemplate:YES];
         [[NSImage imageNamed:@"LeftViewNavigator"] setTemplate:YES];
+        
+        [[NSImage imageNamed:@"NewThread"] setTemplate:YES];
+        [[NSImage imageNamed:@"DeleteThread"] setTemplate:YES];
+        [[NSImage imageNamed:@"ReplyThread"] setTemplate:YES];
+        [[NSImage imageNamed:@"MarkAsRead"] setTemplate:YES];
+        [[NSImage imageNamed:@"MarkAllAsRead"] setTemplate:YES];
+        
+        [[NSImage imageNamed:@"Disconnect"] setTemplate:YES];
+        [[NSImage imageNamed:@"DeleteFile"] setTemplate:YES];
+        [[NSImage imageNamed:@"DeleteBookmark"] setTemplate:YES];
+        [[NSImage imageNamed:@"DeleteAccount"] setTemplate:YES];
     }
     return self;
 }

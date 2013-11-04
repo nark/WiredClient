@@ -7,13 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "WCBadgedTableCellView.h"
 
-@interface WCConversationCellView : NSTableCellView {
-@private
-    NSButton *_button;
-}
-
-@property(retain) IBOutlet NSButton *button;
-
+@interface WCConversationCellView : WCBadgedTableCellView
 
 @end

@@ -33,7 +33,9 @@ extern const struct WDConversationFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSNumber* numberOfUnreads;
+
 
 
 @property int32_t numberOfUnreadsValue;
@@ -45,7 +47,9 @@ extern const struct WDConversationFetchedProperties {
 
 
 
+
 @property (nonatomic, retain) NSString* serverName;
+
 
 
 //- (BOOL)validateServerName:(id*)value_ error:(NSError**)error_;
@@ -54,7 +58,7 @@ extern const struct WDConversationFetchedProperties {
 
 
 
-@property (nonatomic, retain) NSSet* messages;
+@property (nonatomic, retain) NSSet *messages;
 
 - (NSMutableSet*)messagesSet;
 

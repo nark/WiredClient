@@ -26,18 +26,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-extern NSString * const								WCBoardsDidChangeUnreadCountNotification;
+#import "WCWebDataSource.h"
 
+extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 
 @class WCBoardThreadController, WCErrorQueue, WCSourceSplitView, WCBoard, WCSmartBoard, WCBoardThread;
 
-@interface WCBoards : WIWindowController <NSToolbarDelegate> {
-	IBOutlet WCBoardThreadController				*_threadController;
-	
+@interface WCBoards : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, WCWebDataSource> {
 	IBOutlet WCSourceSplitView						*_boardsSplitView;
+    IBOutlet NSImageView                            *_boardsSplitViewImageView;
 	IBOutlet NSView									*_boardsView;
 	IBOutlet NSView									*_threadsView;
-	IBOutlet WISplitView							*_threadsSplitView;
+	IBOutlet WISplitView							*_threadsHorizontalSplitView;
+    IBOutlet NSImageView                            *_threadsHorizontalSplitViewImageView;
+    IBOutlet NSView                                 *_threadsHorizontalSplitViewBarView;
+    IBOutlet WISplitView							*_threadsVerticalSplitView;
+    IBOutlet NSImageView                            *_threadsVerticalSplitViewImageView;
 	IBOutlet NSView									*_threadListView;
 	IBOutlet NSView									*_threadView;
 
@@ -47,13 +51,15 @@ extern NSString * const								WCBoardsDidChangeUnreadCountNotification;
 	IBOutlet NSButton								*_addBoardButton;
 	IBOutlet NSButton								*_deleteBoardButton;
 	
-	IBOutlet WITableView							*_threadsTableView;
+	IBOutlet WITableView							*_threadsHorizontalTableView;
+    IBOutlet WITableView							*_threadsVerticalTableView;
 	IBOutlet NSTableColumn							*_unreadThreadTableColumn;
 	IBOutlet NSTableColumn							*_subjectTableColumn;
 	IBOutlet NSTableColumn							*_nickTableColumn;
 	IBOutlet NSTableColumn							*_repliesTableColumn;
 	IBOutlet NSTableColumn							*_threadTimeTableColumn;
 	IBOutlet NSTableColumn							*_postTimeTableColumn;
+    IBOutlet NSPopUpButton                          *_threadSortingPopUpButton;
 
 	IBOutlet NSPanel								*_addBoardPanel;
 	IBOutlet NSPopUpButton							*_boardLocationPopUpButton;
@@ -86,18 +92,23 @@ extern NSString * const								WCBoardsDidChangeUnreadCountNotification;
 	IBOutlet NSTextField							*_nickFilterTextField;
 	IBOutlet NSButton								*_unreadFilterButton;
 	IBOutlet NSTextField                            *_maxTitleLengthTextField;
+    IBOutlet NSSearchField                          *_searchTextField;
     
+    WCBoardThreadController                         *_threadController;
 	WCErrorQueue									*_errorQueue;
+    
+    NSString                                        *_fileLinkBase64String;
+	NSString                                        *_unreadPostBase64String;
+	NSString                                        *_defaultIconBase64String;
 	
 	WCBoard											*_boards;
 	WCBoard											*_smartBoards;
+    WCBoard											*_searchBoards;
 	id												_selectedBoard;
 	WCSmartBoard									*_searchBoard;
 	
 	NSMutableDictionary								*_boardsByThreadID;
-	
-	WIDateFormatter									*_dateFormatter;
-	
+		
 	NSArray											*_collapsedBoards;
 	BOOL											_expandingBoards;
 	
@@ -105,6 +116,7 @@ extern NSString * const								WCBoardsDidChangeUnreadCountNotification;
 	NSMutableSet									*_readIDs;
 	
 	BOOL											_searching;
+    BOOL                                            _reloadingThreads;
 }
 
 + (id)boards;
@@ -130,6 +142,7 @@ extern NSString * const								WCBoardsDidChangeUnreadCountNotification;
 - (IBAction)renameBoard:(id)sender;
 - (IBAction)changePermissions:(id)sender;
 - (IBAction)location:(id)sender;
+- (IBAction)sortThreads:(id)sender;
 - (IBAction)addThread:(id)sender;
 - (IBAction)deleteThread:(id)sender;
 - (IBAction)saveThread:(id)sender;
@@ -139,6 +152,7 @@ extern NSString * const								WCBoardsDidChangeUnreadCountNotification;
 - (IBAction)search:(id)sender;
 
 - (IBAction)goToLatestReply:(id)sender;
+- (IBAction)openThreadInSeparatedWindow:(id)sender;
 
 - (IBAction)bold:(id)sender;
 - (IBAction)italic:(id)sender;

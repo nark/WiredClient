@@ -558,7 +558,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	[toolbar setAllowsUserCustomization:YES];
 	[toolbar setAutosavesConfiguration:YES];
 	[toolbar setShowsBaselineSeparator:NO];
-    //[toolbar setSelectedItemIdentifier:@"Chat"];
+
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
@@ -627,6 +627,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 		button = [[[NSButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200.0, 32.0)] autorelease];
 		[button setBordered:NO];
 		[button setImage:[NSImage imageNamed:@"Banner"]];
+        [[button cell] setImageScaling:NSImageScaleProportionallyUpOrDown];
 		[button setButtonType:NSMomentaryChangeButton];
 		
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
@@ -965,7 +966,7 @@ typedef enum _WCChatActivity				WCChatActivity;
     [self _updateTabViewItemForConnection:[chatController connection]];
     
     chatController  = [self chatControllerForConnectionIdentifier:[[tabViewItem identifier] valueForKey:@"identifier"]];
-    
+        
     name            = [[chatController connection] name];
     bookmark        = [[chatController connection] bookmark];
     
@@ -1886,7 +1887,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 		
 		[_chatTabView selectTabViewItemAtIndex:newIndex];
         
-		[[self window] makeFirstResponder:[[self selectedChatController] insertionTextView]];
+		[[self window] makeFirstResponder:[[self selectedChatController] insertionTextField]];
 	}
 }
 
@@ -1907,7 +1908,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 		
 		[_chatTabView selectTabViewItemAtIndex:newIndex];
         
-		[[self window] makeFirstResponder:[[self selectedChatController] insertionTextView]];
+		[[self window] makeFirstResponder:[[self selectedChatController] insertionTextField]];
 	}
 }
 
@@ -1953,8 +1954,8 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 #pragma mark -
 
-- (NSTextView *)insertionTextView {
-	return [[self selectedChatController] insertionTextView];
+- (NSTextField *)insertionTextField {
+	return [[self selectedChatController] insertionTextField];
 }
 
 
@@ -2037,7 +2038,7 @@ typedef enum _WCChatActivity				WCChatActivity;
         [[self selectedChatController] showUserList:self];
     
     if(firstResponder)
-        [[self window] makeFirstResponder:[[self selectedChatController] insertionTextView]];
+        [[self window] makeFirstResponder:[[self selectedChatController] insertionTextField]];
 }
 
 

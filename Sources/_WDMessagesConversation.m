@@ -35,7 +35,7 @@ const struct WDMessagesConversationFetchedProperties WDMessagesConversationFetch
 	return (WDMessagesConversationID*)[super objectID];
 }
 
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
++ (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
 

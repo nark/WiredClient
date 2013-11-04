@@ -30,20 +30,20 @@
 
 @implementation WCMessagesWindow
 
-- (void)sendEvent:(NSEvent *)event {
-	BOOL	handled = NO;
-	
-	if([event type] == NSKeyDown) {
-		if([event character] == ' ') {
-			if([event shiftKeyModifier])
-				handled = [[self delegate] showPreviousUnreadConversation];
-			else
-				handled = [[self delegate] showNextUnreadConversation];
-		}
-	}
-	
-	if(!handled)
-		[super sendEvent:event];
-}
+//- (void)sendEvent:(NSEvent *)event {
+//	BOOL	handled = NO;
+//	
+//	if([event type] == NSKeyDown) {
+//		if([event character] == ' ') {
+//			if([event shiftKeyModifier])
+//				handled = [[self delegate] showPreviousUnreadConversation];
+//			else
+//				handled = [[self delegate] showNextUnreadConversation];
+//		}
+//	}
+//	
+//	if(!handled)
+//		[super sendEvent:event];
+//}
 
 @end

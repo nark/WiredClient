@@ -4,6 +4,7 @@ body {
 	color: <? textcolor ?>;
 	text-shadow: 0px 1px 0px white;
 	margin: 0;
+	line-height: 16px;
 }
 
 div.messagewrapper {
@@ -44,14 +45,14 @@ div.message {
 	background-color: <? backgroundcolor ?>;
 	border-radius: 3px;
 	border: 1px solid #999;
-	box-shadow: 0px 0px 4px rgba(127, 131, 137, 0.7);
+	box-shadow: 0px 0px 2px rgba(127, 131, 137, 0.4);
 }
 
 div.messagestatus {
 	color: white;
 	text-shadow: 0px 1px 0px black;
-	background-color: rgba(63,76,107,1);
-	background: -webkit-linear-gradient(top, rgba(96,108,136,1) 0%,rgba(63,76,107,1) 100%); 
+	background-color: #81b7e9;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#81b7e9), color-stop(100%,#5184d2));
 	margin-bottom: 20px;
 }
 
@@ -62,7 +63,6 @@ div.icon {
 
 div.messageinfo span.nick {
 	display: block;
-	margin-bottom: 5px;
 }
 
 div.messageinfo span.time:after {

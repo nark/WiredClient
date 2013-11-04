@@ -28,19 +28,16 @@
 
 #import "WCWebDataSource.h"
 
-@class WDConversation, WDMessage, SBJsonWriter;
+@class WDConversation, WDMessage;
 
 @interface WCConversationController : WIObject <WCWebDataSource> {
 	IBOutlet WebView					*_conversationWebView;
 	
     WDConversation                      *_conversation;
-
 	NSString							*_templatePath;
 	NSFont								*_font;
 	NSColor								*_textColor;
 	NSColor								*_backgroundColor;
-    
-    SBJsonWriter                        *_jsonWriter;
 }
 
 - (void)appendMessage:(WDMessage *)message;

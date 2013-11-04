@@ -47,6 +47,7 @@ extern NSString * const						WCOrderFrontWhenDisconnected;
 
 
 extern NSString * const						WCEnabledEmoticonPacks;
+extern NSString * const						WCEmoticonPacksOrdering;
 extern NSString * const						WCDisabledEmoticons;
 
 extern NSString * const						WCTheme;
@@ -97,6 +98,12 @@ enum {
 };
 
 extern NSString * const						WCThemesMonitorAlternateRows;
+extern NSString * const						WCThreadsSplitViewOrientation;
+
+enum {
+	WCThreadsSplitViewOrientationVertical   = 1,
+	WCThreadsSplitViewOrientationHorizontal = 0
+};
 
 extern NSString * const						WCMessageConversations;
 extern NSString * const						WCBroadcastConversations;

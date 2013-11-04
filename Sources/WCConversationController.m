@@ -50,7 +50,6 @@
 - (id)init {
 	self = [super init];
 	
-    _jsonWriter   = [[SBJsonWriter alloc] init];
     _conversation = nil;
 	
 	return self;
@@ -59,7 +58,6 @@
 
 
 - (void)dealloc {
-	[_jsonWriter release];
     
 	[_font release];
 	[_textColor release];
@@ -181,7 +179,7 @@
 
 - (void)appendMessage:(WDMessage *)message {
     [_conversationWebView stringByEvaluatingJavaScriptFromString:
-            [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:message]]];
+            [NSSWF:@"printMessage(%@);", [[SBJsonWriter writer] stringWithObject:message]]];
 }
 
 
@@ -193,11 +191,9 @@
 - (void)reloadData {
     NSURL                       *url;
     WITemplateBundle            *template;
-    BOOL						isKeyWindow;
     
     template        = [WITemplateBundle templateWithPath:_templatePath];
-    isKeyWindow     = ([NSApp keyWindow] == [_conversationWebView window]);
-        
+    
     if(template) {
         url = [NSURL fileURLWithPath: [template pathForResource:@"messages"
                                                          ofType:@"html"
@@ -424,6 +420,8 @@
     }
     
     if(!date) {
+        [dateFormatter release];
+        [calendar release];
         return nil;
     }
     
@@ -440,6 +438,8 @@
     [descriptor release];
     [dateFormatter release];
     [calendar release];
+    
+    //NSLog(@"jsonString: %@", jsonString);
     
     return jsonString;
 }

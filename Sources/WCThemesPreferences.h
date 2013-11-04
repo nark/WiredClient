@@ -6,8 +6,21 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import <WiredFoundation/WiredFoundation.h>
+#import "WCPreferencesController.h"
 
-@interface WCThemesPreferences : NSObject
+
+extern NSString * const     WCThemesDidChangeNotification;
+
+
+@interface WCThemesPreferences : WCPreferencesController <NSTableViewDataSource, NSTableViewDelegate> {
+    IBOutlet NSTableView    *_themesTableView;
+}
+
+@property (readonly) BOOL themeSelected;
+
+- (IBAction)duplicateTheme:(id)sender;
+- (IBAction)renameTheme:(id)sender;
+- (IBAction)deleteTheme:(id)sender;
 
 @end

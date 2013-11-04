@@ -42,17 +42,17 @@
 
 
 - (void)paste:(id)sender {
-	NSTextView		*textView;
+	NSTextField		*textView;
 	NSWindow		*window;
 	
 	if([self isEditable]) {
 		[super paste:sender];
 	} else {
 		window = [self window];
-		textView = [(WCChatWindow *)[window delegate] insertionTextView];
+		textView = [(WCChatWindow *)[window delegate] insertionTextField];
 		
 		[window makeFirstResponder:textView];
-		[textView paste:sender];
+		//[textView paste:sender];
 	}
 }
 

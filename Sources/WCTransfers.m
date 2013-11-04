@@ -1175,8 +1175,8 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 - (void)_removeTransfer:(WCTransfer *)transfer {
 	[[transfer progressIndicator] removeFromSuperview];
 
-    [[NSNotificationCenter defaultCenter] mainThreadPostNotificationName:WCTransfersQueueUpdatedNotification
-                                                                  object:[transfer connection]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
+                                                        object:[transfer connection]];
 
     [_transfers removeObject:transfer];
 	[self _saveTransfers];
@@ -1185,30 +1185,24 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 
 
 - (void)_cleanTransfers {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    WCTransfer              *transfer;
     
-    WCTransfer		*transfer;
+    if(![self _validateClear])
+        return;
     
-    @synchronized(_transfers) {
-        if(![self _validateClear])
-            return;
-        
-        while((transfer = [self _transferWithState:WCTransferFinished]))
-            [self _removeTransfer:transfer];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
-                                                                object:[transfer connection]
-                                                              userInfo:nil];
-            
-            [_transfersTableView setNeedsDisplay:YES];
-            [_transfersTableView reloadData];
-            [self _validate];
-            
-        });
+    while((transfer = [self _transferWithState:WCTransferFinished])) {
+        [[transfer progressIndicator] removeFromSuperview];
+        [_transfers removeObject:transfer];
     }
     
-    [pool release];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
+                                                        object:nil];
+    
+    [_transfersTableView setNeedsDisplay:YES];
+    [_transfersTableView reloadData];
+    
+    [self _saveTransfers];
+    [self _validate];
 }
 
 
@@ -2765,7 +2759,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 
 
 - (IBAction)clear:(id)sender {
-    [self performSelectorInBackground:@selector(_cleanTransfers) withObject:nil];
+    [self performSelector:@selector(_cleanTransfers) withObject:nil];
 }
 
 
@@ -2883,6 +2877,9 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	WCTransfer		*transfer;
 
 	transfer = [_transfers objectAtIndex:row];
+    
+    if(!transfer)
+        return NULL;
 
 	if(tableColumn == _iconTableColumn) {
 		return [transfer icon];

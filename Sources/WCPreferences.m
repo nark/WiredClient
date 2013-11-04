@@ -28,10 +28,12 @@
 
 #import "WCApplicationController.h"
 #import "WCEmoticonPreferences.h"
+#import "WCThemesPreferences.h"
 #import "WCChatHistory.h"
 #import "WCKeychain.h"
 #import "WCPreferences.h"
 
+#define WC_ICON_SIZE 64.0f
 
 #define WCThemePboardType									@"WCThemePboardType"
 #define WCBookmarkPboardType								@"WCBookmarkPboardType"
@@ -71,12 +73,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (void)_reloadChatLogsFolder;
 
-- (void)_reloadBookmark;
 - (void)_reloadEvents;
 - (void)_reloadEvent;
 - (void)_updateEventControls;
 - (void)_reloadDownloadFolder;
-- (void)_reloadTrackerBookmark;
 
 - (NSArray *)_themeNames;
 - (void)_changeSelectedThemeToTheme:(NSDictionary *)theme;
@@ -102,11 +102,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		
 		[_deleteThemeButton setEnabled:![theme objectForKey:WCThemesBuiltinName]];
 	}
-	
-	[_deleteBookmarkButton setEnabled:([_bookmarksTableView selectedRow] >= 0)];
 	[_deleteHighlightButton setEnabled:([_highlightsTableView selectedRow] >= 0)];
 	[_deleteIgnoreButton setEnabled:([_ignoresTableView selectedRow] >= 0)];
-	[_deleteTrackerBookmarkButton setEnabled:([_trackerBookmarksTableView selectedRow] >= 0)];
 }
 
 
@@ -133,8 +130,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     while((index = [_emoticonPacksPopUpButton indexOfItemWithTag:0]) != -1)
         [_emoticonPacksPopUpButton removeItemAtIndex:index];
     
-    packs           = [[WCApplicationController sharedController] availableEmoticonPacks];
-    enabledPacks    = [[WCApplicationController sharedController] enabledEmoticonPacks];
+    packs           = [self.emoticonPreferences availableEmoticonPacks];
+    enabledPacks    = [self.emoticonPreferences enabledEmoticonPacks];
     selectedPack    = nil;
     
     if([enabledPacks count] > 1) {
@@ -178,17 +175,23 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     return [_themesPopUpButton indexOfItem:[_themesPopUpButton selectedItem]];
 }
 
+- (NSDictionary *)_selectedTheme {
+    NSString        *identifier;
+    NSDictionary    *theme;
+    
+    identifier  = [[WCSettings settings] objectForKey:WCTheme];
+    theme       = [[WCSettings settings] themeWithIdentifier:identifier];
+    
+    return theme;
+}
+
 
 - (void)_reloadThemes {
 	NSEnumerator	*enumerator;
 	NSDictionary	*theme;
 	NSMenuItem		*item;
-	NSInteger		index;
     
     [_themesPopUpButton removeAllItems];
-	
-	while((index = [_bookmarksThemePopUpButton indexOfItemWithTag:0]) != -1)
-		[_bookmarksThemePopUpButton removeItemAtIndex:index];
 	
 	enumerator = [[[WCSettings settings] objectForKey:WCThemes] objectEnumerator];
 	
@@ -196,15 +199,22 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		item = [NSMenuItem itemWithTitle:[theme objectForKey:WCThemesName]];
 		[item setRepresentedObject:[theme objectForKey:WCThemesIdentifier]];
 		[item setImage:[self imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
-		
-        [_themesPopUpButton addItem:[item copy]];
-		[[_bookmarksThemePopUpButton menu] addItem:item];
-	}
-    [_themesPopUpButton selectItemWithRepresentedObject:[[WCSettings settings] objectForKey:WCTheme]];
+		[item setAction:@selector(selectTheme:)];
+        [item setTarget:self];
+        
+        [_themesPopUpButton addItem:item];
+    }
     
+    [_themesPopUpButton selectItemWithRepresentedObject:[[WCSettings settings] objectForKey:WCTheme]];
     [_themesPopUpButton addItem:[NSMenuItem separatorItem]];
-    [_themesPopUpButton addItemWithTitle:@"Add New Theme..."];
-    [_themesPopUpButton addItemWithTitle:@"Edit Themes..."];
+    
+    [[_themesPopUpButton menu] addItemWithTitle:NSLS(@"Add New Theme...", @"Add Theme Menu Item Title")
+                                         action:@selector(addTheme:)
+                                  keyEquivalent:@""];
+    
+    [[_themesPopUpButton menu] addItemWithTitle:NSLS(@"Edit Themes...", @"Edit Themes Menu Item Title")
+                                         action:@selector(editTheme:)
+                                  keyEquivalent:@""];
 }
 
 
@@ -319,65 +329,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 }
 
 
-
-- (void)_reloadBookmark {
-	NSDictionary	*bookmark;
-	NSString		*theme;
-	NSInteger		index, row;
-	
-	row = [_bookmarksTableView selectedRow];
-	
-	if(row >= 0 && (NSUInteger) row < [[[WCSettings settings] objectForKey:WCBookmarks] count]) {
-		bookmark = [[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row];
-		
-		[_bookmarksAddressTextField setEnabled:YES];
-		[_bookmarksLoginTextField setEnabled:YES];
-		[_bookmarksPasswordTextField setEnabled:YES];
-		[_bookmarksAutoConnectButton setEnabled:YES];
-		[_bookmarksAutoReconnectButton setEnabled:YES];
-		[_bookmarksNickTextField setEnabled:YES];
-		[_bookmarksStatusTextField setEnabled:YES];
-
-		[_bookmarksAddressTextField setStringValue:[bookmark objectForKey:WCBookmarksAddress]];
-		[_bookmarksLoginTextField setStringValue:[bookmark objectForKey:WCBookmarksLogin]];
-		
-		[_bookmarksPassword release];
-		_bookmarksPassword = [[[WCKeychain keychain] passwordForBookmark:bookmark] copy];
-
-		if([[bookmark objectForKey:WCBookmarksAddress] length] > 0 && [_bookmarksPassword length] > 0)
-			[_bookmarksPasswordTextField setStringValue:_bookmarksPassword];
-		else
-			[_bookmarksPasswordTextField setStringValue:@""];
-		
-		theme = [bookmark objectForKey:WCBookmarksTheme];
-		
-		if(theme && (index = [_bookmarksThemePopUpButton indexOfItemWithRepresentedObject:theme]) != -1)
-			[_bookmarksThemePopUpButton selectItemAtIndex:index];
-		else
-			[_bookmarksThemePopUpButton selectItemAtIndex:0];
-		
-		[_bookmarksAutoConnectButton setState:[bookmark boolForKey:WCBookmarksAutoConnect]];
-		[_bookmarksAutoReconnectButton setState:[bookmark boolForKey:WCBookmarksAutoReconnect]];
-		[_bookmarksNickTextField setStringValue:[bookmark objectForKey:WCBookmarksNick]];
-		[_bookmarksStatusTextField setStringValue:[bookmark objectForKey:WCBookmarksStatus]];
-	} else {
-		[_bookmarksAddressTextField setEnabled:NO];
-		[_bookmarksLoginTextField setEnabled:NO];
-		[_bookmarksPasswordTextField setEnabled:NO];
-		[_bookmarksAutoConnectButton setEnabled:NO];
-		[_bookmarksAutoReconnectButton setEnabled:NO];
-		[_bookmarksNickTextField setEnabled:NO];
-		[_bookmarksStatusTextField setEnabled:NO];
-
-		[_bookmarksAddressTextField setStringValue:@""];
-		[_bookmarksLoginTextField setStringValue:@""];
-		[_bookmarksPasswordTextField setStringValue:@""];
-		[_bookmarksAutoConnectButton setState:NSOffState];
-		[_bookmarksAutoReconnectButton setState:NSOffState];
-		[_bookmarksNickTextField setStringValue:@""];
-		[_bookmarksStatusTextField setStringValue:@""];
-	}
-}
 
 
 
@@ -546,42 +497,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 
-- (void)_reloadTrackerBookmark {
-	NSDictionary	*bookmark;
-	NSInteger		row;
-	
-	row = [_trackerBookmarksTableView selectedRow];
-	
-	if(row >= 0 && (NSUInteger) row < [[[WCSettings settings] objectForKey:WCTrackerBookmarks] count]) {
-		bookmark = [[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectAtIndex:row];
-		
-		[_trackerBookmarksAddressTextField setEnabled:YES];
-		[_trackerBookmarksLoginTextField setEnabled:YES];
-		[_trackerBookmarksPasswordTextField setEnabled:YES];
-
-		[_trackerBookmarksAddressTextField setStringValue:[bookmark objectForKey:WCTrackerBookmarksAddress]];
-		[_trackerBookmarksLoginTextField setStringValue:[bookmark objectForKey:WCTrackerBookmarksLogin]];
-		
-		[_trackerBookmarksPassword release];
-		_trackerBookmarksPassword = [[[WCKeychain keychain] passwordForTrackerBookmark:bookmark] copy];
-
-		if([[bookmark objectForKey:WCTrackerBookmarksAddress] length] > 0 && [_trackerBookmarksPassword length] > 0)
-			[_trackerBookmarksPasswordTextField setStringValue:_trackerBookmarksPassword];
-		else
-			[_trackerBookmarksPasswordTextField setStringValue:@""];
-	} else {
-		[_trackerBookmarksAddressTextField setEnabled:NO];
-		[_trackerBookmarksLoginTextField setEnabled:NO];
-		[_trackerBookmarksPasswordTextField setEnabled:NO];
-
-		[_trackerBookmarksAddressTextField setStringValue:@""];
-		[_trackerBookmarksLoginTextField setStringValue:@""];
-		[_trackerBookmarksPasswordTextField setStringValue:@""];
-	}
-}
-
-
-
 #pragma mark -
 
 - (NSArray *)_themeNames {
@@ -601,29 +516,44 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)_changeSelectedThemeToTheme:(NSDictionary *)theme {
-	NSAlert		*alert;
-	
-	if([theme objectForKey:WCThemesBuiltinName]) {
-		alert = [[NSAlert alloc] init];
-		[alert setMessageText:[NSSWF:
-			NSLS(@"You cannot edit the built-in theme \u201c%@\u201d", @"Duplicate builtin theme dialog title (theme)"),
-			[theme objectForKey:WCThemesName]]];
-		[alert setInformativeText:NSLS(@"Make a copy of it to edit it.", @"Duplicate builtin theme dialog description")];
-		[alert addButtonWithTitle:NSLS(@"Duplicate", @"Duplicate builtin theme dialog button title")];
-		[alert addButtonWithTitle:NSLS(@"Cancel", @"Duplicate builtin theme button title")];
-		[alert beginSheetModalForWindow:[self window]
-						  modalDelegate:self
-						 didEndSelector:@selector(_changeBuiltinThemePanelDidEnd:returnCode:contextInfo:)
-							contextInfo:[theme retain]];
-		[alert release];
-	} else {
+//    NSMutableDictionary		*newTheme;
+//	NSAlert                 *alert;
+//    NSInteger               returnCode;
+//	
+//	if([theme objectForKey:WCThemesBuiltinName]) {
+//		alert = [[NSAlert alloc] init];
+//		[alert setMessageText:[NSSWF:
+//			NSLS(@"You cannot edit the built-in theme \u201c%@\u201d", @"Duplicate builtin theme dialog title (theme)"),
+//			[theme objectForKey:WCThemesName]]];
+//		[alert setInformativeText:NSLS(@"Make a copy of it to edit it.", @"Duplicate builtin theme dialog description")];
+//		[alert addButtonWithTitle:NSLS(@"Duplicate", @"Duplicate builtin theme dialog button title")];
+//		[alert addButtonWithTitle:NSLS(@"Cancel", @"Duplicate builtin theme button title")];
+//        
+//        returnCode = [alert runModal];
+//        
+//        if(returnCode == NSAlertFirstButtonReturn) {
+//            newTheme = [[theme mutableCopy] autorelease];
+//            [newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
+//                         forKey:WCThemesName];
+//            [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
+//            [newTheme removeObjectForKey:WCThemesBuiltinName];
+//            
+//            [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
+//            [self _reloadThemes];
+//            
+//            if([[self window] attachedSheet] != nil)
+//                [self closeTheme:nil];
+//        }
+//        
+//		[alert release];
+//	} else {
 		[[WCSettings settings] replaceObjectAtIndex:[self _selectedThemeRow] withObject:theme inArrayForKey:WCThemes];
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 
 		[self _reloadTheme];
 		[self _reloadThemes];
-	}
+//	}
 }
 
 
@@ -686,6 +616,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 @implementation WCPreferences
 
+#pragma mark -
+
 + (WCPreferences *)preferences {
 	static id	sharedPreferences;
 
@@ -694,6 +626,13 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 	return sharedPreferences;
 }
+
+
+
+
+#pragma mark -
+
+@synthesize emoticonPreferences = _emoticonPreferences;
 
 
 
@@ -710,6 +649,11 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
            selector:@selector(emoticonsDidChange:)
                name:WCEmoticonsDidChangeNotification];
 
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(themesDidChange:)
+               name:WCThemesDidChangeNotification];
+    
 	[[NSNotificationCenter defaultCenter]
 		addObserver:self
 		   selector:@selector(themeDidChange:)
@@ -760,7 +704,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 	[self addPreferenceView:_appearanceView
 					   name:NSLS(@"Appearance", @"Appearance preferences")
-					  image:[NSImage imageNamed:@"Themes"]];
+					  image:[NSImage imageNamed:@"Appearance"]];
 	
 	[self addPreferenceView:_chatView
 					   name:NSLS(@"Chat", @"Chat preferences")
@@ -782,34 +726,25 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 					   name:NSLS(@"Advanced", @"Advanced preferences")
 					  image:[NSImage imageNamed:@"NSAdvanced"]];
     
-	[_iconImageView setMaxImageSize:NSMakeSize(32.0, 32.0)];
+	[_iconImageView setMaxImageSize:NSMakeSize(WC_ICON_SIZE, WC_ICON_SIZE)];
 	[_iconImageView setDefaultImage:[NSImage imageNamed:@"DefaultIcon"]];
-
-	[[_themesNameTableColumn dataCell] setHorizontalTextOffset:2.0];
-	[[_themesNameTableColumn dataCell] setVerticalTextOffset:10.0];
-	[[_themesNameTableColumn dataCell] setTextHeight:14.0];
 	
 	[_chatTabView selectFirstTabViewItem:self];
 	
 	[_highlightsTableView setTarget:self];
 	[_highlightsTableView setDoubleAction:@selector(changeHighlightColor:)];
 	
-	[_themesTableView registerForDraggedTypes:[NSArray arrayWithObject:WCThemePboardType]];
-	[_bookmarksTableView registerForDraggedTypes:[NSArray arrayWithObject:WCBookmarkPboardType]];
 	[_highlightsTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	[_ignoresTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
-	[_trackerBookmarksTableView registerForDraggedTypes:[NSArray arrayWithObject:WCTrackerBookmarkPboardType]];
 	
     [self _reloadEmoticons];
 	[self _reloadThemes];
 	[self _reloadTheme];
 	[self _reloadTemplates];
 	[self _reloadChatLogsFolder];
-	[self _reloadBookmark];
 	[self _reloadEvents];
 	[self _reloadEvent];
 	[self _reloadDownloadFolder];
-	[self _reloadTrackerBookmark];
 	
 	[_nickTextField setStringValue:[[WCSettings settings] objectForKey:WCNick]];
 	[_statusTextField setStringValue:[[WCSettings settings] objectForKey:WCStatus]];
@@ -823,8 +758,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_autoReconnectButton setState:[[WCSettings settings] boolForKey:WCAutoReconnect]];
     [_orderFrontOnDisconnectButton setState:[[WCSettings settings] boolForKey:WCOrderFrontWhenDisconnected]];
     
-	[_bookmarksNickTextField setPlaceholderString:[_nickTextField stringValue]];
-	[_bookmarksStatusTextField setPlaceholderString:[_statusTextField stringValue]];
+    [_threadsSplitViewMatrix selectCellWithTag:[[WCSettings settings] intForKey:WCThreadsSplitViewOrientation]];
 	
 	[_chatHistoryScrollbackButton setState:[[WCSettings settings] boolForKey:WCChatHistoryScrollback]];
 	[_chatHistoryScrollbackModifierPopUpButton selectItemWithTag:[[WCSettings settings] integerForKey:WCChatHistoryScrollbackModifier]];
@@ -857,7 +791,14 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)emoticonsDidChange:(NSNotification *)notification {
+    NSLog(@"emoticonsDidChange");
     [self _reloadEmoticons];
+}
+
+
+
+- (void)themesDidChange:(NSNotification *)notification {
+    [self _reloadThemes];
 }
 
 
@@ -869,14 +810,12 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	if([[theme objectForKey:WCThemesIdentifier] isEqualToString:[[WCSettings settings] objectForKey:WCTheme]])
 		[[NSNotificationCenter defaultCenter] postNotificationName:WCSelectedThemeDidChangeNotification object:theme];
-	
-	[_themesTableView setNeedsDisplay:YES];
 }
 
 
 
 - (void)bookmarksDidChange:(NSNotification *)notification {
-	[_bookmarksTableView reloadData];
+
 }
 
 
@@ -888,32 +827,15 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)trackerBookmarksDidChange:(NSNotification *)notification {
-	[_trackerBookmarksTableView reloadData];
+
 }
 
 
 
 - (void)controlTextDidChange:(NSNotification *)notification {
-	id			object;
-	
-	object = [notification object];
 
-	if(object == _nickTextField) {
-		[_bookmarksNickTextField setPlaceholderString:[_nickTextField stringValue]];
-	}
-	else if(object == _statusTextField) {
-		[_bookmarksStatusTextField setPlaceholderString:[_statusTextField stringValue]];
-	}
-	else if(object == _bookmarksLoginTextField || object == _bookmarksPasswordTextField ||
-			object == _bookmarksNickTextField || object == _bookmarksStatusTextField) {
-		[self changeBookmark:object];
-	}
-	else if(object == _trackerBookmarksAddressTextField || object == _trackerBookmarksLoginTextField ||
-			object == _trackerBookmarksPasswordTextField) {
-		[self changeTrackerBookmark:object];
-        
-	}
 }
+
 
 - (void)controlTextDidEndEditing:(NSNotification *)notification {
     id			object;
@@ -925,6 +847,9 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     }
 }
 
+
+
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item {
@@ -932,14 +857,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	selector = [item action];
 	
-	if(selector == @selector(duplicateBookmark:))
-		return ([_bookmarksTableView selectedRow] >= 0);
-    
-	else if(selector == @selector(exportBookmarks:))
+	if(selector == @selector(exportBookmarks:))
 		return ([[[WCSettings settings] objectForKey:WCBookmarks] count] > 0);
-    
-	else if(selector == @selector(duplicateTrackerBookmark:))
-		return ([_trackerBookmarksTableView selectedRow] >= 0);
     
 	else if(selector == @selector(exportTrackerBookmarks:))
 		return ([[[WCSettings settings] objectForKey:WCTrackerBookmarks] count] > 0);
@@ -994,9 +913,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSString				*password;
 	NSUInteger				firstIndex;
 	
-//	[self showWindow:self];
-//	[self selectPreferenceView:_bookmarksView];
-	
 	array = [NSArray arrayWithContentsOfFile:path];
 	
 	if(!array || [array count] == 0)
@@ -1026,9 +942,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		if(firstIndex == NSNotFound)
 			firstIndex = [[[WCSettings settings] objectForKey:WCBookmarks] count] - 1;
 	}
-	
-//	[_bookmarksTableView reloadData];
-//	[_bookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:firstIndex] byExtendingSelection:NO];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 	
@@ -1044,9 +957,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSDictionary			*dictionary;
 	NSString				*password;
 	NSUInteger				firstIndex;
-	
-//	[self showWindow:self];
-//	[self selectPreferenceView:_trackersView];
 
 	array = [NSArray arrayWithContentsOfFile:path];
 
@@ -1077,8 +987,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		if(firstIndex == NSNotFound)
 			firstIndex = [[[WCSettings settings] objectForKey:WCBookmarks] count] - 1;
 	}
-
-	//[_trackerBookmarksTableView reloadData];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 	
@@ -1177,8 +1085,11 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[[WCSettings settings] setBool:[_autoReconnectButton state] forKey:WCAutoReconnect];
     [[WCSettings settings] setBool:[_orderFrontOnDisconnectButton state] forKey:WCOrderFrontWhenDisconnected];
     
+    [[WCSettings settings] setInt:[_threadsSplitViewMatrix selectedTag] forKey:WCThreadsSplitViewOrientation];
+    
 	[[WCSettings settings] setBool:[_chatHistoryScrollbackButton state] forKey:WCChatHistoryScrollback];
 	[[WCSettings settings] setInt:[_chatHistoryScrollbackModifierPopUpButton tagOfSelectedItem] forKey:WCChatHistoryScrollbackModifier];
+    
 	[[WCSettings settings] setBool:[_chatTabCompleteNicksButton state] forKey:WCChatTabCompleteNicks];
 	[[WCSettings settings] setObject:[_chatTabCompleteNicksTextField stringValue] forKey:WCChatTabCompleteNicksString];
 	[[WCSettings settings] setBool:[_chatTimestampChatButton state] forKey:WCChatTimestampChat];
@@ -1230,20 +1141,20 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     id              object;
     
     if([_emoticonPacksPopUpButton selectedTag] == 1) {
-        [[WCSettings settings] setObject:nil forKey:WCEnabledEmoticonPacks];
-        
-        [self _reloadEmoticons];
+        [[WCSettings settings] setObject:[NSArray array] forKey:WCEnabledEmoticonPacks];
     }
     else {
         object = [[_emoticonPacksPopUpButton selectedItem] representedObject];
         
         if([object isKindOfClass:[WIEmoticonPack class]]) {
             pack = (WIEmoticonPack *)object;
-            
+        
             [[WCSettings settings] setObject:[NSArray arrayWithObject:[pack packKey]]
                                       forKey:WCEnabledEmoticonPacks];
         }
     }
+    
+    [[self emoticonPreferences] reloadEmoticons];
     [[NSNotificationCenter defaultCenter] postNotificationName:WCEmoticonsDidChangeNotification];
 }
 
@@ -1269,40 +1180,71 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (IBAction)addTheme:(id)sender {
-	NSDictionary		*theme;
-	
-	theme = [NSDictionary dictionaryWithObjectsAndKeys:
-		NSLS(@"Untitled", @"Untitled theme"),							WCThemesName,
-		[NSString UUIDString],											WCThemesIdentifier,
-		WIStringFromFont([NSFont userFixedPitchFontOfSize:9.0]),		WCThemesChatFont,
-		WIStringFromColor([NSColor blackColor]),						WCThemesChatTextColor,
-		WIStringFromColor([NSColor whiteColor]),						WCThemesChatBackgroundColor,
-		WIStringFromColor([NSColor redColor]),							WCThemesChatEventsColor,
-		WIStringFromColor([NSColor redColor]),							WCThemesChatTimestampEveryLineColor,
-		WIStringFromColor([NSColor blueColor]),							WCThemesChatURLsColor,
-		WIStringFromFont([NSFont userFixedPitchFontOfSize:9.0]),		WCThemesMessagesFont,
-		WIStringFromColor([NSColor blackColor]),						WCThemesMessagesTextColor,
-		WIStringFromColor([NSColor whiteColor]),						WCThemesMessagesBackgroundColor,
-		WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),	WCThemesBoardsFont,
-		WIStringFromColor([NSColor blackColor]),						WCThemesBoardsTextColor,
-		WIStringFromColor([NSColor whiteColor]),						WCThemesBoardsBackgroundColor,
-		[NSNumber numberWithBool:NO],									WCThemesShowSmileys,
-		[NSNumber numberWithBool:NO],									WCThemesChatTimestampEveryLine,
-		[NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],		WCThemesUserListIconSize,
-		[NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
-		[NSNumber numberWithBool:NO],									WCThemesFileListAlternateRows,
-		[NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
-		[NSNumber numberWithBool:NO],									WCThemesTransferListAlternateRows,
-		[NSNumber numberWithBool:NO],									WCThemesTrackerListAlternateRows,
-		[NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],		WCThemesMonitorIconSize,
-		[NSNumber numberWithBool:NO],									WCThemesMonitorAlternateRows,
-		NULL];
-
-	[[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-	
-	[self _reloadThemes];
+    NSDictionary            *theme;
+    NSString                *name;
+    
+    [self _reloadThemes];
+    
+    theme   = [self _selectedTheme];
+    
+    if(!theme)
+        return;
+    
+    name    = [WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName]
+                                           existingNames:[self _themeNames]];
+    
+    [_addThemeNameTextField setStringValue:name];
+    
+    [NSApp beginSheet:_addThemeWindow
+       modalForWindow:self.window
+        modalDelegate:self
+       didEndSelector:nil
+          contextInfo:nil];
 }
 
+
+- (IBAction)cancelAddTheme:(id)sender {
+    [NSApp endSheet:_addThemeWindow];
+    [_addThemeWindow orderOut:sender];
+    
+    [_addThemeNameTextField setStringValue:@""];
+}
+
+
+- (IBAction)okAddTheme:(id)sender {
+    NSMutableDictionary		*theme;
+    NSString                *name;
+    NSInteger				row;
+    
+    name = [_addThemeNameTextField stringValue];
+    
+    if([name length] > 0 && ![[self _themeNames] containsObject:name]) {
+        [NSApp endSheet:_addThemeWindow];
+        [_addThemeWindow orderOut:sender];
+        
+        row = [self _selectedThemeRow];
+        
+        if(row < 0)
+            return;
+        
+        theme   = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] mutableCopy] autorelease];
+        [theme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
+        [theme removeObjectForKey:WCThemesBuiltinName];
+        [theme setObject:name forKey:WCThemesName];
+        
+        [[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemesDidChangeNotification
+                                                            object:theme];
+    }
+}
+
+
+- (IBAction)editTheme:(id)sender {
+    [self _reloadThemes];
+    
+    [_themesPreferences open:sender];
+}
 
 
 - (IBAction)deleteTheme:(id)sender {
@@ -1431,14 +1373,16 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSInteger			row;
 	
 	row = [[_themesPopUpButton menu] indexOfItem:[_themesPopUpButton selectedItem]];
-	
-	if(row < 0)
+	   
+	if(row < 0 || [[[WCSettings settings] objectForKey:WCThemes] count] < (NSUInteger)row)
 		return;
 	
 	theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
 	
 	[[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
 	
+    [self _reloadTemplates];
+    
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
 
@@ -1450,8 +1394,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSInteger				row;
 	
 	row = [self _selectedThemeRow];
-	
-	if(row < 0)
+	   
+	if(row < 0 || [[[WCSettings settings] objectForKey:WCThemes] count] < (NSUInteger)row)
 		return;
 
 	oldTheme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] retain] autorelease];
@@ -1572,10 +1516,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	id						value;
 	NSMutableDictionary		*theme;
 	
-	value			= [[sender representedObject] bundleIdentifier];
+	value = [[sender representedObject] bundleIdentifier];
 	
 	if(value && [value isKindOfClass:[NSString class]]) {
-		theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
+		theme = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
 
 		[theme setValue:value forKey:WCThemesTemplate];
 		
@@ -1676,105 +1620,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 #pragma mark -
-
-- (IBAction)addBookmark:(id)sender {
-	NSDictionary	*bookmark;
-	
-	bookmark = [NSDictionary dictionaryWithObjectsAndKeys:
-		NSLS(@"Untitled", @"Untitled bookmark"),	WCBookmarksName,
-		@"",										WCBookmarksAddress,
-		@"",										WCBookmarksLogin,
-		[NSString UUIDString],						WCBookmarksIdentifier,
-		[NSNumber numberWithBool:NO],				WCBookmarksAutoConnect,
-		[NSNumber numberWithBool:NO],				WCBookmarksAutoReconnect,
-		@"",										WCBookmarksNick,
-		@"",										WCBookmarksStatus,
-		NULL];
-	
-	[[WCSettings settings] addObject:bookmark toArrayForKey:WCBookmarks];
-
-	[_bookmarksTableView reloadData];
-	[_bookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCBookmarks] count] - 1]
-					 byExtendingSelection:NO];
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
-}
-
-
-
-- (IBAction)deleteBookmark:(id)sender {
-	NSAlert			*alert;
-	NSString		*name;
-	NSInteger		row;
-	
-	row = [_bookmarksTableView selectedRow];
-	
-	if(row < 0)
-		return;
-	
-	name = [[[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row] objectForKey:WCBookmarksName];
-	
-	alert = [[NSAlert alloc] init];
-	[alert setMessageText:[NSSWF:NSLS(@"Are you sure you want to delete \u201c%@\u201d?", @"Delete bookmark dialog title (bookmark)"), name]];
-	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Delete bookmark dialog description")];
-	[alert addButtonWithTitle:NSLS(@"Delete", @"Delete bookmark dialog button title")];
-	[alert addButtonWithTitle:NSLS(@"Cancel", @"Delete bookmark button title")];
-	[alert beginSheetModalForWindow:[self window]
-					  modalDelegate:self
-					 didEndSelector:@selector(deleteBookmarkSheetDidEnd:returnCode:contextInfo:)
-						contextInfo:[[NSNumber alloc] initWithInteger:row]];
-	[alert release];
-}
-
-
-
-- (void)deleteBookmarkSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	NSNumber	*row = contextInfo;
-
-	if(returnCode == NSAlertFirstButtonReturn) {
-		[[WCKeychain keychain] deletePasswordForBookmark:[[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:[row integerValue]]];
-		
-		[[WCSettings settings] removeObjectAtIndex:[row integerValue] fromArrayForKey:WCBookmarks];
-
-		[_bookmarksTableView reloadData];
-		
-		[self _reloadBookmark];
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
-	}
-	
-	[row release];
-}
-
-
-
-- (IBAction)duplicateBookmark:(id)sender {
-	NSMutableDictionary		*bookmark;
-	NSString				*password;
-	NSInteger				row;
-	
-	row = [_bookmarksTableView selectedRow];
-	
-	if(row < 0)
-		return;
-	
-	bookmark = [[[[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row] mutableCopy] autorelease];
-	password = [[WCKeychain keychain] passwordForBookmark:bookmark];
-	
-	[bookmark setObject:[NSString UUIDString] forKey:WCBookmarksIdentifier];
-	
-	[[WCKeychain keychain] setPassword:password forBookmark:bookmark];
-	
-	[[WCSettings settings] addObject:bookmark toArrayForKey:WCBookmarks];
-
-	[_bookmarksTableView reloadData];
-	[_bookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCBookmarks] count] - 1]
-					 byExtendingSelection:NO];
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
-}
-
-
 
 - (IBAction)exportBookmarks:(id)sender {
 	__block NSSavePanel     *savePanel;
@@ -1886,56 +1731,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 
-
-
-#pragma mark -
-
-- (IBAction)changeBookmark:(id)sender {
-	NSMutableDictionary		*bookmark;
-	NSDictionary			*oldBookmark;
-	NSString				*password;
-	NSInteger				row;
-	
-	row = [_bookmarksTableView selectedRow];
-	
-	if(row < 0)
-		return;
-	
-	oldBookmark		= [[[[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row] retain] autorelease];
-	bookmark		= [[oldBookmark mutableCopy] autorelease];
-	password		= [_bookmarksPasswordTextField stringValue];
-
-	[bookmark setObject:[_bookmarksAddressTextField stringValue] forKey:WCBookmarksAddress];
-	[bookmark setObject:[_bookmarksLoginTextField stringValue] forKey:WCBookmarksLogin];
-	
-	if([_bookmarksThemePopUpButton representedObjectOfSelectedItem])
-		[bookmark setObject:[_bookmarksThemePopUpButton representedObjectOfSelectedItem] forKey:WCBookmarksTheme];
-	else
-		[bookmark removeObjectForKey:WCBookmarksTheme];
-	
-	[bookmark setBool:[_bookmarksAutoConnectButton state] forKey:WCBookmarksAutoConnect];
-	[bookmark setBool:[_bookmarksAutoReconnectButton state] forKey:WCBookmarksAutoReconnect];
-	[bookmark setObject:[_bookmarksNickTextField stringValue] forKey:WCBookmarksNick];
-	[bookmark setObject:[_bookmarksStatusTextField stringValue] forKey:WCBookmarksStatus];
-	
-	if(!_bookmarksPassword || ![_bookmarksPassword isEqualToString:password] ||
-	   ![[oldBookmark objectForKey:WCBookmarksAddress] isEqualToString:[bookmark objectForKey:WCBookmarksAddress]]) {
-		[NSObject cancelPreviousPerformRequestsWithTarget:self];
-		[self performSelector:@selector(_savePasswordForBookmark:)
-				   withObject:[NSArray arrayWithObjects:oldBookmark, bookmark, password, NULL]
-				   afterDelay:1.0];
-
-		[_bookmarksPassword release];
-		_bookmarksPassword = [password copy];
-	}
-	
-	if(![oldBookmark isEqualToDictionary:bookmark]) {
-		[[WCSettings settings] replaceObjectAtIndex:row withObject:bookmark inArrayForKey:WCBookmarks];
-		
-		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_bookmarkDidChange:) object:oldBookmark];
-		[self performSelector:@selector(_bookmarkDidChange:) withObject:bookmark afterDelay:1.0];
-	}
-}
 
 
 
@@ -2189,101 +1984,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 #pragma mark -
 
-- (IBAction)addTrackerBookmark:(id)sender {
-	NSDictionary	*bookmark;
-	
-	bookmark = [NSDictionary dictionaryWithObjectsAndKeys:
-		NSLS(@"Untitled", @"Untitled tracker bookmark"),	WCTrackerBookmarksName,
-		@"",												WCTrackerBookmarksAddress,
-		@"",												WCTrackerBookmarksLogin,
-		[NSString UUIDString],								WCTrackerBookmarksIdentifier,
-		NULL];
-
-	[[WCSettings settings] addObject:bookmark toArrayForKey:WCTrackerBookmarks];
-	
-	[_trackerBookmarksTableView reloadData];
-	[_trackerBookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCTrackerBookmarks] count] - 1]
-							byExtendingSelection:NO];
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarksDidChangeNotification];
-}
-
-
-
-#pragma mark -
-
-- (IBAction)deleteTrackerBookmark:(id)sender {
-	NSAlert		*alert;
-	NSString	*name;
-	NSInteger	row;
-	
-	row = [_trackerBookmarksTableView selectedRow];
-	
-	if(row < 0)
-		return;
-	
-	name = [[[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectAtIndex:row] objectForKey:WCTrackerBookmarksName];
-	
-	alert = [[NSAlert alloc] init];
-	[alert setMessageText:[NSSWF:NSLS(@"Are you sure you want to delete \u201c%@\u201d?", @"Delete tracker bookmark dialog title (bookmark)"), name]];
-	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Delete tracker bookmark dialog description")];
-	[alert addButtonWithTitle:NSLS(@"Delete", @"Delete tracker bookmark dialog button title")];
-	[alert addButtonWithTitle:NSLS(@"Cancel", @"Delete tracker bookmark button title")];
-	[alert beginSheetModalForWindow:[self window]
-					  modalDelegate:self
-					 didEndSelector:@selector(deleteTrackerBookmarkSheetDidEnd:returnCode:contextInfo:)
-						contextInfo:[[NSNumber alloc] initWithInteger:row]];
-	[alert release];
-}
-
-
-
-- (void)deleteTrackerBookmarkSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	NSNumber	*row = contextInfo;
-
-	if(returnCode == NSAlertFirstButtonReturn) {
-		[[WCSettings settings] removeObjectAtIndex:[row integerValue] fromArrayForKey:WCTrackerBookmarks];
-		
-		[_trackerBookmarksTableView reloadData];
-		
-		[self _reloadTrackerBookmark];
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarksDidChangeNotification];
-	}
-	
-	[row release];
-}
-
-
-
-- (IBAction)duplicateTrackerBookmark:(id)sender {
-	NSMutableDictionary		*bookmark;
-	NSString				*password;
-	NSInteger				row;
-	
-	row = [_trackerBookmarksTableView selectedRow];
-	
-	if(row < 0)
-		return;
-	
-	bookmark = [[[[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectAtIndex:row] mutableCopy] autorelease];
-	password = [[WCKeychain keychain] passwordForTrackerBookmark:bookmark];
-	
-	[bookmark setObject:[NSString UUIDString] forKey:WCTrackerBookmarksIdentifier];
-	
-	[[WCKeychain keychain] setPassword:password forTrackerBookmark:bookmark];
-	
-	[[WCSettings settings] addObject:bookmark toArrayForKey:WCTrackerBookmarks];
-
-	[_trackerBookmarksTableView reloadData];
-	[_trackerBookmarksTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[[WCSettings settings] objectForKey:WCTrackerBookmarks] count] - 1]
-							byExtendingSelection:NO];
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarksDidChangeNotification];
-}
-
-
-
 - (IBAction)exportTrackerBookmarks:(id)sender {
 	__block NSSavePanel     *savePanel;
 	
@@ -2343,54 +2043,14 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 
-- (IBAction)changeTrackerBookmark:(id)sender {
-	NSMutableDictionary		*bookmark;
-	NSDictionary			*oldBookmark;
-	NSString				*password;
-	NSInteger				row;
-	
-	row = [_trackerBookmarksTableView selectedRow];
-	
-	if(row < 0)
-		return;
-	
-	oldBookmark		= [[[[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectAtIndex:row] retain] autorelease];
-	bookmark		= [[oldBookmark mutableCopy] autorelease];
-	password		= [_trackerBookmarksPasswordTextField stringValue];
-	
-	[bookmark setObject:[_trackerBookmarksAddressTextField stringValue] forKey:WCTrackerBookmarksAddress];
-	[bookmark setObject:[_trackerBookmarksLoginTextField stringValue] forKey:WCTrackerBookmarksLogin];
-	
-	if(!_trackerBookmarksPassword || ![_trackerBookmarksPassword isEqualToString:password] ||
-	   ![[oldBookmark objectForKey:WCTrackerBookmarksAddress] isEqualToString:[bookmark objectForKey:WCTrackerBookmarksAddress]]) {
-		[NSObject cancelPreviousPerformRequestsWithTarget:self];
-		[self performSelector:@selector(_savePasswordForTrackerBookmark:)
-				   withObject:[NSArray arrayWithObjects:oldBookmark, bookmark, password, NULL]
-				   afterDelay:1.0];
-
-		[_trackerBookmarksPassword release];
-		_trackerBookmarksPassword = [password copy];
-	}
-
-	if(![oldBookmark isEqualToDictionary:bookmark]) {
-		[[WCSettings settings] replaceObjectAtIndex:row withObject:bookmark inArrayForKey:WCTrackerBookmarks];
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarkDidChangeNotification object:bookmark];
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarksDidChangeNotification];
-	}
-}
-
-
 
 
 #pragma mark -
 
-- (void)menuWillOpen:(NSMenu *)menu {
-	//[self _reloadTemplatesForMenu:menu];
-}
-
-- (void)menuDidClose:(NSMenu *)menu {
-	//[self _reloadTemplatesForMenu:menu];
+- (void)menuNeedsUpdate:(NSMenu *)menu {
+    if(menu == [_emoticonPacksPopUpButton menu]) {
+        [self _reloadEmoticons];
+    }
 }
 	
 
@@ -2400,17 +2060,12 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 #pragma mark -
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	if(tableView == _bookmarksTableView)
-		return [[[WCSettings settings] objectForKey:WCBookmarks] count];
-	else if(tableView == _highlightsTableView)
+	if(tableView == _highlightsTableView)
 		return [[[WCSettings settings] objectForKey:WCHighlights] count];
 	else if(tableView == _ignoresTableView)
 		return [[[WCSettings settings] objectForKey:WCIgnores] count];
-	else if(tableView == _trackerBookmarksTableView)
-		return [[[WCSettings settings] objectForKey:WCTrackerBookmarks] count];
-	else if (tableView == _themesTemplatesTableView) {
+	else if (tableView == _themesTemplatesTableView)
 		return [[_publicTemplateManager templates] count];
-	}
 
 	return 0;
 }
@@ -2420,13 +2075,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)column row:(NSInteger)row {
 	NSDictionary	*dictionary;
 		
-	if(tableView == _bookmarksTableView) {
-		dictionary = [[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row];
-		
-		if(column == _bookmarksNameTableColumn)
-			return [dictionary objectForKey:WCBookmarksName];
-	}
-	else if(tableView == _highlightsTableView) {
+	if(tableView == _highlightsTableView) {
 		dictionary = [[[WCSettings settings] objectForKey:WCHighlights] objectAtIndex:row];
 		
 		if(column == _highlightsPatternTableColumn)
@@ -2439,12 +2088,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		
 		if(column == _ignoresNickTableColumn)
 			return [dictionary objectForKey:WCIgnoresNick];
-	}
-	else if(tableView == _trackerBookmarksTableView) {
-		dictionary = [[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectAtIndex:row];
-		
-		if(column == _trackerBookmarksNameTableColumn)
-			return [dictionary objectForKey:WCTrackerBookmarksName];
 	}
 	else if (tableView == _themesTemplatesTableView) {
 		if([[column identifier] isEqualToString:@"Name"])
@@ -2469,30 +2112,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	NSMutableDictionary		*dictionary;
-	
-//	if(tableView == _themesTableView) {
-//		dictionary = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] mutableCopy] autorelease];
-//		
-//		if(tableColumn == _themesNameTableColumn)
-//			[dictionary setObject:object forKey:WCThemesName];
-//		
-//		[[WCSettings settings] replaceObjectAtIndex:row withObject:dictionary inArrayForKey:WCThemes];
-//		
-//		[self _reloadThemes];
-//	}
-//	else
     
-    if(tableView == _bookmarksTableView) {
-		dictionary = [[[[[WCSettings settings] objectForKey:WCBookmarks] objectAtIndex:row] mutableCopy] autorelease];
-		
-		if(tableColumn == _bookmarksNameTableColumn)
-			[dictionary setObject:object forKey:WCBookmarksName];
-		
-		[[WCSettings settings] replaceObjectAtIndex:row withObject:dictionary inArrayForKey:WCBookmarks];
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarkDidChangeNotification object:dictionary];
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
-	}
 	if(tableView == _highlightsTableView) {
 		dictionary = [[[[[WCSettings settings] objectForKey:WCHighlights] objectAtIndex:row] mutableCopy] autorelease];
 		
@@ -2513,45 +2133,12 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:WCPreferencesDidChangeNotification];
 	}
-	else if(tableView == _trackerBookmarksTableView) {
-		dictionary = [[[[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectAtIndex:row] mutableCopy] autorelease];
-		
-		if(tableColumn == _trackerBookmarksNameTableColumn)
-			[dictionary setObject:object forKey:WCTrackerBookmarksName];
-		
-		[[WCSettings settings] replaceObjectAtIndex:row withObject:dictionary inArrayForKey:WCTrackerBookmarks];
-		
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarkDidChangeNotification object:dictionary];
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarksDidChangeNotification];
-	}
-}
-
-
-
-- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	NSDictionary		*theme;
-	
-	if(tableView == _bookmarksTableView) {
-        [cell setImage:[NSImage imageNamed:@"BookmarksSmall"]];
-        
-    } else if(tableView == _trackerBookmarksTableView) {
-        [cell setImage:[NSImage imageNamed:@"WiredServer"]];
-    }
 }
 
 
 
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification {
-	NSTableView		*tableView;
-	
-	tableView = [notification object];
-	
-	if(tableView == _bookmarksTableView)
-		[self _reloadBookmark];
-	else if(tableView == _trackerBookmarksTableView)
-		[self _reloadTrackerBookmark];
-
 	[self _validate];
 }
 
@@ -2562,13 +2149,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	index = [indexes firstIndex];
 	
-	if(tableView == _bookmarksTableView) {
-		[pasteboard declareTypes:[NSArray arrayWithObject:WCBookmarkPboardType] owner:NULL];
-		[pasteboard setString:[NSSWF:@"%d", (int)index] forType:WCBookmarkPboardType];
-		
-		return YES;
-	}
-	else if(tableView == _highlightsTableView) {
+	if(tableView == _highlightsTableView) {
 		[pasteboard declareTypes:[NSArray arrayWithObject:WCHighlightPboardType] owner:NULL];
 		[pasteboard setString:[NSSWF:@"%d", (int)index] forType:WCHighlightPboardType];
 		
@@ -2577,12 +2158,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	else if(tableView == _ignoresTableView) {
 		[pasteboard declareTypes:[NSArray arrayWithObject:WCIgnorePboardType] owner:NULL];
 		[pasteboard setString:[NSSWF:@"%d", (int)index] forType:WCIgnorePboardType];
-		
-		return YES;
-	}
-	else if(tableView == _trackerBookmarksTableView) {
-		[pasteboard declareTypes:[NSArray arrayWithObject:WCTrackerBookmarkPboardType] owner:NULL];
-		[pasteboard setString:[NSSWF:@"%d", (int)index] forType:WCTrackerBookmarkPboardType];
 		
 		return YES;
 	}
@@ -2605,36 +2180,11 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSMutableArray		*array;
 	NSPasteboard		*pasteboard;
 	NSArray				*types;
-	NSUInteger			index;
 	
 	pasteboard = [info draggingPasteboard];
 	types = [pasteboard types];
 	
-	if([types containsObject:WCThemePboardType]) {
-		array = [[[[WCSettings settings] objectForKey:WCThemes] mutableCopy] autorelease];
-		index = [array moveObjectAtIndex:[[pasteboard stringForType:WCThemePboardType] integerValue] toIndex:row];
-
-		[[WCSettings settings] setObject:array forKey:WCThemes];
-		
-		[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-		
-		[self _reloadThemes];
-
-		return YES;
-	}
-	if([types containsObject:WCBookmarkPboardType]) {
-		array = [[[[WCSettings settings] objectForKey:WCBookmarks] mutableCopy] autorelease];
-		index = [array moveObjectAtIndex:[[pasteboard stringForType:WCBookmarkPboardType] integerValue] toIndex:row];
-
-		[[WCSettings settings] setObject:array forKey:WCBookmarks];
-		
-		[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
-
-		return YES;
-	}
-	else if([types containsObject:WCHighlightPboardType]) {
+	if([types containsObject:WCHighlightPboardType]) {
 		array = [[[[WCSettings settings] objectForKey:WCHighlights] mutableCopy] autorelease];
 		[array moveObjectAtIndex:[[pasteboard stringForType:WCHighlightPboardType] integerValue] toIndex:row];
 
@@ -2648,18 +2198,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 		[[WCSettings settings] setObject:array forKey:WCIgnores];
 		
-		return YES;
-	}
-	else if([types containsObject:WCTrackerBookmarkPboardType]) {
-		array = [[[[WCSettings settings] objectForKey:WCTrackerBookmarks] mutableCopy] autorelease];
-		index = [array moveObjectAtIndex:[[pasteboard stringForType:WCTrackerBookmarkPboardType] integerValue] toIndex:row];
-
-		[[WCSettings settings] setObject:array forKey:WCTrackerBookmarks];
-
-		[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCTrackerBookmarksDidChangeNotification];
-
 		return YES;
 	}
 	
