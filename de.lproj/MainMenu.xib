@@ -246,8 +246,8 @@ CA
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Spelling" id="184">
-                                <menu key="submenu" title="Umwandlungen" id="185">
+                            <menuItem title="Rechtschreibung" id="184">
+                                <menu key="submenu" title="Rechtschreibung" id="185">
                                     <items>
                                         <menuItem title="Rechtschreibung..." keyEquivalent=":" id="187">
                                             <connections>
@@ -259,7 +259,7 @@ CA
                                                 <action selector="checkSpelling:" target="-1" id="190"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Check Spelling As You Type" id="191">
+                                        <menuItem title="Bei Eingabe prüfen" id="191">
                                             <connections>
                                                 <action selector="toggleContinuousSpellChecking:" target="-1" id="192"/>
                                             </connections>
@@ -369,7 +369,7 @@ CA
                                     <action selector="messages:" target="248" id="819"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Bretter" keyEquivalent="b" id="838">
+                            <menuItem title="Pinnwände" keyEquivalent="b" id="838">
                                 <connections>
                                     <action selector="boards:" target="248" id="839"/>
                                 </connections>
@@ -387,7 +387,7 @@ CA
                             <menuItem isSeparatorItem="YES" id="749">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Next Connection" keyEquivalent="" id="750">
+                            <menuItem title="Nächste Verbindung" keyEquivalent="" id="750">
                                 <connections>
                                     <action selector="nextConnection:" target="248" id="752"/>
                                 </connections>
@@ -482,11 +482,11 @@ CA
             </connections>
         </customObject>
         <customView id="920" userLabel="Bookmarks Export Panel">
-            <rect key="frame" x="0.0" y="0.0" width="434" height="57"/>
+            <rect key="frame" x="0.0" y="0.0" width="454" height="57"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <textField verticalHuggingPriority="750" id="922">
-                    <rect key="frame" x="49" y="20" width="368" height="17"/>
+                    <rect key="frame" x="49" y="20" width="387" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Diese Datei enthält die Passwörter in unverschlüsselter Form." id="923">
                         <font key="font" metaFont="system"/>

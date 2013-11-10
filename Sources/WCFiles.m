@@ -1447,6 +1447,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	NSUInteger				i, count;
 	BOOL					complete, first;
 	id						item;
+    
+    file = nil;
 	
 	if([_selectFiles count] > 0) {
 		directory		= [self _directoryForConnection:[self _selectedConnection] path:[_currentDirectory path]];
@@ -1477,8 +1479,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 					} while([_filesOutlineView isItemExpanded:file]);
 				}
 			} else {
-				if(![file isFolder])
-					file = [self _existingParentFileForFile:file];
+//				if(file && ![file isFolder])
+//					file = [self _existingParentFileForFile:file];
 			}
 			
 			if(![[_currentDirectory path] isEqualToString:[file path]])

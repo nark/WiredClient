@@ -1767,36 +1767,36 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
             conversation = (WDConversation *)node;
             
             if([conversation isUnread]) {
-                item = [menu addItemWithTitle:@"Mark As Read" action:@selector(markAsRead:) keyEquivalent:@""];
+                item = [menu addItemWithTitle:NSLS(@"Mark As Read", @"Mark as read menu item") action:@selector(markAsRead:) keyEquivalent:@""];
             } else {
-                item = [menu addItemWithTitle:@"Mark As Unread" action:@selector(markAsRead:) keyEquivalent:@""];
+                item = [menu addItemWithTitle:NSLS(@"Mark As Unread", @"Mark as unread menu item") action:@selector(markAsRead:) keyEquivalent:@""];
             }
             
             [menu addItem:[NSMenuItem separatorItem]];
             
-            item = [menu addItemWithTitle:@"Delete Conversation" action:@selector(deleteConversation:) keyEquivalent:@""];
+            item = [menu addItemWithTitle:NSLS(@"Delete Conversation", @"Delete Conversation menu item") action:@selector(deleteConversation:) keyEquivalent:@""];
             [item setTarget:self];
             
             [menu addItem:[NSMenuItem separatorItem]];
             
-            item = [menu addItemWithTitle:@"Reveal In User List" action:@selector(revealInUserList:) keyEquivalent:@""];
+            item = [menu addItemWithTitle:NSLS(@"Reveal In User List", @"Reveal In User List menu item") action:@selector(revealInUserList:) keyEquivalent:@""];
             [item setTarget:self];
         }
         else if([node isKindOfClass:[WDMessage class]]) {
             message = (WDMessage *)node;
             
             if([message unreadValue]) {
-                item = [menu addItemWithTitle:@"Mark As Read" action:@selector(markAsRead:) keyEquivalent:@""];
+                item = [menu addItemWithTitle:NSLS(@"Mark As Read", @"Mark as read menu item") action:@selector(markAsRead:) keyEquivalent:@""];
                 [item setTarget:self];
             } else {
-                item = [menu addItemWithTitle:@"Mark As Unread" action:@selector(markAsRead:) keyEquivalent:@""];
+                item = [menu addItemWithTitle:NSLS(@"Mark As Unread", @"Mark as unread menu item") action:@selector(markAsRead:) keyEquivalent:@""];
                 [item setTarget:self];
             }
             [item setTarget:self];
             
             [menu addItem:[NSMenuItem separatorItem]];
             
-            item = [menu addItemWithTitle:@"Delete Message" action:@selector(deleteMessage:) keyEquivalent:@""];
+            item = [menu addItemWithTitle:NSLS(@"Delete Message", @"Delete message menu item") action:@selector(deleteMessage:) keyEquivalent:@""];
             [item setTarget:self];
         }
     }

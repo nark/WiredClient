@@ -486,16 +486,20 @@
 
 
 - (IBAction)revealInFiles:(id)sender {
-	NSString		*path;
+    WCServerConnection      *connection;
+	NSString                *path;
+    WCFile                  *file;
 	
 	if(![self _validateRevealInFiles])
 		return;
 	
-	path = [[[self _selectedUser] transfer] remotePath];
-	
-	[WCFiles filesWithConnection:[_administration connection]
-							file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[_administration connection]]
-					  selectFile:[WCFile fileWithDirectory:path connection:[_administration connection]]];
+	path        = [[[self _selectedUser] transfer] remotePath];
+	connection  = [[[self _selectedUser] transfer] connection];
+    file        = [WCFile fileWithDirectory:path connection:connection];
+    
+	[WCFiles filesWithConnection:connection
+							file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:connection]
+					  selectFile:file];
 }
 
 

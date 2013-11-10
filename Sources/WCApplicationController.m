@@ -698,9 +698,9 @@ static WCApplicationController		*sharedController;
     
     // set the auto-update feed URL regarding to the selected configuration (Debug or Release)
 #ifdef WCConfigurationRelease
-    [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/wiredclientcast.xml"]];
+    [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/sparkle.php?file=wiredclientcast"]];
 #else
-    [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/wiredclient_debugcast.xml"]];
+    [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/sparkle.php?file=wiredclient_debugcast"]];
 #endif
     
 	[_updater setSendsSystemProfile:YES];
@@ -1234,6 +1234,29 @@ static WCApplicationController		*sharedController;
 
 - (BOOL)updaterShouldPromptForPermissionToCheckForUpdates:(SUUpdater *)updater {
 	return NO;
+}
+
+
+- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile {
+    NSMutableArray *params;
+    
+    params = [NSMutableArray array];
+    
+    [params addObject: @{
+       @"key":          @"debug",
+#ifdef WCConfigurationRelease
+       @"value":        @"false"
+#else
+       @"value":        @"true"
+#endif
+    }];
+    
+    [params addObject: @{
+       @"key":          @"appShortVersion",
+       @"value":        [[[NSApp bundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"],
+    }];
+    
+    return params;
 }
 
 

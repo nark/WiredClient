@@ -75,7 +75,7 @@
                         <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                         <clipView key="contentView" id="u8m-tx-8tr">
                             <rect key="frame" x="0.0" y="0.0" width="148" height="445"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" indentationPerLevel="16" outlineTableColumn="34" id="31" customClass="WCFilesSourceOutlineView">
                                     <rect key="frame" x="0.0" y="0.0" width="148" height="445"/>
@@ -123,14 +123,14 @@
                             <tabViewItem label="List" identifier="List" id="36">
                                 <view key="view" focusRingType="none" id="40">
                                     <rect key="frame" x="0.0" y="0.0" width="453" height="446"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="41">
                                             <rect key="frame" x="0.0" y="0.0" width="454" height="418"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" id="P8k-RJ-0fQ">
                                                 <rect key="frame" x="1" y="17" width="452" height="400"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="reverseSequential" autosaveColumns="NO" headerView="42" id="45" customClass="WIOutlineView">
                                                         <rect key="frame" x="0.0" y="0.0" width="452" height="400"/>
@@ -337,15 +337,15 @@
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" wantsToBeColor="NO" visibleAtLaunch="NO" animationBehavior="default" id="1" userLabel="New Folder" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="348" y="55" width="410" height="280"/>
+            <rect key="contentRect" x="348" y="55" width="406" height="280"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="61">
-                <rect key="frame" x="0.0" y="0.0" width="410" height="280"/>
+                <rect key="frame" x="0.0" y="0.0" width="406" height="280"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" id="75">
-                        <rect key="frame" x="37" y="240" width="45" height="17"/>
+                        <rect key="frame" x="33" y="240" width="45" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Name:" id="76">
                             <font key="font" metaFont="system"/>
@@ -354,7 +354,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="74">
-                        <rect key="frame" x="87" y="238" width="303" height="22"/>
+                        <rect key="frame" x="83" y="238" width="303" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="77">
                             <font key="font" metaFont="system"/>
@@ -366,7 +366,7 @@
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" id="63">
-                        <rect key="frame" x="312" y="12" width="84" height="32"/>
+                        <rect key="frame" x="298" y="12" width="94" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Erstellen" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="109">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -380,7 +380,7 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="62">
-                        <rect key="frame" x="230" y="12" width="82" height="32"/>
+                        <rect key="frame" x="190" y="12" width="108" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Abbrechen" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="110">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -394,16 +394,16 @@ Gw
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="73">
-                        <rect key="frame" x="43" y="212" width="39" height="17"/>
+                        <rect key="frame" x="39" y="212" width="39" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Typ:" id="78">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Typ:" id="78">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="72">
-                        <rect key="frame" x="84" y="206" width="231" height="26"/>
+                        <rect key="frame" x="80" y="206" width="231" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Ordner" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="83" id="79">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -421,7 +421,7 @@ Gw
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="71">
-                        <rect key="frame" x="84" y="176" width="177" height="26"/>
+                        <rect key="frame" x="80" y="176" width="177" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="84">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -430,7 +430,7 @@ Gw
                         </popUpButtonCell>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="65">
-                        <rect key="frame" x="33" y="182" width="49" height="17"/>
+                        <rect key="frame" x="18" y="182" width="60" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Besitzer:" id="107">
                             <font key="font" metaFont="system"/>
@@ -439,7 +439,7 @@ Gw
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="70">
-                        <rect key="frame" x="84" y="116" width="177" height="26"/>
+                        <rect key="frame" x="80" y="116" width="177" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="86">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -448,7 +448,7 @@ Gw
                         </popUpButtonCell>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="64">
-                        <rect key="frame" x="34" y="122" width="48" height="17"/>
+                        <rect key="frame" x="18" y="122" width="60" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Gruppe:" id="108">
                             <font key="font" metaFont="system"/>
@@ -457,7 +457,7 @@ Gw
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="67">
-                        <rect key="frame" x="17" y="62" width="65" height="17"/>
+                        <rect key="frame" x="13" y="62" width="65" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Jeder:" id="100">
                             <font key="font" metaFont="system"/>
@@ -466,7 +466,7 @@ Gw
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" id="69">
-                        <rect key="frame" x="84" y="146" width="177" height="26"/>
+                        <rect key="frame" x="80" y="146" width="177" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Kein Zugriff" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="93" id="88">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -482,7 +482,7 @@ Gw
                         </popUpButtonCell>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="68">
-                        <rect key="frame" x="84" y="86" width="177" height="26"/>
+                        <rect key="frame" x="80" y="86" width="177" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Kein Zugriff" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="98" id="94">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -498,7 +498,7 @@ Gw
                         </popUpButtonCell>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" id="66">
-                        <rect key="frame" x="84" y="56" width="177" height="26"/>
+                        <rect key="frame" x="80" y="56" width="177" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Kein Zugriff" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="105" id="101">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -514,7 +514,7 @@ Gw
                         </popUpButtonCell>
                     </popUpButton>
                     <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="282">
-                        <rect key="frame" x="20" y="22" width="16" height="16"/>
+                        <rect key="frame" x="21" y="22" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                 </subviews>
@@ -742,7 +742,7 @@ Gw
     <resources>
         <image name="Back" width="9" height="9"/>
         <image name="ColumnView" width="13" height="10"/>
-        <image name="DeleteFile" width="16" height="16"/>
+        <image name="DeleteFile" width="100" height="100"/>
         <image name="Download" width="9" height="10"/>
         <image name="FileInfo" width="16" height="16"/>
         <image name="Forward" width="9" height="9"/>

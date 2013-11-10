@@ -697,10 +697,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[self addPreferenceView:_generalView
 					   name:NSLS(@"General", @"General preferences")
 					  image:[NSImage imageNamed:@"General"]];
-	
-//	[self addPreferenceView:_themesView
-//					   name:NSLS(@"Themes", @"Themes preferences")
-//					  image:[NSImage imageNamed:@"Themes"]];
 
 	[self addPreferenceView:_appearanceView
 					   name:NSLS(@"Appearance", @"Appearance preferences")
@@ -717,10 +713,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[self addPreferenceView:_filesView
 					   name:NSLS(@"Files", @"Files preferences")
 					  image:[NSImage imageNamed:@"Folder"]];
-	
-//	[self addPreferenceView:_trackersView
-//					   name:NSLS(@"Trackers", @"Trackers preferences")
-//					  image:[NSImage imageNamed:@"Trackers"]];
 	
     [self addPreferenceView:_advancedView
 					   name:NSLS(@"Advanced", @"Advanced preferences")

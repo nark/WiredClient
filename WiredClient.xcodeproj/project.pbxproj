@@ -19,6 +19,17 @@
 			name = "Wired Client (Distribute Debug)";
 			productName = "Distribute Debug";
 		};
+		4C89D6DE182FA6AB0011D61D /* Localize Strings */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4C89D6F2182FA6AB0011D61D /* Build configuration list for PBXAggregateTarget "Localize Strings" */;
+			buildPhases = (
+				4C89D6F3182FA6BB0011D61D /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Localize Strings";
+			productName = "Generate Strings";
+		};
 		4CDBF1EA14BC4CAF007142D3 /* Wired Client (Distribute) */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 4CDBF1EB14BC4CAF007142D3 /* Build configuration list for PBXAggregateTarget "Wired Client (Distribute)" */;
@@ -31,15 +42,15 @@
 			name = "Wired Client (Distribute)";
 			productName = Distribute;
 		};
-		77F05B800751E75A004F4E0E /* Localization */ = {
+		77F05B800751E75A004F4E0E /* Localize Nibs */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = A5E8BAAE08748D3B0010F2A4 /* Build configuration list for PBXAggregateTarget "Localization" */;
+			buildConfigurationList = A5E8BAAE08748D3B0010F2A4 /* Build configuration list for PBXAggregateTarget "Localize Nibs" */;
 			buildPhases = (
 				77F05B7F0751E75A004F4E0E /* Run Script (Localize) */,
 			);
 			dependencies = (
 			);
-			name = Localization;
+			name = "Localize Nibs";
 			productName = Distribution;
 		};
 /* End PBXAggregateTarget section */
@@ -482,6 +493,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4C86C028155FDEAF00B93247;
 			remoteInfo = Vintage;
+		};
+		4C89D6EC182FA6AB0011D61D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C0B22FB176C95A600B2BF34 /* WiredFrameworks.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CFCEBDA181EA57400D5FF71;
+			remoteInfo = StaticWiredKit;
+		};
+		4C89D6EE182FA6AB0011D61D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C0B22FB176C95A600B2BF34 /* WiredFrameworks.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C04AABC181EA9B800D00B75;
+			remoteInfo = StaticWiredData;
+		};
+		4C89D6F0182FA6AB0011D61D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C0B22FB176C95A600B2BF34 /* WiredFrameworks.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C04AAC9181EA9B800D00B75;
+			remoteInfo = WiredDataTests;
 		};
 		4CDBF1F014BC4CB8007142D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1673,10 +1705,13 @@
 				4CE153031800D5E7004DA093 /* WiredFoundation.a */,
 				4CE153051800D5E7004DA093 /* WiredNetworking.a */,
 				4CE153071800D5E7004DA093 /* WiredUIKit.a */,
+				4C89D6ED182FA6AB0011D61D /* WiredKit.a */,
+				4C89D6EF182FA6AB0011D61D /* WiredData.a */,
 				4CE153091800D5E7004DA093 /* WiredFoundation.framework */,
 				4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */,
 				4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */,
 				4CE1530F1800D5E7004DA093 /* ChatHistory-default.WiredHistory */,
+				4C89D6F1182FA6AB0011D61D /* WiredDataTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2545,12 +2580,34 @@
 				4C86C028155FDEAF00B93247 /* Vintage */,
 				4CDBF1EA14BC4CAF007142D3 /* Wired Client (Distribute) */,
 				4C06678415DEC69800E8D810 /* Wired Client (Distribute Debug) */,
-				77F05B800751E75A004F4E0E /* Localization */,
+				77F05B800751E75A004F4E0E /* Localize Nibs */,
+				4C89D6DE182FA6AB0011D61D /* Localize Strings */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4C89D6ED182FA6AB0011D61D /* WiredKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = WiredKit.a;
+			remoteRef = 4C89D6EC182FA6AB0011D61D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4C89D6EF182FA6AB0011D61D /* WiredData.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = WiredData.a;
+			remoteRef = 4C89D6EE182FA6AB0011D61D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4C89D6F1182FA6AB0011D61D /* WiredDataTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = WiredDataTests.xctest;
+			remoteRef = 4C89D6F0182FA6AB0011D61D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -2959,6 +3016,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/bin/mogenerator -m \"$SRCROOT/CoreData/WiredClient.xcdatamodeld/WiredClient.xcdatamodel\" -O \"$SRCROOT/Sources/\" --includeh \"$SRCROOT/Sources/WDWiredModel.h\"";
+		};
+		4C89D6F3182FA6BB0011D61D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh \"$SRCROOT/../../update-translations.py\" || exit 1";
 		};
 		4CDBF1F314BC4CE3007142D3 /* Run Script (Archive & Sign & Update) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3676,6 +3746,27 @@
 			};
 			name = Release;
 		};
+		4C89D6DF182FA6AB0011D61D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4C89D6E0182FA6AB0011D61D /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Test;
+		};
+		4C89D6E1182FA6AB0011D61D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		4CDBF1EC14BC4CAF007142D3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4024,6 +4115,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		4C89D6F2182FA6AB0011D61D /* Build configuration list for PBXAggregateTarget "Localize Strings" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C89D6DF182FA6AB0011D61D /* Debug */,
+				4C89D6E0182FA6AB0011D61D /* Test */,
+				4C89D6E1182FA6AB0011D61D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		4CDBF1EB14BC4CAF007142D3 /* Build configuration list for PBXAggregateTarget "Wired Client (Distribute)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -4064,7 +4165,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		A5E8BAAE08748D3B0010F2A4 /* Build configuration list for PBXAggregateTarget "Localization" */ = {
+		A5E8BAAE08748D3B0010F2A4 /* Build configuration list for PBXAggregateTarget "Localize Nibs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A5E8BAAF08748D3B0010F2A4 /* Debug */,
