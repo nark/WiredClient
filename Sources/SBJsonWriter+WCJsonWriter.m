@@ -10,9 +10,9 @@
 
 @implementation SBJsonWriter (WCJsonWriter)
 
-static SBJsonWriter *_instance;
-
 + (id)writer {
+    static SBJsonWriter *_instance;
+    
     if(!_instance)
         _instance = [[SBJsonWriter alloc] init];
 

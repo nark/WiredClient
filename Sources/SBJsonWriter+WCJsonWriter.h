@@ -6,8 +6,6 @@
 //
 //
 
-#import <SBJson/SBJson.h>
-
 @interface SBJsonWriter (WCJsonWriter)
 
 + (id)writer;
