@@ -95,6 +95,13 @@ NSString * const WCThemesDidChangeNotification      = @"WCThemesDidChangeNotific
 
 #pragma mark -
 
+- (IBAction)open:(id)sender {
+    [super open:sender];
+    
+    [_themesTableView reloadData];
+}
+
+
 - (IBAction)duplicateTheme:(id)sender {
     NSMutableDictionary		*theme;
     NSString                *copiedName;
@@ -187,7 +194,17 @@ NSString * const WCThemesDidChangeNotification      = @"WCThemesDidChangeNotific
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification {
+    NSDictionary    *theme;
+    BOOL            enabled = NO;
+
     [self willChangeValueForKey:@"themeSelected"];
+    
+    theme   = [self _selectedTheme];
+    enabled = ([theme objectForKey:WCThemesBuiltinName] == nil);
+    
+    [_renameButton setEnabled:enabled];
+    [_deleteButton setEnabled:enabled];
+    
     [self didChangeValueForKey:@"themeSelected"];
 }
 

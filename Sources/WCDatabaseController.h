@@ -22,15 +22,15 @@
 
 @property (readwrite, retain)           NSOperationQueue                *queue;
 
-+ (id)                              sharedController;
++ (id)                                  sharedController;
 
-+ (NSManagedObjectContext *)        context;
-+ (NSOperationQueue *)              queue;
++ (NSManagedObjectContext *)            context;
++ (NSOperationQueue *)                  queue;
 
-- (NSString *)                      secretKey;
+- (NSString *)                          secretKey;
 
-- (BOOL)                            save;
-- (BOOL)                            saveContext:(NSManagedObjectContext *)context;
-- (void)                            mergeChanges:(NSNotification *)notification;
+- (BOOL)                                save;
+- (BOOL)                                saveContext:(NSManagedObjectContext *)context;
+- (void)                                mergeChanges:(NSNotification *)notification;
 
 @end

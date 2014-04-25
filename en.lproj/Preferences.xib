@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13A3017" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1070" defaultVersion="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4511"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5053"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="WCPreferences">
@@ -32,6 +32,7 @@
                 <outlet property="_chatView" destination="2264" id="2273"/>
                 <outlet property="_checkForUpdateButton" destination="2190" id="2277"/>
                 <outlet property="_confirmDisconnectButton" destination="2186" id="2278"/>
+                <outlet property="_customizeThemesButton" destination="3614" id="lZa-vZ-yVj"/>
                 <outlet property="_deleteHighlightButton" destination="2559" id="3107"/>
                 <outlet property="_deleteIgnoreButton" destination="2493" id="2576"/>
                 <outlet property="_emoticonPacksPopUpButton" destination="3627" id="3637"/>
@@ -90,6 +91,7 @@
                 <outlet property="_themesPopUpButton" destination="3608" id="3734"/>
                 <outlet property="_themesPreferences" destination="0Qr-gy-SVG" id="jqL-DG-SWI"/>
                 <outlet property="_themesShowSmileysButton" destination="3259" id="3271"/>
+                <outlet property="_themesTableView" destination="18O-j1-ASj" id="99r-Jl-3qn"/>
                 <outlet property="_themesTemplatesPopUpButton" destination="3429" id="3459"/>
                 <outlet property="_themesTemplatesTableView" destination="3464" id="3485"/>
                 <outlet property="_themesTemplatesWindow" destination="3461" id="3484"/>
@@ -621,11 +623,11 @@
                                             </subviews>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" id="2563">
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="2563">
                                             <rect key="frame" x="-100" y="-100" width="372" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" id="2562">
+                                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="2562">
                                             <rect key="frame" x="425" y="17" width="16" height="134"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -711,11 +713,11 @@
                                             </subviews>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" id="2498">
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="2498">
                                             <rect key="frame" x="-100" y="-100" width="372" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" id="2497">
+                                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="2497">
                                             <rect key="frame" x="425" y="17" width="16" height="134"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1115,13 +1117,9 @@
                     <rect key="frame" x="217" y="74" width="64" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="3352">
-                        <numberFormatter key="formatter" formatterBehavior="default10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" minimumFractionDigits="0" maximumFractionDigits="3" id="3353">
-                            <real key="roundingIncrement" value="0.0"/>
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" paddingCharacter="*" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" decimalSeparator="." groupingSeparator="," currencyDecimalSeparator="." plusSign="+" minusSign="-" notANumberSymbol="NaN" perMillSymbol="‰" percentSymbol="%" exponentSymbol="E" positivePrefix="" positiveSuffix="" negativePrefix="-" negativeSuffix="" id="3353">
                             <real key="minimum" value="0.0"/>
                             <real key="maximum" value="60"/>
-                            <metadata>
-                                <bool key="localizesFormat" value="YES"/>
-                            </metadata>
                         </numberFormatter>
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1213,13 +1211,9 @@
                     <rect key="frame" x="217" y="44" width="64" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="3398">
-                        <numberFormatter key="formatter" formatterBehavior="default10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" minimumFractionDigits="0" maximumFractionDigits="3" id="3399">
-                            <real key="roundingIncrement" value="0.0"/>
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" paddingCharacter="*" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" decimalSeparator="." groupingSeparator="," currencyDecimalSeparator="." plusSign="+" minusSign="-" notANumberSymbol="NaN" perMillSymbol="‰" percentSymbol="%" exponentSymbol="E" positivePrefix="" positiveSuffix="" negativePrefix="-" negativeSuffix="" id="3399">
                             <real key="minimum" value="0.0"/>
                             <real key="maximum" value="60"/>
-                            <metadata>
-                                <bool key="localizesFormat" value="YES"/>
-                            </metadata>
                         </numberFormatter>
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1289,11 +1283,11 @@
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" id="3465">
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="3465">
                             <rect key="frame" x="0.0" y="150" width="284" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" id="3467">
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="3467">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -1358,14 +1352,14 @@ DQ
                                 <rect key="frame" x="0.0" y="0.0" width="145" height="284"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <scrollView focusRingType="none" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="3683">
+                                    <scrollView focusRingType="none" borderType="none" autohidesScrollers="YES" horizontalLineScroll="47" horizontalPageScroll="10" verticalLineScroll="47" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="3683">
                                         <rect key="frame" x="0.0" y="-1" width="145" height="285"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="87H-fK-2GF">
                                             <rect key="frame" x="0.0" y="0.0" width="145" height="285"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" columnSelection="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="3684">
+                                                <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" columnSelection="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowHeight="45" rowSizeStyle="automatic" viewBased="YES" id="3684">
                                                     <rect key="frame" x="0.0" y="0.0" width="145" height="285"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -1456,11 +1450,11 @@ DQ
                                             </subviews>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" id="3685">
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="3685">
                                             <rect key="frame" x="0.0" y="119" width="139" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" id="3687">
+                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="3687">
                                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1540,11 +1534,11 @@ DQ
                                             </subviews>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" id="3656">
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="3656">
                                             <rect key="frame" x="0.0" y="268" width="349" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" id="3658">
+                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="3658">
                                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -2200,11 +2194,11 @@ Gw
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" id="F15-Tu-eWF">
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="F15-Tu-eWF">
                             <rect key="frame" x="1" y="119" width="223" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" id="hbb-rZ-N0Z">
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="hbb-rZ-N0Z">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -2230,7 +2224,6 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="renameTheme:" target="0Qr-gy-SVG" id="GO1-J3-dE9"/>
-                            <binding destination="0Qr-gy-SVG" name="enabled" keyPath="self.themeSelected" id="g0l-mo-xHO"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="ImE-ZO-trG">
@@ -2242,7 +2235,6 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="deleteTheme:" target="0Qr-gy-SVG" id="LNb-gz-TEy"/>
-                            <binding destination="0Qr-gy-SVG" name="enabled" keyPath="self.themeSelected" id="tJW-R5-6j7"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="7Xk-RR-l5y">
@@ -2264,6 +2256,8 @@ DQ
         </window>
         <customObject id="0Qr-gy-SVG" customClass="WCThemesPreferences">
             <connections>
+                <outlet property="_deleteButton" destination="ImE-ZO-trG" id="gBS-5n-kGc"/>
+                <outlet property="_renameButton" destination="VBQ-66-Sgf" id="RH8-Xk-8DL"/>
                 <outlet property="_themesTableView" destination="18O-j1-ASj" id="Pki-mM-bzS"/>
                 <outlet property="window" destination="iiu-wZ-LHJ" id="vps-fb-qiV"/>
             </connections>

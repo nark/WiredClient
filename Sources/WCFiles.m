@@ -1479,8 +1479,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 					} while([_filesOutlineView isItemExpanded:file]);
 				}
 			} else {
-//				if(file && ![file isFolder])
-//					file = [self _existingParentFileForFile:file];
+                if([file isFolder])
+                    file = [self _existingParentFileForFile:file];
 			}
 			
 			if(![[_currentDirectory path] isEqualToString:[file path]])

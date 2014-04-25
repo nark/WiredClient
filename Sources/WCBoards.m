@@ -3762,16 +3762,37 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (IBAction)url:(id)sender {
+    NSString    *selected, *regex;
 	NSRange		range;
-	
-	[self _insertBBCodeWithStartTag:@"[url=]" endTag:@"[/url]"];
-	
-	range = [_postTextView selectedRange];
 
-	range.location	-= 1;
-	range.length	= 0;
-	
-	[_postTextView setSelectedRange:range];
+    regex           = [NSString URLRegex];
+    range           = [_postTextView selectedRange];
+    selected        = [[[_postTextView textStorage] string] substringWithRange:range];
+    
+	range           = [selected rangeOfRegex:[NSSWF:@"(?:^|\\s)(%@)(?:\\.|,|:|\\?|!)?(?:\\s|$)", regex]
+                                     options:RKLCaseless
+                                     capture:1];
+    
+    if(range.location != NSNotFound) {
+        [self _insertBBCodeWithStartTag:@"[url]" endTag:@"[/url]"];
+        
+        range = [_postTextView selectedRange];
+        
+        range.location	+= range.length + 6;
+        range.length	= 0;
+        
+        [_postTextView setSelectedRange:range];
+        
+    } else {
+        [self _insertBBCodeWithStartTag:@"[url=]" endTag:@"[/url]"];
+        
+        range = [_postTextView selectedRange];
+        
+        range.location	-= 1;
+        range.length	= 0;
+        
+        [_postTextView setSelectedRange:range];
+    }
 }
 
 

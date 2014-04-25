@@ -1103,7 +1103,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 + (BOOL)isHTMLString:(NSString *)string {
-	return ([string characterAtIndex:0] == '<' && [string characterAtIndex:[string length]-1] == '>');
+	return ([string length] > 0 && [string characterAtIndex:0] == '<' && [string characterAtIndex:[string length]-1] == '>');
 }
 
 
@@ -1228,7 +1228,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 #pragma mark -
 
 - (void)themeDidChange:(NSDictionary *)theme {
-	
 	WITemplateBundle		*templateBundle;
 	NSColor					*textColor, *backgroundColor, *timestampColor, *eventColor, *urlColor;
 	NSFont					*font;
@@ -1286,7 +1285,7 @@ typedef enum _WCChatFormat					WCChatFormat;
         [_userListTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleRegular];
     } else {
         [_userListTableView setUsesAlternatingRowBackgroundColors:NO];
-        [_userListTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleSourceList];
+        [_userListTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleRegular];
     }
     	
 	switch([[theme objectForKey:WCThemesUserListIconSize] integerValue]) {
@@ -1307,8 +1306,8 @@ typedef enum _WCChatFormat					WCChatFormat;
     }
     
 	// HTML/ CSS template reload
-	templateBundle			= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-	
+	templateBundle  = [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+    
 	[templateBundle setCSSValue:[font fontName]
                     toAttribute:WITemplateAttributesFontName
                          ofType:WITemplateTypeChat];
@@ -1342,6 +1341,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[_chatOutputWebView reloadStylesheetWithID:@"wc-stylesheet"
 								  withTemplate:templateBundle
 										  type:WITemplateTypeChat];
+    
+    [_chatOutputWebView scrollToBottom];
 }
 
 
@@ -2439,7 +2440,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[[WCSettings settings] addObject:ignore toArrayForKey:WCIgnores];
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCIgnoresDidChangeNotification];
 	
-	[_userListTableView setNeedsDisplay:YES];
+	[_userListTableView reloadData];
 }
 
 
@@ -2466,7 +2467,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[[WCSettings settings] setObject:array forKey:WCIgnores];
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCIgnoresDidChangeNotification];
 	
-	[_userListTableView setNeedsDisplay:YES];
+	[_userListTableView reloadData];
 }
 
 
@@ -2672,13 +2673,33 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
         } break;
 	}
     
-    cellView.textField.stringValue = [user nick];
-    
     if(row != [tableView selectedRow])
-        cellView.textField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
+        cellView.nickTextField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
     else
-        cellView.textField.textColor = [NSColor whiteColor];
+        cellView.nickTextField.textColor = [NSColor whiteColor];
     
+    [cellView.nickTextField setAllowsEditingTextAttributes:YES];
+    
+    NSDictionary *attributes;
+    
+    if([user isIgnored]) {
+        attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                      [NSNumber numberWithInteger:NSUnderlinePatternSolid | NSUnderlineStyleSingle],
+                      NSStrikethroughStyleAttributeName,
+                      nil];
+    } else {
+        attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                      [NSNumber numberWithInteger:NSUnderlinePatternSolid | NSUnderlineStyleNone],
+                      NSStrikethroughStyleAttributeName,
+                      nil];
+    }
+    
+    cellView.nickTextField.attributedStringValue = [NSAttributedString attributedStringWithString:[user nick]
+                                                                                   attributes:attributes];
+    
+    cellView.nickTextField.toolTip = [user nick];
+    
+    cellView.statusTextField.toolTip = [user status];
     cellView.statusTextField.stringValue = [user status];
     cellView.imageView.image = [user iconWithIdleTint:YES];
     
@@ -2687,15 +2708,20 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 }
 
 
+
+
+
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)column row:(NSInteger)row {
-	WCUser		*user;
-	
-	if(column == _nickTableColumn) {
-		user = [self userAtIndex:row];
-		
-		[cell setTextColor:[WCUser colorForColor:[user color] idleTint:[user isIdle]]];
-		[cell setIgnored:[user isIgnored]];
-	}
+    if(tableView == _userListTableView)
+        NSLog(@"willDisplayCell");
+//	WCUser		*user;
+//	
+//	if(column == _nickTableColumn) {
+//		user = [self userAtIndex:row];
+//		
+//		[cell setTextColor:[WCUser colorForColor:[user color] idleTint:[user isIdle]]];
+//		[cell setIgnored:[user isIgnored]];
+//	}
 }
 
 

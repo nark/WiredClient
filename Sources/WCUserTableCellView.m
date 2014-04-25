@@ -11,5 +11,6 @@
 @implementation WCUserTableCellView
 
 @synthesize statusTextField;
+@synthesize nickTextField;
 
 @end

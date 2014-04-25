@@ -76,11 +76,13 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSButton								*_addThemeButton;
 	IBOutlet NSButton								*_deleteThemeButton;
 	IBOutlet NSButton								*_selectThemeButton;
+    IBOutlet NSButton                               *_customizeThemesButton;
 	
 	IBOutlet NSPopUpButton							*_themesTemplatesPopUpButton;
 	IBOutlet NSWindow								*_themesTemplatesWindow;
 	IBOutlet NSTableView							*_themesTemplatesTableView;
-	
+	IBOutlet NSTableView							*_themesTableView;
+    
 	IBOutlet NSTextField							*_themesChatFontTextField;
 	IBOutlet NSButton								*_themesChatFontButton;
 	IBOutlet NSColorWell							*_themesChatTextColorWell;

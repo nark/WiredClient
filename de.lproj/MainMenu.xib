@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13A3017" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1070" defaultVersion="1070" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4511"/>
@@ -94,7 +94,7 @@
                             <menuItem isSeparatorItem="YES" id="446">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Server Info" keyEquivalent="I" id="646">
+                            <menuItem title="Server-Info" keyEquivalent="I" id="646">
                                 <connections>
                                     <action selector="serverInfo:" target="248" id="853"/>
                                 </connections>
@@ -170,7 +170,7 @@ CA
                     </menu>
                 </menuItem>
                 <menuItem title="Bearbeiten" id="163">
-                    <menu key="submenu" title="Edit" id="169">
+                    <menu key="submenu" title="Bearbeiten" id="169">
                         <items>
                             <menuItem title="Einfügen widerrufen" keyEquivalent="z" id="158">
                                 <connections>
@@ -213,7 +213,7 @@ CA
                             <menuItem isSeparatorItem="YES" id="174">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Find" id="501">
+                            <menuItem title="Finden" id="501">
                                 <menu key="submenu" title="Finden" id="497">
                                     <items>
                                         <menuItem title="Finden..." tag="1" keyEquivalent="f" id="498">
@@ -222,12 +222,12 @@ CA
                                                 <action selector="performFindPanelAction:" target="-1" id="792"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Find Next" tag="2" keyEquivalent="g" id="500">
+                                        <menuItem title="Nächstes finden" tag="2" keyEquivalent="g" id="500">
                                             <connections>
                                                 <action selector="performFindPanelAction:" target="-1" id="793"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Find Previous" tag="3" keyEquivalent="G" id="496">
+                                        <menuItem title="Vorheriges finden" tag="3" keyEquivalent="G" id="496">
                                             <connections>
                                                 <action selector="performFindPanelAction:" target="-1" id="794"/>
                                             </connections>
@@ -342,7 +342,7 @@ CA
                     </menu>
                 </menuItem>
                 <menuItem title="Debuggen" id="724">
-                    <menu key="submenu" title="Debug" id="726">
+                    <menu key="submenu" title="Debuggen" id="726">
                         <items>
                             <menuItem title="Konsole" id="731">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -374,7 +374,7 @@ CA
                                     <action selector="boards:" target="248" id="839"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Transfers" keyEquivalent="s" id="821">
+                            <menuItem title="Übertragungen" keyEquivalent="s" id="821">
                                 <connections>
                                     <action selector="transfers:" target="248" id="822"/>
                                 </connections>
@@ -482,11 +482,11 @@ CA
             </connections>
         </customObject>
         <customView id="920" userLabel="Bookmarks Export Panel">
-            <rect key="frame" x="0.0" y="0.0" width="454" height="57"/>
+            <rect key="frame" x="0.0" y="0.0" width="434" height="57"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <textField verticalHuggingPriority="750" id="922">
-                    <rect key="frame" x="49" y="20" width="387" height="17"/>
+                    <rect key="frame" x="37" y="20" width="387" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Diese Datei enthält die Passwörter in unverschlüsselter Form." id="923">
                         <font key="font" metaFont="system"/>
@@ -495,7 +495,7 @@ CA
                     </textFieldCell>
                 </textField>
                 <imageView id="921">
-                    <rect key="frame" x="20" y="17" width="24" height="24"/>
+                    <rect key="frame" x="8" y="17" width="24" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="Warning" id="924"/>
                 </imageView>

@@ -215,6 +215,8 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [[_themesPopUpButton menu] addItemWithTitle:NSLS(@"Edit Themes...", @"Edit Themes Menu Item Title")
                                          action:@selector(editTheme:)
                                   keyEquivalent:@""];
+    
+    [_themesTableView reloadData];
 }
 
 
@@ -516,44 +518,34 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)_changeSelectedThemeToTheme:(NSDictionary *)theme {
-//    NSMutableDictionary		*newTheme;
-//	NSAlert                 *alert;
-//    NSInteger               returnCode;
-//	
-//	if([theme objectForKey:WCThemesBuiltinName]) {
-//		alert = [[NSAlert alloc] init];
-//		[alert setMessageText:[NSSWF:
-//			NSLS(@"You cannot edit the built-in theme \u201c%@\u201d", @"Duplicate builtin theme dialog title (theme)"),
-//			[theme objectForKey:WCThemesName]]];
-//		[alert setInformativeText:NSLS(@"Make a copy of it to edit it.", @"Duplicate builtin theme dialog description")];
-//		[alert addButtonWithTitle:NSLS(@"Duplicate", @"Duplicate builtin theme dialog button title")];
-//		[alert addButtonWithTitle:NSLS(@"Cancel", @"Duplicate builtin theme button title")];
-//        
-//        returnCode = [alert runModal];
-//        
-//        if(returnCode == NSAlertFirstButtonReturn) {
-//            newTheme = [[theme mutableCopy] autorelease];
-//            [newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
-//                         forKey:WCThemesName];
-//            [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-//            [newTheme removeObjectForKey:WCThemesBuiltinName];
-//            
-//            [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
-//            [self _reloadThemes];
-//            
-//            if([[self window] attachedSheet] != nil)
-//                [self closeTheme:nil];
-//        }
-//        
-//		[alert release];
-//	} else {
+    NSMutableDictionary		*newTheme;
+	
+	if([theme objectForKey:WCThemesBuiltinName]) {
+        newTheme = [[theme mutableCopy] autorelease];
+        [newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
+                     forKey:WCThemesName];
+        [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
+        [newTheme removeObjectForKey:WCThemesBuiltinName];
+        
+        [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
+        [[WCSettings settings] setObject:[newTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
+        [self _reloadThemes];
+        
+        [_themesPopUpButton selectItemAtIndex:[[[WCSettings settings] objectForKey:WCThemes] count]-1];
+        
+        [self _reloadTheme];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:newTheme];
+        
+	} else {
 		[[WCSettings settings] replaceObjectAtIndex:[self _selectedThemeRow] withObject:theme inArrayForKey:WCThemes];
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
-
+        
 		[self _reloadTheme];
 		[self _reloadThemes];
-//	}
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
+
+	}
 }
 
 
@@ -799,9 +791,11 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSDictionary	*theme;
 	
 	theme = [notification object];
-	
+    
 	if([[theme objectForKey:WCThemesIdentifier] isEqualToString:[[WCSettings settings] objectForKey:WCTheme]])
 		[[NSNotificationCenter defaultCenter] postNotificationName:WCSelectedThemeDidChangeNotification object:theme];
+    
+    [self _reloadTheme];
 }
 
 
@@ -1160,6 +1154,69 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
         modalDelegate:self
        didEndSelector:nil
           contextInfo:nil];
+    
+//    NSDictionary            *theme;
+//    NSAlert                 *alert;
+//    
+//    theme   = [self _selectedTheme];
+//    
+//    if([theme objectForKey:WCThemesBuiltinName]) {
+//		alert = [[NSAlert alloc] init];
+//		[alert setMessageText:[NSSWF:
+//                               NSLS(@"You cannot edit the built-in theme \u201c%@\u201d", @"Duplicate builtin theme dialog title (theme)"),
+//                               [theme objectForKey:WCThemesName]]];
+//		[alert setInformativeText:NSLS(@"Make a copy of it to edit it.", @"Duplicate builtin theme dialog description")];
+//		[alert addButtonWithTitle:NSLS(@"Duplicate", @"Duplicate builtin theme dialog button title")];
+//		[alert addButtonWithTitle:NSLS(@"Cancel", @"Duplicate builtin theme button title")];
+//        
+//        [alert beginSheetModalForWindow:[self window]
+//                          modalDelegate:self
+//                         didEndSelector:@selector(customizeBuiltInAlertDidEnd:returnCode:contextInfo:)
+//                            contextInfo:theme];
+//
+//        
+//        [alert release];
+//	} else {
+//        [NSApp beginSheet:_themesWindow
+//           modalForWindow:[self window]
+//            modalDelegate:self
+//           didEndSelector:nil
+//              contextInfo:nil];
+//    }
+}
+
+- (void)customizeBuiltInAlertDidEnd:(NSAlert *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+	NSMutableDictionary		*newTheme;
+    NSString                *newName;
+	NSDictionary			*theme = contextInfo;
+    
+    [NSApp endSheet:[sheet window]];
+	[[sheet window] orderOut:self];
+    
+	if(returnCode == NSAlertFirstButtonReturn) {
+        newName = [WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName]
+                                               existingNames:[self _themeNames]];
+        
+        newTheme = [[theme mutableCopy] autorelease];
+        [newTheme setObject:newName forKey:WCThemesName];
+        [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
+        [newTheme removeObjectForKey:WCThemesBuiltinName];
+        
+        [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
+        [self _reloadThemes];
+        
+        [_themesPopUpButton selectItemWithTitle:newName];
+        [[WCSettings settings] setObject:[newTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
+        
+        [self _reloadTheme];
+        
+        [NSApp beginSheet:_themesWindow
+           modalForWindow:[self window]
+            modalDelegate:self
+           didEndSelector:nil
+              contextInfo:nil];
+
+    }
 }
 
 

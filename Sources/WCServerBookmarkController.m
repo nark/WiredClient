@@ -112,7 +112,7 @@
 - (void)save {
     NSString        *password;
     NSInteger       row;
-    BOOL            passwordChanged = NO;
+    BOOL            nickChanged = NO, passwordChanged = NO;
     
     if(_bookmark) {
         // update
@@ -133,9 +133,12 @@
         [_bookmark setObject:[_bookmarksNickTextField stringValue] forKey:WCBookmarksNick];
         [_bookmark setObject:[_bookmarksStatusTextField stringValue] forKey:WCBookmarksStatus];
         
-        if(!_bookmarksPassword || ![_bookmarksPassword isEqualToString:password] ||
+        nickChanged = ([_bookmarksLoginTextField stringValue] != [_oldBookmark objectForKey:WCBookmarksLogin]);
+        
+        if(nickChanged || !_bookmarksPassword || ![_bookmarksPassword isEqualToString:password] ||
            ![[_oldBookmark objectForKey:WCBookmarksAddress] isEqualToString:[_bookmark objectForKey:WCBookmarksAddress]]) {
             [NSObject cancelPreviousPerformRequestsWithTarget:self];
+            
             [self performSelector:@selector(_savePasswordForBookmark:)
                        withObject:[NSArray arrayWithObjects:_oldBookmark, _bookmark, password, NULL]
                        afterDelay:0.0];

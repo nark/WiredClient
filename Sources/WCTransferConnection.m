@@ -30,11 +30,15 @@
 #import "WCTransfer.h"
 #import "WCTransferConnection.h"
 
+
+
 @interface WCTransferConnection(Private)
 
 - (id)_initWithTransfer:(WCTransfer *)transfer;
 
 @end
+
+
 
 
 @implementation WCTransferConnection(Private)
@@ -48,6 +52,8 @@
 }
 
 @end
+
+
 
 
 
@@ -89,7 +95,7 @@
 
 	_p7Socket = [[WIP7Socket alloc] initWithSocket:_socket spec:WCP7Spec];
 	
-	if(![_p7Socket connectWithOptions:WIP7EncryptionRSA_AES256_SHA1 | WIP7ChecksumSHA1
+	if(![_p7Socket connectWithOptions:WIP7EncryptionRSA_AES256_SHA256 | WIP7ChecksumSHA256
 						serialization:WIP7Binary
 							 username:[[self URL] user]
 							 password:[[[self URL] password] SHA1]
@@ -100,7 +106,6 @@
 
 	return YES;
 }
-
 
 
 - (void)disconnect {

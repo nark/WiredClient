@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title></title>
   <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1265">
+  <meta name="CocoaVersion" content="1265.19">
   <style type="text/css">
     p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Helvetica; color: #919191}
     p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; min-height: 17.0px}
@@ -14,8 +14,8 @@
     p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #0000ee}
     p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; color: #919191; min-height: 17.0px}
     p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #919191}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #e32400}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #e32400}
     p.p10 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Helvetica}
     p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #919191; min-height: 14.0px}
     p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
@@ -35,8 +35,16 @@
 <p class="p2"><br></p>
 <p class="p3"><b>Version History</b></p>
 <p class="p6"><br></p>
+<p class="p7"><b>2.1.1</b></p>
+<p class="p4">- Fix text resizing in user list when using small icons style</p>
+<p class="p4">- Fix built-in theme customization</p>
+<p class="p4">- Fix timestamp margin in the vintage template</p>
+<p class="p4">- Fix a bug where nick was missing (Table Cell View instead) in private chats user list</p>
+<p class="p4">- Re-add many missing translations resources</p>
+<p class="p8"><br></p>
+<p class="p6"><br></p>
 <p class="p7"><b>2.1</b></p>
-<p class="p8">- Important: the minimum required Mac OSX version is now 10.7 Lion. Mac OS 10.6 Snow Leopard is no longer supported.</p>
+<p class="p9">- Important: the minimum required Mac OSX version is now 10.7 Lion. Mac OS 10.6 Snow Leopard is no longer supported.</p>
 <p class="p4">- New Messages window design and storage (move to Core Data)</p>
 <p class="p4">- Add search feature in Messages conversations</p>
 <p class="p4">- Add messages pagination with scroll-up detection to load more messages</p>
@@ -52,15 +60,18 @@
 <p class="p4">- Add contextual handling of Growl events on click action</p>
 <p class="p4">- Add Chats and Messages input text field grow automatically when needed</p>
 <p class="p4">- Fix bug when opening a Wired internal URL pointing to a directory, in List mode</p>
-<p class="p4">- Fix delay quit after 30 seconds</p>
+<p class="p4">- Fix delay quit after 30 seconds #60</p>
 <p class="p4">- Better design and readability of Toolbar notification badges</p>
 <p class="p4">- Better Retina display support</p>
+<p class="p4">- Better handling of the Link BBCode in Boards #62</p>
 <p class="p4">- Max user icon size is now 64px x 64px in order to support Retina display</p>
 <p class="p4">- Max server banner size is now 400px x 64px in order to support Retina display</p>
-<p class="p9"><br></p>
-<p class="p9"><br></p>
+<p class="p4">- Fix lost of passwords of Bookmarks when changing the login value</p>
+<p class="p4">- Fix crash when revealing a file on the server from the transfers window (disabling selection in column mode) #71</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0.3</b></p>
-<p class="p4">- Fix bug where client try to overwrite the Downloads folder on tracker connections</p>
+<p class="p4">- Fix bug where client try to overwrite the Downloads folder on tracker connections #51</p>
 <p class="p4">- Server and tracker bookmarks management moves to the sidebar of the chat window (removed from Preferences)</p>
 <p class="p4">- Better contextual menus for the sidebar of the chat window</p>
 <p class="p4">- Better design<span class="Apple-converted-space">  </span>for the Dock notification badge</p>
@@ -93,8 +104,8 @@
 <p class="p6"><br></p>
 <p class="p7"><b>2.0 (269)</b></p>
 <p class="p4">- Add download file directly from external URL Type (e.g. wiredp7://guest@localhost/file.txt)</p>
-<p class="p9"><br></p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0 (268)</b></p>
 <p class="p4">- Better support of older WebKit versions for Neo template</p>
 <p class="p6"><br></p>
@@ -103,17 +114,17 @@
 <p class="p4">- Fix a bug in data offset management of upload transfers when resume after suddenly disconnected</p>
 <p class="p4">- Fix some bugs in Smart Boards. Quote, Edit, Delete and Reply buttons now work.</p>
 <p class="p4">- Replace several depreciated methods and clean sources</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p6"><br></p>
 <p class="p7"><b>2.0b (263)</b></p>
 <p class="p4">- Add support to handle settings compatibility issues in order to prepare the release</p>
 <p class="p4">- Remove auto-reconnect support for disconnected transfers to prevent the transfer data to be corrupted (transfers are automatically removed from the Transfers Window when the connection suddenly disconnect)</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p11"><br></p>
 <p class="p7"><b>2.0b (262)</b></p>
 <p class="p4">- Add custom sorting and drag and drop support for Bookmarks and Trackers in the Sidebar</p>
 <p class="p4">- Fix bug in source lists for bold text of unread cell on Mountain Lion</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p11"><br></p>
 <p class="p7"><b>2.0b (261)</b></p>
 <p class="p4">- Add a dynamic menu when right-click an item of the Sidebar</p>
@@ -135,17 +146,17 @@
 <p class="p7"><b>2.0b (259)</b></p>
 <p class="p4">- Add a template named "Neo" in Themes, exploiting new HTML/CSS abilities</p>
 <p class="p4">- Open WiredTemplate file by double-click to install them</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p11"><br></p>
 <p class="p7"><b>2.0b (258)</b></p>
 <p class="p4">- Add auto-update support for alpha version (debug mode enabled, different plist file)</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p11"><br></p>
 <p class="p7"><b>2.0b (251)</b></p>
 <p class="p4">- Fix boards notifications for unread posts at login</p>
 <p class="p4">- Correct a typo in iTunes Now Playing output text</p>
 <p class="p4">- Now compiled using 10.7 SDK (10.6 stay the minimum required operating system)</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p11"><br></p>
 <p class="p7"><b>2.0b (248)</b></p>
 <p class="p4">- Add full CSS template support for Wired themes</p>
@@ -155,8 +166,8 @@
 <p class="p4">- Add Chat History and Plain Text Logs support</p>
 <p class="p4">- Improve Messages, Boards and Chat loading (10x faster)</p>
 <p class="p4">- Add full support for 32/64 bits architectures</p>
-<p class="p9"><br></p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (244)</b></p>
 <p class="p4">- Add Chat Sent event in Preferences &gt; Events</p>
 <p class="p4">- Add a Set Topic button in the chat window</p>
@@ -164,55 +175,55 @@
 <p class="p4">- The manual menu now redirect to the Wired Wiki</p>
 <p class="p4">- Fix the "Text Only" issue for toolbars of Files and Transfers windows</p>
 <p class="p4">- Wired Client is now built using Xcode 4.3</p>
-<p class="p9"><br></p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (243)</b></p>
 <p class="p4">- Triggers Chat Received event only when user isn't yourself</p>
 <p class="p4">- Fix error when delete focused highlight or ignore row in Preferences &gt; Chat</p>
 <p class="p4">- Fix memory leaks</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (242)</b></p>
 <p class="p4">- Fix a critical bug in the Messages window related to mixed messages from different conversations</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (241)</b></p>
 <p class="p4">- Add Clear toolbar item to clear the public chat text</p>
 <p class="p4">- Add Save Conversation action in the File menu</p>
 <p class="p4">- Add a contextual menu to the messages list</p>
 <p class="p4">- Improve messages interface speed and review window design</p>
 <p class="p4">- Fix private chat output text view which was editable</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (240)</b></p>
 <p class="p4">- Fix threads sorting by Latest Post Time</p>
 <p class="p4">- Fix can't import server/tracker bookmarks when the list is empty</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (239)</b></p>
 <p class="p4">- Add a Toggle User List menu action<span class="Apple-converted-space"> </span></p>
 <p class="p4">- Fix Board Post Added event not triggered</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (237)</b></p>
 <p class="p4">- Fix persistence of board tree expansion state</p>
 <p class="p4">- Fix persistence of manually unread threads</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (235)</b></p>
 <p class="p4">- Add ability to move a board with sub-boards into it</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (235)</b></p>
 <p class="p4">- Add Copy URL and Path contextual action in Files window</p>
 <p class="p4">- Add many new smileys from a well known collection</p>
 <p class="p4">- Improve the support of internal links to files</p>
 <p class="p4">- Fix UI design related issues in Boards and Messages windows</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (234)</b></p>
 <p class="p4">- Fix the built-in Growl issue</p>
 <p class="p4">- Fix issue where you cannot change permissions of a sub-board</p>
 <p class="p4">- Fix auto-update issue (wrong destination: Zanka) due to a conflict in the migration process</p>
 <p class="p4">- Remove the ability to move a board with sub boards into it</p>
 <p class="p4">- Remove Crash Logs menu</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>2.0b (233)</b></p>
 <p class="p4">- Fix the auto-update release logs</p>
 <p class="p4">- Fix error when perform menu File &gt; Set Topic with an empty uninitialized topic</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>1.3.3</b></p>
 <p class="p4">- File info panel can now display info for multiple files, and set folder type for multiple folders at once</p>
 <p class="p4">- Add ability to pause a transfer, which stops it without requesting the next transfer in the list</p>
@@ -379,18 +390,18 @@
 <p class="p11"><br></p>
 <p class="p7"><b>1.0.1</b></p>
 <p class="p4">- Minor interface fixes</p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p7"><b>1.0</b></p>
 <p class="p4">- Initial release</p>
-<p class="p9"><br></p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
 <p class="p3"><b>Contributors</b></p>
 <p class="p2"><br></p>
 <p class="p4">- Daniel Ericsson, sdz@lounging.com</p>
-<p class="p9"><br></p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
 <p class="p3"><b>License</b></p>
-<p class="p9"><br></p>
+<p class="p8"><br></p>
 <p class="p12">Copyright © 2003-2009 Axel Andersson</p>
 <p class="p12">All rights reserved.</p>
 <p class="p13"><br></p>

@@ -164,11 +164,11 @@
 #pragma mark -
 
 - (IBAction)clear:(id)sender {
-	NSAlert *alert = [NSAlert alertWithMessageText:@"Clear History" 
+	NSAlert *alert = [NSAlert alertWithMessageText:NSLS(@"Clear History", @"Clear chat history title")
 									 defaultButton:@"OK" 
-								   alternateButton:@"Cancel" 
+								   alternateButton:NSLS(@"Cancel", @"Clear chat history button")
 									   otherButton:nil 
-						 informativeTextWithFormat:@"Are you sure to clear your entire chat history ? This operation is not cancellable."];
+						 informativeTextWithFormat:NSLS(@"Are you sure to clear your entire chat history ? This operation is not cancellable.", @"Clear chat history message")];
 
 	[alert beginSheetModalForWindow:[_detailsTableView window]
 					  modalDelegate:self

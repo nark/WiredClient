@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13A3017" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1070" defaultVersion="1070" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4511"/>
@@ -37,12 +37,12 @@
                     <scrollView horizontalLineScroll="48" horizontalPageScroll="10" verticalLineScroll="48" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="7">
                         <rect key="frame" x="-1" y="-1" width="553" height="143"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="HEj-QB-rkA">
-                            <rect key="frame" x="1" y="1" width="551" height="141"/>
+                        <clipView key="contentView" id="qLM-ch-TMk">
+                            <rect key="frame" x="1" y="1" width="536" height="141"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="46" id="9" customClass="WITableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="551" height="141"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="536" height="141"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -54,11 +54,11 @@
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
-                                            <imageCell key="dataCell" controlSize="small" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="1710C20B-FB86-4CDC-AE5D-38583A2C53BC" id="110">
+                                            <imageCell key="dataCell" controlSize="small" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="FDAAC51E-144C-4F5D-98F8-CD952C53C7F5" id="110">
                                                 <font key="font" metaFont="titleBar" size="12"/>
                                             </imageCell>
                                         </tableColumn>
-                                        <tableColumn editable="NO" width="509" minWidth="4" maxWidth="1000" id="38">
+                                        <tableColumn editable="NO" width="494" minWidth="4" maxWidth="1000" id="38">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -86,7 +86,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" id="83">
-                            <rect key="frame" x="536" y="1" width="16" height="141"/>
+                            <rect key="frame" x="537" y="1" width="15" height="141"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
@@ -231,7 +231,9 @@
         </menu>
     </objects>
     <resources>
-        <image name="1710C20B-FB86-4CDC-AE5D-38583A2C53BC" width="46" height="46">
+        <image name="ClearTransfers" width="16" height="16"/>
+        <image name="ConnectTransfer" width="16" height="16"/>
+        <image name="FDAAC51E-144C-4F5D-98F8-CD952C53C7F5" width="46" height="46">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -392,8 +394,6 @@ KyMwIzsjRCNXI1sjbiN5I4IjhyOPI5IjlyOmI6ojsSO5I8YjyyPNI88j1CPcI98j5CPsI+8kASQEJAkA
 AAAAAAACAQAAAAAAAABCAAAAAAAAAAAAAAAAAAAkCw
 </mutableData>
         </image>
-        <image name="ClearTransfers" width="16" height="16"/>
-        <image name="ConnectTransfer" width="16" height="16"/>
         <image name="Folder" width="512" height="512"/>
         <image name="PauseTransfer" width="16" height="16"/>
         <image name="QuickLook" width="19" height="11"/>

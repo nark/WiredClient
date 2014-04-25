@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">13A3017</string>
-		<string key="IBDocument.InterfaceBuilderVersion">4511</string>
-		<string key="IBDocument.AppKitVersion">1265</string>
-		<string key="IBDocument.HIToolboxVersion">695.00</string>
+		<string key="IBDocument.SystemVersion">13C64</string>
+		<string key="IBDocument.InterfaceBuilderVersion">5053</string>
+		<string key="IBDocument.AppKitVersion">1265.19</string>
+		<string key="IBDocument.HIToolboxVersion">697.40</string>
 		<dictionary class="NSMutableDictionary" key="IBDocument.PluginVersions">
-			<string key="com.apple.InterfaceBuilder.CocoaPlugin">4511</string>
-			<string key="com.apple.WebKitIBPlugin">3336</string>
+			<string key="com.apple.InterfaceBuilder.CocoaPlugin">5053</string>
+			<string key="com.apple.WebKitIBPlugin">5053</string>
 		</dictionary>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSBox</string>
@@ -683,20 +683,7 @@
 														</array>
 														<double key="NSIntercellSpacingWidth">3</double>
 														<double key="NSIntercellSpacingHeight">2</double>
-														<object class="NSColor" key="NSBackgroundColor">
-															<int key="NSColorSpace">6</int>
-															<string key="NSCatalogName">System</string>
-															<string key="NSColorName">_sourceListBackgroundColor</string>
-															<object class="NSColor" key="NSColor">
-																<int key="NSColorSpace">6</int>
-																<string key="NSCatalogName">System</string>
-																<string key="NSColorName">alternateSelectedControlColor</string>
-																<object class="NSColor" key="NSColor" id="157777963">
-																	<int key="NSColorSpace">1</int>
-																	<bytes key="NSRGB">MCAwIDEAA</bytes>
-																</object>
-															</object>
-														</object>
+														<reference key="NSBackgroundColor" ref="122906619"/>
 														<object class="NSColor" key="NSGridColor">
 															<int key="NSColorSpace">6</int>
 															<string key="NSCatalogName">System</string>
@@ -706,7 +693,7 @@
 																<bytes key="NSWhite">MC41AA</bytes>
 															</object>
 														</object>
-														<double key="NSRowHeight">17</double>
+														<double key="NSRowHeight">35</double>
 														<int key="NSTvFlags">308281344</int>
 														<reference key="NSDelegate"/>
 														<reference key="NSDataSource"/>
@@ -770,7 +757,7 @@
 										<reference key="NSVScroller" ref="108766374"/>
 										<reference key="NSHScroller" ref="401430335"/>
 										<reference key="NSContentView" ref="405554608"/>
-										<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
+										<bytes key="NSScrollAmts">QSAAAEEgAABCFAAAQhQAAA</bytes>
 										<double key="NSMinMagnification">0.25</double>
 										<double key="NSMaxMagnification">4</double>
 										<double key="NSMagnification">1</double>
@@ -959,7 +946,10 @@
 												</dictionary>
 												<reference key="NSInsertionColor" ref="472141517"/>
 												<dictionary key="NSLinkAttributes">
-													<reference key="NSColor" ref="157777963"/>
+													<object class="NSColor" key="NSColor">
+														<int key="NSColorSpace">1</int>
+														<bytes key="NSRGB">MCAwIDEAA</bytes>
+													</object>
 													<object class="NSCursor" key="NSCursor">
 														<string key="NSHotSpot">{8, -8}</string>
 														<int key="NSCursorType">13</int>
@@ -981,7 +971,7 @@
 									<reference key="NSDocView" ref="327714652"/>
 									<reference key="NSBGColor" ref="122906619"/>
 									<object class="NSCursor" key="NSCursor">
-										<string key="NSHotSpot">{5, 5}</string>
+										<string key="NSHotSpot">{1, -1}</string>
 										<int key="NSCursorType">0</int>
 									</object>
 									<int key="NScvFlags">4</int>
@@ -2343,6 +2333,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">nickTextField</string>
+						<reference key="source" ref="41602760"/>
+						<reference key="destination" ref="427821890"/>
+					</object>
+					<string key="id">XwB-Yz-RBH</string>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">imageView</string>
 						<object class="NSTableCellView" key="source" id="636707924">
 							<nil key="NSNextResponder"/>
@@ -2371,7 +2369,7 @@
 								</object>
 								<object class="NSImageView" id="938968150">
 									<reference key="NSNextResponder" ref="636707924"/>
-									<int key="NSvFlags">1814</int>
+									<int key="NSvFlags">1812</int>
 									<object class="NSPSMatrix" key="NSFrameMatrix"/>
 									<set class="NSMutableSet" key="NSDragTypes">
 										<string>Apple PDF pasteboard type</string>
@@ -2413,6 +2411,14 @@
 						<reference key="destination" ref="294067661"/>
 					</object>
 					<string key="id">378</string>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nickTextField</string>
+						<reference key="source" ref="636707924"/>
+						<reference key="destination" ref="294067661"/>
+					</object>
+					<string key="id">sQY-9I-HaU</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -2489,6 +2495,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">nickTextField</string>
+						<reference key="source" ref="634616585"/>
+						<reference key="destination" ref="859933044"/>
+					</object>
+					<string key="id">rLE-85-YHh</string>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">imageView</string>
 						<object class="NSTableCellView" key="source" id="416958246">
 							<nil key="NSNextResponder"/>
@@ -2496,9 +2510,9 @@
 							<array class="NSMutableArray" key="NSSubviews">
 								<object class="NSTextField" id="590273479">
 									<reference key="NSNextResponder" ref="416958246"/>
-									<int key="NSvFlags">1804</int>
+									<int key="NSvFlags">1798</int>
 									<object class="NSPSMatrix" key="NSFrameMatrix"/>
-									<string key="NSFrame">{{22, 1}, {93, 16}}</string>
+									<string key="NSFrame">{{22, 1}, {105, 16}}</string>
 									<reference key="NSSuperview" ref="416958246"/>
 									<reference key="NSNextKeyView" ref="925438490"/>
 									<string key="NSAntiCompressionPriority">{250, 750}</string>
@@ -2517,9 +2531,9 @@
 								</object>
 								<object class="NSTextField" id="925438490">
 									<reference key="NSNextResponder" ref="416958246"/>
-									<int key="NSvFlags">1802</int>
+									<int key="NSvFlags">1795</int>
 									<object class="NSPSMatrix" key="NSFrameMatrix"/>
-									<string key="NSFrame">{{117, 1}, {82, 14}}</string>
+									<string key="NSFrame">{{131, 1}, {68, 14}}</string>
 									<reference key="NSSuperview" ref="416958246"/>
 									<reference key="NSNextKeyView" ref="108766374"/>
 									<bool key="NSEnabled">YES</bool>
@@ -2537,7 +2551,7 @@
 								</object>
 								<object class="NSImageView" id="470518837">
 									<reference key="NSNextResponder" ref="416958246"/>
-									<int key="NSvFlags">1814</int>
+									<int key="NSvFlags">1812</int>
 									<object class="NSPSMatrix" key="NSFrameMatrix"/>
 									<set class="NSMutableSet" key="NSDragTypes">
 										<string>Apple PDF pasteboard type</string>
@@ -2587,6 +2601,14 @@
 						<reference key="destination" ref="590273479"/>
 					</object>
 					<string key="id">398</string>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nickTextField</string>
+						<reference key="source" ref="416958246"/>
+						<reference key="destination" ref="590273479"/>
+					</object>
+					<string key="id">JqL-AG-eB9</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -4441,17 +4463,20 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">WCUserTableCellView</string>
 					<string key="superclassName">NSTableCellView</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">statusTextField</string>
-						<string key="NS.object.0">NSTextField</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">statusTextField</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="nickTextField">NSTextField</string>
+						<string key="statusTextField">NSTextField</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="nickTextField">
+							<string key="name">nickTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="statusTextField">
 							<string key="name">statusTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-					</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/WCUserTableCellView.h</string>

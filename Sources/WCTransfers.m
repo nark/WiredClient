@@ -2848,6 +2848,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	NSEnumerator	*enumerator;
 	NSString		*path;
 	WCTransfer		*transfer;
+    WCFile          *file;
 	
 	if(![self _validateRevealInFiles])
 		return;
@@ -2856,10 +2857,11 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	
 	while((transfer = [enumerator nextObject])) {
 		path = [transfer remotePath];
+        file = [WCFile fileWithDirectory:path connection:[transfer connection]];
 		
 		[WCFiles filesWithConnection:[transfer connection]
 								file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[transfer connection]]
-						  selectFile:[WCFile fileWithDirectory:path connection:[transfer connection]]];
+						  selectFile:file];
 	}
 }
 

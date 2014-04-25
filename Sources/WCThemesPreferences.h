@@ -15,6 +15,9 @@ extern NSString * const     WCThemesDidChangeNotification;
 
 @interface WCThemesPreferences : WCPreferencesController <NSTableViewDataSource, NSTableViewDelegate> {
     IBOutlet NSTableView    *_themesTableView;
+    
+    IBOutlet NSButton       *_renameButton;
+    IBOutlet NSButton       *_deleteButton;
 }
 
 @property (readonly) BOOL themeSelected;

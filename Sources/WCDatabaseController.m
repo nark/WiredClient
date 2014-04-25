@@ -8,7 +8,6 @@
 
 #import "WCDatabaseController.h"
 #import "WCApplicationController.h"
-#import "WCKeychain.h"
 
 
 @interface WCDatabaseController (Private)
@@ -121,11 +120,6 @@ static WCDatabaseController *_controller = nil;
     [self.managedObjectContext performBlock:^{
         [self.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
     }];
-}
-
-
-- (NSString *)secretKey {
-    return [self _checkSecretKey];
 }
 
 
