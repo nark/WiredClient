@@ -1,13 +1,13 @@
 # Wired Client Source Code
 
-This repository hosts Wired Client source code. You will find an Xcode project named "WiredClient.xcodeproj" that contains a Wired Client target ready to deploy a 10.6+ compatible application (i386).
+This repository hosts Wired Client source code. You will find an Xcode project named "WiredClient.xcworkspace" that contains a Wired Client target ready to deploy a 10.7+ compatible application (64-bit).
 
 ## Prerequisites
 
 - Mac OS X 10.11+
 - Xcode 9.0+
-- Homebrew
-- CocoaPods
+- Homebrew 1.4+
+- CocoaPods 1.2+
 
 ## How to compile Wired Client
 
