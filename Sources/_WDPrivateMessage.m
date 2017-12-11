@@ -3,21 +3,12 @@
 
 #import "_WDPrivateMessage.h"
 
-const struct WDPrivateMessageAttributes WDPrivateMessageAttributes = {
-};
-
-const struct WDPrivateMessageRelationships WDPrivateMessageRelationships = {
-};
-
-const struct WDPrivateMessageFetchedProperties WDPrivateMessageFetchedProperties = {
-};
-
 @implementation WDPrivateMessageID
 @end
 
 @implementation _WDPrivateMessage
 
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_ {
 	NSParameterAssert(moc_);
 	return [NSEntityDescription insertNewObjectForEntityForName:@"PrivateMessage" inManagedObjectContext:moc_];
 }
@@ -37,17 +28,9 @@ const struct WDPrivateMessageFetchedProperties WDPrivateMessageFetchedProperties
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
-
-
-
-
-
 @end
+

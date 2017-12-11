@@ -179,7 +179,7 @@
 
 - (void)appendMessage:(WDMessage *)message {
     [_conversationWebView stringByEvaluatingJavaScriptFromString:
-            [NSSWF:@"printMessage(%@);", [[SBJsonWriter writer] stringWithObject:message]]];
+            [NSSWF:@"printMessage(%@);", [[SBJson4Writer writer] stringWithObject:message]]];
 }
 
 
@@ -433,7 +433,7 @@
                                                                     limit:limit
                                                                     error:nil];
     
-    jsonString      = [[SBJsonWriter writer] stringWithObject:sortedMessages];
+    jsonString      = [[SBJson4Writer writer] stringWithObject:sortedMessages];
     
     [descriptor release];
     [dateFormatter release];

@@ -3,24 +3,12 @@
 
 #import "_WDConversation.h"
 
-const struct WDConversationAttributes WDConversationAttributes = {
-	.numberOfUnreads = @"numberOfUnreads",
-	.serverName = @"serverName",
-};
-
-const struct WDConversationRelationships WDConversationRelationships = {
-	.messages = @"messages",
-};
-
-const struct WDConversationFetchedProperties WDConversationFetchedProperties = {
-};
-
 @implementation WDConversationID
 @end
 
 @implementation _WDConversation
 
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_ {
 	NSParameterAssert(moc_);
 	return [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:moc_];
 }
@@ -40,7 +28,7 @@ const struct WDConversationFetchedProperties WDConversationFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"numberOfUnreadsValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"numberOfUnreads"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -50,12 +38,7 @@ const struct WDConversationFetchedProperties WDConversationFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic numberOfUnreads;
-
-
 
 - (int32_t)numberOfUnreadsValue {
 	NSNumber *result = [self numberOfUnreads];
@@ -63,7 +46,7 @@ const struct WDConversationFetchedProperties WDConversationFetchedProperties = {
 }
 
 - (void)setNumberOfUnreadsValue:(int32_t)value_ {
-	[self setNumberOfUnreads:[NSNumber numberWithInt:value_]];
+	[self setNumberOfUnreads:@(value_)];
 }
 
 - (int32_t)primitiveNumberOfUnreadsValue {
@@ -72,36 +55,36 @@ const struct WDConversationFetchedProperties WDConversationFetchedProperties = {
 }
 
 - (void)setPrimitiveNumberOfUnreadsValue:(int32_t)value_ {
-	[self setPrimitiveNumberOfUnreads:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveNumberOfUnreads:@(value_)];
 }
-
-
-
-
 
 @dynamic serverName;
 
-
-
-
-
-
 @dynamic messages;
 
-	
-- (NSMutableSet*)messagesSet {
+- (NSMutableSet<WDMessage*>*)messagesSet {
 	[self willAccessValueForKey:@"messages"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"messages"];
-  
+
+	NSMutableSet<WDMessage*> *result = (NSMutableSet<WDMessage*>*)[self mutableSetValueForKey:@"messages"];
+
 	[self didAccessValueForKey:@"messages"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+
+@implementation WDConversationAttributes 
++ (NSString *)numberOfUnreads {
+	return @"numberOfUnreads";
+}
++ (NSString *)serverName {
+	return @"serverName";
+}
+@end
+
+@implementation WDConversationRelationships 
++ (NSString *)messages {
+	return @"messages";
+}
+@end
+

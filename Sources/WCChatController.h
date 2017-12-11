@@ -41,7 +41,7 @@ extern NSString * const WCChatHighlightColorKey;
 extern NSString * const WCUserPboardType;
 
 
-@class SBJsonWriter, LNWebView, LNScrollView, WCChatTextView, WCChatWindow, WCServerConnection, WCErrorQueue, WCTopic, WCUser;
+@class SBJson4Writer, LNWebView, LNScrollView, WCChatTextView, WCChatWindow, WCServerConnection, WCErrorQueue, WCTopic, WCUser;
 
 @interface WCChatController : WIObject <NSMenuDelegate> {
 	IBOutlet WISplitView							*_userListSplitView;
@@ -87,7 +87,7 @@ extern NSString * const WCUserPboardType;
 	WCServerConnection								*_connection;
 	
 	WCErrorQueue									*_errorQueue;
-    SBJsonWriter                                    *_jsonWriter;
+    SBJson4Writer                                   *_jsonWriter;
 
 	NSMutableArray									*_commandHistory;
 	NSUInteger										_currentCommand;

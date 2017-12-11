@@ -3,21 +3,12 @@
 
 #import "_WDBroadcastsConversation.h"
 
-const struct WDBroadcastsConversationAttributes WDBroadcastsConversationAttributes = {
-};
-
-const struct WDBroadcastsConversationRelationships WDBroadcastsConversationRelationships = {
-};
-
-const struct WDBroadcastsConversationFetchedProperties WDBroadcastsConversationFetchedProperties = {
-};
-
 @implementation WDBroadcastsConversationID
 @end
 
 @implementation _WDBroadcastsConversation
 
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_ {
 	NSParameterAssert(moc_);
 	return [NSEntityDescription insertNewObjectForEntityForName:@"BroadcastsConversation" inManagedObjectContext:moc_];
 }
@@ -37,17 +28,9 @@ const struct WDBroadcastsConversationFetchedProperties WDBroadcastsConversationF
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
-
-
-
-
-
 @end
+

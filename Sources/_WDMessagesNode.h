@@ -1,188 +1,97 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to WDMessagesNode.h instead.
 
-#import <CoreData/CoreData.h>
+#if __has_feature(modules)
+    @import Foundation;
+    @import CoreData;
+#else
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#endif
 
-
-extern const struct WDMessagesNodeAttributes {
-	 NSString *active;
-	 NSString *date;
-	 NSString *direction;
-	 NSString *identifier;
-	 NSString *nick;
-	 NSString *unread;
-	 NSString *user;
-} WDMessagesNodeAttributes;
-
-extern const struct WDMessagesNodeRelationships {
-} WDMessagesNodeRelationships;
-
-extern const struct WDMessagesNodeFetchedProperties {
-} WDMessagesNodeFetchedProperties;
-
-
-
-
-
-
-
+NS_ASSUME_NONNULL_BEGIN
 
 @class NSObject;
 
 @interface WDMessagesNodeID : NSManagedObjectID {}
 @end
 
-@interface _WDMessagesNode : NSManagedObject {}
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@interface _WDMessagesNode : NSManagedObject
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_;
 + (NSString*)entityName;
-+ (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (WDMessagesNodeID*)objectID;
++ (nullable NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@property (nonatomic, readonly, strong) WDMessagesNodeID *objectID;
 
+@property (nonatomic, strong, nullable) NSNumber* active;
 
-
-
-
-@property (nonatomic, retain) NSNumber* active;
-
-
-
-@property BOOL activeValue;
+@property (atomic) BOOL activeValue;
 - (BOOL)activeValue;
 - (void)setActiveValue:(BOOL)value_;
 
-//- (BOOL)validateActive:(id*)value_ error:(NSError**)error_;
+@property (nonatomic, strong, nullable) NSDate* date;
 
+@property (nonatomic, strong, nullable) NSNumber* direction;
 
-
-
-
-@property (nonatomic, retain) NSDate* date;
-
-
-
-//- (BOOL)validateDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, retain) NSNumber* direction;
-
-
-
-@property int32_t directionValue;
+@property (atomic) int32_t directionValue;
 - (int32_t)directionValue;
 - (void)setDirectionValue:(int32_t)value_;
 
-//- (BOOL)validateDirection:(id*)value_ error:(NSError**)error_;
+@property (nonatomic, strong, nullable) NSString* identifier;
 
+@property (nonatomic, strong, nullable) NSString* nick;
 
+@property (nonatomic, strong, nullable) NSNumber* unread;
 
-
-
-@property (nonatomic, retain) NSString* identifier;
-
-
-
-//- (BOOL)validateIdentifier:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, retain) NSString* nick;
-
-
-
-//- (BOOL)validateNick:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, retain) NSNumber* unread;
-
-
-
-@property BOOL unreadValue;
+@property (atomic) BOOL unreadValue;
 - (BOOL)unreadValue;
 - (void)setUnreadValue:(BOOL)value_;
 
-//- (BOOL)validateUnread:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, retain) id user;
-
-
-
-//- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-
-@end
-
-@interface _WDMessagesNode (CoreDataGeneratedAccessors)
+@property (nonatomic, strong, nullable) id user;
 
 @end
 
 @interface _WDMessagesNode (CoreDataGeneratedPrimitiveAccessors)
 
-
-- (NSNumber*)primitiveActive;
-- (void)setPrimitiveActive:(NSNumber*)value;
+- (nullable NSNumber*)primitiveActive;
+- (void)setPrimitiveActive:(nullable NSNumber*)value;
 
 - (BOOL)primitiveActiveValue;
 - (void)setPrimitiveActiveValue:(BOOL)value_;
 
+- (nullable NSDate*)primitiveDate;
+- (void)setPrimitiveDate:(nullable NSDate*)value;
 
-
-
-- (NSDate*)primitiveDate;
-- (void)setPrimitiveDate:(NSDate*)value;
-
-
-
-
-- (NSNumber*)primitiveDirection;
-- (void)setPrimitiveDirection:(NSNumber*)value;
+- (nullable NSNumber*)primitiveDirection;
+- (void)setPrimitiveDirection:(nullable NSNumber*)value;
 
 - (int32_t)primitiveDirectionValue;
 - (void)setPrimitiveDirectionValue:(int32_t)value_;
 
+- (nullable NSString*)primitiveIdentifier;
+- (void)setPrimitiveIdentifier:(nullable NSString*)value;
 
+- (nullable NSString*)primitiveNick;
+- (void)setPrimitiveNick:(nullable NSString*)value;
 
-
-- (NSString*)primitiveIdentifier;
-- (void)setPrimitiveIdentifier:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveNick;
-- (void)setPrimitiveNick:(NSString*)value;
-
-
-
-
-- (NSNumber*)primitiveUnread;
-- (void)setPrimitiveUnread:(NSNumber*)value;
+- (nullable NSNumber*)primitiveUnread;
+- (void)setPrimitiveUnread:(nullable NSNumber*)value;
 
 - (BOOL)primitiveUnreadValue;
 - (void)setPrimitiveUnreadValue:(BOOL)value_;
 
-
-
-
-- (id)primitiveUser;
-- (void)setPrimitiveUser:(id)value;
-
-
-
+- (nullable id)primitiveUser;
+- (void)setPrimitiveUser:(nullable id)value;
 
 @end
+
+@interface WDMessagesNodeAttributes: NSObject 
++ (NSString *)active;
++ (NSString *)date;
++ (NSString *)direction;
++ (NSString *)identifier;
++ (NSString *)nick;
++ (NSString *)unread;
++ (NSString *)user;
+@end
+
+NS_ASSUME_NONNULL_END

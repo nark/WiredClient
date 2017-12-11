@@ -6,15 +6,15 @@
 //
 //
 
-#import "SBJsonWriter+WCJsonWriter.h"
 
-@implementation SBJsonWriter (WCJsonWriter)
+
+@implementation SBJson4Writer (WCJsonWriter)
 
 + (id)writer {
-    static SBJsonWriter *_instance;
+    static SBJson4Writer *_instance;
     
     if(!_instance)
-        _instance = [[SBJsonWriter alloc] init];
+        _instance = [[SBJson4Writer alloc] init];
 
     return _instance;
 }

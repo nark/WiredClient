@@ -1,0 +1,759 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0D0E4AFDD696ADCC04F0E7F5396FBB4F /* SBJson4StreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = F74AA3539EC036A7CFC125C56874DCA6 /* SBJson4StreamParserState.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		11A89CAC33E221E170B98F08C5321699 /* SBJson4StreamWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = CE3FCB3B864D7B4E576456CED221016F /* SBJson4StreamWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		253CD533EA1724C518C7066C32C13AA7 /* SBJson4StreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 485C6B13DB7BDF675BEA6182A2C985FB /* SBJson4StreamParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29B0FA0F8479698D980A2B7DD2CCA716 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270DD1219F1E6CF00379D39F252D87C6 /* Cocoa.framework */; };
+		3AE641C22206036DC443F002AF802452 /* SBJson4StreamWriterState.h in Headers */ = {isa = PBXBuildFile; fileRef = C47762F22CE14336BF4D4A538938A671 /* SBJson4StreamWriterState.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5022ACC80A397166BFD64078D994C488 /* Pods-Wired Client-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F6EEDE4047F9B9B287CBDF02ECA7D3C7 /* Pods-Wired Client-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5A21B25D6D8FDBBF96A8CDEDCD6FA45B /* SBJson4Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 144CD9FB6437A9C3083FD8E98E76D1A3 /* SBJson4Parser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BC780BA220CD9B49F7ED9B27E8E1A3F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270DD1219F1E6CF00379D39F252D87C6 /* Cocoa.framework */; };
+		77623624EC41070515AD2738B8A65757 /* SBJson4Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D13BF2E57EA2B54627DDF4AC0A1474 /* SBJson4Parser.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		7FCF4A020F6D854118908BD21FC7E507 /* SBJson4StreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2615FE05E335192F64BBA0D54C1FE32F /* SBJson4StreamParser.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		91BE2F15D428C3AE11B4C29D91361DFB /* SBJson4StreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F40862D45BDA4C6872958E415F47F12 /* SBJson4StreamTokeniser.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		A229D6DA842EF8A0EF18446059C6A1D3 /* Pods-Wired Client-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 19A3016923CAB21B9AF91876A17688A3 /* Pods-Wired Client-dummy.m */; };
+		A2329FE314CEB90DA1E2DD1E794371EC /* SBJson4.h in Headers */ = {isa = PBXBuildFile; fileRef = D087C56A554505411D808A45CE7D1468 /* SBJson4.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A752846EA968CFD82E7C861FC1E1A39E /* SBJson4-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 447F71A60D1FF1E5A2A6AE35567A0A9E /* SBJson4-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B26586B6C8FF3D7D9B37071EA3301BEA /* SBJson4-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F92F9FC9B14D9E012ED87F963A6C0746 /* SBJson4-dummy.m */; };
+		B3DEA8630D935F8B0026E14D793086D7 /* SBJson4StreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 97FB7E0DA3A23FBF573765474080D884 /* SBJson4StreamWriter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		D66EB86DFE4E195A279FBA4EFDE9DB1D /* SBJson4StreamParserState.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CA89FD886614C825625B47EC7FD10B /* SBJson4StreamParserState.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		DE02E0A2218BA0E8DA06365443B72942 /* SBJson4StreamTokeniser.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FD2591616DB1CDFA34A3B76B963BD3B /* SBJson4StreamTokeniser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E8732C136672DE961A63C02FCBF10F58 /* SBJson4StreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 96035FF1C46A232C72F47E04743C4170 /* SBJson4StreamWriterState.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		EE4B502B014EA82D3B1D15CA97DE5A0F /* SBJson4Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = F06F75C395E90B2C6DEB0949B047B479 /* SBJson4Writer.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		FA0B0C005CE36CDE2B8A86DF15CC94F4 /* SBJson4Writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 204DD43A5CDFA6FEC25AED89E457F46F /* SBJson4Writer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FF732AF042F979AF40C3C279502AFB49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D70BA447C9F5DB96FD09064AAFB0DC4B;
+			remoteInfo = SBJson4;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		002B970031CB801D13DC60C11C2047BF /* SUVersionComparisonProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUVersionComparisonProtocol.h; path = Sparkle.framework/Versions/A/Headers/SUVersionComparisonProtocol.h; sourceTree = "<group>"; };
+		01BFB3A27705F31889F735D12A959844 /* SUAppcast.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUAppcast.h; path = Sparkle.framework/Versions/A/Headers/SUAppcast.h; sourceTree = "<group>"; };
+		0495711B7369AE80D3F03C44E109503D /* Pods-Wired Client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Wired Client.release.xcconfig"; sourceTree = "<group>"; };
+		079D0EE5AB56ADE4FFA37016168CBA82 /* SBJson4-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SBJson4-prefix.pch"; sourceTree = "<group>"; };
+		144CD9FB6437A9C3083FD8E98E76D1A3 /* SBJson4Parser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4Parser.h; path = Classes/SBJson4Parser.h; sourceTree = "<group>"; };
+		19A3016923CAB21B9AF91876A17688A3 /* Pods-Wired Client-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Wired Client-dummy.m"; sourceTree = "<group>"; };
+		1A672798BFA9D0B2C8CFF49D2B205416 /* SUUpdater.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUUpdater.h; path = Sparkle.framework/Versions/A/Headers/SUUpdater.h; sourceTree = "<group>"; };
+		1BFEC69B3F0E3E9BA79188690E6177DB /* Pods-Wired Client-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Wired Client-frameworks.sh"; sourceTree = "<group>"; };
+		204DD43A5CDFA6FEC25AED89E457F46F /* SBJson4Writer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4Writer.h; path = Classes/SBJson4Writer.h; sourceTree = "<group>"; };
+		260521832FD97F0FE36B340F93BCE773 /* SBJson4.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SBJson4.xcconfig; sourceTree = "<group>"; };
+		2615FE05E335192F64BBA0D54C1FE32F /* SBJson4StreamParser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SBJson4StreamParser.m; path = Classes/SBJson4StreamParser.m; sourceTree = "<group>"; };
+		270DD1219F1E6CF00379D39F252D87C6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		2E9BFD8B724BEC86ED2C218A24019302 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2FB1279A2C93F19F419B7B2979444A43 /* SUUpdaterDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUUpdaterDelegate.h; path = Sparkle.framework/Versions/A/Headers/SUUpdaterDelegate.h; sourceTree = "<group>"; };
+		2FD2591616DB1CDFA34A3B76B963BD3B /* SBJson4StreamTokeniser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4StreamTokeniser.h; path = Classes/SBJson4StreamTokeniser.h; sourceTree = "<group>"; };
+		37B0E7C0CFC692B4FA4E98D2F6611B37 /* Pods_Wired_Client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Wired_Client.framework; path = "Pods-Wired Client.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		37FA9615E17252BA9FEAEAA2510C5D18 /* SUAppcastItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUAppcastItem.h; path = Sparkle.framework/Versions/A/Headers/SUAppcastItem.h; sourceTree = "<group>"; };
+		43E615060ED8D96E3FE16A1FAD50C14C /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		447F71A60D1FF1E5A2A6AE35567A0A9E /* SBJson4-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SBJson4-umbrella.h"; sourceTree = "<group>"; };
+		485C6B13DB7BDF675BEA6182A2C985FB /* SBJson4StreamParser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4StreamParser.h; path = Classes/SBJson4StreamParser.h; sourceTree = "<group>"; };
+		51BF33B22E2C630B15267DC75BCA3275 /* Pods-Wired Client.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Wired Client.modulemap"; sourceTree = "<group>"; };
+		66EAF5E53054ECF3A9D070976C8A8736 /* Pods-Wired Client-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Wired Client-acknowledgements.plist"; sourceTree = "<group>"; };
+		760532438BEDF019919C6EF76F76DF44 /* Sparkle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Sparkle.h; path = Sparkle.framework/Versions/A/Headers/Sparkle.h; sourceTree = "<group>"; };
+		77D13BF2E57EA2B54627DDF4AC0A1474 /* SBJson4Parser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SBJson4Parser.m; path = Classes/SBJson4Parser.m; sourceTree = "<group>"; };
+		7B150B04CA373C294C5739911DE15F3F /* Pods-Wired Client.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Wired Client.test.xcconfig"; sourceTree = "<group>"; };
+		7C839BB08A64DFD65B24525F5668980B /* SUStandardVersionComparator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUStandardVersionComparator.h; path = Sparkle.framework/Versions/A/Headers/SUStandardVersionComparator.h; sourceTree = "<group>"; };
+		84FEEED569A86F0580DB9E4CA049A2BA /* Pods-Wired Client-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Wired Client-resources.sh"; sourceTree = "<group>"; };
+		89D3BCC358CAB89FC956737101659C7B /* Pods-Wired Client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Wired Client.debug.xcconfig"; sourceTree = "<group>"; };
+		8F40862D45BDA4C6872958E415F47F12 /* SBJson4StreamTokeniser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SBJson4StreamTokeniser.m; path = Classes/SBJson4StreamTokeniser.m; sourceTree = "<group>"; };
+		8FF1DE0D9BE8B337ECE2936BBAE55200 /* SUExport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUExport.h; path = Sparkle.framework/Versions/A/Headers/SUExport.h; sourceTree = "<group>"; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		96035FF1C46A232C72F47E04743C4170 /* SBJson4StreamWriterState.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SBJson4StreamWriterState.m; path = Classes/SBJson4StreamWriterState.m; sourceTree = "<group>"; };
+		97FB7E0DA3A23FBF573765474080D884 /* SBJson4StreamWriter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SBJson4StreamWriter.m; path = Classes/SBJson4StreamWriter.m; sourceTree = "<group>"; };
+		A30C8D9E1E89B8D7E0DD4A7FC16660FD /* SUVersionDisplayProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUVersionDisplayProtocol.h; path = Sparkle.framework/Versions/A/Headers/SUVersionDisplayProtocol.h; sourceTree = "<group>"; };
+		AF63319EA4176752A94BF7E1E8F397E6 /* Pods-Wired Client-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Wired Client-acknowledgements.markdown"; sourceTree = "<group>"; };
+		B6CA89FD886614C825625B47EC7FD10B /* SBJson4StreamParserState.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4StreamParserState.h; path = Classes/SBJson4StreamParserState.h; sourceTree = "<group>"; };
+		C13B972EDE8A56A78024FFCFF1711B36 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C47762F22CE14336BF4D4A538938A671 /* SBJson4StreamWriterState.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4StreamWriterState.h; path = Classes/SBJson4StreamWriterState.h; sourceTree = "<group>"; };
+		CC94655B7566B862F6868D2F77849E1E /* SBJson4.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SBJson4.modulemap; sourceTree = "<group>"; };
+		CE3FCB3B864D7B4E576456CED221016F /* SBJson4StreamWriter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4StreamWriter.h; path = Classes/SBJson4StreamWriter.h; sourceTree = "<group>"; };
+		D087C56A554505411D808A45CE7D1468 /* SBJson4.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SBJson4.h; path = Classes/SBJson4.h; sourceTree = "<group>"; };
+		DB1C34C6A76D4029064D5E444F0E967B /* SUErrors.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SUErrors.h; path = Sparkle.framework/Versions/A/Headers/SUErrors.h; sourceTree = "<group>"; };
+		EDA312A49A539B3F3D536456BFA9F965 /* SBJson4.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SBJson4.framework; path = SBJson4.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F06F75C395E90B2C6DEB0949B047B479 /* SBJson4Writer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SBJson4Writer.m; path = Classes/SBJson4Writer.m; sourceTree = "<group>"; };
+		F6EEDE4047F9B9B287CBDF02ECA7D3C7 /* Pods-Wired Client-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Wired Client-umbrella.h"; sourceTree = "<group>"; };
+		F74AA3539EC036A7CFC125C56874DCA6 /* SBJson4StreamParserState.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SBJson4StreamParserState.m; path = Classes/SBJson4StreamParserState.m; sourceTree = "<group>"; };
+		F92F9FC9B14D9E012ED87F963A6C0746 /* SBJson4-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SBJson4-dummy.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5C4F7F323952390D5BA7500D44285A0A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BC780BA220CD9B49F7ED9B27E8E1A3F /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1F8B002123FFE544F782A7216712ABF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29B0FA0F8479698D980A2B7DD2CCA716 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		04C068A18C5413F804A2959126093416 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				270DD1219F1E6CF00379D39F252D87C6 /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		0D32C4294B70E54EF0D24590A5D7B73B /* SBJson4 */ = {
+			isa = PBXGroup;
+			children = (
+				D087C56A554505411D808A45CE7D1468 /* SBJson4.h */,
+				144CD9FB6437A9C3083FD8E98E76D1A3 /* SBJson4Parser.h */,
+				77D13BF2E57EA2B54627DDF4AC0A1474 /* SBJson4Parser.m */,
+				485C6B13DB7BDF675BEA6182A2C985FB /* SBJson4StreamParser.h */,
+				2615FE05E335192F64BBA0D54C1FE32F /* SBJson4StreamParser.m */,
+				B6CA89FD886614C825625B47EC7FD10B /* SBJson4StreamParserState.h */,
+				F74AA3539EC036A7CFC125C56874DCA6 /* SBJson4StreamParserState.m */,
+				2FD2591616DB1CDFA34A3B76B963BD3B /* SBJson4StreamTokeniser.h */,
+				8F40862D45BDA4C6872958E415F47F12 /* SBJson4StreamTokeniser.m */,
+				CE3FCB3B864D7B4E576456CED221016F /* SBJson4StreamWriter.h */,
+				97FB7E0DA3A23FBF573765474080D884 /* SBJson4StreamWriter.m */,
+				C47762F22CE14336BF4D4A538938A671 /* SBJson4StreamWriterState.h */,
+				96035FF1C46A232C72F47E04743C4170 /* SBJson4StreamWriterState.m */,
+				204DD43A5CDFA6FEC25AED89E457F46F /* SBJson4Writer.h */,
+				F06F75C395E90B2C6DEB0949B047B479 /* SBJson4Writer.m */,
+				174DB8AB7B0C5A389B37A972B7D5FD71 /* Support Files */,
+			);
+			name = SBJson4;
+			path = SBJson4;
+			sourceTree = "<group>";
+		};
+		174DB8AB7B0C5A389B37A972B7D5FD71 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C13B972EDE8A56A78024FFCFF1711B36 /* Info.plist */,
+				CC94655B7566B862F6868D2F77849E1E /* SBJson4.modulemap */,
+				260521832FD97F0FE36B340F93BCE773 /* SBJson4.xcconfig */,
+				F92F9FC9B14D9E012ED87F963A6C0746 /* SBJson4-dummy.m */,
+				079D0EE5AB56ADE4FFA37016168CBA82 /* SBJson4-prefix.pch */,
+				447F71A60D1FF1E5A2A6AE35567A0A9E /* SBJson4-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SBJson4";
+			sourceTree = "<group>";
+		};
+		2FCAC97223E18ED345F7631C2D22B9E8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0D32C4294B70E54EF0D24590A5D7B73B /* SBJson4 */,
+				4CEFA62B2BF66C54164C2870015EFE4E /* Sparkle */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		39E9EE8210D861DFD82346C1F5EB7218 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				04C068A18C5413F804A2959126093416 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4736D4C5793A6905F4383422C3E7DC8C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				37B0E7C0CFC692B4FA4E98D2F6611B37 /* Pods_Wired_Client.framework */,
+				EDA312A49A539B3F3D536456BFA9F965 /* SBJson4.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CEFA62B2BF66C54164C2870015EFE4E /* Sparkle */ = {
+			isa = PBXGroup;
+			children = (
+				760532438BEDF019919C6EF76F76DF44 /* Sparkle.h */,
+				01BFB3A27705F31889F735D12A959844 /* SUAppcast.h */,
+				37FA9615E17252BA9FEAEAA2510C5D18 /* SUAppcastItem.h */,
+				DB1C34C6A76D4029064D5E444F0E967B /* SUErrors.h */,
+				8FF1DE0D9BE8B337ECE2936BBAE55200 /* SUExport.h */,
+				7C839BB08A64DFD65B24525F5668980B /* SUStandardVersionComparator.h */,
+				1A672798BFA9D0B2C8CFF49D2B205416 /* SUUpdater.h */,
+				2FB1279A2C93F19F419B7B2979444A43 /* SUUpdaterDelegate.h */,
+				002B970031CB801D13DC60C11C2047BF /* SUVersionComparisonProtocol.h */,
+				A30C8D9E1E89B8D7E0DD4A7FC16660FD /* SUVersionDisplayProtocol.h */,
+				DDE42221305C1D1985947DB98919191F /* Frameworks */,
+			);
+			name = Sparkle;
+			path = Sparkle;
+			sourceTree = "<group>";
+		};
+		6512667B803ED1B6CF5829446FC85F5C /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				A203616F5BC4A59DB6E023B635C6C84D /* Pods-Wired Client */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
+				39E9EE8210D861DFD82346C1F5EB7218 /* Frameworks */,
+				2FCAC97223E18ED345F7631C2D22B9E8 /* Pods */,
+				4736D4C5793A6905F4383422C3E7DC8C /* Products */,
+				6512667B803ED1B6CF5829446FC85F5C /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		A203616F5BC4A59DB6E023B635C6C84D /* Pods-Wired Client */ = {
+			isa = PBXGroup;
+			children = (
+				2E9BFD8B724BEC86ED2C218A24019302 /* Info.plist */,
+				51BF33B22E2C630B15267DC75BCA3275 /* Pods-Wired Client.modulemap */,
+				AF63319EA4176752A94BF7E1E8F397E6 /* Pods-Wired Client-acknowledgements.markdown */,
+				66EAF5E53054ECF3A9D070976C8A8736 /* Pods-Wired Client-acknowledgements.plist */,
+				19A3016923CAB21B9AF91876A17688A3 /* Pods-Wired Client-dummy.m */,
+				1BFEC69B3F0E3E9BA79188690E6177DB /* Pods-Wired Client-frameworks.sh */,
+				84FEEED569A86F0580DB9E4CA049A2BA /* Pods-Wired Client-resources.sh */,
+				F6EEDE4047F9B9B287CBDF02ECA7D3C7 /* Pods-Wired Client-umbrella.h */,
+				89D3BCC358CAB89FC956737101659C7B /* Pods-Wired Client.debug.xcconfig */,
+				0495711B7369AE80D3F03C44E109503D /* Pods-Wired Client.release.xcconfig */,
+				7B150B04CA373C294C5739911DE15F3F /* Pods-Wired Client.test.xcconfig */,
+			);
+			name = "Pods-Wired Client";
+			path = "Target Support Files/Pods-Wired Client";
+			sourceTree = "<group>";
+		};
+		DDE42221305C1D1985947DB98919191F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43E615060ED8D96E3FE16A1FAD50C14C /* Sparkle.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5E2118F204A0264ED4BEE75ED5857DD7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A752846EA968CFD82E7C861FC1E1A39E /* SBJson4-umbrella.h in Headers */,
+				A2329FE314CEB90DA1E2DD1E794371EC /* SBJson4.h in Headers */,
+				5A21B25D6D8FDBBF96A8CDEDCD6FA45B /* SBJson4Parser.h in Headers */,
+				253CD533EA1724C518C7066C32C13AA7 /* SBJson4StreamParser.h in Headers */,
+				D66EB86DFE4E195A279FBA4EFDE9DB1D /* SBJson4StreamParserState.h in Headers */,
+				DE02E0A2218BA0E8DA06365443B72942 /* SBJson4StreamTokeniser.h in Headers */,
+				11A89CAC33E221E170B98F08C5321699 /* SBJson4StreamWriter.h in Headers */,
+				3AE641C22206036DC443F002AF802452 /* SBJson4StreamWriterState.h in Headers */,
+				FA0B0C005CE36CDE2B8A86DF15CC94F4 /* SBJson4Writer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A03F7465D63B83881D53C714BFB09FB5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5022ACC80A397166BFD64078D994C488 /* Pods-Wired Client-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		AB5E639E4457B8649E151F3074CCD6C1 /* Pods-Wired Client */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 58D058200D78B4D4CB1166A94CDBDF8A /* Build configuration list for PBXNativeTarget "Pods-Wired Client" */;
+			buildPhases = (
+				F18C483E673415E13F252F13376B822A /* Sources */,
+				5C4F7F323952390D5BA7500D44285A0A /* Frameworks */,
+				A03F7465D63B83881D53C714BFB09FB5 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6C522BAE344BA1D9785A1D99A9C5B089 /* PBXTargetDependency */,
+			);
+			name = "Pods-Wired Client";
+			productName = "Pods-Wired Client";
+			productReference = 37B0E7C0CFC692B4FA4E98D2F6611B37 /* Pods_Wired_Client.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D70BA447C9F5DB96FD09064AAFB0DC4B /* SBJson4 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7ED27571D247F48147A2EE1F62AFAD59 /* Build configuration list for PBXNativeTarget "SBJson4" */;
+			buildPhases = (
+				A0D21F238A8F5B8D947717725400339A /* Sources */,
+				D1F8B002123FFE544F782A7216712ABF /* Frameworks */,
+				5E2118F204A0264ED4BEE75ED5857DD7 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SBJson4;
+			productName = SBJson4;
+			productReference = EDA312A49A539B3F3D536456BFA9F965 /* SBJson4.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = 4736D4C5793A6905F4383422C3E7DC8C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AB5E639E4457B8649E151F3074CCD6C1 /* Pods-Wired Client */,
+				D70BA447C9F5DB96FD09064AAFB0DC4B /* SBJson4 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A0D21F238A8F5B8D947717725400339A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B26586B6C8FF3D7D9B37071EA3301BEA /* SBJson4-dummy.m in Sources */,
+				77623624EC41070515AD2738B8A65757 /* SBJson4Parser.m in Sources */,
+				7FCF4A020F6D854118908BD21FC7E507 /* SBJson4StreamParser.m in Sources */,
+				0D0E4AFDD696ADCC04F0E7F5396FBB4F /* SBJson4StreamParserState.m in Sources */,
+				91BE2F15D428C3AE11B4C29D91361DFB /* SBJson4StreamTokeniser.m in Sources */,
+				B3DEA8630D935F8B0026E14D793086D7 /* SBJson4StreamWriter.m in Sources */,
+				E8732C136672DE961A63C02FCBF10F58 /* SBJson4StreamWriterState.m in Sources */,
+				EE4B502B014EA82D3B1D15CA97DE5A0F /* SBJson4Writer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F18C483E673415E13F252F13376B822A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A229D6DA842EF8A0EF18446059C6A1D3 /* Pods-Wired Client-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6C522BAE344BA1D9785A1D99A9C5B089 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SBJson4;
+			target = D70BA447C9F5DB96FD09064AAFB0DC4B /* SBJson4 */;
+			targetProxy = FF732AF042F979AF40C3C279502AFB49 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0D888A937A632FABDDE664F6303DAD4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		16606049C147A8E13C83DA842B4F2DEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		28F9C6E439174FA30E4FE2ED7C226BB7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 260521832FD97F0FE36B340F93BCE773 /* SBJson4.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/SBJson4/SBJson4-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SBJson4/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MODULEMAP_FILE = "Target Support Files/SBJson4/SBJson4.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = SBJson4;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4A6740DEF227627BE7C1CF5A6FFCFA6F /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 260521832FD97F0FE36B340F93BCE773 /* SBJson4.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/SBJson4/SBJson4-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SBJson4/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MODULEMAP_FILE = "Target Support Files/SBJson4/SBJson4.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = SBJson4;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Test;
+		};
+		68123E8D8C520B1B18B658C1E7391114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0495711B7369AE80D3F03C44E109503D /* Pods-Wired Client.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Wired Client/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MODULEMAP_FILE = "Target Support Files/Pods-Wired Client/Pods-Wired Client.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Wired_Client;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		75870E646D1CFD796E8AC4F375B09FEC /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7B150B04CA373C294C5739911DE15F3F /* Pods-Wired Client.test.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Wired Client/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MODULEMAP_FILE = "Target Support Files/Pods-Wired Client/Pods-Wired Client.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Wired_Client;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Test;
+		};
+		A516DB2D0D3BF1672123EDEEA88F26F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 89D3BCC358CAB89FC956737101659C7B /* Pods-Wired Client.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Wired Client/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MODULEMAP_FILE = "Target Support Files/Pods-Wired Client/Pods-Wired Client.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Wired_Client;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A7E46F781FFFA22A32A04CD836190B54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 260521832FD97F0FE36B340F93BCE773 /* SBJson4.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/SBJson4/SBJson4-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SBJson4/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MODULEMAP_FILE = "Target Support Files/SBJson4/SBJson4.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = SBJson4;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B46E207A9850A24EBC287227E8DFFA19 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_TEST=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Test;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D888A937A632FABDDE664F6303DAD4B /* Debug */,
+				16606049C147A8E13C83DA842B4F2DEF /* Release */,
+				B46E207A9850A24EBC287227E8DFFA19 /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		58D058200D78B4D4CB1166A94CDBDF8A /* Build configuration list for PBXNativeTarget "Pods-Wired Client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A516DB2D0D3BF1672123EDEEA88F26F6 /* Debug */,
+				68123E8D8C520B1B18B658C1E7391114 /* Release */,
+				75870E646D1CFD796E8AC4F375B09FEC /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7ED27571D247F48147A2EE1F62AFAD59 /* Build configuration list for PBXNativeTarget "SBJson4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28F9C6E439174FA30E4FE2ED7C226BB7 /* Debug */,
+				A7E46F781FFFA22A32A04CD836190B54 /* Release */,
+				4A6740DEF227627BE7C1CF5A6FFCFA6F /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

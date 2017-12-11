@@ -77,10 +77,11 @@
 		4C06680215DED6D400E8D810 /* History.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C06680015DED6D400E8D810 /* History.xib */; };
 		4C06680515DED6E400E8D810 /* Console.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C06680315DED6E400E8D810 /* Console.xib */; };
 		4C06680815DED6EF00E8D810 /* Error.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C06680615DED6EF00E8D810 /* Error.xib */; };
-		4C115855148CC65D0012B767 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C115854148CC65D0012B767 /* libxml2.dylib */; };
-		4C115857148CC6690012B767 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C115856148CC6690012B767 /* libcrypto.dylib */; };
-		4C115859148CC6710012B767 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C115858148CC6710012B767 /* libz.dylib */; };
-		4C11585B148CC67F0012B767 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11585A148CC67F0012B767 /* libssl.dylib */; };
+		4C076C6D1FDF18DB00775589 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C076C6B1FDF18DB00775589 /* libcrypto.a */; };
+		4C076C6E1FDF18DB00775589 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C076C6C1FDF18DB00775589 /* libssl.a */; };
+		4C076C701FDF18E600775589 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C076C6F1FDF18E500775589 /* libxml2.tbd */; };
+		4C076C721FDF18EC00775589 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C076C711FDF18EC00775589 /* libz.tbd */; };
+		4C155D0D1C39C58900C16971 /* Wired.WiredEmoticons in Resources */ = {isa = PBXBuildFile; fileRef = 4C2BDA4E17F9004A0069B38E /* Wired.WiredEmoticons */; };
 		4C16068C181494BB00373611 /* htdocs in Resources */ = {isa = PBXBuildFile; fileRef = 4C160683181494A800373611 /* htdocs */; };
 		4C20940B1569B06100AEFE04 /* WebArchive.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C20940A1569B06100AEFE04 /* WebArchive.png */; };
 		4C22070C17DE369500F1FBBA /* WCDatabaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22070A17DE369500F1FBBA /* WCDatabaseController.m */; };
@@ -176,7 +177,6 @@
 		4C23442114E6012D0046CD87 /* Yuck.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C2343D514E6012D0046CD87 /* Yuck.tiff */; };
 		4C23442214E6012D0046CD87 /* Yummy.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C2343D614E6012D0046CD87 /* Yummy.tiff */; };
 		4C23442314E6012D0046CD87 /* Zorro.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C2343D714E6012D0046CD87 /* Zorro.tiff */; };
-		4C2BDA5717F909380069B38E /* Wired.WiredEmoticons in Copy Emoticon Packs */ = {isa = PBXBuildFile; fileRef = 4C2BDA4E17F9004A0069B38E /* Wired.WiredEmoticons */; };
 		4C2BDA5A17F911530069B38E /* WCEmoticonPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BDA5917F911530069B38E /* WCEmoticonPreferences.m */; };
 		4C2BDA5D17F9B4D30069B38E /* WCEmoticonPackTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2BDA5C17F9B4D30069B38E /* WCEmoticonPackTableCellView.m */; };
 		4C2BDA6017FA16B80069B38E /* EmoticonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C2BDA5E17FA16B80069B38E /* EmoticonView.xib */; };
@@ -194,6 +194,7 @@
 		4C67D559156ADE230057D15A /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C67D558156ADE230057D15A /* ScriptingBridge.framework */; };
 		4C67D561156B8E930057D15A /* NowPlaying.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67D560156B8E930057D15A /* NowPlaying.png */; };
 		4C67D563156B8F010057D15A /* Chat History.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67D562156B8F010057D15A /* Chat History.png */; };
+		4C6853051FDF38700077FD54 /* SBJson4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6853061FDF38700077FD54 /* SBJson4.framework */; };
 		4C6D6E21176C9C9E0043677E /* TrackerServerInfo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6D6E1F176C9C9E0043677E /* TrackerServerInfo.xib */; };
 		4C6D6E23176C9E5E0043677E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D6E22176C9E5E0043677E /* main.m */; };
 		4C6D6E25176CA0B50043677E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF094C11559D67D005D77BB /* InfoPlist.strings */; };
@@ -213,7 +214,7 @@
 		4C82443917E08FF80065CEEE /* ReadThread.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C82443817E08FF80065CEEE /* ReadThread.tiff */; };
 		4C86C02A155FDEAF00B93247 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF094BB1559D67D005D77BB /* Cocoa.framework */; };
 		4C86C030155FDEAF00B93247 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C86C02E155FDEAF00B93247 /* InfoPlist.strings */; };
-		4C86C038155FDEFF00B93247 /* Vintage.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4C86C029155FDEAF00B93247 /* Vintage.WiredTemplate */; };
+		4C86C038155FDEFF00B93247 /* Vintage.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4C86C029155FDEAF00B93247 /* Vintage.WiredTemplate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4C86C03B155FF4FE00B93247 /* htdocs in Resources */ = {isa = PBXBuildFile; fileRef = 4C86C039155FF40400B93247 /* htdocs */; };
 		4C86C04D1561016100B93247 /* WCScrollViewBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C86C04C1561016100B93247 /* WCScrollViewBackground.png */; };
 		4C97DE3415630D8A00D88C11 /* WCWindowGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */; };
@@ -224,7 +225,7 @@
 		4CA9B2E11807249D00FDDB3A /* wired.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153011800D5E7004DA093 /* wired.a */; };
 		4CB439AB181DC7F0007E0C36 /* Appearance.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB439AA181DC7F0007E0C36 /* Appearance.png */; };
 		4CCDD70314F469490009F646 /* ClearChat.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCDD70214F469480009F646 /* ClearChat.png */; };
-		4CD0F4B01800D980001D8E4A /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1533E1800D94A004DA093 /* Growl.framework */; };
+		4CD0F4B01800D980001D8E4A /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1533E1800D94A004DA093 /* Growl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CD0F4C81801F940001D8E4A /* WCChatTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F4C71801F940001D8E4A /* WCChatTextFieldCell.m */; };
 		4CD0F4CE18044D82001D8E4A /* PublicChat.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0F4CC18044D82001D8E4A /* PublicChat.xib */; };
 		4CD0F4D618044F09001D8E4A /* Messages.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0F4D418044F09001D8E4A /* Messages.xib */; };
@@ -244,24 +245,20 @@
 		4CE153221800D64F004DA093 /* WiredAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; };
 		4CE153231800D64F004DA093 /* WiredFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153091800D5E7004DA093 /* WiredFoundation.framework */; };
 		4CE153241800D64F004DA093 /* WiredNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; };
-		4CE153271800D665004DA093 /* MMTabBarView.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */; };
-		4CE153281800D665004DA093 /* WiredFoundation.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153091800D5E7004DA093 /* WiredFoundation.framework */; };
-		4CE153291800D665004DA093 /* WiredNetworking.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; };
-		4CE1532A1800D665004DA093 /* WiredAppKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; };
+		4CE153271800D665004DA093 /* MMTabBarView.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		4CE153281800D665004DA093 /* WiredFoundation.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153091800D5E7004DA093 /* WiredFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		4CE153291800D665004DA093 /* WiredNetworking.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		4CE1532A1800D665004DA093 /* WiredAppKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CE1533F1800D94A004DA093 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1533E1800D94A004DA093 /* Growl.framework */; };
 		4CE2835D14A7C91200FDE489 /* SplitSizer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE2835C14A7C91200FDE489 /* SplitSizer.png */; };
 		4CEFF6BE180C3FA600AD7AD9 /* WCThemesPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFF6BD180C3FA600AD7AD9 /* WCThemesPreferences.m */; };
 		4CEFF6D2180C3FF700AD7AD9 /* WCPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */; };
-		4CEFF6DD180C807000AD7AD9 /* SBJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEFF6DB180C807000AD7AD9 /* SBJson.framework */; };
-		4CEFF6DE180C807000AD7AD9 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEFF6DC180C807000AD7AD9 /* Sparkle.framework */; };
-		4CEFF6DF180C808100AD7AD9 /* SBJson.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEFF6DB180C807000AD7AD9 /* SBJson.framework */; };
-		4CEFF6E0180C808100AD7AD9 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEFF6DC180C807000AD7AD9 /* Sparkle.framework */; };
 		4CF094971559D2D9005D77BB /* WiredTemplate.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4CF094961559D2D9005D77BB /* WiredTemplate.icns */; };
 		4CF094BC1559D67D005D77BB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF094BB1559D67D005D77BB /* Cocoa.framework */; };
-		4CF094CD1559D6F1005D77BB /* Basic.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094BA1559D67D005D77BB /* Basic.WiredTemplate */; };
+		4CF094CD1559D6F1005D77BB /* Basic.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094BA1559D67D005D77BB /* Basic.WiredTemplate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CF094D51559D8C1005D77BB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF094BB1559D67D005D77BB /* Cocoa.framework */; };
 		4CF094DB1559D8C1005D77BB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF094D91559D8C1005D77BB /* InfoPlist.strings */; };
-		4CF094E51559D9AA005D77BB /* Neo.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */; };
+		4CF094E51559D9AA005D77BB /* Neo.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CFDCBE815695FDA00DA17A6 /* WCChatHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDCBE715695FDA00DA17A6 /* WCChatHistory.m */; };
 		77096732107EBB1A005F357B /* WCEventsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77096731107EBB1A005F357B /* WCEventsController.m */; };
 		7712242D0F27421D00984433 /* UnreadThread.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 7712242B0F27421D00984433 /* UnreadThread.tiff */; };
@@ -477,6 +474,7 @@
 		A5F802980D8E378300A84685 /* WCMonitorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F802970D8E378300A84685 /* WCMonitorCell.m */; };
 		A5F990191065021A0055E9E4 /* ClearTransfers.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A5F990181065021A0055E9E4 /* ClearTransfers.tiff */; };
 		A5F9905C106506030055E9E4 /* ConnectTransfer.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A5F9905B106506030055E9E4 /* ConnectTransfer.tiff */; };
+		E631FE006AB48726F7BBB212 /* Pods_Wired_Client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EA4DF030F0053EC62511D55 /* Pods_Wired_Client.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -650,7 +648,6 @@
 			dstPath = Emoticons;
 			dstSubfolderSpec = 7;
 			files = (
-				4C2BDA5717F909380069B38E /* Wired.WiredEmoticons in Copy Emoticon Packs */,
 			);
 			name = "Copy Emoticon Packs";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -674,8 +671,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4CEFF6DF180C808100AD7AD9 /* SBJson.framework in Copy Frameworks */,
-				4CEFF6E0180C808100AD7AD9 /* Sparkle.framework in Copy Frameworks */,
 				4CD0F4B01800D980001D8E4A /* Growl.framework in Copy Frameworks */,
 				4CE153271800D665004DA093 /* MMTabBarView.framework in Copy Frameworks */,
 				4CE153281800D665004DA093 /* WiredFoundation.framework in Copy Frameworks */,
@@ -738,11 +733,16 @@
 		4C06680115DED6D400E8D810 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/History.xib; sourceTree = "<group>"; };
 		4C06680415DED6E400E8D810 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Console.xib; sourceTree = "<group>"; };
 		4C06680715DED6EF00E8D810 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Error.xib; sourceTree = "<group>"; };
+		4C076C6B1FDF18DB00775589 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../../../../../../../../usr/local/Cellar/openssl/1.0.2m/lib/libcrypto.a; sourceTree = "<group>"; };
+		4C076C6C1FDF18DB00775589 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../../../../../../../../usr/local/Cellar/openssl/1.0.2m/lib/libssl.a; sourceTree = "<group>"; };
+		4C076C6F1FDF18E500775589 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		4C076C711FDF18EC00775589 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4C0B22FB176C95A600B2BF34 /* WiredFrameworks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WiredFrameworks.xcodeproj; path = vendor/WiredFrameworks/WiredFrameworks.xcodeproj; sourceTree = "<group>"; };
 		4C115854148CC65D0012B767 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		4C115856148CC6690012B767 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		4C115858148CC6710012B767 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		4C11585A148CC67F0012B767 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
+		4C155D071C39C53800C16971 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C160683181494A800373611 /* htdocs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = htdocs; sourceTree = "<group>"; };
 		4C20940A1569B06100AEFE04 /* WebArchive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebArchive.png; sourceTree = "<group>"; };
 		4C2206FB17DCE70000F1FBBA /* WCWebDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCWebDataSource.h; sourceTree = "<group>"; };
@@ -910,6 +910,7 @@
 		4C67D55F156B84BF0057D15A /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		4C67D560156B8E930057D15A /* NowPlaying.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NowPlaying.png; sourceTree = "<group>"; };
 		4C67D562156B8F010057D15A /* Chat History.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Chat History.png"; sourceTree = "<group>"; };
+		4C6853061FDF38700077FD54 /* SBJson4.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SBJson4.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6D6E20176C9C9E0043677E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/TrackerServerInfo.xib; sourceTree = "<group>"; };
 		4C6D6E22176C9E5E0043677E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Sources/main.m; sourceTree = "<group>"; };
 		4C6D6E24176C9E840043677E /* prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prefix.pch; path = Sources/prefix.pch; sourceTree = "<group>"; };
@@ -1008,8 +1009,6 @@
 		4CEFF6BD180C3FA600AD7AD9 /* WCThemesPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCThemesPreferences.m; path = Sources/WCThemesPreferences.m; sourceTree = "<group>"; };
 		4CEFF6D0180C3FF700AD7AD9 /* WCPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCPreferencesController.h; path = Sources/WCPreferencesController.h; sourceTree = "<group>"; };
 		4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCPreferencesController.m; path = Sources/WCPreferencesController.m; sourceTree = "<group>"; };
-		4CEFF6DB180C807000AD7AD9 /* SBJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SBJson.framework; path = vendor/SBJson.framework; sourceTree = "<group>"; };
-		4CEFF6DC180C807000AD7AD9 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = vendor/Sparkle.framework; sourceTree = "<group>"; };
 		4CF094961559D2D9005D77BB /* WiredTemplate.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = WiredTemplate.icns; path = Images/WiredTemplate.icns; sourceTree = "<group>"; };
 		4CF094BA1559D67D005D77BB /* Basic.WiredTemplate */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Basic.WiredTemplate; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF094BB1559D67D005D77BB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -1028,6 +1027,8 @@
 		4CFCEB57181E7AB100D5FF71 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/ThreadWindow.xib; sourceTree = "<group>"; };
 		4CFDCBE615695FDA00DA17A6 /* WCChatHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCChatHistory.h; path = Sources/WCChatHistory.h; sourceTree = "<group>"; };
 		4CFDCBE715695FDA00DA17A6 /* WCChatHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCChatHistory.m; path = Sources/WCChatHistory.m; sourceTree = "<group>"; };
+		4EA4DF030F0053EC62511D55 /* Pods_Wired_Client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wired_Client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52A30D560B7D36A2AD0F2511 /* Pods-Wired Client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wired Client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client.debug.xcconfig"; sourceTree = "<group>"; };
 		77096730107EBB1A005F357B /* WCEventsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCEventsController.h; path = Sources/WCEventsController.h; sourceTree = "<group>"; };
 		77096731107EBB1A005F357B /* WCEventsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCEventsController.m; path = Sources/WCEventsController.m; sourceTree = "<group>"; };
 		7712242B0F27421D00984433 /* UnreadThread.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = UnreadThread.tiff; sourceTree = "<group>"; };
@@ -1090,6 +1091,7 @@
 		77E36EED0F82414F0065329A /* WCFilesSourceOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCFilesSourceOutlineView.m; path = Sources/WCFilesSourceOutlineView.m; sourceTree = "<group>"; };
 		77EF17F3106C19BA00883C96 /* WiredSettings.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = WiredSettings.icns; path = Images/WiredSettings.icns; sourceTree = "<group>"; };
 		77EFFBF4106C12F300883C96 /* WiredServer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = WiredServer.icns; path = Images/WiredServer.icns; sourceTree = "<group>"; };
+		8412F05D439B9F0793485926 /* Pods-Wired Client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wired Client.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client.release.xcconfig"; sourceTree = "<group>"; };
 		A509A98305F4A6D300E6AE2D /* WiredTransfer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = WiredTransfer.icns; path = Images/WiredTransfer.icns; sourceTree = "<group>"; };
 		A509A98F05F4EB9D00E6AE2D /* WiredScheme.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = WiredScheme.icns; path = Images/WiredScheme.icns; sourceTree = "<group>"; };
 		A509AD1105F7FBFF00E6AE2D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -1312,6 +1314,7 @@
 		A5F802970D8E378300A84685 /* WCMonitorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCMonitorCell.m; path = Sources/WCMonitorCell.m; sourceTree = "<group>"; };
 		A5F990181065021A0055E9E4 /* ClearTransfers.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ClearTransfers.tiff; sourceTree = "<group>"; };
 		A5F9905B106506030055E9E4 /* ConnectTransfer.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ConnectTransfer.tiff; sourceTree = "<group>"; };
+		F7D369A6437514269AF02479 /* Pods-Wired Client.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wired Client.test.xcconfig"; path = "Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client.test.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1343,25 +1346,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C6853051FDF38700077FD54 /* SBJson4.framework in Frameworks */,
+				4C076C721FDF18EC00775589 /* libz.tbd in Frameworks */,
+				4C076C701FDF18E600775589 /* libxml2.tbd in Frameworks */,
 				4CA9B2E11807249D00FDDB3A /* wired.a in Frameworks */,
+				4C076C6D1FDF18DB00775589 /* libcrypto.a in Frameworks */,
+				4C076C6E1FDF18DB00775589 /* libssl.a in Frameworks */,
 				4CE1531E1800D64F004DA093 /* MMTabBarView.framework in Frameworks */,
 				4CE153221800D64F004DA093 /* WiredAppKit.framework in Frameworks */,
 				4CE153231800D64F004DA093 /* WiredFoundation.framework in Frameworks */,
 				4CE153241800D64F004DA093 /* WiredNetworking.framework in Frameworks */,
-				4CEFF6DE180C807000AD7AD9 /* Sparkle.framework in Frameworks */,
-				4C11585B148CC67F0012B767 /* libssl.dylib in Frameworks */,
-				4C115859148CC6710012B767 /* libz.dylib in Frameworks */,
-				4C115857148CC6690012B767 /* libcrypto.dylib in Frameworks */,
-				4C115855148CC65D0012B767 /* libxml2.dylib in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				A509AD1205F7FBFF00E6AE2D /* Carbon.framework in Frameworks */,
-				4CEFF6DD180C807000AD7AD9 /* SBJson.framework in Frameworks */,
 				A5D4F28006D75DA4002A33D0 /* ExceptionHandling.framework in Frameworks */,
 				A5A3400707216D8900A16E9A /* Security.framework in Frameworks */,
 				777D36C50987E125005B5EC1 /* WebKit.framework in Frameworks */,
 				A55C73440F268087006E8568 /* libicucore.dylib in Frameworks */,
 				4CE1533F1800D94A004DA093 /* Growl.framework in Frameworks */,
 				4C67D559156ADE230057D15A /* ScriptingBridge.framework in Frameworks */,
+				E631FE006AB48726F7BBB212 /* Pods_Wired_Client.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1406,8 +1409,10 @@
 			children = (
 				A52B1C4706C408210033D317 /* Wired Client */,
 				A544C1C50758E107008446CF /* Subprojects */,
+				4C155D061C39C53700C16971 /* Wired.WiredEmoticons */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				DD0DA2D67713F53111D1E544 /* Pods */,
 			);
 			name = WiredClient;
 			sourceTree = "<group>";
@@ -1451,14 +1456,18 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4CEFF6DB180C807000AD7AD9 /* SBJson.framework */,
-				4CEFF6DC180C807000AD7AD9 /* Sparkle.framework */,
+				4C6853061FDF38700077FD54 /* SBJson4.framework */,
+				4C076C711FDF18EC00775589 /* libz.tbd */,
+				4C076C6F1FDF18E500775589 /* libxml2.tbd */,
+				4C076C6B1FDF18DB00775589 /* libcrypto.a */,
+				4C076C6C1FDF18DB00775589 /* libssl.a */,
 				4CE1533E1800D94A004DA093 /* Growl.framework */,
 				4C67D558156ADE230057D15A /* ScriptingBridge.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				A55C73450F268093006E8568 /* Linked Libraries */,
 				4CF094BB1559D67D005D77BB /* Cocoa.framework */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+				4EA4DF030F0053EC62511D55 /* Pods_Wired_Client.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1489,6 +1498,14 @@
 				A5DC7F9C057AB0A600736BBF /* WCMessage.h */,
 			);
 			name = Depreciated;
+			sourceTree = "<group>";
+		};
+		4C155D061C39C53700C16971 /* Wired.WiredEmoticons */ = {
+			isa = PBXGroup;
+			children = (
+				4C155D071C39C53800C16971 /* Info.plist */,
+			);
+			path = Wired.WiredEmoticons;
 			sourceTree = "<group>";
 		};
 		4C22070717DE366900F1FBBA /* Database */ = {
@@ -2395,6 +2412,16 @@
 			name = Config;
 			sourceTree = "<group>";
 		};
+		DD0DA2D67713F53111D1E544 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				52A30D560B7D36A2AD0F2511 /* Pods-Wired Client.debug.xcconfig */,
+				F7D369A6437514269AF02479 /* Pods-Wired Client.test.xcconfig */,
+				8412F05D439B9F0793485926 /* Pods-Wired Client.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2453,6 +2480,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A5E8BAA908748D3B0010F2A4 /* Build configuration list for PBXNativeTarget "Wired Client" */;
 			buildPhases = (
+				4D5C19408B81356B3BB3BE34 /* [CP] Check Pods Manifest.lock */,
 				4C8243FB17DE37C90065CEEE /* Generate Core Data Model */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -2461,6 +2489,8 @@
 				4CF094B21559D529005D77BB /* Copy Templates */,
 				770B8A64075C86BD005327F5 /* Copy Frameworks */,
 				4C2BDA5417F909230069B38E /* Copy Emoticon Packs */,
+				41A4977D16E8C8CEE4C029C0 /* [CP] Embed Pods Frameworks */,
+				4E8A4810DCF1700E64BB092D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2486,7 +2516,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0900;
 			};
 			buildConfigurationList = A5E8BAB808748D3B0010F2A4 /* Build configuration list for PBXProject "WiredClient" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2503,6 +2533,7 @@
 				nl,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* WiredClient */;
+			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
 				{
@@ -2926,12 +2957,28 @@
 				4C82443917E08FF80065CEEE /* ReadThread.tiff in Resources */,
 				4C2BDA6017FA16B80069B38E /* EmoticonView.xib in Resources */,
 				4C50C99E17FDE30300A75E7E /* Boards@x2.png in Resources */,
+				4C155D0D1C39C58900C16971 /* Wired.WiredEmoticons in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		41A4977D16E8C8CEE4C029C0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4C06678915DEC69F00E8D810 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2957,7 +3004,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/mogenerator -m \"$SRCROOT/CoreData/WiredClient.xcdatamodeld/WiredClient.xcdatamodel\" -O \"$SRCROOT/Sources/\" --includeh \"$SRCROOT/Sources/WDWiredModel.h\"";
+			shellScript = "/usr/local/bin/mogenerator -m \"$SRCROOT/CoreData/WiredClient.xcdatamodeld/WiredClient.xcdatamodel\" -O \"$SRCROOT/Sources/\" --includeh \"$SRCROOT/Sources/WDWiredModel.h\"";
 		};
 		4C89D6F3182FA6BB0011D61D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2985,6 +3032,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "sh \"$SRCROOT/../../wired_client_distribute.sh\" || exit 1";
+		};
+		4D5C19408B81356B3BB3BE34 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		4E8A4810DCF1700E64BB092D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		770FF23110342F39009D0F58 /* Run Script (XSD Schema) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3565,7 +3642,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -3583,6 +3659,7 @@
 				INFOPLIST_FILE = "Templates/Vintage/Vintage-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3592,7 +3669,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3604,6 +3680,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Templates/Vintage/Vintage-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3613,7 +3690,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3625,6 +3701,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Templates/Vintage/Vintage-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3696,6 +3773,7 @@
 				INFOPLIST_FILE = "Templates/Basic/Basic-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3705,7 +3783,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3717,6 +3794,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Templates/Basic/Basic-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3726,7 +3804,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3738,6 +3815,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Templates/Basic/Basic-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3764,6 +3842,7 @@
 				INFOPLIST_FILE = "Templates/Neo/Neo-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3773,7 +3852,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3785,6 +3863,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Templates/Neo/Neo-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3794,7 +3873,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3806,6 +3884,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Templates/Neo/Neo-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = WiredTemplate;
 			};
@@ -3813,27 +3892,38 @@
 		};
 		A5DB47B9098BBAB50073564C /* Test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7D369A6437514269AF02479 /* Pods-Wired Client.test.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)",
 					"\"$(SRCROOT)/../Sparkle\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/$(CONTENTS_FOLDER_PATH)/Frameworks\"",
 					"$(SRCROOT)/vendor",
+					/usr/local/opt/openssl/lib,
+					"$(PROJECT_DIR)/vendor",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/prefix.pch;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Sparkle\"",
+					/usr/local/opt/openssl/include,
+					"\"$(CONFIGURATION_BUILD_DIR)/$(CONTENTS_FOLDER_PATH)\"",
 					"\"$(SRCROOT)/../\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				OTHER_LDFLAGS = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/opt/openssl/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_IDENTIFIER}";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClientDebug";
 				PRODUCT_NAME = "Wired Client";
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)\" \"$(BUILT_PRODUCTS_DIR)\"";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Test;
@@ -3850,14 +3940,32 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A5E8BADA08748E1C0010F2A4 /* WiredClient.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = stabs;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = WCConfigurationTest;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				IBC_FLATTEN_NIBS = NO;
 				IBC_NOTICES = NO;
@@ -3869,55 +3977,79 @@
 		};
 		A5E8BAAA08748D3B0010F2A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52A30D560B7D36A2AD0F2511 /* Pods-Wired Client.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)",
-					"\"$(SRCROOT)/../Sparkle\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/$(CONTENTS_FOLDER_PATH)/Frameworks\"",
 					"$(SRCROOT)/vendor",
+					/usr/local/opt/openssl/lib,
+					"\"$PODS_CONFIGURATION_BUILD_DIR/Sparkle\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/SBJson4\"",
+					"$(PROJECT_DIR)/vendor",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/prefix.pch;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Sparkle\"",
+					/usr/local/opt/openssl/include,
 					"\"$(BUILT_PRODUCTS_DIR)\"",
+					"\"$(SRCROOT)/../\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/opt/openssl/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_IDENTIFIER}";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClientDebug";
 				PRODUCT_NAME = "Wired Client";
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)\" \"$(BUILT_PRODUCTS_DIR)\"";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		A5E8BAAC08748D3B0010F2A4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8412F05D439B9F0793485926 /* Pods-Wired Client.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)",
 					"\"$(SRCROOT)/../Sparkle\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/$(CONTENTS_FOLDER_PATH)/Frameworks\"",
 					"$(SRCROOT)/vendor",
+					/usr/local/opt/openssl/lib,
+					"$(PROJECT_DIR)/vendor",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/prefix.pch;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Sparkle\"",
+					/usr/local/opt/openssl/include,
+					"\"$(CONFIGURATION_BUILD_DIR)/$(CONTENTS_FOLDER_PATH)\"",
 					"\"$(SRCROOT)/../\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				OTHER_LDFLAGS = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/opt/openssl/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_IDENTIFIER}";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClient";
 				PRODUCT_NAME = "Wired Client";
 				STRIP_INSTALLED_PRODUCT = YES;
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)\" \"$(BUILT_PRODUCTS_DIR)\"";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -3942,17 +4074,37 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A5E8BADA08748E1C0010F2A4 /* WiredClient.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = WCConfigurationDebug;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				IBC_FLATTEN_NIBS = NO;
 				IBC_NOTICES = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -3962,13 +4114,31 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A5E8BADA08748E1C0010F2A4 /* WiredClient.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = WCConfigurationRelease;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				IBC_NOTICES = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;

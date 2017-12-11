@@ -3,28 +3,12 @@
 
 #import "_WDMessagesNode.h"
 
-const struct WDMessagesNodeAttributes WDMessagesNodeAttributes = {
-	.active = @"active",
-	.date = @"date",
-	.direction = @"direction",
-	.identifier = @"identifier",
-	.nick = @"nick",
-	.unread = @"unread",
-	.user = @"user",
-};
-
-const struct WDMessagesNodeRelationships WDMessagesNodeRelationships = {
-};
-
-const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
-};
-
 @implementation WDMessagesNodeID
 @end
 
 @implementation _WDMessagesNode
 
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_ {
 	NSParameterAssert(moc_);
 	return [NSEntityDescription insertNewObjectForEntityForName:@"MessagesNode" inManagedObjectContext:moc_];
 }
@@ -44,7 +28,7 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"activeValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"active"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -64,12 +48,7 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic active;
-
-
 
 - (BOOL)activeValue {
 	NSNumber *result = [self active];
@@ -77,7 +56,7 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 }
 
 - (void)setActiveValue:(BOOL)value_ {
-	[self setActive:[NSNumber numberWithBool:value_]];
+	[self setActive:@(value_)];
 }
 
 - (BOOL)primitiveActiveValue {
@@ -86,23 +65,12 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 }
 
 - (void)setPrimitiveActiveValue:(BOOL)value_ {
-	[self setPrimitiveActive:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveActive:@(value_)];
 }
-
-
-
-
 
 @dynamic date;
 
-
-
-
-
-
 @dynamic direction;
-
-
 
 - (int32_t)directionValue {
 	NSNumber *result = [self direction];
@@ -110,7 +78,7 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 }
 
 - (void)setDirectionValue:(int32_t)value_ {
-	[self setDirection:[NSNumber numberWithInt:value_]];
+	[self setDirection:@(value_)];
 }
 
 - (int32_t)primitiveDirectionValue {
@@ -119,30 +87,14 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 }
 
 - (void)setPrimitiveDirectionValue:(int32_t)value_ {
-	[self setPrimitiveDirection:[NSNumber numberWithInt:value_]];
+	[self setPrimitiveDirection:@(value_)];
 }
-
-
-
-
 
 @dynamic identifier;
 
-
-
-
-
-
 @dynamic nick;
 
-
-
-
-
-
 @dynamic unread;
-
-
 
 - (BOOL)unreadValue {
 	NSNumber *result = [self unread];
@@ -150,7 +102,7 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 }
 
 - (void)setUnreadValue:(BOOL)value_ {
-	[self setUnread:[NSNumber numberWithBool:value_]];
+	[self setUnread:@(value_)];
 }
 
 - (BOOL)primitiveUnreadValue {
@@ -159,23 +111,34 @@ const struct WDMessagesNodeFetchedProperties WDMessagesNodeFetchedProperties = {
 }
 
 - (void)setPrimitiveUnreadValue:(BOOL)value_ {
-	[self setPrimitiveUnread:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveUnread:@(value_)];
 }
-
-
-
-
 
 @dynamic user;
 
-
-
-
-
-
-
-
-
-
-
 @end
+
+@implementation WDMessagesNodeAttributes 
++ (NSString *)active {
+	return @"active";
+}
++ (NSString *)date {
+	return @"date";
+}
++ (NSString *)direction {
+	return @"direction";
+}
++ (NSString *)identifier {
+	return @"identifier";
+}
++ (NSString *)nick {
+	return @"nick";
+}
++ (NSString *)unread {
+	return @"unread";
+}
++ (NSString *)user {
+	return @"user";
+}
+@end
+

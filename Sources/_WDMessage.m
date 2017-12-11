@@ -3,24 +3,12 @@
 
 #import "_WDMessage.h"
 
-const struct WDMessageAttributes WDMessageAttributes = {
-	.draft = @"draft",
-	.message = @"message",
-};
-
-const struct WDMessageRelationships WDMessageRelationships = {
-	.conversation = @"conversation",
-};
-
-const struct WDMessageFetchedProperties WDMessageFetchedProperties = {
-};
-
 @implementation WDMessageID
 @end
 
 @implementation _WDMessage
 
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_ {
 	NSParameterAssert(moc_);
 	return [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:moc_];
 }
@@ -40,7 +28,7 @@ const struct WDMessageFetchedProperties WDMessageFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"draftValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"draft"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -50,12 +38,7 @@ const struct WDMessageFetchedProperties WDMessageFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic draft;
-
-
 
 - (BOOL)draftValue {
 	NSNumber *result = [self draft];
@@ -63,7 +46,7 @@ const struct WDMessageFetchedProperties WDMessageFetchedProperties = {
 }
 
 - (void)setDraftValue:(BOOL)value_ {
-	[self setDraft:[NSNumber numberWithBool:value_]];
+	[self setDraft:@(value_)];
 }
 
 - (BOOL)primitiveDraftValue {
@@ -72,27 +55,27 @@ const struct WDMessageFetchedProperties WDMessageFetchedProperties = {
 }
 
 - (void)setPrimitiveDraftValue:(BOOL)value_ {
-	[self setPrimitiveDraft:[NSNumber numberWithBool:value_]];
+	[self setPrimitiveDraft:@(value_)];
 }
-
-
-
-
 
 @dynamic message;
 
-
-
-
-
-
 @dynamic conversation;
 
-	
-
-
-
-
-
-
 @end
+
+@implementation WDMessageAttributes 
++ (NSString *)draft {
+	return @"draft";
+}
++ (NSString *)message {
+	return @"message";
+}
+@end
+
+@implementation WDMessageRelationships 
++ (NSString *)conversation {
+	return @"conversation";
+}
+@end
+

@@ -1448,7 +1448,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	BOOL					complete, first;
 	id						item;
     
-    file = nil;
+    //file = nil;
 	
 	if([_selectFiles count] > 0) {
 		directory		= [self _directoryForConnection:[self _selectedConnection] path:[_currentDirectory path]];

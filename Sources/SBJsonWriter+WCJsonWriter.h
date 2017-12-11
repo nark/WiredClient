@@ -6,7 +6,7 @@
 //
 //
 
-@interface SBJsonWriter (WCJsonWriter)
+@interface SBJson4Writer (WCJsonWriter)
 
 + (id)writer;
 

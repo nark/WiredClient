@@ -4418,7 +4418,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
             [posts addObject:[self _JSONProxyForPost:post]];
         }
         
-        jsonString = [[SBJsonWriter writer] stringWithObject:posts];
+        jsonString = [[SBJson4Writer writer] stringWithObject:posts];
         
         [thread setLoaded:YES];
         

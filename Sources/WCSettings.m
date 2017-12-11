@@ -950,7 +950,7 @@ static NSString         *basicThemeIdentifier;
             [NSNumber numberWithInteger:10],
                 WCNetworkReadTimeout,
                   
-            [NSNumber numberWithInteger:5],
+            [NSNumber numberWithInteger:2],
                 WCNetworkEncryptionCipher,
                     
             [NSNumber numberWithBool:YES],

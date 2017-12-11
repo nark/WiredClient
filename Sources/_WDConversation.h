@@ -1,77 +1,45 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to WDConversation.h instead.
 
-#import <CoreData/CoreData.h>
+#if __has_feature(modules)
+    @import Foundation;
+    @import CoreData;
+#else
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#endif
+
 #import "WDMessagesNode.h"
 
-extern const struct WDConversationAttributes {
-	 NSString *numberOfUnreads;
-	 NSString *serverName;
-} WDConversationAttributes;
-
-extern const struct WDConversationRelationships {
-	 NSString *messages;
-} WDConversationRelationships;
-
-extern const struct WDConversationFetchedProperties {
-} WDConversationFetchedProperties;
+NS_ASSUME_NONNULL_BEGIN
 
 @class WDMessage;
 
-
-
-
-@interface WDConversationID : NSManagedObjectID {}
+@interface WDConversationID : WDMessagesNodeID {}
 @end
 
-@interface _WDConversation : WDMessagesNode {}
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@interface _WDConversation : WDMessagesNode
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_;
 + (NSString*)entityName;
-+ (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (WDConversationID*)objectID;
++ (nullable NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@property (nonatomic, readonly, strong) WDConversationID *objectID;
 
+@property (nonatomic, strong, nullable) NSNumber* numberOfUnreads;
 
-
-
-
-@property (nonatomic, retain) NSNumber* numberOfUnreads;
-
-
-
-@property int32_t numberOfUnreadsValue;
+@property (atomic) int32_t numberOfUnreadsValue;
 - (int32_t)numberOfUnreadsValue;
 - (void)setNumberOfUnreadsValue:(int32_t)value_;
 
-//- (BOOL)validateNumberOfUnreads:(id*)value_ error:(NSError**)error_;
+@property (nonatomic, strong, nullable) NSString* serverName;
 
-
-
-
-
-@property (nonatomic, retain) NSString* serverName;
-
-
-
-//- (BOOL)validateServerName:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, retain) NSSet *messages;
-
-- (NSMutableSet*)messagesSet;
-
-
-
-
+@property (nonatomic, strong, nullable) NSSet<WDMessage*> *messages;
+- (nullable NSMutableSet<WDMessage*>*)messagesSet;
 
 @end
 
-@interface _WDConversation (CoreDataGeneratedAccessors)
-
-- (void)addMessages:(NSSet*)value_;
-- (void)removeMessages:(NSSet*)value_;
+@interface _WDConversation (MessagesCoreDataGeneratedAccessors)
+- (void)addMessages:(NSSet<WDMessage*>*)value_;
+- (void)removeMessages:(NSSet<WDMessage*>*)value_;
 - (void)addMessagesObject:(WDMessage*)value_;
 - (void)removeMessagesObject:(WDMessage*)value_;
 
@@ -79,25 +47,27 @@ extern const struct WDConversationFetchedProperties {
 
 @interface _WDConversation (CoreDataGeneratedPrimitiveAccessors)
 
-
-- (NSNumber*)primitiveNumberOfUnreads;
-- (void)setPrimitiveNumberOfUnreads:(NSNumber*)value;
+- (nullable NSNumber*)primitiveNumberOfUnreads;
+- (void)setPrimitiveNumberOfUnreads:(nullable NSNumber*)value;
 
 - (int32_t)primitiveNumberOfUnreadsValue;
 - (void)setPrimitiveNumberOfUnreadsValue:(int32_t)value_;
 
+- (nullable NSString*)primitiveServerName;
+- (void)setPrimitiveServerName:(nullable NSString*)value;
 
-
-
-- (NSString*)primitiveServerName;
-- (void)setPrimitiveServerName:(NSString*)value;
-
-
-
-
-
-- (NSMutableSet*)primitiveMessages;
-- (void)setPrimitiveMessages:(NSMutableSet*)value;
-
+- (NSMutableSet<WDMessage*>*)primitiveMessages;
+- (void)setPrimitiveMessages:(NSMutableSet<WDMessage*>*)value;
 
 @end
+
+@interface WDConversationAttributes: NSObject 
++ (NSString *)numberOfUnreads;
++ (NSString *)serverName;
+@end
+
+@interface WDConversationRelationships: NSObject
++ (NSString *)messages;
+@end
+
+NS_ASSUME_NONNULL_END

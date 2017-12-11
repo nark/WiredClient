@@ -1,41 +1,31 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to WDMessagesConversation.h instead.
 
-#import <CoreData/CoreData.h>
+#if __has_feature(modules)
+    @import Foundation;
+    @import CoreData;
+#else
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#endif
+
 #import "WDConversation.h"
 
-extern const struct WDMessagesConversationAttributes {
-} WDMessagesConversationAttributes;
+NS_ASSUME_NONNULL_BEGIN
 
-extern const struct WDMessagesConversationRelationships {
-} WDMessagesConversationRelationships;
-
-extern const struct WDMessagesConversationFetchedProperties {
-} WDMessagesConversationFetchedProperties;
-
-
-
-@interface WDMessagesConversationID : NSManagedObjectID {}
+@interface WDMessagesConversationID : WDConversationID {}
 @end
 
-@interface _WDMessagesConversation : WDConversation {}
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@interface _WDMessagesConversation : WDConversation
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_;
 + (NSString*)entityName;
-+ (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (WDMessagesConversationID*)objectID;
-
-
-
-
-
-
-@end
-
-@interface _WDMessagesConversation (CoreDataGeneratedAccessors)
++ (nullable NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@property (nonatomic, readonly, strong) WDMessagesConversationID *objectID;
 
 @end
 
 @interface _WDMessagesConversation (CoreDataGeneratedPrimitiveAccessors)
 
-
 @end
+
+NS_ASSUME_NONNULL_END

@@ -64,15 +64,30 @@
 
 #pragma mark -
 
+- (BOOL)belongsToConnection:(WCServerConnection *)connection {
+    if(!_connection) {
+        if([[self identifier] isEqualToString:[connection URLIdentifier]] ||
+           [[[_connection bookmark] objectForKey:WCBookmarksIdentifier] isEqualToString:[connection bookmarkIdentifier]])
+            return YES;
+    }
+    
+    return NO;
+}
+
+
+
 - (void)revalidateForConnection:(WCServerConnection *)connection {
 	WDMessage		*message;
+    
+    NSLog(@"revalidateForConnection : %@ <> %@", [self identifier], [connection URLIdentifier]);
         
 	for(message in self.messages) {		
 		if([message belongsToConnection:connection])
 			[message setConnection:connection];
 
 	}
-    [self setConnection:connection];
+    if([self belongsToConnection:connection])
+        [self setConnection:connection];
 }
 
 
@@ -86,8 +101,10 @@
 		}
 	}
 	
-	[self setConnection:NULL];
-    [self setUser:NULL];
+    if([self belongsToConnection:connection] && [[self user] userID] ==[connection userID]) {
+        [self setConnection:NULL];
+        [self setUser:NULL];
+    }
 }
 
 
@@ -102,6 +119,9 @@
 		if([message user] == user)
 			[message setUser:NULL];
 	}
+    
+    if([self user] == user)
+        [self setUser:NULL];
 }
 
 
@@ -115,8 +135,12 @@
                 [message setUser:user];
 	}
     
+    NSLog(@"revalidateForUser : %@ <> %@", user.nick, [self nick]);
+    NSLog(@"self user connection : %@", [[self user] connection]);
+    NSLog(@"revalidateForUser : %@ <> %@", [self connection], [user connection]);
+    
     if([[user nick] isEqualToString:[self nick]])
-        if(![self user] && [self connection] == [user connection])
+        if(![[self user] connection] && [self connection] == [user connection])
             [self setUser:user];
 }
 

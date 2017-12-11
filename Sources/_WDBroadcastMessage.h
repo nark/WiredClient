@@ -1,41 +1,31 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to WDBroadcastMessage.h instead.
 
-#import <CoreData/CoreData.h>
+#if __has_feature(modules)
+    @import Foundation;
+    @import CoreData;
+#else
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#endif
+
 #import "WDMessage.h"
 
-extern const struct WDBroadcastMessageAttributes {
-} WDBroadcastMessageAttributes;
+NS_ASSUME_NONNULL_BEGIN
 
-extern const struct WDBroadcastMessageRelationships {
-} WDBroadcastMessageRelationships;
-
-extern const struct WDBroadcastMessageFetchedProperties {
-} WDBroadcastMessageFetchedProperties;
-
-
-
-@interface WDBroadcastMessageID : NSManagedObjectID {}
+@interface WDBroadcastMessageID : WDMessageID {}
 @end
 
-@interface _WDBroadcastMessage : WDMessage {}
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@interface _WDBroadcastMessage : WDMessage
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_;
 + (NSString*)entityName;
-+ (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (WDBroadcastMessageID*)objectID;
-
-
-
-
-
-
-@end
-
-@interface _WDBroadcastMessage (CoreDataGeneratedAccessors)
++ (nullable NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@property (nonatomic, readonly, strong) WDBroadcastMessageID *objectID;
 
 @end
 
 @interface _WDBroadcastMessage (CoreDataGeneratedPrimitiveAccessors)
 
-
 @end
+
+NS_ASSUME_NONNULL_END

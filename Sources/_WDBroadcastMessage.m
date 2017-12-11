@@ -3,21 +3,12 @@
 
 #import "_WDBroadcastMessage.h"
 
-const struct WDBroadcastMessageAttributes WDBroadcastMessageAttributes = {
-};
-
-const struct WDBroadcastMessageRelationships WDBroadcastMessageRelationships = {
-};
-
-const struct WDBroadcastMessageFetchedProperties WDBroadcastMessageFetchedProperties = {
-};
-
 @implementation WDBroadcastMessageID
 @end
 
 @implementation _WDBroadcastMessage
 
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_ {
 	NSParameterAssert(moc_);
 	return [NSEntityDescription insertNewObjectForEntityForName:@"BroadcastMessage" inManagedObjectContext:moc_];
 }
@@ -37,17 +28,9 @@ const struct WDBroadcastMessageFetchedProperties WDBroadcastMessageFetchedProper
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
-
-
-
-
-
 @end
+

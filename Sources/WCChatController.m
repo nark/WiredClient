@@ -1123,7 +1123,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	_highlightPatterns		= [[NSMutableArray alloc] init];
 	_highlightColors		= [[NSMutableArray alloc] init];
     
-    _jsonWriter             = [[SBJsonWriter alloc] init];
+    _jsonWriter             = [[SBJson4Writer alloc] init];
 	
 	[[NSNotificationCenter defaultCenter]
      addObserver:self

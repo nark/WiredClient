@@ -183,7 +183,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	
 	conversation	= [self _selectedConversation];
 	connection		= [conversation connection];
-    enabled         = (connection != NULL && [connection isConnected] && [conversation user] != NULL);
+    enabled         = (connection != NULL && [connection isConnected] && [[conversation user] connection] != NULL);
     
 	[_messageTextField setEditable:enabled];
 	[_emoticonButton setEnabled:enabled];
@@ -309,6 +309,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     selfUser        = [[[conversation connection] chatController] userWithUserID:[[conversation connection] userID]];
 	user			= [conversation user];
     connection      = [user connection];
+    
+    NSLog(@"connection : %@ %d %@", connection, [connection isConnected], user);
         
     if(![conversation direction])
         [conversation setDirection:[NSNumber numberWithInteger:WCMessageTo]];
@@ -569,6 +571,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     }
     
     [_conversationController setConversation:_selectedConversation];
+    
+    [self _validate];
 }
 
 - (NSInteger)_numberOfConversations {
@@ -697,6 +701,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     for(WDConversation *conversation in conversations) {
         [conversation revalidateForConnection:connection];
     }
+    
     [[WCDatabaseController sharedController] save];
 }
 

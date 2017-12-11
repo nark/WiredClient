@@ -1,98 +1,64 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to WDMessage.h instead.
 
-#import <CoreData/CoreData.h>
+#if __has_feature(modules)
+    @import Foundation;
+    @import CoreData;
+#else
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#endif
+
 #import "WDMessagesNode.h"
 
-extern const struct WDMessageAttributes {
-	 NSString *draft;
-	 NSString *message;
-} WDMessageAttributes;
-
-extern const struct WDMessageRelationships {
-	 NSString *conversation;
-} WDMessageRelationships;
-
-extern const struct WDMessageFetchedProperties {
-} WDMessageFetchedProperties;
+NS_ASSUME_NONNULL_BEGIN
 
 @class WDConversation;
 
-
-
-
-@interface WDMessageID : NSManagedObjectID {}
+@interface WDMessageID : WDMessagesNodeID {}
 @end
 
-@interface _WDMessage : WDMessagesNode {}
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@interface _WDMessage : WDMessagesNode
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_;
 + (NSString*)entityName;
-+ (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (WDMessageID*)objectID;
++ (nullable NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@property (nonatomic, readonly, strong) WDMessageID *objectID;
 
+@property (nonatomic, strong, nullable) NSNumber* draft;
 
-
-
-
-@property (nonatomic, retain) NSNumber* draft;
-
-
-
-@property BOOL draftValue;
+@property (atomic) BOOL draftValue;
 - (BOOL)draftValue;
 - (void)setDraftValue:(BOOL)value_;
 
-//- (BOOL)validateDraft:(id*)value_ error:(NSError**)error_;
+@property (nonatomic, strong, nullable) NSString* message;
 
-
-
-
-
-@property (nonatomic, retain) NSString* message;
-
-
-
-//- (BOOL)validateMessage:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, retain) WDConversation *conversation;
-
-//- (BOOL)validateConversation:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@end
-
-@interface _WDMessage (CoreDataGeneratedAccessors)
+@property (nonatomic, strong, nullable) WDConversation *conversation;
 
 @end
 
 @interface _WDMessage (CoreDataGeneratedPrimitiveAccessors)
 
-
-- (NSNumber*)primitiveDraft;
-- (void)setPrimitiveDraft:(NSNumber*)value;
+- (nullable NSNumber*)primitiveDraft;
+- (void)setPrimitiveDraft:(nullable NSNumber*)value;
 
 - (BOOL)primitiveDraftValue;
 - (void)setPrimitiveDraftValue:(BOOL)value_;
 
-
-
-
-- (NSString*)primitiveMessage;
-- (void)setPrimitiveMessage:(NSString*)value;
-
-
-
-
+- (nullable NSString*)primitiveMessage;
+- (void)setPrimitiveMessage:(nullable NSString*)value;
 
 - (WDConversation*)primitiveConversation;
 - (void)setPrimitiveConversation:(WDConversation*)value;
 
-
 @end
+
+@interface WDMessageAttributes: NSObject 
++ (NSString *)draft;
++ (NSString *)message;
+@end
+
+@interface WDMessageRelationships: NSObject
++ (NSString *)conversation;
+@end
+
+NS_ASSUME_NONNULL_END

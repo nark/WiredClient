@@ -1,41 +1,31 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
 // Make changes to WDArchivesConversation.h instead.
 
-#import <CoreData/CoreData.h>
+#if __has_feature(modules)
+    @import Foundation;
+    @import CoreData;
+#else
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#endif
+
 #import "WDConversation.h"
 
-extern const struct WDArchivesConversationAttributes {
-} WDArchivesConversationAttributes;
+NS_ASSUME_NONNULL_BEGIN
 
-extern const struct WDArchivesConversationRelationships {
-} WDArchivesConversationRelationships;
-
-extern const struct WDArchivesConversationFetchedProperties {
-} WDArchivesConversationFetchedProperties;
-
-
-
-@interface WDArchivesConversationID : NSManagedObjectID {}
+@interface WDArchivesConversationID : WDConversationID {}
 @end
 
-@interface _WDArchivesConversation : WDConversation {}
-+ (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@interface _WDArchivesConversation : WDConversation
++ (instancetype)insertInManagedObjectContext:(NSManagedObjectContext *)moc_;
 + (NSString*)entityName;
-+ (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (WDArchivesConversationID*)objectID;
-
-
-
-
-
-
-@end
-
-@interface _WDArchivesConversation (CoreDataGeneratedAccessors)
++ (nullable NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
+@property (nonatomic, readonly, strong) WDArchivesConversationID *objectID;
 
 @end
 
 @interface _WDArchivesConversation (CoreDataGeneratedPrimitiveAccessors)
 
-
 @end
+
+NS_ASSUME_NONNULL_END
