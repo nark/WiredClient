@@ -692,9 +692,6 @@ static WCApplicationController		*sharedController;
     
 	[WIDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 	[NSNumberFormatter setDefaultFormatterBehavior:NSNumberFormatterBehavior10_4];
-	
-	[GrowlApplicationBridge setGrowlDelegate:self];
-    [GrowlApplicationBridge setShouldUseBuiltInNotifications:NO];
     
     // set the auto-update feed URL regarding to the selected configuration (Debug or Release)
 #ifdef WCConfigurationRelease
@@ -933,164 +930,6 @@ static WCApplicationController		*sharedController;
     if ([NSUserNotification class] && [NSUserNotificationCenter class]) {
         [self _userNotificationWithNotification:notification];
     }
-	
-	switch([event intForKey:WCEventsEvent]) {
-		case WCEventsServerConnected:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Connected", @"Growl event connected title")
-										description:[NSSWF:NSLS(@"Connected to %@", @"Growl event connected description (server)"),
-											[connection name]]
-								   notificationName:WCGrowlServerConnected
-										   iconData:NULL
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-
-		case WCEventsServerDisconnected:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Disconnected", @"Growl event disconnected title")
-										description:[NSSWF:NSLS(@"Disconnected from %@", @"Growl event disconnected description (server)"),
-											[connection name]]
-								   notificationName:WCGrowlServerDisconnected
-										   iconData:NULL
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsError:
-			[GrowlApplicationBridge notifyWithTitle:[info1 localizedDescription]
-										description:[info1 localizedFailureReason]
-								   notificationName:WCGrowlError
-										   iconData:NULL
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsUserJoined:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"User joined", @"Growl event user joined title")
-										description:[info1 nick]
-								   notificationName:WCGrowlUserJoined
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsUserChangedNick:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"User changed nick", @"Growl event user changed nick title")
-										description:[NSSWF:NSLS(@"%@ is now known as %@", @"Growl event user changed nick description (oldnick, newnick)"),
-											[info1 nick], info2]
-								   notificationName:WCGrowlUserChangedNick
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsUserChangedStatus:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"User changed status", @"Growl event user changed status title")
-										description:[NSSWF:NSLS(@"%@ changed status to %@", @"Growl event user changed status description (nick, status)"),
-											[info1 nick], info2]
-								   notificationName:WCGrowlUserChangedStatus
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsUserLeft:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"User left", @"Growl event user left title")
-										description:[info1 nick]
-								   notificationName:WCGrowlUserLeft
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsChatReceived:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Chat received", @"Growl event chat received title")
-										description:[NSSWF:@"%@: %@", [info1 nick], info2]
-								   notificationName:WCGrowlChatReceived
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-			
-		
-		
-		case WCEventsHighlightedChatReceived:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Chat received", @"Growl event chat received title")
-										description:[NSSWF:@"%@: %@", [info1 nick], info2]
-								   notificationName:WCGrowlHighlightedChatReceived
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsChatInvitationReceived:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Private chat invitation received", @"Growl event private chat invitation received title")
-										description:[info1 nick]
-								   notificationName:WCGrowlChatInvitationReceived
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-			
-		case WCEventsMessageReceived:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Message received", @"Growl event message received title")
-										description:[NSSWF:@"%@: %@", [info1 nick], [info1 valueForKey:@"messageString"]]
-								   notificationName:WCGrowlMessageReceived
-										   iconData:[[(WCUser *) [info1 user] icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsBoardPostReceived:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Board post received", @"Growl event news posted title")
-										description:[NSSWF:@"%@: %@", info1, info2]
-								   notificationName:WCGrowlBoardPostReceived
-										   iconData:NULL
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsBroadcastReceived:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Broadcast received", @"Growl event broadcast received title")
-										description:[NSSWF:@"%@: %@", [info1 nick], [info1 message]]
-								   notificationName:WCGrowlBroadcastReceived
-										   iconData:[[(WCUser *) [info1 user] icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsTransferStarted:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Transfer started", @"Growl event transfer started title")
-										description:[info1 name]
-								   notificationName:WCGrowlTransferStarted
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-		
-		case WCEventsTransferFinished:
-			[GrowlApplicationBridge notifyWithTitle:NSLS(@"Transfer finished", @"Growl event transfer started title")
-										description:[info1 name]
-								   notificationName:WCGrowlTransferFinished
-										   iconData:[[info1 icon] TIFFRepresentation]
-										   priority:0.0
-										   isSticky:NO
-									   clickContext:userInfo];
-			break;
-	}
 }
 
 
@@ -1190,7 +1029,7 @@ static WCApplicationController		*sharedController;
 			WCGrowlTransferStarted,
 			WCGrowlTransferFinished,
 			NULL],
-			GROWL_NOTIFICATIONS_ALL,
+			"",
 		[NSArray arrayWithObjects:
 			WCGrowlServerDisconnected,
 			WCGrowlHighlightedChatReceived,
@@ -1199,7 +1038,7 @@ static WCApplicationController		*sharedController;
 			WCGrowlBoardPostReceived,
 			WCGrowlTransferFinished,
 			NULL],
-			GROWL_NOTIFICATIONS_DEFAULT,
+			"",
 		NULL];
 }
 
