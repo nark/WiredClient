@@ -4,11 +4,18 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 
 ## Prerequisites
 
-- Mac OS X 10.8+
-- Xcode 4.6+
+- Mac OS X 10.11+
+- Xcode 9.0+
+- Homebrew
+- CocoaPods
 
 ## How to compile Wired Client
 
+0. Install dependencies using [Homebrew](https://brew.sh):
+		
+		brew install mogenerator
+		brew install openssl
+		
 1. Get sources on GitHub:
 
 		git clone https://github.com/nark/WiredClient.git
@@ -25,18 +32,13 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 
 		pod install
 		
-5. Install [Homebrew](https://brew.sh) dependencies:
-
-		brew install mogenerator
-		brew install openssl
-		
 	OpenSSL should be linked to `/usr/local/opt/openssl/lib`, or you will have to update `Header Search Path` and `Library Search Path` build settings in Xcode in order to make it works with your OpenSSL installation.
 		
-4. Open `WiredClient.xcworkspace` with Xcode
+5. Open `WiredClient.xcworkspace` with Xcode
 
-5. Select scheme `Wired Client` and be sure to use "Debug" Build Configuration
+6. Select scheme `Wired Client` and be sure to use "Debug" Build Configuration
 
-6. Launch Build, Wired Client.app should launch automatically when finished
+7. Launch Build, Wired Client.app should launch automatically when finished
 
 
 ## Troubleshooting
