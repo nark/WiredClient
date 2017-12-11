@@ -21,7 +21,18 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 
 		git submodule update --init --recursive
 		
-4. Open `WiredClient.xcodeproj` with Xcode
+4. Install pods:
+
+		pod install
+		
+5. Install [Homebrew](https://brew.sh) dependencies:
+
+		brew install mogenerator
+		brew install openssl
+		
+	OpenSSL should be linked to `/usr/local/opt/openssl/lib`, or you will have to update `Header Search Path` and `Library Search Path` build settings in Xcode in order to make it works with your OpenSSL installation.
+		
+4. Open `WiredClient.xcworkspace` with Xcode
 
 5. Select scheme `Wired Client` and be sure to use "Debug" Build Configuration
 
