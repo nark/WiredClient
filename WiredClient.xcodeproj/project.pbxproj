@@ -239,8 +239,6 @@
 		4CDD88CD15F76F8000283005 /* wiredclientrnote.html in Resources */ = {isa = PBXBuildFile; fileRef = 4CDD88CC15F76F8000283005 /* wiredclientrnote.html */; };
 		4CDD88CF15F79E8D00283005 /* WiredClient.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4CDD88CE15F79E8D00283005 /* WiredClient.icns */; };
 		4CE0360714B5E9A800CE609B /* DefaultTheme.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE0360614B5E9A800CE609B /* DefaultTheme.png */; };
-		4CE152C31800CF1E004DA093 /* NSDateTimeAgo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4CE152C21800CF1E004DA093 /* NSDateTimeAgo.bundle */; };
-		4CE152C61800CF30004DA093 /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE152C51800CF30004DA093 /* NSDate+TimeAgo.m */; };
 		4CE1531E1800D64F004DA093 /* MMTabBarView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */; };
 		4CE153221800D64F004DA093 /* WiredAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; };
 		4CE153231800D64F004DA093 /* WiredFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153091800D5E7004DA093 /* WiredFoundation.framework */; };
@@ -1000,9 +998,6 @@
 		4CE15265180051EB004DA093 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nl; path = nl.lproj/Credits.rtf; sourceTree = "<group>"; };
 		4CE15266180051EB004DA093 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CE15267180051EC004DA093 /* nl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		4CE152C21800CF1E004DA093 /* NSDateTimeAgo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = NSDateTimeAgo.bundle; path = "vendor/NSDate-TimeAgo/NSDateTimeAgo.bundle"; sourceTree = "<group>"; };
-		4CE152C41800CF30004DA093 /* NSDate+TimeAgo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+TimeAgo.h"; path = "vendor/NSDate-TimeAgo/NSDate+TimeAgo.h"; sourceTree = SOURCE_ROOT; };
-		4CE152C51800CF30004DA093 /* NSDate+TimeAgo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+TimeAgo.m"; path = "vendor/NSDate-TimeAgo/NSDate+TimeAgo.m"; sourceTree = SOURCE_ROOT; };
 		4CE1533E1800D94A004DA093 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = vendor/Growl.framework; sourceTree = "<group>"; };
 		4CE2835C14A7C91200FDE489 /* SplitSizer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SplitSizer.png; sourceTree = "<group>"; };
 		4CEFF6BC180C3FA600AD7AD9 /* WCThemesPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCThemesPreferences.h; path = Sources/WCThemesPreferences.h; sourceTree = "<group>"; };
@@ -1433,7 +1428,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4CE152C21800CF1E004DA093 /* NSDateTimeAgo.bundle */,
 				4C0667CB15DED59500E8D810 /* Info.plist */,
 				4C0667A615DED4B400E8D810 /* Credits.rtf */,
 				4C0667A815DED4B400E8D810 /* InfoPlist.strings */,
@@ -1607,8 +1601,6 @@
 		4C82442A17DFB3D20065CEEE /* Additions */ = {
 			isa = PBXGroup;
 			children = (
-				4CE152C41800CF30004DA093 /* NSDate+TimeAgo.h */,
-				4CE152C51800CF30004DA093 /* NSDate+TimeAgo.m */,
 				4C82442B17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.h */,
 				4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */,
 				4C82443517DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.h */,
@@ -2806,7 +2798,6 @@
 				A54AF97A0F13AEBB00AFD50E /* Settings.png in Resources */,
 				7789584B0F582B1B0017C511 /* SmartBoard.tiff in Resources */,
 				A5F7F9A70F1D4D3A007BF4FD /* SourceAdd.tiff in Resources */,
-				4CE152C31800CF1E004DA093 /* NSDateTimeAgo.bundle in Resources */,
 				7789583C0F5828D10017C511 /* SourceAddArrow.tiff in Resources */,
 				7789583D0F5828D10017C511 /* SourceAddArrowPressed.tiff in Resources */,
 				A5F7F9A80F1D4D3A007BF4FD /* SourceAddPressed.tiff in Resources */,
@@ -3132,7 +3123,6 @@
 				77CED3A50EC068F500123164 /* WCBoard.m in Sources */,
 				77CED3A60EC068F500123164 /* WCBoardPost.m in Sources */,
 				77CED3A70EC068F500123164 /* WCBoards.m in Sources */,
-				4CE152C61800CF30004DA093 /* NSDate+TimeAgo.m in Sources */,
 				773FEF141084CE2F002AF8DF /* WCBoardsButtonCell.m in Sources */,
 				777790B110617FE200248834 /* WCBoardsTextView.m in Sources */,
 				77BB1C9A0F28C20E00A402B7 /* WCBoardsWindow.m in Sources */,

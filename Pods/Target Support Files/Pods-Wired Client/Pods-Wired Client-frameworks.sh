@@ -89,14 +89,17 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/NSDate+TimeAgo/NSDate_TimeAgo.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SBJson4/SBJson4.framework"
   install_framework "${PODS_ROOT}/Sparkle/Sparkle.framework"
 fi
 if [[ "$CONFIGURATION" == "Test" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/NSDate+TimeAgo/NSDate_TimeAgo.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SBJson4/SBJson4.framework"
   install_framework "${PODS_ROOT}/Sparkle/Sparkle.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/NSDate+TimeAgo/NSDate_TimeAgo.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SBJson4/SBJson4.framework"
   install_framework "${PODS_ROOT}/Sparkle/Sparkle.framework"
 fi
