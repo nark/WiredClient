@@ -32,8 +32,8 @@
 	[[NSGraphicsContext currentContext] saveGraphicsState];
 	
 	fade = [[NSGradient alloc] initWithColorsAndLocations:
-			[NSColor colorWithCalibratedWhite:0.3 alpha:0.75], 0.0,
-			[NSColor colorWithCalibratedWhite:0.85 alpha:1.0], 0.1,
+			[NSColor colorWithCalibratedWhite:0.65 alpha:1.0], 0.0,
+			[NSColor colorWithCalibratedWhite:0.65 alpha:1.0], 0.1,
 			[NSColor colorWithCalibratedWhite:0.65 alpha:1.0], 0.8,
 			nil];
 	

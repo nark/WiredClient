@@ -28,30 +28,30 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="12" y="493" width="646" height="458"/>
+            <rect key="contentRect" x="12" y="493" width="646" height="459"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1028"/>
             <value key="minSize" type="size" width="250" height="300"/>
             <view key="contentView" id="11">
-                <rect key="frame" x="0.0" y="0.0" width="646" height="458"/>
+                <rect key="frame" x="0.0" y="0.0" width="646" height="459"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <splitView autosaveName="" dividerStyle="thin" vertical="YES" id="637" customClass="WISplitView">
-                        <rect key="frame" x="0.0" y="0.0" width="646" height="436"/>
+                    <splitView misplaced="YES" autosaveName="" dividerStyle="thin" vertical="YES" id="637" customClass="WISplitView">
+                        <rect key="frame" x="0.0" y="0.0" width="646" height="435"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <customView id="638">
-                                <rect key="frame" x="0.0" y="0.0" width="173" height="436"/>
+                                <rect key="frame" x="0.0" y="0.0" width="173" height="435"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <scrollView focusRingType="none" borderType="none" autohidesScrollers="YES" horizontalLineScroll="20" horizontalPageScroll="10" verticalLineScroll="20" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="640">
-                                        <rect key="frame" x="0.0" y="32" width="173" height="404"/>
+                                        <rect key="frame" x="0.0" y="32" width="173" height="403"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="MJj-0A-Csh">
-                                            <rect key="frame" x="0.0" y="0.0" width="173" height="404"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="173" height="403"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" indentationPerLevel="20" outlineTableColumn="645" id="641" customClass="WIOutlineView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="173" height="404"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="173" height="403"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="0.0"/>
                                                     <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -156,11 +156,11 @@
                                 </subviews>
                             </customView>
                             <customView id="639">
-                                <rect key="frame" x="174" y="0.0" width="472" height="436"/>
+                                <rect key="frame" x="174" y="0.0" width="472" height="435"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <tabView drawsBackground="NO" type="noTabsNoBorder" id="623">
-                                        <rect key="frame" x="0.0" y="0.0" width="472" height="436"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="472" height="435"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <tabViewItems/>
@@ -185,8 +185,8 @@
                             <outlet property="delegate" destination="-2" id="653"/>
                         </connections>
                     </splitView>
-                    <customView focusRingType="none" id="724" customClass="WCTabBarView">
-                        <rect key="frame" x="0.0" y="436" width="646" height="22"/>
+                    <customView focusRingType="none" misplaced="YES" id="724" customClass="WCTabBarView">
+                        <rect key="frame" x="0.0" y="435" width="646" height="25"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </customView>
                 </subviews>
@@ -195,6 +195,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="32"/>
             </connections>
+            <point key="canvasLocation" x="-69" y="112"/>
         </window>
         <segmentedControl verticalHuggingPriority="750" id="691">
             <rect key="frame" x="0.0" y="0.0" width="67" height="25"/>

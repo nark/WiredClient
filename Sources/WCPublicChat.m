@@ -579,13 +579,13 @@ typedef enum _WCChatActivity				WCChatActivity;
     [_serversOutlineView expandItem:_trackers];
     
     [_tabBarView setTabView:_chatTabView];
-	[_tabBarView setStyleNamed:@"Safari"];
+	[_tabBarView setStyleNamed:@"Yosemite"];
 	[_tabBarView setDelegate:self];
 	[_tabBarView setCanCloseOnlyTab:YES];
     [_tabBarView setShowAddTabButton:YES];
     [_tabBarView setAllowsBackgroundTabClosing:YES];
     [_tabBarView setAutomaticallyAnimates:YES];
-    [_tabBarView setHideForSingleTab:YES];
+    [_tabBarView setHideForSingleTab:NO];
     [_tabBarView setOnlyShowCloseOnHover:YES];
     [_tabBarView setAllowsScrubbing:YES];
     [_tabBarView setAllowsResizing:YES];
@@ -1164,7 +1164,7 @@ typedef enum _WCChatActivity				WCChatActivity;
        usingRect:(NSRect)rect {
     
     if(![_tabBarView isTabBarHidden]) {
-        rect.size.height = 42;
+        rect.size.height = 47;
     }
     return rect;
 }

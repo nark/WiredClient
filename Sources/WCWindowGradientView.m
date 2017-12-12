@@ -56,44 +56,44 @@
 
 
 
-- (void)drawRect:(NSRect)dirtyRect {
-	NSGradient		*fade;
-	NSRect			rect, bottomBarRect;
-	
-	rect			= [self bounds];
-	bottomBarRect	= NSMakeRect(rect.origin.x, rect.size.height-33, rect.size.width, 33);
-	
-	if ([[self window] isKeyWindow]) {
-        
-        if ((floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_6) || (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_7)) {
-            [WC_WINDOW_ENDING_KEY_COLOR set];
-            NSRectFill(rect);
-            
-            fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_STARTING_KEY_COLOR
-                                                 endingColor:WC_WINDOW_ENDING_KEY_COLOR];
-        } else {
-            [WC_WINDOW_ENDING_KEY_COLOR_108 set];
-            NSRectFill(rect);
-            
-            fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_STARTING_KEY_COLOR_108
-                                                 endingColor:WC_WINDOW_ENDING_KEY_COLOR_108];
-        }
-        
-	} else {
-
-        
-        [WC_WINDOW_ENDING_COLOR set];
-        NSRectFill(rect);
-        
-        fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_STARTING_COLOR
-                                             endingColor:WC_WINDOW_ENDING_COLOR];
-	}
-
-	[fade drawInRect:bottomBarRect angle:-90.0];
-	[fade release];
-    
-    [self _drawTopLine];
-}
+//- (void)drawRect:(NSRect)dirtyRect {
+//    NSGradient        *fade;
+//    NSRect            rect, bottomBarRect;
+//
+//    rect            = [self bounds];
+//    bottomBarRect    = NSMakeRect(rect.origin.x, rect.size.height-33, rect.size.width, 33);
+//
+//    if ([[self window] isKeyWindow]) {
+//
+//        if ((floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_6) || (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_7)) {
+//            [WC_WINDOW_ENDING_KEY_COLOR set];
+//            NSRectFill(rect);
+//
+//            fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_STARTING_KEY_COLOR
+//                                                 endingColor:WC_WINDOW_ENDING_KEY_COLOR];
+//        } else {
+//            [WC_WINDOW_ENDING_KEY_COLOR_108 set];
+//            NSRectFill(rect);
+//
+//            fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_STARTING_KEY_COLOR_108
+//                                                 endingColor:WC_WINDOW_ENDING_KEY_COLOR_108];
+//        }
+//
+//    } else {
+//
+//
+//        [WC_WINDOW_ENDING_COLOR set];
+//        NSRectFill(rect);
+//
+//        fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_STARTING_COLOR
+//                                             endingColor:WC_WINDOW_ENDING_COLOR];
+//    }
+//
+//    [fade drawInRect:bottomBarRect angle:-90.0];
+//    [fade release];
+//
+//    [self _drawTopLine];
+//}
 
 
 @end

@@ -7,10 +7,10 @@
 //
 
 
-#define WC_VIEW_STARTING_KEY_COLOR        [NSColor colorWithCalibratedRed:0.9459 green:0.9458 blue:0.9458 alpha:1.0000]
-#define WC_VIEW_STARTING_COLOR            [NSColor colorWithCalibratedRed:0.8115 green:0.8116 blue:0.8114 alpha:1.0000]
-#define WC_VIEW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedRed:0.7602 green:0.7604 blue:0.7556 alpha:1.0000]
-#define WC_VIEW_ENDING_COLOR              [NSColor colorWithCalibratedRed:0.9166 green:0.9167 blue:0.9165 alpha:1.0000]
+#define WC_VIEW_STARTING_KEY_COLOR        [NSColor colorWithCalibratedWhite:0.8068 alpha:1.0000]
+#define WC_VIEW_STARTING_COLOR            [NSColor colorWithCalibratedWhite:0.8068 alpha:0.9]
+#define WC_VIEW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedWhite:0.8068 alpha:1.0000]
+#define WC_VIEW_ENDING_COLOR              [NSColor colorWithCalibratedWhite:0.8068 alpha:0.9]
 #define WC_VIEW_BORDER_KEY_COLOR          [NSColor colorWithCalibratedRed:0.4347 green:0.4347 blue:0.4347 alpha:1.0000]
 #define WC_VIEW_BORDER_COLOR              [NSColor colorWithCalibratedRed:0.5000 green:0.5000 blue:0.5000 alpha:1.0000]
 
@@ -40,7 +40,7 @@
 	NSRect			rect;
     BOOL            keyWindow;
     
-    keyWindow       = YES;//[[self window] isKeyWindow];
+    keyWindow       = [[self window] isKeyWindow];
 	rect            = [self bounds];
     
     startColor      = (keyWindow) ? WC_VIEW_STARTING_KEY_COLOR  : WC_VIEW_STARTING_COLOR;
@@ -60,14 +60,14 @@
     NSBezierPath    *borderLinePath;
     NSColor         *borderColor;
     BOOL            keyWindow;
-    
+
     keyWindow       = [[self window] isKeyWindow];
     rect            = [self bounds];
-    
-    borderLineRect  = NSMakeRect(0, NSHeight(rect)-1, NSWidth(rect), 1.0);
+
+    borderLineRect  = NSMakeRect(0, NSHeight(rect), NSWidth(rect), 1.0);
     borderLinePath  = [NSBezierPath bezierPathWithRect:borderLineRect];
     borderColor     = (keyWindow ? WC_VIEW_BORDER_KEY_COLOR : WC_VIEW_BORDER_COLOR);
-    
+
     [borderColor setFill];
     [borderLinePath fill];
 }
@@ -84,7 +84,7 @@
     
     borderLineRect  = NSMakeRect(0, 0, NSWidth(rect), 1.0);
     borderLinePath  = [NSBezierPath bezierPathWithRect:borderLineRect];
-    borderColor     = (keyWindow ? WC_VIEW_BORDER_KEY_COLOR : WC_VIEW_BORDER_COLOR);
+    borderColor     = [NSColor lightGrayColor];
     
     [borderColor setFill];
     [borderLinePath fill];

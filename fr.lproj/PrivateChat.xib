@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1070" defaultVersion="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5053"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="5053"/>
+        <deployment version="1070" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="13196"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="WCPrivateChat">
@@ -13,8 +14,8 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
-        <window title="&lt;&lt;do not localize>>" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="139" userLabel="Private Chat" customClass="WCChatWindow">
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="&lt;&lt;do not localize&gt;&gt;" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="139" userLabel="Private Chat" customClass="WCChatWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="258" y="188" width="642" height="323"/>
@@ -61,23 +62,20 @@
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button id="517">
-                                                <rect key="frame" x="14" y="7" width="15" height="15"/>
+                                            <button misplaced="YES" id="517">
+                                                <rect key="frame" x="8" y="6" width="15" height="15"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" controlSize="small" imageScaling="proportionallyDown" inset="2" id="520">
-                                                    <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                    <behavior key="behavior" lightByContents="YES"/>
                                                     <font key="font" metaFont="smallSystem"/>
                                                 </buttonCell>
                                                 <connections>
                                                     <action selector="setTopic:" target="391" id="523"/>
                                                 </connections>
                                             </button>
-                                            <box autoresizesSubviews="NO" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="515">
+                                            <box verticalHuggingPriority="750" boxType="separator" id="515">
                                                 <rect key="frame" x="0.0" y="-2" width="432" height="5"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                                <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                                <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <font key="titleFont" metaFont="system"/>
                                             </box>
                                         </subviews>
                                     </customView>
@@ -172,7 +170,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="209" height="291"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
                                                         <tableColumn editable="NO" width="206" maxWidth="1000" id="MPH-TO-dkm">
@@ -181,7 +179,7 @@
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
-                                                            <imageCell key="dataCell" controlSize="small" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="96B27C8F-68AE-4933-8449-572F131A9AB2" id="XcM-0L-GIl"/>
+                                                            <imageCell key="dataCell" controlSize="small" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="imageCell:XcM-0L-GIl:image" id="XcM-0L-GIl"/>
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="WCLargeUserWithStatusTableCellView" id="u2F-gj-bEd" customClass="WCUserTableCellView">
@@ -314,7 +312,6 @@
                                                     </connections>
                                                 </tableView>
                                             </subviews>
-                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="qGy-Hj-gBq">
                                             <rect key="frame" x="-100" y="-100" width="212" height="15"/>
@@ -395,17 +392,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="Zxi-UL-uOj">
                             <rect key="frame" x="1" y="1" width="330" height="72"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <textView importsGraphics="NO" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="252">
+                                <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="252">
                                     <rect key="frame" x="0.0" y="0.0" width="330" height="72"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="330" height="72"/>
                                     <size key="maxSize" width="647" height="10000000"/>
                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="330" height="72"/>
-                                    <size key="maxSize" width="647" height="10000000"/>
                                     <connections>
                                         <outlet property="delegate" destination="391" id="435"/>
                                     </connections>
@@ -544,7 +539,12 @@ Gw
         </customObject>
     </objects>
     <resources>
-        <image name="96B27C8F-68AE-4933-8449-572F131A9AB2" width="35" height="35">
+        <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>
+        <image name="Smileys" width="100" height="100"/>
+        <image name="SplitSizer" width="8" height="12"/>
+        <image name="WiredClient" width="512" height="512"/>
+        <image name="imageCell:XcM-0L-GIl:image" width="35" height="35">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGISJYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKYHCBES
 GB5VJG51bGzUCQoLDA0ODxBWTlNTaXplViRjbGFzc1xOU0ltYWdlRmxhZ3NXTlNDb2xvcoACgAUSIMAA
@@ -555,10 +555,5 @@ AKAApQCnAKkArgC5AMIAygDNANYA2wDjAOYA+AD7AQAAAAAAAAACAQAAAAAAAAAlAAAAAAAAAAAAAAAA
 AAABAg
 </mutableData>
         </image>
-        <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSFollowLinkFreestandingTemplate" width="10" height="10"/>
-        <image name="Smileys" width="100" height="100"/>
-        <image name="SplitSizer" width="8" height="12"/>
-        <image name="WiredClient" width="512" height="512"/>
     </resources>
 </document>
