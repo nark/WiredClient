@@ -3,6 +3,7 @@
     <dependencies>
         <deployment version="1070" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -189,6 +190,15 @@
                         <rect key="frame" x="0.0" y="434" width="646" height="25"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </customView>
+                    <box hidden="YES" misplaced="YES" boxType="custom" id="fPt-1A-GkS">
+                        <rect key="frame" x="0.0" y="427" width="646" height="1"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="mWZ-1V-0Mu">
+                            <rect key="frame" x="1" y="1" width="644" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </view>
+                        <color key="borderColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    </box>
                 </subviews>
             </view>
             <contentBorderThickness minY="32"/>

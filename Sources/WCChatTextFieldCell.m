@@ -19,7 +19,7 @@
     [super drawWithFrame:cellFrame inView:controlView];
     if (self.isBezeled) {
         [betterBounds setLineWidth:2];
-        [[NSColor disabledControlTextColor] setStroke];
+        [[NSColor lightGrayColor] setStroke];
         [betterBounds stroke];
     }
 }
