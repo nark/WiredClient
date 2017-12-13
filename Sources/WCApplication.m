@@ -60,8 +60,9 @@
 	BOOL	handled = NO;
 
 	if([event type] == NSKeyDown) {
-		if([event character] == NSF12FunctionKey && [event controlKeyModifier])
+        if([event character] == NSF12FunctionKey && [event controlKeyModifier]) {
 			handled = [self sendAction:@selector(stats:) to:NULL from:self];
+        }
 	}
 
 	if(!handled)
