@@ -45,33 +45,32 @@
             [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
             [characterSet removeCharactersInString:@"\t"];
         }
-
+        
         textField = [(WCPublicChat *)[self delegate] insertionTextField];
         NSText* fieldEditor = [self fieldEditor:YES forObject:textField];
 
         if(fieldEditor && [self firstResponder] != textField) {
             if([[event characters] isComposedOfCharactersFromSet:characterSet]) {
-                // make the field first responder without losing selection
-                NSRange oldRange = fieldEditor.selectedRange;
-
-                [fieldEditor setSelectable:NO];
-                [self makeFirstResponder:textField];
-                [fieldEditor setSelectable:YES];
-
-                if(oldRange.location != NSNotFound)
-                    [fieldEditor setSelectedRange:oldRange];
-
-                if(fieldEditor.selectedRange.location != NSNotFound) {
-                    // I commented the following code I don't totally understand.
-                    // All I know is that it breaks computing of dead key by duplicating them, ex: « ^ê » instead of « ê »
-                    // I don't know what regression this could cause
+                // avoid string manipulation of composing characters like ` ^ ¨ etc.
+                if(![[event characters] isComposedOfCharactersFromSet:[NSCharacterSet decomposableCharacterSet]]) {
+                    // make the field first responder without losing selection
+                    NSRange oldRange = fieldEditor.selectedRange;
                     
-                    //[textField setStringValue:[[textField stringValue] stringByReplacingCharactersInRange:fieldEditor.selectedRange withString:@""]];
-                    //[fieldEditor setSelectedRange:NSMakeRange(fieldEditor.selectedRange.location,0)];
-                } else {
-                    [fieldEditor setSelectedRange:NSMakeRange([[fieldEditor string] length],0)];
+                    [fieldEditor setSelectable:NO];
+                    [self makeFirstResponder:textField];
+                    [fieldEditor setSelectable:YES];
+                    
+                    if(oldRange.location != NSNotFound)
+                        [fieldEditor setSelectedRange:oldRange];
+                    
+                    if(fieldEditor.selectedRange.location != NSNotFound) {
+                        [textField setStringValue:[[textField stringValue] stringByReplacingCharactersInRange:fieldEditor.selectedRange withString:@""]];
+                        [fieldEditor setSelectedRange:NSMakeRange(fieldEditor.selectedRange.location,0)];
+                    } else {
+                        [fieldEditor setSelectedRange:NSMakeRange([[fieldEditor string] length],0)];
+                    }
+                    [fieldEditor setNeedsDisplay:YES];
                 }
-                [fieldEditor setNeedsDisplay:YES];
             }
         }
     }
