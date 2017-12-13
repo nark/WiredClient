@@ -1605,8 +1605,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		percent							= (transfer->_dataTransferred + transfer->_rsrcTransferred) / (double) transfer->_size;
 		time							= _WCTransfersTimeInterval();
 		
-		if(percent == 1.00 || percent - [progressIndicator doubleValue] >= 0.001)
-			[progressIndicator setDoubleValue:percent];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(percent == 1.00 || percent - [progressIndicator doubleValue] >= 0.001)
+                [progressIndicator setDoubleValue:percent];
+        });
 	
 		if(transfer->_speed == 0.0 || time - speedTime > 0.33) {
 			wi_speed_calculator_add_bytes_at_time(transfer->_speedCalculator, speedBytes, speedTime);

@@ -309,23 +309,27 @@
 #pragma mark -
 
 - (void)setState:(WCTransferState)state {
-	_state = state;
-	
-	if(_state < WCTransferRunning && [_progressIndicator doubleValue] == 0.0)
-		[_progressIndicator setIndeterminate:YES];
-	else
-		[_progressIndicator setIndeterminate:NO];
-
-	if(_state == WCTransferRunning) {
-		if(!_startDate)
-			_startDate = [[NSDate date] retain];
-	}
-	else if(_startDate) {
-		_accumulatedTime += [[NSDate date] timeIntervalSinceDate:_startDate];
-
-		[_startDate release];
-		_startDate = NULL;
-	}
+    
+    _state = state;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(_state < WCTransferRunning && [_progressIndicator doubleValue] == 0.0)
+            [_progressIndicator setIndeterminate:YES];
+        else
+            [_progressIndicator setIndeterminate:NO];
+    });
+    
+    if(_state == WCTransferRunning) {
+        if(!_startDate)
+            _startDate = [[NSDate date] retain];
+    }
+    else if(_startDate) {
+        _accumulatedTime += [[NSDate date] timeIntervalSinceDate:_startDate];
+        
+        [_startDate release];
+        _startDate = NULL;
+    }
+    
 }
 
 
