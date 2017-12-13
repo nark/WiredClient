@@ -36,6 +36,9 @@
     // All I know is that it breaks computing of dead key by duplicating them, ex: « ^ê » instead of « ê »
     // I don't know what regression this could cause
     
+    if(event)
+        [super sendEvent:event];
+    
 //    static NSMutableCharacterSet    *characterSet;
 //    NSTextField                        *textField;
 //    NSString                        *string;
