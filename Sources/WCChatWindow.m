@@ -33,8 +33,7 @@
 
 - (void)sendEvent:(NSEvent *)event {
     static NSMutableCharacterSet    *characterSet;
-    NSTextField                        *textField;
-    NSString                        *string;
+    NSTextField                     *textField;
     BOOL                            handled = NO;
 
     if([event type] == NSKeyDown) {
