@@ -31,7 +31,7 @@
 @class WCServerBookmarkController, WCTrackerBookmarkController;
 @class WCTabBarView;
 
-@interface WCPublicChat : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSNetServiceBrowserDelegate, NSNetServiceDelegate, NSMenuDelegate> {
+@interface WCPublicChat : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSNetServiceBrowserDelegate, NSNetServiceDelegate, NSMenuDelegate, NSSplitViewDelegate> {
 	IBOutlet NSTabView                      *_chatTabView;
     IBOutlet WCTabBarView                   *_tabBarView;
     IBOutlet WISplitView                    *_resourcesSplitView;
@@ -58,6 +58,8 @@
 	WCServerBonjour                         *_bonjour;
 	WCServerBookmarks                       *_bookmarks;
 }
+
+@property (assign) IBOutlet NSSegmentedControl *viewsSegmentedControl;
 
 + (id)publicChat;
 

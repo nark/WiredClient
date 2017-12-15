@@ -443,6 +443,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 @implementation WCPublicChat
 
+
 + (id)publicChat {
 	static WCPublicChat			*publicChat;
 	
@@ -1126,39 +1127,20 @@ typedef enum _WCChatActivity				WCChatActivity;
 }
 
 
+- (void)splitViewDidResizeSubviews:(NSNotification *)notification {
+    if([[_resourcesSplitView subviews] objectAtIndex:0].isHidden == YES) {
+        [[WCSettings settings] setBool:YES forKey:WCHideServerList];
+        [_viewsSegmentedControl setSelected:NO forSegment:0];
+    }
+    else {
+        [[WCSettings settings] setBool:NO forKey:WCHideServerList];
+        [_viewsSegmentedControl setSelected:YES forSegment:0];
+    }
+}
 
 
 
 #pragma mark -
-
-- (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize {
-    if([self selectedChatController]) {
-        if([self window].frame.size.width < 640.0f)
-            [self hideServerList:self];
-        else if([self window].frame.size.width > 650.0f){
-            if(![[WCSettings settings] boolForKey:WCHideServerList])
-                [self showServerList:self];
-            
-        }
-        if([self window].frame.size.width < 470.0f)
-            [self hideUserList:self];
-        else if([self window].frame.size.width > 480.0f){
-            if(![[WCSettings settings] boolForKey:WCHideUserList])
-                [self showUserList:self];
-            
-        }
-    } else {
-        if([self window].frame.size.width < 470.0f)
-            [self hideServerList:self];
-        else if([self window].frame.size.width > 480.0f){
-            if(![[WCSettings settings] boolForKey:WCHideServerList])
-                [self showServerList:self];
-            
-        }
-    }
-    return frameSize;
-}
-
 
 - (NSRect)window:(NSWindow *)window willPositionSheet:(NSWindow *)sheet
        usingRect:(NSRect)rect {

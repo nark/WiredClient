@@ -2896,6 +2896,16 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 }
 
 
+- (void)splitViewDidResizeSubviews:(NSNotification *)notification {
+    if([[_userListSplitView subviews] objectAtIndex:1].isHidden == YES) {
+        [[WCSettings settings] setBool:YES forKey:WCHideServerList];
+        [[[WCPublicChat publicChat] viewsSegmentedControl] setSelected:NO forSegment:1];
+    }
+    else {
+        [[WCSettings settings] setBool:NO forKey:WCHideServerList];
+        [[[WCPublicChat publicChat] viewsSegmentedControl] setSelected:YES forSegment:1];
+    }
+}
 
 
 
