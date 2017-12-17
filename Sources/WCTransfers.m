@@ -497,6 +497,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		error = [WCError errorWithDomain:WCWiredClientErrorDomain code:WCWiredClientTransferExists argument:[file path]];
 		
 		[self _presentError:error forConnection:[file connection] transfer:NULL];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
+                                                            object:[transfer connection]
+                                                          userInfo:nil];
 		
 		return NO;
 	}
@@ -641,6 +645,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	if([self _unfinishedTransferWithPath:remotePath connection:[destination connection]]) {
 		error = [WCError errorWithDomain:WCWiredClientErrorDomain code:WCWiredClientTransferExists argument:remotePath];
 		[self _presentError:error forConnection:[destination connection] transfer:NULL];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
+                                                            object:[transfer connection]
+                                                          userInfo:nil];
 		
 		return NO;
 	}
@@ -960,7 +968,11 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	if(![transfer isTerminating])
 		[transfer setState:WCTransferWaiting];
     	
-	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_queueTransfer:) object:transfer]; 
+	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_queueTransfer:) object:transfer];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCTransfersQueueUpdatedNotification
+                                                        object:[transfer connection]
+                                                      userInfo:nil];
 
 	[WIThread detachNewThreadSelector:@selector(transferThread:) toTarget:self withObject:transfer];
 }
@@ -968,7 +980,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 
 
 - (void)_queueTransfer:(WCTransfer *)transfer { 
-	[transfer setState:WCTransferQueued]; 
+	[transfer setState:WCTransferQueued];
 	
 	[_transfersTableView setNeedsDisplay:YES]; 
 }
@@ -1092,6 +1104,8 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 			[[transfer transferConnection] disconnect];
 			[transfer setTransferConnection:NULL];
 			[transfer setState:WCTransferFinished];
+            
+    
 			[[transfer progressIndicator] setDoubleValue:1.0];
 			
 			if([[WCSettings settings] boolForKey:WCRemoveTransfers])
@@ -1878,8 +1892,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		percent							= (transfer->_dataTransferred + transfer->_rsrcTransferred) / (double) transfer->_size;
 		time							= _WCTransfersTimeInterval();
 		
-		if(percent == 1.00 || percent - [progressIndicator doubleValue] >= 0.001)
-			[progressIndicator setDoubleValue:percent];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(percent == 1.00 || percent - [progressIndicator doubleValue] >= 0.001)
+                [progressIndicator setDoubleValue:percent];
+        });
 		
 		if(transfer->_speed == 0.0 || time - speedTime > 0.33) {
 			wi_speed_calculator_add_bytes_at_time(transfer->_speedCalculator, speedBytes, speedTime);
@@ -2581,8 +2597,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
     NSInteger count = 0;
     
     for(WCTransfer *transfer in _transfers) {
-        if([transfer numberOfUntransferredFiles] > 0) {
-            count++;
+        if([transfer state] != WCTransferDisconnected) {
+            if([transfer numberOfUntransferredFiles] > 0) {
+                count++;
+            }
         }
     }
     
