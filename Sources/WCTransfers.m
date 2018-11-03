@@ -1675,7 +1675,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 - (void)_runUpload:(WCTransfer *)transfer {
 	NSAutoreleasePool			*pool;
 	NSProgressIndicator			*progressIndicator;
-	NSString					*dataPath, *rsrcPath;
+	NSString					*dataPath;
 	WIP7Socket					*socket;
 	WIP7Message					*message;
 	WCTransferConnection		*connection;
@@ -1684,11 +1684,11 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	char						buffer[8192];
 	NSTimeInterval				time, speedTime, statsTime;
 	NSUInteger					i, sendBytes, speedBytes, statsBytes;
-	WIP7UInt64					dataLength, rsrcLength;
-	WIP7UInt64					dataOffset, rsrcOffset;
+	WIP7UInt64					dataLength;
+	WIP7UInt64					dataOffset;
 	double						percent;
 	ssize_t						readBytes;
-	int							dataFD, rsrcFD;
+	int							dataFD;
 	BOOL						data;
 	
 	error = NULL;
@@ -1715,7 +1715,6 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	
 	file				= [transfer firstUntransferredFile];
 	dataPath			= [file transferLocalPath];
-	rsrcPath			= [NSFileManager resourceForkPathForPath:dataPath];
 	speedBytes			= 0;
 	statsBytes			= 0;
 	i					= 0;
@@ -1777,10 +1776,8 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	}
 	
 	[message getUInt64:&dataOffset forName:@"wired.transfer.data_offset"];
-	[message getUInt64:&rsrcOffset forName:@"wired.transfer.rsrc_offset"];
     
 	dataLength = [file uploadDataSize] - dataOffset;
-	rsrcLength = [file uploadRsrcSize] - rsrcOffset;
     
 	if([file dataTransferred] == 0) {
 		[file setDataTransferred:dataOffset];
@@ -1790,15 +1787,9 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		[transfer setDataTransferred:dataOffset];
     }
 	
-	if([file rsrcTransferred] == 0) {
-		[file setRsrcTransferred:rsrcOffset];
-		[transfer setRsrcTransferred:[transfer rsrcTransferred] + rsrcOffset];
-	} else {
-        [file setRsrcTransferred:rsrcOffset];
-		[transfer setRsrcTransferred:rsrcOffset];
-    }
+
 	
-	if(![self _sendUploadMessageOnConnection:connection forFile:file dataLength:dataLength rsrcLength:rsrcLength error:&error]) {
+	if(![self _sendUploadMessageOnConnection:connection forFile:file dataLength:dataLength rsrcLength:0 error:&error]) {
 		if(![transfer isTerminating]) {
 			[transfer setState:WCTransferDisconnecting];
 			[transfer signalTerminated];
@@ -1812,10 +1803,8 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	}
 	
 	dataFD = open([dataPath fileSystemRepresentation], O_RDONLY, 0666);
-	rsrcFD = open([rsrcPath fileSystemRepresentation], O_RDONLY, 0666);
 	
-	if((dataFD < 0 || lseek(dataFD, [file dataTransferred], SEEK_SET) < 0) ||
-	   (rsrcFD < 0 || lseek(rsrcFD, [file rsrcTransferred], SEEK_SET) < 0)) {
+	if((dataFD < 0 || lseek(dataFD, [file dataTransferred], SEEK_SET) < 0)) {
 		error = [WCError errorWithDomain:NSPOSIXErrorDomain code:errno];
 		
 		if(![transfer isTerminating]) {
@@ -1825,9 +1814,6 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		
 		if(dataFD >= 0)
 			close(dataFD);
-		
-		if(rsrcFD >= 0)
-			close(rsrcFD);
 		
 		[self performSelectorOnMainThread:@selector(_finishTransfer:withError:)
 							   withObject:transfer
@@ -1850,10 +1836,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		if(data && dataLength == 0)
 			data = NO;
 		
-		if(!data && rsrcLength == 0)
+		if(!data)
 			break;
 		
-		readBytes = read(data ? dataFD : rsrcFD, buffer, sizeof(buffer));
+		readBytes = read(data ? dataFD : 0, buffer, sizeof(buffer));
 
 		if(readBytes <= 0) {
 			if(readBytes < 0)
@@ -1867,8 +1853,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		
 		if(data)
 			sendBytes = (dataLength < (NSUInteger) readBytes) ? dataLength : (NSUInteger) readBytes;
-		else
-			sendBytes = (rsrcLength < (NSUInteger) readBytes) ? rsrcLength : (NSUInteger) readBytes;
+    
 		
 		if(![socket writeOOBData:buffer length:sendBytes timeout:30.0 error:&error]) {
 			[transfer setState:WCTransferDisconnecting];
@@ -1880,10 +1865,6 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 			dataLength					-= sendBytes;
 			transfer->_dataTransferred	+= sendBytes;
 			file->_dataTransferred		+= sendBytes;
-		} else {
-			rsrcLength					-= sendBytes;
-			transfer->_rsrcTransferred	+= sendBytes;
-			file->_rsrcTransferred		+= sendBytes;
 		}
 		
 		transfer->_actualTransferred	+= readBytes;
@@ -1920,7 +1901,6 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	}
 	
 	close(dataFD);
-	close(rsrcFD);
 	
 	wi_speed_calculator_add_bytes_at_time(transfer->_speedCalculator, speedBytes, speedTime);
 	
