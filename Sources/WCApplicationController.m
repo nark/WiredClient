@@ -29,7 +29,6 @@
 //#import <Sparkle/SUStandardVersionComparator.h>
 //#import <Sparkle/SUHost.h>
 
-#import "WCAboutWindow.h"
 #import "WCAccountsController.h"
 #import "WCAdministration.h"
 #import "WCApplicationController.h"
@@ -1232,35 +1231,31 @@ static WCApplicationController		*sharedController;
 	NSData						*rtf;
 	NSString					*string;
 	
-	if([[NSApp currentEvent] alternateKeyModifier]) {
-		[[WCAboutWindow aboutWindow] makeKeyAndOrderFront:self];
-	} else {
-		rtf = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Credits" ofType:@"rtf"]];
-		credits = [[[NSMutableAttributedString alloc] initWithRTF:rtf documentAttributes:NULL] autorelease];
-
-		style = [[[NSMutableParagraphStyle alloc] init] autorelease];
-		[style setAlignment:NSCenterTextAlignment];
-		attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-			[NSFont boldSystemFontOfSize:11.0],	NSFontAttributeName,
-			[NSColor grayColor],					NSForegroundColorAttributeName,
-			style,									NSParagraphStyleAttributeName,
-			NULL];
-		string = [NSSWF:@"%@\n", NSLS(@"Stats", @"About box title")];
-		header = [NSAttributedString attributedStringWithString:string attributes:attributes];
-
-		attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-			[NSFont systemFontOfSize:11.0],			NSFontAttributeName,
-			style,									NSParagraphStyleAttributeName,
-			NULL];
-		string = [NSSWF:@"%@\n\n", [[WCStats stats] stringValue]];
-		stats = [NSAttributedString attributedStringWithString:string attributes:attributes];
-
-		[credits insertAttributedString:stats atIndex:0];
-		[credits insertAttributedString:header atIndex:0];
-
-		[NSApp orderFrontStandardAboutPanelWithOptions:
-			[NSDictionary dictionaryWithObject:credits forKey:@"Credits"]];
-	}
+    rtf = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Credits" ofType:@"rtf"]];
+    credits = [[[NSMutableAttributedString alloc] initWithRTF:rtf documentAttributes:NULL] autorelease];
+    
+    style = [[[NSMutableParagraphStyle alloc] init] autorelease];
+    [style setAlignment:NSCenterTextAlignment];
+    attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                  [NSFont boldSystemFontOfSize:11.0],	NSFontAttributeName,
+                  [NSColor grayColor],					NSForegroundColorAttributeName,
+                  style,									NSParagraphStyleAttributeName,
+                  NULL];
+    string = [NSSWF:@"%@\n", NSLS(@"Stats", @"About box title")];
+    header = [NSAttributedString attributedStringWithString:string attributes:attributes];
+    
+    attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                  [NSFont systemFontOfSize:11.0],			NSFontAttributeName,
+                  style,									NSParagraphStyleAttributeName,
+                  NULL];
+    string = [NSSWF:@"%@\n\n", [[WCStats stats] stringValue]];
+    stats = [NSAttributedString attributedStringWithString:string attributes:attributes];
+    
+    [credits insertAttributedString:stats atIndex:0];
+    [credits insertAttributedString:header atIndex:0];
+    
+    [NSApp orderFrontStandardAboutPanelWithOptions:
+     [NSDictionary dictionaryWithObject:credits forKey:@"Credits"]];
 }
 
 

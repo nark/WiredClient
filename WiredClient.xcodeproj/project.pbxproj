@@ -259,7 +259,6 @@
 		77E36EEE0F82414F0065329A /* WCFilesSourceOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77E36EED0F82414F0065329A /* WCFilesSourceOutlineView.m */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A509AD1205F7FBFF00E6AE2D /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A509AD1105F7FBFF00E6AE2D /* Carbon.framework */; };
-		A509ADAC05F7FF8400E6AE2D /* WCAboutWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A509ADAA05F7FF8400E6AE2D /* WCAboutWindow.m */; };
 		A51474A90F487ECD00DBE395 /* WCErrorQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = A51474A80F487ECD00DBE395 /* WCErrorQueue.m */; };
 		A515FD380D61ED4800922A2D /* WCInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A515FD370D61ED4800922A2D /* WCInfoController.m */; };
 		A51B4FE50F4222AF00EAB0E1 /* WCFilterButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B4FE40F4222AF00EAB0E1 /* WCFilterButtonCell.m */; };
@@ -886,8 +885,6 @@
 		77E36EED0F82414F0065329A /* WCFilesSourceOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCFilesSourceOutlineView.m; path = Sources/WCFilesSourceOutlineView.m; sourceTree = "<group>"; };
 		8412F05D439B9F0793485926 /* Pods-Wired Client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wired Client.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client.release.xcconfig"; sourceTree = "<group>"; };
 		A509AD1105F7FBFF00E6AE2D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		A509ADA905F7FF8400E6AE2D /* WCAboutWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCAboutWindow.h; sourceTree = "<group>"; };
-		A509ADAA05F7FF8400E6AE2D /* WCAboutWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCAboutWindow.m; sourceTree = "<group>"; };
 		A51474A70F487ECD00DBE395 /* WCErrorQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCErrorQueue.h; path = Sources/WCErrorQueue.h; sourceTree = "<group>"; };
 		A51474A80F487ECD00DBE395 /* WCErrorQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCErrorQueue.m; path = Sources/WCErrorQueue.m; sourceTree = "<group>"; };
 		A515FD360D61ED4800922A2D /* WCInfoController.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = WCInfoController.h; path = Sources/WCInfoController.h; sourceTree = "<group>"; };
@@ -1446,8 +1443,6 @@
 				4C97DE411564632900D88C11 /* WCChatTopicView.m */,
 				4C97DE3215630D8A00D88C11 /* WCWindowGradientView.h */,
 				4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */,
-				A509ADAA05F7FF8400E6AE2D /* WCAboutWindow.m */,
-				A509ADA905F7FF8400E6AE2D /* WCAboutWindow.h */,
 				A51B4FE40F4222AF00EAB0E1 /* WCFilterButtonCell.m */,
 				A51B4FE30F4222AF00EAB0E1 /* WCFilterButtonCell.h */,
 				A5AAD2DD0D879B250072FFA1 /* WCFilterView.m */,
@@ -2484,7 +2479,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A509ADAC05F7FF8400E6AE2D /* WCAboutWindow.m in Sources */,
 				A5DC7FA9057AB0A600736BBF /* WCAccount.m in Sources */,
 				77ACA8580F4AF26E00577FA1 /* WCAccountsController.m in Sources */,
 				A5AAD12B0D86EA9C0072FFA1 /* WCAdministration.m in Sources */,
