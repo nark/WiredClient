@@ -43,8 +43,8 @@
     keyWindow       = [[self window] isKeyWindow];
 	rect            = [self bounds];
     
-    startColor      = (keyWindow) ? [NSColor windowBackgroundColor]  : [NSColor windowBackgroundColor];
-    endColor        = (keyWindow) ? [NSColor controlColor]    : [NSColor controlColor];
+    startColor      = (keyWindow) ? WC_VIEW_STARTING_KEY_COLOR  : WC_VIEW_STARTING_COLOR;
+    endColor        = (keyWindow) ? WC_VIEW_ENDING_KEY_COLOR    : WC_VIEW_ENDING_COLOR;
 	
     [endColor set];
     //NSRectFill([self bounds]);
