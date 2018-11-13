@@ -25,14 +25,11 @@
 
 - (void)                    _saveEmoticonPackOrdering;
 - (void)                    _sortArrayOfEmoticonPacks:(NSMutableArray *)packArray;
-- (void)                    _moveEmoticonPacks:(NSArray *)packs
-                                       toIndex:(NSUInteger)idx;
+- (void)                    _moveEmoticonPacks:(NSArray *)packs toIndex:(NSUInteger)idx;
 
 @end
 
-
 NSInteger packSortFunction(id packA, id packB, void *packOrderingArray);
-
 
 @implementation WCEmoticonPreferences (Private)
 
@@ -45,7 +42,7 @@ NSInteger packSortFunction(id packA, id packB, void *packOrderingArray);
 
 
 - (WIEmoticonPack *)_selectedPack {
-    NSInteger		row;
+    NSInteger row;
     
     row = [_emoticonPacksTableView clickedRow];
 	
@@ -356,13 +353,13 @@ NSInteger packSortFunction(id packA, id packB, void *packOrderingArray) {
             }];
             
             if(result) {
-                substop = YES;
+                substop = (BOOL*)YES;
                 return;
             }
         }];
         
         if(result) {
-            stop = YES;
+            stop = (BOOL*)YES;
             return;
         }
     }];
@@ -500,7 +497,7 @@ NSInteger packSortFunction(id packA, id packB, void *packOrderingArray) {
         return nil;
     
     // Release previous rows if needed
-    if(_dragRows) [_dragRows release], _dragRows = nil;
+    if(_dragRows) [_dragRows release]; _dragRows = nil;
     
     // Retain given row
     _dragRows = [[NSIndexSet indexSetWithIndex:row] retain];

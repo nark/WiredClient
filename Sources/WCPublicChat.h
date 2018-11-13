@@ -115,8 +115,6 @@
 
 #pragma mark -
 - (NSInteger)numberOfUnreads;
-- (NSInteger)numberOfUnreadsForConnection:(WCServerConnection *)connection;
-
 - (void)saveAllChatControllerHistory;
 
 - (void)addChatController:(WCPublicChatController *)chatController;

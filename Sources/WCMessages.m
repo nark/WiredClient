@@ -601,9 +601,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 #pragma mark -
 
 - (void)_sortConversations {
-    _sorting = YES;
+    _sorting = (BOOL*)YES;
     [_conversationsTreeController rearrangeObjects];
-    _sorting = NO;
+    _sorting = (BOOL*)NO;
 }
 
 
@@ -814,8 +814,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
             [self _migrateConversations:array];
         }
         else if(result == NSAlertAlternateReturn) {
-            [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
-            [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
+            [[WCSettings settings] setObject:@{} forKey:WCMessageConversations];
+            [[WCSettings settings] setObject:@{} forKey:WCBroadcastConversations];
         }
         else if(result == NSAlertOtherReturn) {
             exit(0);
@@ -907,8 +907,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
     [operation setCompletionBlock:^{
         if(count == [conversations count]) {
-            [[WCSettings settings] setObject:nil forKey:WCMessageConversations];
-            [[WCSettings settings] setObject:nil forKey:WCBroadcastConversations];
+            [[WCSettings settings] setObject:@{} forKey:WCMessageConversations];
+            [[WCSettings settings] setObject:@{} forKey:WCBroadcastConversations];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[self  window] setTitle:title];
@@ -973,7 +973,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         _dialogDateFormatter = [[WIDateFormatter alloc] init];
         [_dialogDateFormatter setTimeStyle:NSDateFormatterShortStyle];
         
-        _sorting                = NO;
+        _sorting = (BOOL*)NO;
         
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -1376,11 +1376,6 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
-
-
-
-
-
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -1591,7 +1586,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         WebResource				*dataSource;
         WebArchive				*archive;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             dataSource = [[[[[_conversationController conversationWebView] mainFrame] DOMDocument] webArchive] mainResource];
             
             archive = [[WebArchive alloc]
@@ -1669,10 +1664,15 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Delete conversation dialog description")];
 	[alert addButtonWithTitle:NSLS(@"Delete", @"Delete board button title")];
 	[alert addButtonWithTitle:NSLS(@"Cancel", @"Delete board button title")];
-	[alert beginSheetModalForWindow:[self window]
+	
+    
+    [alert beginSheetModalForWindow:[self window]
 					  modalDelegate:self
 					 didEndSelector:@selector(deleteConversationAlertDidEnd:returnCode:contextInfo:)
 						contextInfo:[conversation retain]];
+    
+    
+    
 }
 
 

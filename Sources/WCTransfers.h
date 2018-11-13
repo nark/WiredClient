@@ -60,6 +60,10 @@ extern NSString * const WCTransfersQueueUpdatedNotification;
 	Class									_quickLookPanelClass;
 }
 
+- (void)wiredTransferUploadDirectoryReply:(WIP7Message *)message;
+- (void)transferThread:(id)arg;
+- (void)wiredFileListPathReply:(WIP7Message *)message;
+
 + (id)transfers;
 
 + (BOOL)downloadFileAtPath:(NSString *)path forConnection:(WCServerConnection *)connection;

@@ -101,7 +101,7 @@
 	
 	if(image) {
 		data = [[NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]]
-			representationUsingType:NSPNGFileType properties:NULL];
+			representationUsingType:NSPNGFileType properties:@{}];
 	} else {
 		data = [NSData data];
 	}

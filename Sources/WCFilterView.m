@@ -51,11 +51,11 @@ static void WCFilterViewShader(void *info, const float *in, float *out) {
 - (id)initWithFrame:(NSRect)frame {
 	static const float		domain[2] = { 0, 1 };
 	static const float		range[8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
-	CGFunctionCallbacks		callbacks = {0, &WCFilterViewShader, NULL};
+	CGFunctionCallbacks		callbacks = {0, (void*)&WCFilterViewShader, NULL};
 	
 	self = [super initWithFrame:frame];
 
-	_gradientFunction = CGFunctionCreate(self, 1, domain, 4, range, &callbacks);
+	_gradientFunction = CGFunctionCreate(self, 1, (const CGFloat *)domain, 4, (const double*)range, &callbacks);
 	
 	_color1 = [[NSColor colorWithCalibratedRed:208.0 / 255.0 green:208.0 / 255.0 blue:208.0 / 255.0 alpha:1.0] retain];
 	_color2 = [[NSColor colorWithCalibratedRed:233.0 / 255.0 green:233.0 / 255.0 blue:233.0 / 255.0 alpha:1.0] retain];

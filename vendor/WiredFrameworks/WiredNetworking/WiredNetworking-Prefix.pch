@@ -1,0 +1,19 @@
+//
+// Prefix header for all source files of the 'WiredNetworking' target in the 'WiredNetworking' project
+//
+
+#import <Foundation/Foundation.h>
+#import <WiredFoundation/WiredFoundation.h>
+
+// --- Libraries
+#import <wired/wired.h>
+
+// --- Macros
+#define NSLS							NSLocalizedString
+#define NSSWF							NSString stringWithFormat
+#define WINetworkingBundleIdentifier	@"fr.read-write.WiredNetworking"
+
+#define WILS(string, comment) \
+[NSBundle bundleWithIdentifier:WINetworkingBundleIdentifier] \
+? NSLocalizedStringFromTableInBundle((string), NULL, [NSBundle bundleWithIdentifier:WINetworkingBundleIdentifier], (comment)) \
+: (string)

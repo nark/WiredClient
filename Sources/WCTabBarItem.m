@@ -45,12 +45,12 @@
 }
 
 - (void)dealloc {
-    [_title release],               _title = nil;
-    [_icon release],                _icon = nil;
-    [_iconName release],            _iconName = nil;
-    [_largeImage release],          _largeImage = nil;
-    [_identifier release],          _identifier = nil;
-    [_objectCountColor release],    _objectCountColor = nil;
+    [_title release];               _title = nil;
+    [_icon release];                _icon = nil;
+    [_iconName release];            _iconName = nil;
+    [_largeImage release];          _largeImage = nil;
+    [_identifier release];          _identifier = nil;
+    [_objectCountColor release];    _objectCountColor = nil;
     
     [super dealloc];
 }

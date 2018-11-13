@@ -34,6 +34,12 @@
 }
 
 + (id)consoleWithConnection:(WCServerConnection *)connection;
+- (void)linkConnectionReceivedMessage:(NSNotification *)notification;
+- (void)exceptionHandlerReceivedException:(NSNotification *)notification;
+- (void)linkConnectionSentMessage:(NSNotification *)notification;
+- (void)linkConnectionReceivedInvalidMessage:(NSNotification *)notification;
+- (void)linkConnectionReceivedErrorMessage:(NSNotification *)notificatio;
+- (void)exceptionHandlerReceivedBacktrace:(NSNotification *)notification;
 
 - (void)log:(NSString *)format, ...;
 

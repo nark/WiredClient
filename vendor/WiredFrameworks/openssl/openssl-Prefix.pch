@@ -1,0 +1,10 @@
+//
+// Prefix header for all source files of the 'ssl' and 'crypto' target in the 'openssl' project
+//
+
+#ifdef __ARM_ARCH_7S__
+#define __ARM_ARCH__ 7
+#endif
+
+#define OPENSSL_NO_HW
+#define OPENSSL_NO_GOST

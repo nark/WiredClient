@@ -22,7 +22,7 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 		
 2. Move into the sources directory:
 		
-		cd WiredClient/
+		cd WiredClient
 		
 3. Init and clone every git submodules:
 

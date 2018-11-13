@@ -419,16 +419,16 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
     [_tabBarView enumerateAttachedButtons:buttons inRange:NSMakeRange(0, [widths count]) withOptions:MMAttachedButtonsEnumerationUpdateButtonState|MMAttachedButtonsEnumerationUpdateTabStateMask usingBlock:
         ^(MMAttachedTabBarButton *aButton, NSUInteger idx, MMAttachedTabBarButton *previousButton, MMAttachedTabBarButton *nextButton, BOOL *stop) {
                 
-            if ([[_tabBarView delegate] respondsToSelector:@selector(tabView:toolTipForTabViewItem:)]) {
-                NSString *toolTip = [[_tabBarView delegate] tabView:[_tabBarView tabView] toolTipForTabViewItem:[aButton tabViewItem]];
+            if ([[self->_tabBarView delegate] respondsToSelector:@selector(tabView:toolTipForTabViewItem:)]) {
+                NSString *toolTip = [[self->_tabBarView delegate] tabView:[self->_tabBarView tabView] toolTipForTabViewItem:[aButton tabViewItem]];
                 [aButton setToolTip:toolTip];
             }
 
-            [aButton setTarget:_tabBarView];
+            [aButton setTarget:self->_tabBarView];
             [aButton setAction:@selector(_didClickTabButton:)];
             
             if ([aButton shouldDisplayCloseButton]) {
-                [[aButton closeButton] setTarget:_tabBarView];
+                [[aButton closeButton] setTarget:self->_tabBarView];
                 [aButton setCloseButtonAction:@selector(_didClickCloseButton:)];
             } else {
                 [[aButton closeButton] setTarget:nil];
@@ -436,10 +436,10 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
             }
         
 			// set button frame
-			if ([_tabBarView orientation] == MMTabBarHorizontalOrientation) {
+            if ([self->_tabBarView orientation] == MMTabBarHorizontalOrientation) {
 				buttonRect.size.width = [[widths objectAtIndex:idx] doubleValue];
 			} else {
-				buttonRect.size.width = [_tabBarView frame].size.width;
+                buttonRect.size.width = [self->_tabBarView frame].size.width;
 				buttonRect.origin.y = [[widths objectAtIndex:idx] doubleValue];
 				buttonRect.origin.x = 0;
 			}
@@ -455,13 +455,13 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
                 [aButton setIsOverflowButton:NO];
 
 			// next...
-            if ([_tabBarView orientation] == MMTabBarHorizontalOrientation)
+            if ([self->_tabBarView orientation] == MMTabBarHorizontalOrientation)
                 buttonRect.origin.x += [[widths objectAtIndex:idx] doubleValue];
             else
                 buttonRect.origin.y += buttonRect.size.height;
                 
-            if ([[_tabBarView delegate] respondsToSelector:@selector(tabView:tabViewItem:isInOverflowMenu:)]) {
-                [[_tabBarView delegate] tabView:[_tabBarView tabView] tabViewItem:[aButton tabViewItem] isInOverflowMenu:NO];
+            if ([[self->_tabBarView delegate] respondsToSelector:@selector(tabView:tabViewItem:isInOverflowMenu:)]) {
+                [[self->_tabBarView delegate] tabView:[self->_tabBarView tabView] tabViewItem:[aButton tabViewItem] isInOverflowMenu:NO];
             }
         }];
     
@@ -470,7 +470,7 @@ static NSInteger potentialMinimumForArray(NSArray *array, NSInteger minimum){
         [buttons enumerateObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange([widths count], buttonCount-[widths count])] options:0 usingBlock:
             ^(MMAttachedTabBarButton *aButton, NSUInteger idx, BOOL *stop) {
 
-                [_tabBarView removeAttachedButton:aButton synchronizeTabViewItems:NO];
+                [self->_tabBarView removeAttachedButton:aButton synchronizeTabViewItems:NO];
 
                 [self _addItemToOverflowMenu:[aButton tabViewItem] withTitle:[[aButton attributedStringValue] string]];                
             }];

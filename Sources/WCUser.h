@@ -32,7 +32,7 @@
 @class WCTransfer;
 
 @interface WCUser : WCServerConnectionObject {
-	NSUInteger				_userID;
+	unsigned long			_userID;
 	BOOL					_idle;
 	NSString				*_nick;
 	NSString				*_status;
@@ -41,7 +41,7 @@
 	NSString				*_address;
 	NSString				*_host;
 	NSString				*_version;
-	NSUInteger				_cipherBits;
+	unsigned long			_cipherBits;
 	NSString				*_cipherName;
 	NSDate					*_joinDate;
 	NSDate					*_idleDate;
@@ -71,7 +71,7 @@
 - (NSString *)address;
 - (NSString *)host;
 - (NSString *)version;
-- (NSUInteger)cipherBits;
+- (unsigned long)cipherBits;
 - (NSString *)cipherName;
 - (NSDate *)joinDate;
 - (NSDate *)idleDate;

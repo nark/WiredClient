@@ -70,10 +70,10 @@
 
 
 - (void)awakeFromNib {
-	[_conversationWebView setUIDelegate:self];
-    [_conversationWebView setFrameLoadDelegate:self];
-	[_conversationWebView setResourceLoadDelegate:self];
-	[_conversationWebView setPolicyDelegate:self];
+	[_conversationWebView setUIDelegate:(id)self];
+    [_conversationWebView setFrameLoadDelegate:(id)self];
+	[_conversationWebView setResourceLoadDelegate:(id)self];
+	[_conversationWebView setPolicyDelegate:(id)self];
     
     [self reloadData];
 }
@@ -391,7 +391,7 @@
     dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
+    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian]];
     
     return [dateFormatter stringFromDate:[_conversation date]];
 }
@@ -406,7 +406,7 @@
     NSArray             *sortedMessages;
     NSCalendar          *calendar;
     
-    calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];

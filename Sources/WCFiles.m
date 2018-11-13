@@ -1371,9 +1371,11 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 		[[WCTransfers transfers] downloadFiles:files];
 }
 
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
 
 - (void)_quickLook {
+    
 	NSEnumerator	*enumerator;
 	WIP7Message		*message;
 	WCFile			*file;
@@ -2178,7 +2180,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	}
 }
 
-
+#pragma clang diagnostic pop
 
 - (void)wiredFileSetLabelReply:(WIP7Message *)message {
 	WCServerConnection		*connection;
@@ -2439,7 +2441,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
         NSMutableArray			*urlPaths;
         NSArray                 *paths;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             urlPaths = [NSMutableArray array];
             
             for(NSURL *url in [openPanel URLs]) {
@@ -2606,7 +2608,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 
 
 - (void)quickLookSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	if(returnCode == NSAlertFirstButtonReturn)
+	if(returnCode == NSAlertDefaultReturn)
 		[self _quickLook];
 }
 
@@ -3192,7 +3194,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 		}
 		else if([types containsObject:WCPlacePboardType]) {
 			if([item isKindOfClass:[NSNumber class]] && [item unsignedIntegerValue] == 1 && index >= 0) {
-				[_sourceOutlineView setDropRow:-1 dropOperation:NSDragOperationMove];
+				[_sourceOutlineView setDropRow:-1 dropOperation:(NSTableViewDropOperation)NSDragOperationMove];
 				
 				return NSDragOperationMove;
 			}
@@ -3780,7 +3782,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 		
 		if(row >= 0) {
 			frame				= [_filesOutlineView convertRect:[_filesOutlineView frameOfCellAtColumn:0 row:row] toView:NULL];
-			frame.origin		= [[self window] convertBaseToScreen:frame.origin];
+			frame.origin		= [[self window] convertPointToScreen:frame.origin];
 
 			return NSMakeRect(frame.origin.x, frame.origin.y, frame.size.height, frame.size.height);
 		}
@@ -3791,7 +3793,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 			
 		if(index != NSNotFound) {
 			frame			= [_filesTreeView frameOfRow:index inPath:path];
-			frame.origin	= [[self window] convertBaseToScreen:frame.origin];
+			frame.origin	= [[self window] convertPointToScreen:frame.origin];
 
 			return NSMakeRect(frame.origin.x, frame.origin.y, frame.size.height, frame.size.height);
 		}

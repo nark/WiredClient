@@ -15,7 +15,6 @@
 @interface WCServerBookmarkController (Private)
 
 - (void)_savePasswordForBookmark:(NSArray *)arguments;
-
 - (void)_reloadThemes;
 
 @end
@@ -27,9 +26,9 @@
 #pragma mark -
 
 - (void)_savePasswordForBookmark:(NSArray *)arguments {
-	NSDictionary		*oldBookmark = [arguments objectAtIndex:0];
-	NSDictionary		*bookmark = [arguments objectAtIndex:1];
-	NSString			*password = [arguments objectAtIndex:2];
+	NSDictionary		*oldBookmark    = [arguments objectAtIndex:0];
+	NSDictionary		*bookmark       = [arguments objectAtIndex:1];
+	NSString			*password       = [arguments objectAtIndex:2];
     
 	if(![oldBookmark isEqual:bookmark])
 		[[WCKeychain keychain] deletePasswordForBookmark:oldBookmark];
@@ -64,9 +63,6 @@
 
 
 @end
-
-
-
 
 @implementation WCServerBookmarkController
 
@@ -108,6 +104,10 @@
     }
 }
 
+- (void)_bookmarkDidChange:(NSDictionary *)bookmark {
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarkDidChangeNotification object:bookmark];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
+}
 
 - (void)save {
     NSString        *password;

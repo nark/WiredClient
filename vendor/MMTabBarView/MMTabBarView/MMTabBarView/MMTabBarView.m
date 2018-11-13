@@ -2143,7 +2143,7 @@ static NSMutableDictionary *registeredStyleClasses = nil;
 #pragma mark -
 #pragma mark Accessibility
 
--(BOOL)accessibilityIsIgnored {
+- (BOOL)accessibilityIsIgnored {
 	return NO;
 }
 

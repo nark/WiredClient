@@ -727,7 +727,7 @@ static NSString         *basicThemeIdentifier;
 //                                                   otherButton:nil
 //                                     informativeTextWithFormat:@"Wired Client found an old preferences file (~/Library/Preferences/com.zanka.WiredClientDebugP7). Do you want to migrate it ?"];
 //                
-//                if([alert runModal] == NSOKButton) {
+//                if([alert runModal] == NSModalResponseOK) {
 //                    [[NSUserDefaults standardUserDefaults] setPersistentDomain:dictionary forName:@"fr.read-write.WiredClient"];
 //
 //					if ([[NSUserDefaults standardUserDefaults] objectForKey:@"SUFeedURL"])

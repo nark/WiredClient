@@ -64,6 +64,10 @@
 	NSSize									_minWindowSize;
 }
 
+- (void)wiredSettingsGetSettingsReply:(WIP7Message *)message;
+- (void)wiredSettingsSetSettingsReply:(WIP7Message *)message;
+
+
 - (IBAction)addTracker:(id)sender;
 - (IBAction)deleteTracker:(id)sender;
 - (IBAction)addCategory:(id)sender;

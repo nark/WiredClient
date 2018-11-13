@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:p7="http://www.zankasoftware.com/P7/Specification"
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   targetNamespace="http://www.zankasoftware.com/P7/Specification"
+		   elementFormDefault="qualified"
+		   attributeFormDefault="unqualified">
+	<xs:element name="documentation" type="p7:documentation" />
+	<xs:element name="type" type="p7:type" />
+	<xs:element name="field" type="p7:field" />
+	<xs:element name="enum" type="p7:enum" />
+	<xs:element name="collection" type="p7:collection" />
+	<xs:element name="member" type="p7:member" />
+	<xs:element name="message" type="p7:message" />
+	<xs:element name="parameter" type="p7:parameter" />
+	<xs:element name="transaction" type="p7:transaction" />
+	<xs:element name="reply" type="p7:reply" />
+	<xs:element name="or" type="p7:or" />
+	<xs:element name="and" type="p7:and" />
+	<xs:element name="broadcast" type="p7:broadcast" />
+
+	<xs:simpleType name="use">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="optional" />
+			<xs:enumeration value="required" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="originator">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="client" />
+			<xs:enumeration value="server" />
+			<xs:enumeration value="both" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="protocol">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="p7:documentation" minOccurs="0" maxOccurs="1" />
+
+				<xs:element name="types" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="p7:type" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="fields" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="p7:field" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="collections" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="p7:collection" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="messages" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="p7:message" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="transactions" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="p7:transaction" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="broadcasts" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="p7:broadcast" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:attribute name="version" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:simpleType name="documentation">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+	
+	<xs:complexType name="type">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="id" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:integer">
+					<xs:minInclusive value="1" />
+					<xs:maxInclusive value="12" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="size" type="xs:nonNegativeInteger" use="optional" />
+	</xs:complexType>
+	
+	<xs:complexType name="field">
+		<xs:sequence>
+			<xs:element ref="p7:documentation" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="p7:enum" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="id" type="xs:nonNegativeInteger" use="required" />
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="bool" />
+					<xs:enumeration value="enum" />
+					<xs:enumeration value="int32" />
+					<xs:enumeration value="uint32" />
+					<xs:enumeration value="int64" />
+					<xs:enumeration value="uint64" />
+					<xs:enumeration value="double" />
+					<xs:enumeration value="string" />
+					<xs:enumeration value="uuid" />
+					<xs:enumeration value="date" />
+					<xs:enumeration value="data" />
+					<xs:enumeration value="oobdata" />
+					<xs:enumeration value="list" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="listtype" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="bool" />
+					<xs:enumeration value="enum" />
+					<xs:enumeration value="int32" />
+					<xs:enumeration value="uint32" />
+					<xs:enumeration value="int64" />
+					<xs:enumeration value="uint64" />
+					<xs:enumeration value="double" />
+					<xs:enumeration value="string" />
+					<xs:enumeration value="uuid" />
+					<xs:enumeration value="date" />
+					<xs:enumeration value="data" />
+					<xs:enumeration value="oobdata" />
+					<xs:enumeration value="list" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="version" type="xs:string" use="required" />
+	</xs:complexType>
+	
+	<xs:complexType name="enum">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:nonNegativeInteger" use="required" />
+		<xs:attribute name="version" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="collection">
+		<xs:sequence>
+			<xs:element ref="p7:member" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="member">
+		<xs:attribute name="field" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="message">
+		<xs:sequence>
+			<xs:element ref="p7:documentation" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="p7:parameter" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="id" type="xs:nonNegativeInteger" use="optional" />
+		<xs:attribute name="version" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="parameter">
+		<xs:attribute name="field" type="xs:string" />
+		<xs:attribute name="collection" type="xs:string" />
+		<xs:attribute name="use" type="p7:use" use="optional" default="optional" />
+		<xs:attribute name="version" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="transaction">
+		<xs:sequence>
+			<xs:element ref="p7:documentation" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="p7:or" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element ref="p7:reply" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="message" type="xs:string" use="required" />
+		<xs:attribute name="originator" type="p7:originator" use="required" />
+		<xs:attribute name="use" type="p7:use" use="optional" default="optional" />
+		<xs:attribute name="version" type="xs:string" use="required" />
+	</xs:complexType>
+	
+	<xs:complexType name="or">
+		<xs:sequence>
+			<xs:element ref="p7:and" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element ref="p7:reply" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="and">
+		<xs:sequence>
+			<xs:element ref="p7:reply" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="reply">
+		<xs:attribute name="message" type="xs:string" use="required" />
+		<xs:attribute name="count" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="\?|\*|\+|[0-9]+" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="use" type="p7:use" use="optional" default="optional" />
+		<xs:attribute name="version" type="xs:string" use="required" />
+	</xs:complexType>
+	
+	<xs:complexType name="broadcast">
+		<xs:sequence>
+			<xs:element ref="p7:documentation" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="message" type="xs:string" use="required" />
+		<xs:attribute name="version" type="xs:string" use="required" />
+	</xs:complexType>
+</xs:schema>

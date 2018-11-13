@@ -1,0 +1,25 @@
+//
+// Prefix header for all source files of the 'WiredAppKit' target in the 'WiredAppKit' project
+
+
+// --- Frameworks
+#import <Carbon/Carbon.h>
+#import <Cocoa/Cocoa.h>
+#import <WebKit/WebKit.h>
+#import <WiredFoundation/WiredFoundation.h>
+#import <ExceptionHandling/NSExceptionHandler.h>
+
+// --- Libraries
+#import <sys/attr.h>
+#import <sys/sysctl.h>
+#import <unistd.h>
+
+// --- Macros
+#define NSLS						NSLocalizedString
+#define NSSWF						NSString stringWithFormat
+#define WIAppKitBundleIdentifier	@"fr.read-write.WiredAppKit"
+
+#define WILS(string, comment) \
+[NSBundle bundleWithIdentifier:WIAppKitBundleIdentifier] \
+? NSLocalizedStringFromTableInBundle((string), NULL, [NSBundle bundleWithIdentifier:WIAppKitBundleIdentifier], (comment)) \
+: (string)

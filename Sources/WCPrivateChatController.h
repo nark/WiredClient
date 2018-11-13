@@ -33,7 +33,7 @@
 @interface WCPrivateChatController : WCChatController {
 	IBOutlet WCPrivateChat			*_privateChat;
 	
-	NSUInteger						_chatID;
+	unsigned int					_chatID;
 	WCUser							*_inviteUser;
 }
 

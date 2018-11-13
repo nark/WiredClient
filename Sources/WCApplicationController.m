@@ -135,6 +135,10 @@ static NSArray *_systemSounds;
 
 
 - (void)_updateBookmarksMenu {
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    
 	NSEnumerator	*enumerator;
 	NSArray			*bookmarks;
 	NSDictionary	*bookmark;
@@ -187,6 +191,7 @@ static NSArray *_systemSounds;
     [_bookmarksMenu addItem:[NSMenuItem itemWithTitle:NSLS(@"Import Bookmarks...", @"Bookmarks menu item title")
                                                action:@selector(importBookmarks:)
                                         keyEquivalent:@""]];
+    #pragma clang diagnostic pop
 }
 
 
@@ -542,7 +547,7 @@ static WCApplicationController		*sharedController;
 	copy = NSLS(@"Copy", @"Account copy");
 	
 	if([name containsSubstring:[NSSWF:@" %@", copy]]) {
-		string			= [name stringByMatching:[NSSWF:@"(\\d+)$", copy] capture:1];
+		string			= [name stringByMatching:[NSSWF:@"(\\d+)$"] capture:1];
 		number			= string ? [string unsignedIntegerValue] + 1 : 2;
 		copiedName		= [[name mutableCopy] autorelease];
 	} else {
@@ -813,6 +818,10 @@ static WCApplicationController		*sharedController;
 
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    
 	NSString		*newString, *deleteString, *reloadString, *quickLookString, *saveString;
 	id				delegate;
 	
@@ -859,6 +868,8 @@ static WCApplicationController		*sharedController;
 			[_closeWindowMenuItem setTitle:NSLS(@"Close Window", @"Close window menu item")];
 		}
 	}
+#pragma clang diagnostic pop
+    
 }
 
 

@@ -239,7 +239,7 @@
 	WIP7Message		*message;
 	WCUser			*user = contextInfo;
 
-	if(returnCode == NSOKButton) {
+	if(returnCode == NSModalResponseOK) {
 		message = [WIP7Message messageWithName:@"wired.user.ban_user" spec:WCP7Spec];
 		[message setUInt32:[user userID] forName:@"wired.user.id"];
 		[message setString:[_banMessageTextField stringValue] forName:@"wired.user.disconnect_message"];

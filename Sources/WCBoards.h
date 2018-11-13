@@ -121,6 +121,8 @@ extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 
 + (id)boards;
 
+- (NSString *)lastMessageDate;
+
 - (NSString *)newDocumentMenuItemTitle;
 - (NSString *)deleteDocumentMenuItemTitle;
 - (NSString *)reloadDocumentMenuItemTitle;
@@ -163,5 +165,13 @@ extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 - (IBAction)code:(id)sender;
 - (IBAction)url:(id)sender;
 - (IBAction)image:(id)sender;
+
+
+- (void)wiredBoardGetThreadReply:(WIP7Message *)message;
+- (void)wiredBoardBoardGetInfoReply:(WIP7Message *)message;
+- (void)wiredBoardGetBoardsReply:(WIP7Message *)message;
+- (void)wiredBoardGetThreadsReply:(WIP7Message *)message;
+- (void)wiredBoardSubscribeBoardsReply:(WIP7Message *)message;
+
 
 @end

@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13A598" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1070" defaultVersion="1070" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4511"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="WCApplication">
@@ -11,7 +12,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <menu systemMenu="main" id="29" userLabel="MainMenu">
             <items>
                 <menuItem title="Wired Client" id="56">
@@ -128,12 +129,12 @@
                                     <action selector="getInfo:" target="-1" id="777"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="&lt;&lt;do not localize>>" keyEquivalent="N" id="879">
+                            <menuItem title="&lt;&lt;do not localize&gt;&gt;" keyEquivalent="N" id="879">
                                 <connections>
                                     <action selector="newDocument:" target="-1" id="886"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="&lt;&lt;do not localize>>" id="880">
+                            <menuItem title="&lt;&lt;do not localize&gt;&gt;" id="880">
                                 <string key="keyEquivalent" base64-UTF8="YES">
 CA
 </string>
@@ -141,17 +142,17 @@ CA
                                     <action selector="deleteDocument:" target="-1" id="890"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="&lt;&lt;do not localize>>" keyEquivalent="l" id="881">
+                            <menuItem title="&lt;&lt;do not localize&gt;&gt;" keyEquivalent="l" id="881">
                                 <connections>
                                     <action selector="reloadDocument:" target="-1" id="891"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="&lt;&lt;do not localize>>" keyEquivalent="y" id="892">
+                            <menuItem title="&lt;&lt;do not localize&gt;&gt;" keyEquivalent="y" id="892">
                                 <connections>
                                     <action selector="quickLook:" target="-1" id="895"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="&lt;&lt;do not localize>>" keyEquivalent="S" id="648">
+                            <menuItem title="&lt;&lt;do not localize&gt;&gt;" keyEquivalent="S" id="648">
                                 <connections>
                                     <action selector="saveDocument:" target="-1" id="904"/>
                                 </connections>
@@ -400,7 +401,7 @@ CA
                             <menuItem isSeparatorItem="YES" id="801">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="&lt;&lt;do not localize>>" keyEquivalent="w" id="399">
+                            <menuItem title="&lt;&lt;do not localize&gt;&gt;" keyEquivalent="w" id="399">
                                 <connections>
                                     <action selector="performClose:" target="-1" id="400"/>
                                 </connections>

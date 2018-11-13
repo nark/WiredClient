@@ -592,7 +592,7 @@ typedef enum _WCChatActivity				WCChatActivity;
     [_tabBarView setAllowsResizing:YES];
     
 	[_tabBarView setPartnerView:_resourcesSplitView];
-	[_chatTabView setDelegate:_tabBarView];
+	[_chatTabView setDelegate:(id)_tabBarView];
     
     [_viewsSegmentedControl setSelected:![[WCSettings settings] boolForKey:WCHideServerList] forSegment:0];
     [_viewsSegmentedControl setSelected:![[WCSettings settings] boolForKey:WCHideUserList] forSegment:1];
@@ -1239,6 +1239,10 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 
 - (BOOL)validateToolbarItem:(NSToolbarItem *)item {
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    
 	WCServerConnection		*connection;
 	SEL						selector;
 	
@@ -1265,6 +1269,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	
     else if(selector == @selector(switchViews:))
         [[_viewsSegmentedControl cell] setEnabled:([self selectedChatController] != nil)];
+#pragma clang diagnostic pop
     
 	return YES;
 }
@@ -1776,7 +1781,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	item = [self _selectedItem];
 	
 	if([item isKindOfClass:[WCServerTracker class]]) {
-		state = [item state];
+		state = (WCServerTrackerState)[item state];
 		
 		if(state == WCServerTrackerIdle)
 			[_serversOutlineView expandItem:item];
@@ -1894,31 +1899,27 @@ typedef enum _WCChatActivity				WCChatActivity;
 	}
 }
 
-
-
 - (IBAction)closeTab:(id)sender {
     
-	NSTabViewItem			*tabViewItem;
-	WCServerConnection		*connection;
-	
-	tabViewItem		= [_chatTabView selectedTabViewItem];
-	connection		= [[self selectedChatController] connection];
-	
-	if([self _beginConfirmDisconnectSheetModalForWindow:[self window]
-											 connection:connection
-										  modalDelegate:self
-										 didEndSelector:@selector(closeTabSheetDidEnd:returnCode:contextInfo:)
-											contextInfo:[tabViewItem retain]]) {
-		
-		[self _removeTabViewItem:tabViewItem];
-		
-		[_chatTabView removeTabViewItem:tabViewItem];
-		
-		[tabViewItem release];
-	}
+    NSTabViewItem            *tabViewItem;
+    WCServerConnection        *connection;
+    
+    tabViewItem        = [_chatTabView selectedTabViewItem];
+    connection        = [[self selectedChatController] connection];
+    
+    if([self _beginConfirmDisconnectSheetModalForWindow:[self window]
+                                             connection:connection
+                                          modalDelegate:self
+                                         didEndSelector:@selector(closeTabSheetDidEnd:returnCode:contextInfo:)
+                                            contextInfo:[tabViewItem retain]]) {
+        
+        [self _removeTabViewItem:tabViewItem];
+        
+        [_chatTabView removeTabViewItem:tabViewItem];
+        
+        [tabViewItem release];
+    }
 }
-
-
 
 - (void)closeTabSheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
 	NSTabViewItem		*tabViewItem = contextInfo;

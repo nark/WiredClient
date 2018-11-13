@@ -170,6 +170,10 @@
 }
 
 
+- (void)serverConnectionWillReconnect:(NSNotification *)notification {
+    [self validate];
+}
+
 
 #pragma mark -
 

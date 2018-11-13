@@ -38,6 +38,11 @@
 		[[WCKeychain keychain] deletePasswordForTrackerBookmark:bookmark];
 }
 
+- (void)_bookmarkDidChange:(NSDictionary *)bookmark {
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarkDidChangeNotification object:bookmark];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
+}
+
 @end
 
 
@@ -65,6 +70,7 @@
         [_bookmarksNameTextField setStringValue:NSLS(@"Untitled", @"Untitled tracker bookmark")];
     }
 }
+
 
 
 - (void)save {

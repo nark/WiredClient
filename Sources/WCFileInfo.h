@@ -66,5 +66,11 @@
 
 + (id)fileInfoWithConnection:(WCServerConnection *)connection file:(WCFile *)file;
 + (id)fileInfoWithConnection:(WCServerConnection *)connection files:(NSArray *)files;
+- (void)wiredFileGetInfoReply:(WIP7Message *)message;
+- (void)wiredFileSetLabelReply:(WIP7Message *)message;
+- (void)wiredFileSetPermissionsReply:(WIP7Message *)message;
+- (void)wiredFileMoveReply:(WIP7Message *)message;
+- (void)wiredFileSetCommentReply:(WIP7Message *)message;
+- (void)wiredFileSetTypeReply:(WIP7Message *)message;
 
 @end

@@ -127,7 +127,7 @@ typedef enum _WCFileLabel			WCFileLabel;
 - (NSString *)internalURLString;
 - (NSString *)externalURLString;
 - (NSImage *)iconWithWidth:(CGFloat)width open:(BOOL)open;
-- (NSImage *)iconWithWidth:(CGFloat)width open:(BOOL)open;
+
 
 - (void)setDataSize:(WIFileOffset)size;
 - (WIFileOffset)dataSize;

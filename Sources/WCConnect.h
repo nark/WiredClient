@@ -33,7 +33,7 @@
 	IBOutlet NSTextField					*_loginTextField;
 	IBOutlet NSSecureTextField				*_passwordTextField;
 	
-	IBOutlet NSProgressIndicator			*_progressIndicator;
+	IBOutlet NSProgressIndicator *_progressIndicator;
 	
 	IBOutlet NSButton						*_connectButton;
 	
@@ -47,6 +47,7 @@
 
 + (id)connect;
 + (id)connectWithURL:(WIURL *)url bookmark:(NSDictionary *)bookmark;
+- (void)serverConnectionReceivedLoginError:(NSNotification *)notification;
 
 - (IBAction)connect:(id)sender;
 

@@ -51,6 +51,11 @@
 	BOOL								_requested;
 }
 
+
+- (void)wiredLogSubscribeReply:(WIP7Message *)message;
+- (void)wiredLogGetLogReply:(WIP7Message *)message;
+
+
 - (IBAction)all:(id)sender;
 - (IBAction)info:(id)sender;
 - (IBAction)warnings:(id)sender;

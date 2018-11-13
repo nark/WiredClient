@@ -110,6 +110,13 @@ extern NSString * const					WCAccountsControllerAccountsDidChangeNotification;
 	NSMutableDictionary					*_deletedAccounts;
 }
 
+- (void)wiredAccountListAccountsReply:(WIP7Message *)message;
+- (void)wiredAccountSubscribeAccountsReply:(WIP7Message *)message;
+- (void)saveSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+- (void)wiredAccountChangeAccountReply:(WIP7Message *)message;
+- (void)wiredAccountReadAccountReply:(WIP7Message *)message;
+
+
 - (NSString *)newDocumentMenuItemTitle;
 - (NSString *)deleteDocumentMenuItemTitle;
 

@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "WCChatController.h"
 #import "WCApplication.h"
 
 @implementation WCApplication

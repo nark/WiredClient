@@ -27,7 +27,7 @@
 + (NSManagedObjectContext *)            context;
 + (NSOperationQueue *)                  queue;
 
-- (NSString *)                          secretKey;
+//- (NSString *)                          secretKey;
 
 - (BOOL)                                save;
 - (BOOL)                                saveContext:(NSManagedObjectContext *)context;

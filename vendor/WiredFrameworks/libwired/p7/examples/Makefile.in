@@ -1,0 +1,17 @@
+# Makefile.in
+
+abs_top_srcdir	= @abs_top_srcdir@
+rundir			= ../../@rundir@
+
+DEFS			= @DEFS@
+CC				= @CC@
+CFLAGS			= @CFLAGS@
+CPPFLAGS		= @CPPFLAGS@
+LDFLAGS			= -L$(rundir)/lib @LDFLAGS@
+LIBS			= -lwired @LIBS@
+INCLUDES		= -I$(abs_top_srcdir) -I$(rundir)/include
+
+COMPILEANDLINK	= $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+
+wiredclient: wiredclient.c
+	$(COMPILEANDLINK) $(LIBS) $<

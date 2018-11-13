@@ -34,7 +34,7 @@
 
 - (void)setConnection:(WCServerConnection *)connection {
     if(_connection)
-        [_connection release], _connection = nil;
+        [_connection release]; _connection = nil;
     
     _connection = [connection retain];
     

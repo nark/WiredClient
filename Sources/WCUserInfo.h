@@ -65,7 +65,7 @@
 }
 
 + (id)userInfoWithConnection:(WCServerConnection *)connection user:(WCUser *)user;
-
+- (void)wiredUserGetInfoReply:(WIP7Message *)message;
 - (IBAction)icon:(id)sender;
 
 @end

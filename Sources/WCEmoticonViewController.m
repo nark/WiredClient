@@ -81,10 +81,10 @@ static WCEmoticonViewController *_emoticonController;
 #pragma mark -
 
 - (void)popoverWithSender:(id)sender textView:(NSTextView *)view {
-    if(_textView) [_textView release], _textView = nil;
+    if(_textView) [_textView release]; _textView = nil;
     _textView = [view retain];
     
-    if(_textField) [_textField release], _textField = nil;
+    if(_textField) [_textField release]; _textField = nil;
     
     if(!_popover) {
         _popover = [[NSPopover alloc] init];
@@ -106,10 +106,10 @@ static WCEmoticonViewController *_emoticonController;
 
 
 - (void)popoverWithSender:(id)sender textField:(NSTextField *)view {
-    if(_textField) [_textField release], _textField = nil;
+    if(_textField) [_textField release]; _textField = nil;
     _textField = [view retain];
     
-    if(_textView) [_textView release], _textView = nil;
+    if(_textView) [_textView release]; _textView = nil;
     
     if(!_popover) {
         _popover = [[NSPopover alloc] init];
@@ -166,7 +166,8 @@ static WCEmoticonViewController *_emoticonController;
     NSMutableString             *equivalent;
     
     emoticon            = (WIEmoticon *)[sender representedObject];
-	wrapper				= [[NSFileWrapper alloc] initWithPath:[emoticon path]];
+    NSURL *emoticonURL  = [NSURL fileURLWithPath:[emoticon path]];
+    wrapper             = [[NSFileWrapper alloc] initWithURL:emoticonURL options:0 error:nil];
     equivalent          = [NSMutableString stringWithString:[emoticon equivalent]];
 	attachment			= [[WITextAttachment alloc] initWithFileWrapper:wrapper
                                                           string:equivalent];

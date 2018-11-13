@@ -79,4 +79,8 @@
 - (IBAction)okClear:(id)sender;
 - (IBAction)cancelClear:(id)sender;
 
+- (void)wiredEventGetFirstTimeReply:(WIP7Message *)message;
+- (void)wiredEventGetEventsReply:(WIP7Message *)message;
+- (void)wiredEventSubscribeReply:(WIP7Message *)message;
+
 @end

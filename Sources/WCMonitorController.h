@@ -58,6 +58,8 @@
 	BOOL								_error;
 }
 
+- (void)wiredUserGetUsersReply:(WIP7Message *)message;
+
 - (IBAction)all:(id)sender;
 - (IBAction)downloading:(id)sender;
 - (IBAction)uploading:(id)sender;

@@ -56,7 +56,7 @@ extern NSString * const WCServerConnectionEventInfo2Key;
 	NSString								*_identifier;
 	NSDictionary							*_theme;
 	
-	NSUInteger								_userID;
+	unsigned long                           _userID;
 	
 	WCServer								*_server;
 	WCCache									*_cache;

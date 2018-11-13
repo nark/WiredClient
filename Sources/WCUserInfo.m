@@ -74,7 +74,7 @@
 
 - (void)_showUserInfo {
 	NSMutableArray		*groups;
-    NSMutableString     *groupString, *groupsString;
+    NSMutableString     *groupsString;
 	NSRect				rect;
 	CGFloat				height;
 
@@ -118,7 +118,7 @@
 	[_versionTextField setStringValue:[_user version]];
 	
 	if([_user cipherBits] > 0) {
-		[_cipherTextField setStringValue:[NSSWF:@"%@/%u %@",
+		[_cipherTextField setStringValue:[NSSWF:@"%@/%lu %@",
 			[_user cipherName],
 			[_user cipherBits],
 			NSLS(@"bits", "Cipher string")]];

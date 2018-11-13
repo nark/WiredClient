@@ -191,14 +191,14 @@
 #pragma mark -
 
 - (void)clearChat {
-	WCUser		*user;
+	WCUser *user;
 	
-	user		= [self userWithUserID:[[self connection] userID]];
+	user = [self userWithUserID:[[self connection] userID]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![self chatIsEmpty])
 		[[[[WCApplicationController sharedController] logController] privateChatHistoryBundle] addHistoryForWebView:[self webView] 
-																			   withConnectionName:[[self connection] name]
-																						 identity:[user nick]];
+                withConnectionName:[[self connection] name]
+                    identity:[user nick]];
 	
 	[super clearChat];
 }

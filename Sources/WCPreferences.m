@@ -309,8 +309,11 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	}
 	
 	[menu addItem:[NSMenuItem separatorItem]];
-	[menu addItemWithTitle:@"Add New Template..." action:@selector(addThemeTemplate:) keyEquivalent:@""];
-	[menu addItemWithTitle:@"Manage Templates..." action:@selector(manageThemeTemplates:) keyEquivalent:@""];
+    
+    // NSLS(@"Add New Theme...", @"Add Theme Menu Item Title")
+    
+	[menu addItemWithTitle:NSLS(@"Add New Template...", @"Add Template Menu Item Title") action:@selector(addThemeTemplate:) keyEquivalent:@""];
+	[menu addItemWithTitle:NSLS(@"Manage Templates...", @"Add Templates Menu Item Title") action:@selector(manageThemeTemplates:) keyEquivalent:@""];
 }
 
 
@@ -554,7 +557,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSMutableDictionary		*newTheme;
 	NSDictionary			*theme = contextInfo;
 	
-	if(returnCode == NSAlertFirstButtonReturn) {
+	if(returnCode == NSAlertDefaultReturn) {
 		newTheme = [[theme mutableCopy] autorelease];
 		[newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
 					 forKey:WCThemesName];
@@ -759,7 +762,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 	[_filesOpenFoldersInNewWindowsButton setState:[[WCSettings settings] boolForKey:WCOpenFoldersInNewWindows]];
 	[_filesQueueTransfersButton setState:[[WCSettings settings] boolForKey:WCQueueTransfers]];
-	[_filesCheckForResourceForksButton setState:[[WCSettings settings] boolForKey:WCCheckForResourceForks]];
 	[_filesRemoveTransfersButton setState:[[WCSettings settings] boolForKey:WCRemoveTransfers]];
     
     [_networkConnectionTimeoutTextField setStringValue:[NSSWF:@"%d", [[WCSettings settings] intForKey:WCNetworkConnectionTimeout]]];
@@ -1050,7 +1052,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	image = [_iconImageView image];
 	
 	if(image) {
-		string = [[[NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]] representationUsingType:NSPNGFileType properties:NULL]
+		string = [[[NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]] representationUsingType:NSPNGFileType properties:@{}]
 			base64EncodedString];
 		
 		if(!string)
@@ -1087,7 +1089,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		
 	[[WCSettings settings] setBool:[_filesOpenFoldersInNewWindowsButton state] forKey:WCOpenFoldersInNewWindows];
 	[[WCSettings settings] setBool:[_filesQueueTransfersButton state] forKey:WCQueueTransfers];
-	[[WCSettings settings] setBool:[_filesCheckForResourceForksButton state] forKey:WCCheckForResourceForks];
 	[[WCSettings settings] setBool:[_filesRemoveTransfersButton state] forKey:WCRemoveTransfers];
 	
 	[[WCSettings settings] setFloat:[_eventsVolumeSlider floatValue] forKey:WCEventsVolume];
@@ -1101,14 +1102,14 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [[WCSettings settings] setInteger:[_networkCipherPopUpButton selectedTag] forKey:WCNetworkEncryptionCipher];
     [[WCSettings settings] setBool:[_networkCompressionButton state] forKey:WCNetworkCompressionEnabled];
     
-    NSAlert *alert = [NSAlert alertWithMessageText:@"Network Settings Changed"
-                                     defaultButton:@"OK"
-                                   alternateButton:nil
-                                       otherButton:nil
-                         informativeTextWithFormat:@"This change cannot be applied to already active connections. Change will only take effect for newly initiated connections."];
-        
-    [alert runModal];
-    
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert setMessageText:@"Network Settings Changed"];
+    [alert addButtonWithTitle:@"OK"];
+    [alert setInformativeText:@"This change cannot be applied to already active connections. Change will only take effect for newly initiated connections."];
+                                   
+     [alert runModal];
+                                   
+                                   
     [[NSNotificationCenter defaultCenter] postNotificationName:WCPreferencesDidChangeNotification];
 }
 
@@ -1193,7 +1194,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [NSApp endSheet:[sheet window]];
 	[[sheet window] orderOut:self];
     
-	if(returnCode == NSAlertFirstButtonReturn) {
+	if(returnCode == NSAlertDefaultReturn) {
         newName = [WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName]
                                                existingNames:[self _themeNames]];
         
@@ -1326,7 +1327,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSNumber		*row = contextInfo;
 	NSString		*identifier;
 
-	if(returnCode == NSAlertFirstButtonReturn) {
+	if(returnCode == NSAlertDefaultReturn) {
 		identifier = [[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[row unsignedIntegerValue]]
 			objectForKey:WCThemesIdentifier];
 		
@@ -1390,7 +1391,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [savePanel setNameFieldStringValue:[[theme objectForKey:WCThemesName] stringByAppendingPathExtension:@"WiredTheme"]];
     
     [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {        
-        if(result == NSOKButton)
+        if(result == NSModalResponseOK)
             [theme writeToURL:[savePanel URL] atomically:YES];
         
         [theme release];
@@ -1408,7 +1409,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [openPanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredTheme"]];
     
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSOKButton)
+        if(result == NSModalResponseOK)
             [self importThemeFromFile:[[openPanel URL] path]];
     }];
 }
@@ -1587,7 +1588,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		[self closeManageThemeTemplates:sender];
     
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             [_publicTemplateManager addTemplateAtPath:[[openPanel URL] path]];
         }
         
@@ -1687,7 +1688,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
         NSDictionary			*dictionary;
         NSString				*password;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             bookmarks	= [NSMutableArray array];
             enumerator	= [[[WCSettings settings] objectForKey:WCBookmarks] objectEnumerator];
             
@@ -1724,7 +1725,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [openPanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredBookmarks"]];
     
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSOKButton)
+        if(result == NSModalResponseOK)
             [self importBookmarksFromFile:[[openPanel URL] path]];
     }];
 }
@@ -1758,7 +1759,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [openPanel setDirectoryURL:[NSURL fileURLWithPath:[[WCApplicationController sharedController] chatLogsPath]]];
     
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             [[WCSettings settings] setObject:[[openPanel URL] path] forKey:WCChatLogsPath];
             
             [[WCApplicationController sharedController] performSelectorInBackground:@selector(reloadChatLogsWithPath:)
@@ -1945,7 +1946,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (void)deleteIgnoreSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSNumber	*row = contextInfo;
 	
-	if(returnCode == NSAlertFirstButtonReturn) {
+	if(returnCode == NSAlertDefaultReturn) {
 		[[WCSettings settings] removeObjectAtIndex:[row integerValue] fromArrayForKey:WCIgnores];
 		
 		[_ignoresTableView reloadData];
@@ -2016,7 +2017,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[openPanel setPrompt:NSLS(@"Select", @"Select download folder dialog button title")];
     
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             [[WCSettings settings] setObject:[[openPanel URL] path] forKey:WCDownloadFolder];
             
             [self _reloadDownloadFolder];
@@ -2050,7 +2051,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
         NSDictionary			*dictionary;
         NSString				*password;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             bookmarks	= [NSMutableArray array];
             enumerator	= [[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectEnumerator];
             
@@ -2084,7 +2085,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [openPanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredTrackerBookmarks"]];
     
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSOKButton)
+        if(result == NSModalResponseOK)
             [self importTrackerBookmarksFromFile:[[openPanel URL] path]];
     }];
 }

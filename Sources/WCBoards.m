@@ -418,7 +418,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 	if(_searching) {
 		_selectedBoard = [_searchBoard retain];
-        [_searchBoard release], _searchBoard = nil;
+        [_searchBoard release]; _searchBoard = nil;
         
 	} else {
 		row = [_boardsOutlineView selectedRow];
@@ -1022,7 +1022,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 					if([[[fileWrapper preferredFilename] pathExtension] isEqualToString:@"gif"]) {
 						mimeType = @"image/gif";
 					} else {
-						data = [imageRep representationUsingType:NSPNGFileType properties:NULL];
+                        data = [imageRep representationUsingType:NSPNGFileType properties:@{}];
 						mimeType = @"image/png";
 					}
 					
@@ -1308,7 +1308,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     
     string              = [[[post text] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
     text                = [NSMutableString stringWithString:string];
-    icon                = (([post icon] && [[post icon] length] > 0) ? [post icon] : _defaultIconBase64String);
+    icon                = (NSString*)(([post icon] && sizeof([post icon]) > 0) ? [post icon] : _defaultIconBase64String);
     account             = [(WCServerConnection *)[board connection] account];
     editDate            = ([post editDate] ? [dateFormatter stringFromDate:[post editDate]] : @"");
     
@@ -1379,7 +1379,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     _threadController           = [[WCBoardThreadController alloc] init];
     
 	_boards                     = [[WCBoard rootBoard] retain];
-	_searchBoard                = [[WCSearchBoard rootBoard] retain];
+	_searchBoard                = (WCSmartBoard*)[[WCSearchBoard rootBoard] retain];
     
 	_receivedBoards             = [[NSMutableSet alloc] init];
 	_readIDs                    = [[NSMutableSet alloc] initWithArray:[[WCSettings settings] objectForKey:WCReadBoardPosts]];
@@ -3736,7 +3736,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	NSInteger	tag;
 	
 	tag		= [sender tagOfSelectedItem];
-	color	= [NSSWF:@"#%02X%02X%02X", (tag & 0xFF0000) >> 16, (tag & 0x00FF00) >> 8, (tag & 0x0000FF)];
+	color	= [NSSWF:@"#%02lX%02lX%02lX", (tag & 0xFF0000) >> 16, (tag & 0x00FF00) >> 8, (tag & 0x0000FF)];
 	
 	[self _insertBBCodeWithStartTag:[NSSWF:@"[color=%@]", color] endTag:@"[/color]"];
 }
@@ -4345,6 +4345,17 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 //    return name;
 //}
 
+- (NSString *)lastMessageDate {
+    NSDateFormatter *dateFormatter;
+    
+    dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian]];
+    
+    return [dateFormatter stringFromDate:[[self _selectedThread] latestReplyDate]];
+}
+
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)selector {
 	if(selector == @selector(replyToThread) ||
 	   selector == @selector(replyToPostWithID:) ||
@@ -4352,16 +4363,12 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	   selector == @selector(editPostWithID:) ||
        selector == @selector(loadScriptWithName:) ||
        selector == @selector(JSONObjectsUntilDate:withLimit:) ||
-       selector == @selector(JSONObjects) ||
-       selector == @selector(lastMessageDate:))
+       selector == @selector(lastMessageDate) ||
+       selector == @selector(JSONObjects))
 		return NO;
     
 	return YES;
 }
-
-
-
-
 
 
 
@@ -4382,19 +4389,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     
     return YES;
 }
-
-
-- (NSString *)lastMessageDate {
-    NSDateFormatter     *dateFormatter;
-    
-    dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
-    
-    return [dateFormatter stringFromDate:[[self _selectedThread] latestReplyDate]];
-}
-
 
 - (NSString *)JSONObjects {
     NSMutableSet            *readIDs;
@@ -4431,7 +4425,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     
     return jsonString;
 }
-
 
 - (NSString *)JSONObjectsUntilDate:(NSString *)dateString withLimit:(NSUInteger)limit {
 //    NSPredicate         *predicate;

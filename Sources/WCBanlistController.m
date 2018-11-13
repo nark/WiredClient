@@ -468,7 +468,7 @@
 	WIP7Message		*message;
 	WCBan			*ban;
 	
-	if(returnCode == NSAlertFirstButtonReturn) {
+	if(returnCode == NSAlertDefaultReturn) {
 		enumerator = [[self _selectedBans] objectEnumerator];
 		
 		while((ban = [enumerator nextObject])) {

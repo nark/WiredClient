@@ -118,6 +118,8 @@ extern NSString * const WCUserPboardType;
 	BOOL											_loadedNib;
 }
 
+- (void)wiredSendPingReply:(WIP7Message *)message;
+
 + (NSString *)outputForShellCommand:(NSString *)command;
 
 + (void)applyHTMLTagsForURLToMutableString:(NSMutableString *)mutableString;
@@ -126,7 +128,7 @@ extern NSString * const WCUserPboardType;
 + (BOOL)checkHTMLRestrictionsForString:(NSString *)string;
 
 + (NSString *)stringByDecomposingSmileyAttributesInAttributedString:(NSAttributedString *)attributedString;
-+ (NSDictionary *)smileyRegexs;
+//+ (NSDictionary *)smileyRegexs;
 + (BOOL)isHTMLString:(NSString *)string;
 
 - (void)themeDidChange:(NSDictionary *)theme;

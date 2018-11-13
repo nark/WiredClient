@@ -111,8 +111,16 @@ extern NSString * const					WCPlacePboardType;
 	CGFloat								_iconWidth;
 }
 
+- (void)wiredFilePreviewFileReply:(WIP7Message *)message;
+- (void)wiredFileSubscribeDirectoryReply:(WIP7Message *)message;
 + (id)filesWithConnection:(WCServerConnection *)connection file:(WCFile *)file;
 + (id)filesWithConnection:(WCServerConnection *)connection file:(WCFile *)file selectFile:(WCFile *)selectFile;
+- (void)accountsControllerAccountsDidChange:(NSNotification *)notification;
+- (void)wiredFileDirectoryChanged:(WIP7Message *)message;
+- (void)wiredFileDirectoryDeleted:(WIP7Message *)message;
+- (void)selectedThemeDidChange:(NSNotification *)notification;
+- (void)wiredFileUnsubscribeDirectoryReply:(WIP7Message *)message;
+- (void)wiredFileSearchListReply:(WIP7Message *)message;
 
 - (NSString *)newDocumentMenuItemTitle;
 - (NSString *)deleteDocumentMenuItemTitle;

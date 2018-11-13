@@ -14,9 +14,10 @@
 #endif
 
 
-
+//#define WC_WINDOW_STARTING_KEY_COLOR        [NSColor colorWithCalibratedRed:0.8162 green:0.8163 blue:0.8161 alpha:1.0000]
 #define WC_WINDOW_STARTING_KEY_COLOR        [NSColor colorWithCalibratedRed:0.8684 green:0.8685 blue:0.8683 alpha:1.0000]
-#define WC_WINDOW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedRed:0.8162 green:0.8163 blue:0.8161 alpha:1.0000]
+#define WC_WINDOW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedRed:0.8684 green:0.8685 blue:0.8683 alpha:1.0000]
+//#define WC_WINDOW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedRed:0.8162 green:0.8163 blue:0.8161 alpha:1.0000]
 
 #define WC_WINDOW_STARTING_COLOR            [NSColor colorWithCalibratedRed:0.9555 green:0.9557 blue:0.9555 alpha:1.0000]
 #define WC_WINDOW_ENDING_COLOR              [NSColor colorWithCalibratedRed:0.9555 green:0.9557 blue:0.9555 alpha:1.0000]

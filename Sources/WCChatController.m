@@ -1052,7 +1052,7 @@ typedef enum _WCChatFormat					WCChatFormat;
                     }
                 }
                 else {
-                    stop = YES;
+                    stop = (BOOL*)YES;
                     return;
                 }
             }
@@ -1205,10 +1205,10 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[_topicDateFormatter setDateStyle:NSDateFormatterMediumStyle];
 	[_topicDateFormatter setNaturalLanguageStyle:WIDateFormatterCapitalizedNaturalLanguageStyle];
 	
-	[_chatOutputWebView setUIDelegate:self];
-    [_chatOutputWebView setFrameLoadDelegate:self];
-	[_chatOutputWebView setResourceLoadDelegate:self];
-	[_chatOutputWebView setPolicyDelegate:self];
+	[_chatOutputWebView setUIDelegate:(id)self];
+    [_chatOutputWebView setFrameLoadDelegate:(id)self];
+	[_chatOutputWebView setResourceLoadDelegate:(id)self];
+	[_chatOutputWebView setPolicyDelegate:(id)self];
 	
 	[[_topicTextField cell] setBackgroundStyle:NSBackgroundStyleRaised];
 	
@@ -2315,7 +2315,7 @@ typedef enum _WCChatFormat					WCChatFormat;
     [savePanel beginSheetModalForWindow:[_userListSplitView window] completionHandler:^(NSInteger result) {
         WIChatLogType			type;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             type = [_saveChatFileFormatPopUpButton indexOfSelectedItem];
             
             [_chatOutputWebView exportContentToFileAtPath:[[savePanel URL] path] forType:type];
@@ -2327,7 +2327,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (void)saveChatPanelDidEnd:(NSSavePanel *)savePanel returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	WIChatLogType			type;
 	
-	if(returnCode == NSOKButton) {
+	if(returnCode == NSModalResponseOK) {
 		type = [_saveChatFileFormatPopUpButton indexOfSelectedItem];
 		
 		[_chatOutputWebView exportContentToFileAtPath:[[savePanel URL] path] forType:type];

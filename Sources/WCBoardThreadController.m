@@ -137,10 +137,10 @@
 
 
 - (void)awakeFromNib {    
-	[_threadWebView setUIDelegate:self];
-    [_threadWebView setFrameLoadDelegate:self];
-	[_threadWebView setResourceLoadDelegate:self];
-	[_threadWebView setPolicyDelegate:self];
+	[_threadWebView setUIDelegate:(id)self];
+    [_threadWebView setFrameLoadDelegate:(id)self];
+	[_threadWebView setResourceLoadDelegate:(id)self];
+	[_threadWebView setPolicyDelegate:(id)self];
     
     [self reloadData];
 }

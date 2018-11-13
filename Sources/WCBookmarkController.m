@@ -64,10 +64,10 @@
 
 - (void)setBookmark:(NSMutableDictionary *)bookmark {
     if(_bookmark)
-        [_bookmark release], _bookmark = nil;
+        [_bookmark release]; _bookmark = nil;
     
     if(_oldBookmark)
-        [_oldBookmark release], _oldBookmark = nil;
+        [_oldBookmark release]; _oldBookmark = nil;
     
     _bookmark       = [bookmark retain];
     _oldBookmark    = [bookmark copy];

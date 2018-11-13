@@ -56,4 +56,6 @@
 - (IBAction)addBan:(id)sender;
 - (IBAction)deleteBan:(id)sender;
 
+- (void)wiredBanlistGetBansReply:(WIP7Message *)message;
+
 @end

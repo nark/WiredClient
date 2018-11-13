@@ -109,8 +109,8 @@
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![_chatController chatIsEmpty])
 		[[[[WCApplicationController sharedController] logController] privateChatHistoryBundle] addHistoryForWebView:[_chatController webView] 
-																				withConnectionName:[[_chatController connection] name]
-																						  identity:[user nick]];
+                                        withConnectionName:[[_chatController connection] name]
+                                            identity:[user nick]];
 	
 	message = [WIP7Message messageWithName:@"wired.chat.leave_chat" spec:WCP7Spec];
 	[message setUInt32:[_chatController chatID] forName:@"wired.chat.id"];

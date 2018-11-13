@@ -444,7 +444,7 @@
 	WIP7Message		*message;
 	WCUser			*user = contextInfo;
 
-	if(returnCode == NSOKButton) {
+	if(returnCode == NSModalResponseOK) {
 		message = [WIP7Message messageWithName:@"wired.user.disconnect_user" spec:WCP7Spec];
 		[message setUInt32:[user userID] forName:@"wired.user.id"];
 		[message setString:[_disconnectMessageTextField stringValue] forName:@"wired.user.disconnect_message"];
@@ -514,7 +514,7 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	NSMutableDictionary		*dictionary;
-	NSString				*status, *userInfo;
+	NSString				*status;
 	WCUser					*user;
 	
 	user = [self _userAtIndex:row];

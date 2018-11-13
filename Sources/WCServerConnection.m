@@ -361,7 +361,7 @@ NSString * const WCServerConnectionEventInfo2Key						= @"WCServerConnectionEven
 
 - (void)wiredLoginReply:(WIP7Message *)message {
 	if([[message name] isEqualToString:@"wired.login"]) {
-		[message getUInt32:&_userID forName:@"wired.user.id"];
+		[message getUInt32:(unsigned int*)&_userID forName:@"wired.user.id"];
 
 		[self triggerEvent:WCEventsServerConnected];
 	}

@@ -8,6 +8,7 @@
 
 #import "WCEncryptionTransformer.h"
 #import "WCDatabaseController.h"
+#import "WCKeychain.h"
 
 @implementation WCEncryptionTransformer
 

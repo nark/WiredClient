@@ -140,6 +140,7 @@
 	_identifier = [[NSString UUIDString] retain];
 
 	_progressIndicator = [[WIUnclickableProgressIndicator alloc] initWithFrame:NSMakeRect(0.0, 0.0, 10.0, 10.0)];
+    
 	[_progressIndicator setUsesThreadedAnimation:YES];
 	[_progressIndicator setMinValue:0.0];
 	[_progressIndicator setMaxValue:1.0];

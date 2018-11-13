@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:p7="http://www.zankasoftware.com/P7/Message"
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   targetNamespace="http://www.zankasoftware.com/P7/Message"
+		   elementFormDefault="qualified"
+		   attributeFormDefault="unqualified">
+	<xs:element name="field" type="p7:field" />
+
+	<xs:element name="item" type="p7:item" />
+
+	<xs:element name="message">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:all>
+				<xs:element name="types" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="p7:field" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:element ref="p7:item" minOccurs="0" maxOccurs="unbounded">
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="field">
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:simpleType name="item" />
+</xs:schema>

@@ -150,7 +150,6 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSMenuItem								*_filesDownloadFolderMenuItem;
 	IBOutlet NSButton								*_filesOpenFoldersInNewWindowsButton;
 	IBOutlet NSButton								*_filesQueueTransfersButton;
-	IBOutlet NSButton								*_filesCheckForResourceForksButton;
 	IBOutlet NSButton								*_filesRemoveTransfersButton;
     
     IBOutlet NSTextField                            *_networkConnectionTimeoutTextField;

@@ -102,8 +102,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[_saveButton setEnabled:save];
 }
 
-
-
 - (BOOL)_validateAddAccount {
 	WCAccount		*account;
 	
@@ -114,8 +112,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 
 	return ([account accountCreateUsers] || [account accountCreateGroups]);
 }
-
-
 
 - (BOOL)_validateDeleteAccount {
 	NSEnumerator	*enumerator;
@@ -151,8 +147,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	return NO;
 }
 
-
-
 - (BOOL)_validateDuplicateAccount {
 	NSArray			*accounts;
 	WCAccount		*account;
@@ -172,8 +166,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	else
 		return [account accountCreateGroups];
 }
-
-
 
 #pragma mark -
 
@@ -203,8 +195,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (void)_reloadAccounts {
 	WIP7Message		*message;
 	
@@ -226,15 +216,11 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 #pragma mark -
 
 - (NSDictionary *)_settingForRow:(NSInteger)row {
 	return [_shownSettings objectAtIndex:row];
 }
-
-
 
 #pragma mark -
 
@@ -279,8 +265,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	return YES;
 }
-
-
 
 - (void)_save {
 	NSEnumerator		*enumerator;
@@ -333,8 +317,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (BOOL)_canEditAccounts {
 	NSEnumerator	*enumerator;
 	WCAccount		*account;
@@ -371,8 +353,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	return editable;
 }
 
-
-
 #pragma mark -
 
 - (void)_readAccount:(WCAccount *)account {
@@ -389,8 +369,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[_progressIndicator startAnimation:self];
 }
 
-
-
 - (void)_readAccounts:(NSArray *)accounts {
 	NSEnumerator	*enumerator;
 	WCAccount		*account;
@@ -404,8 +382,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	while((account = [enumerator nextObject]))
 		[self _readAccount:account];
 }
-
-
 
 - (void)_readFromAccounts {
 	NSEnumerator		*enumerator;
@@ -580,8 +556,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		[_settingsOutlineView expandItem:section];
 }
 
-
-
 - (void)_validateForAccounts {
 	NSEnumerator	*enumerator;
 	WCAccount		*account;
@@ -647,8 +621,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	[_settingsOutlineView setNeedsDisplay:YES];
 }
-
-
 
 - (void)_writeToAccounts:(NSArray *)accounts {
 	NSEnumerator	*enumerator;
@@ -721,8 +693,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 #pragma mark -
 
 - (WCAccount *)_accountAtIndex:(NSUInteger)index {
@@ -734,8 +704,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	return [_shownAccounts objectAtIndex:i];
 }
-
-
 
 - (NSArray *)_selectedAccounts {
 	NSMutableArray		*array;
@@ -754,8 +722,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	return array;
 }
-
-
 
 - (void)_reloadGroups {
 	NSEnumerator		*enumerator;
@@ -793,8 +759,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		}
 	}
 }
-
-
 
 - (void)_reloadSettings {
 	NSEnumerator			*enumerator, *settingsEnumerator, *accountsEnumerator;
@@ -841,8 +805,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	while((section = [enumerator nextObject]))
 		[_settingsOutlineView expandItem:section];
 }
-
-
 
 - (BOOL)_filterIncludesAccount:(WCAccount *)account {
 	NSMenuItem		*item;
@@ -894,8 +856,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	return YES;
 }
 
-
-
 - (void)_reloadFilter {
 	NSEnumerator	*enumerator;
 	WCAccount		*account;
@@ -915,8 +875,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 			? NSLS(@"account", @"Account singular")
 			: NSLS(@"accounts", @"Account plural")]];
 }
-
-
 
 - (void)_selectAccounts {
 	NSEnumerator			*enumerator;
@@ -1124,8 +1082,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	return self;
 }
 
-
-
 - (void)dealloc {
 	[_dontChangeGroupMenuItem release];
 	
@@ -1153,8 +1109,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[super dealloc];
 }
 
-
-
 #pragma mark -
 
 - (void)windowDidLoad {
@@ -1181,8 +1135,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[self _readFromAccounts];
 }
 
-
-
 - (void)linkConnectionLoggedIn:(NSNotification *)notification {
 	[_allAccounts removeAllObjects];
 	[_allUserAccounts removeAllObjects];
@@ -1199,8 +1151,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[self _validate];
 }
 
-
-
 - (void)serverConnectionPrivilegesDidChange:(NSNotification *)notification {
 	if([[[_administration connection] account] accountListAccounts]) {
 		if([[_administration window] isVisible] && [_administration selectedController] == self)
@@ -1213,16 +1163,12 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[self _validateForAccounts];
 }
 
-
-
 - (void)wiredAccountAccountsChanged:(WIP7Message *)message {
 	if([_selectAccounts count] == 0)
 		[_selectAccounts setArray:[self _selectedAccounts]];
 	
 	[self _reloadAccounts];
 }
-
-
 
 - (void)wiredAccountListAccountsReply:(WIP7Message *)message {
 	NSMutableArray		*accounts;
@@ -1283,8 +1229,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (void)wiredAccountSubscribeAccountsReply:(WIP7Message *)message {
 	if([[message name] isEqualToString:@"wired.okay"]) {
 		[[_administration connection] removeObserver:self message:message];
@@ -1297,8 +1241,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		[[_administration connection] removeObserver:self message:message];
 	}
 }
-
-
 
 - (void)wiredAccountReadAccountReply:(WIP7Message *)message {
 	NSEnumerator	*enumerator;
@@ -1358,8 +1300,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (void)wiredAccountChangeAccountReply:(WIP7Message *)message {
 	if([[message name] isEqualToString:@"wired.okay"]) {
 		[_accounts removeAllObjects];
@@ -1386,8 +1326,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		[[_administration connection] removeObserver:self message:message];
 	}
 }
-
-
 
 - (void)wiredAccountDeleteAccountReply:(WIP7Message *)message {
 	NSEnumerator	*enumerator;
@@ -1454,19 +1392,13 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (void)textDidChange:(NSNotification *)notification {
 	[self touch:self];
 }
 
-
-
 - (void)controlTextDidChange:(NSNotification *)notification {
 	[self touch:self];
 }
-
-
 
 - (NSArray *)tokenField:(NSTokenField *)tokenField completionsForSubstring:(NSString *)substring indexOfToken:(NSInteger)tokenIndex indexOfSelectedItem:(NSInteger *)selectedIndex {
 	NSEnumerator		*enumerator;
@@ -1483,8 +1415,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	return array;
 }
-
-
 
 #pragma mark -
 
@@ -1503,15 +1433,11 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	return YES;
 }
 
-
-
 #pragma mark -
 
 - (BOOL)controllerWindowShouldClose {
 	return [self _verifyUnsavedAndPerformAction:WCAccountsCloseWindow argument:NULL];
 }
-
-
 
 - (void)controllerDidSelect {
 	[self _requestAccounts];
@@ -1519,13 +1445,9 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[[_administration window] makeFirstResponder:_accountsTableView];
 }
 
-
-
 - (BOOL)controllerShouldUnselectForNewController:(id)controller {
 	return [self _verifyUnsavedAndPerformAction:WCAccountsSelectTab argument:controller];
 }
-
-
 
 #pragma mark -
 
@@ -1533,15 +1455,11 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	return NSMakeSize(678.0, 571.0);
 }
 
-
-
 #pragma mark -
 
 - (NSString *)newDocumentMenuItemTitle {
 	return NSLS(@"New Account\u2026", @"New menu item");
 }
-
-
 
 - (NSString *)deleteDocumentMenuItemTitle {
 	NSArray			*accounts;
@@ -1562,8 +1480,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 			break;
 	}
 }
-
-
 
 #pragma mark -
 
@@ -1592,8 +1508,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (NSArray *)groupNames {
 	NSEnumerator	*enumerator;
 	NSMutableArray	*array;
@@ -1619,8 +1533,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (void)editUserAccountWithName:(NSString *)name {
 	WCAccount	*account;
 	NSInteger	i, count;
@@ -1641,21 +1553,15 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[_administration showWindow:self];
 }
 
-
-
 #pragma mark -
 
 - (IBAction)newDocument:(id)sender {
 	[self addAccount:sender];
 }
 
-
-
 - (IBAction)deleteDocument:(id)sender {
 	[self deleteAccount:sender];
 }
-
-
 
 - (IBAction)touch:(id)sender {
 	_touched = YES;
@@ -1664,8 +1570,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	[self _validate];
 }
-
-
 
 - (IBAction)addAccount:(id)sender {
 	WCUserAccount		*account;
@@ -1704,8 +1608,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[_nameTextField selectText:self];
 }
 
-
-
 - (IBAction)deleteAccount:(id)sender {
 	NSAlert			*alert;
 	NSArray			*accounts;
@@ -1738,8 +1640,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[alert release];
 }
 
-
-
 - (void)deleteSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSEnumerator	*enumerator;
 	WIP7Message		*message;
@@ -1768,8 +1668,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (void)deleteAndDisconnectSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSEnumerator	*enumerator;
 	WIP7Message		*message;
@@ -1797,8 +1695,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[_deletedAccounts removeAllObjects];
 }
 
-
-
 - (IBAction)duplicateAccount:(id)sender {
 	NSArray				*names;
 	WCAccount			*account;
@@ -1818,8 +1714,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[_selectAccounts setArray:[NSArray arrayWithObject:account]];
 }
 
-
-
 - (IBAction)all:(id)sender {
 	[_usersFilterButton setState:NSOffState];
 	[_groupsFilterButton setState:NSOffState];
@@ -1832,8 +1726,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	[self _selectAccounts];
 }
-
-
 
 - (IBAction)users:(id)sender {
 	[_allFilterButton setState:NSOffState];
@@ -1848,8 +1740,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[self _selectAccounts];
 }
 
-
-
 - (IBAction)groups:(id)sender {
 	[_usersFilterButton setState:NSOffState];
 	[_allFilterButton setState:NSOffState];
@@ -1863,8 +1753,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[self _selectAccounts];
 }
 
-
-
 - (IBAction)groupFilter:(id)sender {
 	[_selectAccounts setArray:[self _selectedAccounts]];
 	
@@ -1874,8 +1762,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	[self _selectAccounts];
 }
-
-
 
 - (IBAction)search:(id)sender {
 	[_accountFilter release];
@@ -1894,8 +1780,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	[self _selectAccounts];
 }
 
-
-
 - (IBAction)type:(id)sender {
 	WCUserAccount		*userAccount;
 	
@@ -1912,8 +1796,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	[self _validateForAccounts];
 }
-
-
 
 - (IBAction)group:(id)sender {
 	NSEnumerator		*enumerator;
@@ -1947,13 +1829,9 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (IBAction)show:(id)sender {
 	[self _reloadSettings];
 }
-
-
 
 - (IBAction)selectAll:(id)sender {
 	NSEnumerator		*enumerator, *settingsEnumerator, *accountsEnumerator;
@@ -1979,8 +1857,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	
 	[self touch:self];
 }
-
-
 
 - (IBAction)clearSetting:(id)sender {
 	NSEnumerator		*enumerator;
@@ -2020,15 +1896,11 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
-
-
 - (IBAction)save:(id)sender {
 	[[_administration window] makeFirstResponder:_accountsTableView];
 	
 	[self _save];
 }
-
-
 
 - (void)saveSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSDictionary		*dictionary = contextInfo;

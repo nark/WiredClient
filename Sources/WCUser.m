@@ -300,7 +300,7 @@
 
 
 
-- (NSUInteger)cipherBits {
+- (unsigned long)cipherBits {
 	return _cipherBits;
 }
 
