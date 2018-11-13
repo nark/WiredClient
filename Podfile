@@ -14,3 +14,9 @@ target 'WiredNetworking' do
     workspace 'vendor/WiredFrameworks/WiredFrameworks.xcworkspace'
     pod 'OpenSSL-Universal'
 end
+
+target 'libwired-osx' do
+    project 'vendor/WiredFrameworks/WiredFrameworks.xcodeproj'
+    workspace 'vendor/WiredFrameworks/WiredFrameworks.xcworkspace'
+    pod 'OpenSSL-Universal'
+end
