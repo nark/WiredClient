@@ -472,12 +472,9 @@ typedef enum _WCChatFormat					WCChatFormat;
     
     
 - (void)_sendLocalImage:(NSURL *)url {
-    NSLog(@"url : %@", url);
-    
     NSString            *html;
     NSString            *base64ImageString;
     NSData              *imageData;
-    WIP7Message         *message;
     
     imageData = [NSData dataWithContentsOfURL:url];
     base64ImageString = [imageData base64EncodedString];
@@ -485,18 +482,7 @@ typedef enum _WCChatFormat					WCChatFormat;
     html = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64ImageString];
     
     if(html && [html length] > 0) {
-        WCUser *user = [self userWithUserID:self.connection.userID];
-        // [self _printHTML:html by:user];
-        
-        NSLog(@"user : %@", user);
-       
-        
         [self sendChat:html];
-        
-//        message = [WIP7Message messageWithName:@"wired.chat.send_say" spec:WCP7Spec];
-//        [message setUInt32:[self chatID] forName:@"wired.chat.id"];
-//        [message setString:html forName:@"wired.chat.say"];
-//        [[self connection] sendMessage:message];
     }
 }
 
