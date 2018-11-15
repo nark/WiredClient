@@ -469,6 +469,22 @@ typedef enum _WCChatFormat					WCChatFormat;
 		[[self connection] sendMessage:message];
 	}
 }
+    
+    
+- (void)_sendLocalImage:(NSURL *)url {
+    NSString            *html;
+    NSString            *base64ImageString;
+    NSData              *imageData;
+    
+    imageData = [NSData dataWithContentsOfURL:url];
+    base64ImageString = [imageData base64EncodedString];
+    
+    html = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64ImageString];
+    
+    if(html && [html length] > 0) {
+        [self sendChat:html];
+    }
+}
 
 
 - (void)_sendYouTube:(NSURL *)url {
@@ -1208,7 +1224,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[_chatOutputWebView setUIDelegate:(id)self];
     [_chatOutputWebView setFrameLoadDelegate:(id)self];
 	[_chatOutputWebView setResourceLoadDelegate:(id)self];
-	[_chatOutputWebView setPolicyDelegate:(id)self];
+    [_chatOutputWebView setPolicyDelegate:(id)self];
+    [_chatOutputWebView registerForDraggedTypes:@[NSFilenamesPboardType]];
 	
 	[[_topicTextField cell] setBackgroundStyle:NSBackgroundStyleRaised];
 	
@@ -1222,6 +1239,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	[self _updatePreferences];
 }
+
+    
 
 
 
@@ -2510,11 +2529,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-
-
-
-
-
 #pragma mark -
 
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
@@ -2587,13 +2601,13 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
     NSURL               *url;
 	WIURL				*wiredURL;
 	WCFile				*file;
+    NSData              *fileData;
+    NSImage             *droppedImage;
 	BOOL				handled     = NO;
 	BOOL                isDirectory = NO;
     
-	if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeOther) {
-		[listener use];
-	} else {
-		[listener ignore];
+    if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeLinkClicked) {
+        [listener ignore];
         
         url         = [action objectForKey:WebActionOriginalURLKey];
 		wiredURL    = [WIURL URLWithURL:url];
@@ -2623,14 +2637,34 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 		
 		if(!handled)
 			[[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
-	}
+        
+    } else {
+        url = [action objectForKey:WebActionOriginalURLKey];
+        
+        if (![[url pathExtension] isEqualToString:@"html"]) {
+            [listener ignore];
+            
+            fileData        = [NSData dataWithContentsOfURL:url];
+            droppedImage    = [NSImage imageWithData:fileData];
+            
+            if (droppedImage) {
+                [self _sendLocalImage:url];
+            }
+        }
+        
+        [listener use];
+    }
 }
 
 - (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
     // useless but required
 }
-
-
+    
+- (NSUInteger)webView:(WebView *)webView
+dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
+    return WebDragDestinationActionLoad;
+}
+    
 
 #pragma mark -
 
