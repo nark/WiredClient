@@ -1552,7 +1552,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	WIP7Message				*message;
 	WCServerConnection		*connection = contextInfo;
 	
-	if(returnCode == NSAlertDefaultReturn) {
+	if(returnCode == NSModalResponseOK) {
 		message = [WIP7Message messageWithName:@"wired.message.send_broadcast" spec:WCP7Spec];
 		[message setString:[self _stringForMessageString:[_broadcastTextView string]] forName:@"wired.message.broadcast"];
 		[connection sendMessage:message];

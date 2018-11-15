@@ -409,9 +409,9 @@
 
 
 - (void)addSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	WIP7Message		*message;
-	
-	if(returnCode == NSAlertDefaultReturn) {
+
+    WIP7Message		*message;
+	if(returnCode == NSModalResponseOK) {
 		message = [WIP7Message messageWithName:@"wired.banlist.add_ban" spec:WCP7Spec];
 		[message setString:[_addBanTextField stringValue] forName:@"wired.banlist.ip"];
 		
@@ -468,7 +468,7 @@
 	WIP7Message		*message;
 	WCBan			*ban;
 	
-	if(returnCode == NSAlertDefaultReturn) {
+	if(returnCode == NSAlertFirstButtonReturn) {
 		enumerator = [[self _selectedBans] objectEnumerator];
 		
 		while((ban = [enumerator nextObject])) {

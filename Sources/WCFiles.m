@@ -2606,9 +2606,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 }
 
 
-
 - (void)quickLookSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	if(returnCode == NSAlertDefaultReturn)
+	if(returnCode == NSModalResponseOK)
 		[self _quickLook];
 }
 
@@ -2658,7 +2657,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 
 	[_createFolderPanel close];
 
-	if(returnCode == NSAlertDefaultReturn) {
+	if(returnCode == NSModalResponseOK) {
 		path = [[_currentDirectory path] stringByAppendingPathComponent:[_nameTextField stringValue]];
 		
 		message = [WIP7Message messageWithName:@"wired.file.create_directory" spec:WCP7Spec];

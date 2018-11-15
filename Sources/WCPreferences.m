@@ -1624,7 +1624,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (IBAction)deleteThemeTemplate:(id)sender {
 	WITemplateBundle		*selectedTemplate;
-	NSAlert					*alert;
+	NSAlert	*alert = [[[NSAlert alloc] init] autorelease];
 	BOOL					inUse;
 	
 	if([_themesTemplatesTableView selectedRow] != -1) {
@@ -1946,7 +1946,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (void)deleteIgnoreSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSNumber	*row = contextInfo;
 	
-	if(returnCode == NSAlertDefaultReturn) {
+	if(returnCode == NSModalResponseOK) {
 		[[WCSettings settings] removeObjectAtIndex:[row integerValue] fromArrayForKey:WCIgnores];
 		
 		[_ignoresTableView reloadData];

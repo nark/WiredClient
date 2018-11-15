@@ -163,7 +163,7 @@ static void _WIP7SocketWroteMessage(wi_p7_socket_t *p7Socket, wi_p7_message_t *p
 
 
 - (WIP7Serialization)serialization {
-	return wi_p7_socket_serialization(_p7Socket);
+	return (WIP7Serialization)wi_p7_socket_serialization(_p7Socket);
 }
 
 
@@ -255,7 +255,7 @@ static void _WIP7SocketWroteMessage(wi_p7_socket_t *p7Socket, wi_p7_message_t *p
 	wi_boolean_t	result;
 	
 	pool = wi_pool_init(wi_pool_alloc());
-	result = wi_p7_socket_connect(_p7Socket, timeout, options, serialization, [username wiredString], [password wiredString]);
+	result = (wi_boolean_t)wi_p7_socket_connect(_p7Socket, timeout, options, (wi_p7_serialization_t)serialization, [username wiredString], [password wiredString]);
 	wi_release(pool);
 
 	if(!result) {
