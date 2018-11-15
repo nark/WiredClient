@@ -48,7 +48,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="MJj-0A-Csh">
                                             <rect key="frame" x="0.0" y="0.0" width="173" height="402"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" indentationPerLevel="20" outlineTableColumn="645" id="641" customClass="WIOutlineView">
                                                     <rect key="frame" x="0.0" y="0.0" width="173" height="402"/>
@@ -80,11 +80,11 @@
                                             </subviews>
                                             <nil key="backgroundColor"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="642">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="642">
                                             <rect key="frame" x="0.0" y="388" width="166" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="644">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="644">
                                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -197,19 +197,20 @@
             <point key="canvasLocation" x="128" y="142"/>
         </window>
         <segmentedControl verticalHuggingPriority="750" id="691">
-            <rect key="frame" x="0.5" y="0.0" width="67" height="25"/>
+            <rect key="frame" x="0.0" y="0.0" width="74" height="23"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectAny" id="692">
                 <font key="font" metaFont="system"/>
                 <segments>
-                    <segment toolTip="Server Listen-Ansicht" image="LeftViewNavigator" width="32">
+                    <segment toolTip="Server Listen-Ansicht" image="LeftViewNavigator" width="34">
                         <nil key="label"/>
                     </segment>
-                    <segment toolTip="Benutzer Listen-Ansicht" image="RightViewNavigator" width="32" tag="1">
+                    <segment toolTip="Benutzer Listen-Ansicht" image="RightViewNavigator" width="33" tag="1">
                         <nil key="label"/>
                     </segment>
                 </segments>
             </segmentedCell>
+            <point key="canvasLocation" x="12" y="155"/>
         </segmentedControl>
         <menu id="714" userLabel="Sidebar Menu">
             <connections>
