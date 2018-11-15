@@ -31,6 +31,7 @@
 #import "WCErrorQueue.h"
 #import "WCServerConnection.h"
 #import "WCTransfers.h"
+#import "WCKeychain.h"
 
 @interface WCConnect(Private)
 
@@ -47,6 +48,11 @@
 	self = [super initWithWindowNibName:@"Connect"];
 	
 	_url = [url retain];
+    
+    // check that bookmark password was loaded from keychain
+    if (_url.password == nil) {
+        [_url setPassword:[[WCKeychain keychain] passwordForBookmark:bookmark]];
+    }
     
 	_connection = [[WCServerConnection connection] retain];
 	[_connection setURL:url];

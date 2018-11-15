@@ -357,7 +357,7 @@
 	
 	_url = [[WIURL URLWithString:[bookmark objectForKey:WCBookmarksAddress] scheme:@"wiredp7"] retain];
 	[_url setUser:[bookmark objectForKey:WCBookmarksLogin]];
-	[_url setPassword:[[WCKeychain keychain] passwordForBookmark:bookmark]];
+	//[_url setPassword:[[WCKeychain keychain] passwordForBookmark:bookmark]];
 	
 	return self;
 }
