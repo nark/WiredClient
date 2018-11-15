@@ -1392,7 +1392,7 @@ static WCApplicationController		*sharedController;
         NSDictionary			*dictionary;
         NSString				*password;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             bookmarks	= [NSMutableArray array];
             enumerator	= [[[WCSettings settings] objectForKey:WCBookmarks] objectEnumerator];
             
@@ -1431,7 +1431,7 @@ static WCApplicationController		*sharedController;
         NSDictionary			*dictionary;
         NSString				*password;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             bookmarks	= [NSMutableArray array];
             enumerator	= [[[WCSettings settings] objectForKey:WCTrackerBookmarks] objectEnumerator];
             
@@ -1464,7 +1464,7 @@ static WCApplicationController		*sharedController;
     [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"WiredBookmarks", @"WiredTrackerBookmarks", nil]];
     
     [openPanel beginSheetModalForWindow:[[WCPublicChat publicChat] window] completionHandler:^(NSInteger result) {
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             if([[[openPanel URL] pathExtension] isEqualToString:@"WiredBookmarks"]) {
                 [[WCPreferences preferences] importBookmarksFromFile:[[openPanel URL] path]];
             }

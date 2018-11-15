@@ -2889,7 +2889,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCBoard			*board = [array objectAtIndex:0];
 	WCBoardThread	*thread = [array objectAtIndex:1];
 	
-	if(returnCode == NSOKButton) {
+    if(returnCode == NSModalResponseOK) {
 		string = [WCChatController stringByDecomposingSmileyAttributesInAttributedString:[self _attributedPostString]];
 
 		message = [WIP7Message messageWithName:@"wired.board.add_post" spec:WCP7Spec];
@@ -2953,7 +2953,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCBoardThread		*thread = [array objectAtIndex:1];
 	WCBoardPost			*post = ([array count] > 2) ? [array objectAtIndex:2] : NULL;
 	
-	if(returnCode == NSOKButton) {
+    if(returnCode == NSModalResponseOK) {
 		if([[board connection] isConnected]) {
 			string = [WCChatController stringByDecomposingSmileyAttributesInAttributedString:[self _attributedPostString]];
 			
@@ -3106,7 +3106,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCBoard			*board;
 	NSUInteger		ownerPermissions, groupPermissions, everyonePermissions;
 	
-	if(returnCode == NSOKButton) {
+    if(returnCode == NSModalResponseOK) {
 		board = [_boardLocationPopUpButton representedObjectOfSelectedItem];
 		
 		if(board && [[board connection] isConnected] && [[_nameTextField stringValue] length] > 0) {
@@ -3166,7 +3166,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCSmartBoard				*smartBoard;
 	WCBoardThreadFilter			*filter;
 	
-	if(returnCode == NSOKButton) {
+    if(returnCode == NSModalResponseOK) {
 		filter = [WCBoardThreadFilter filter];
 
 		[filter setBoard:[_boardFilterComboBox stringValue]];
@@ -3225,7 +3225,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCSmartBoard			*smartBoard = contextInfo;
 	WCBoardThreadFilter		*filter;
 
-	if(returnCode == NSOKButton) {
+    if(returnCode == NSModalResponseOK) {
 		filter = [smartBoard filter];
 		
 		[filter setBoard:[_boardFilterComboBox stringValue]];
@@ -3381,7 +3381,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCBoard			*board = contextInfo;
 	NSUInteger		ownerPermissions, groupPermissions, everyonePermissions;
     
-	if(returnCode == NSOKButton) {
+    if(returnCode == NSModalResponseOK) {
 		owner					= ([_setOwnerPopUpButton tagOfSelectedItem] == 0) ? [_setOwnerPopUpButton titleOfSelectedItem] : @"";
 		ownerPermissions		= [_setOwnerPermissionsPopUpButton tagOfSelectedItem];
 		group					= ([_setGroupPopUpButton tagOfSelectedItem] == 0) ? [_setGroupPopUpButton titleOfSelectedItem] : @"";
@@ -3446,7 +3446,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WIP7Message		*message;
 	WCBoard			*board;
 	
-	if(returnCode == NSOKButton) {
+    if(returnCode == NSModalResponseOK) {
 		board		= [_postLocationPopUpButton representedObjectOfSelectedItem];
 		string		= [WCChatController stringByDecomposingSmileyAttributesInAttributedString:[self _attributedPostString]];
 
@@ -3556,7 +3556,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         WebResource				*dataSource;
         WebArchive				*archive;
         
-        if(result == NSOKButton) {
+        if(result == NSModalResponseOK) {
             dataSource = [[[[[_threadController threadWebView] mainFrame] DOMDocument] webArchive] mainResource];
             
             archive = [[WebArchive alloc]
