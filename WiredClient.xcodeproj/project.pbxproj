@@ -237,8 +237,6 @@
 		A5F7F9F90F1D52DB007BF4FD /* WCSourceImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F7F9F80F1D52DB007BF4FD /* WCSourceImageView.m */; };
 		A5F802980D8E378300A84685 /* WCMonitorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F802970D8E378300A84685 /* WCMonitorCell.m */; };
 		B12BA439219369020090B54E /* WiredPlus.WiredEmoticons in Resources */ = {isa = PBXBuildFile; fileRef = B12BA438219369020090B54E /* WiredPlus.WiredEmoticons */; };
-		B1304CC62193A5F90071B6C2 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1304CC22193A5920071B6C2 /* libcrypto.dylib */; };
-		B1304CC72193A5FF0071B6C2 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1304CC42193A5A00071B6C2 /* libssl.dylib */; };
 		B1D840CA2191AD8C00B991C8 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1533E1800D94A004DA093 /* Growl.framework */; };
 		B1D840D42191AEF700B991C8 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D840D32191AEF700B991C8 /* libz.1.dylib */; };
 		B1D840D62191AF0300B991C8 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D840D52191AF0300B991C8 /* libxml2.2.dylib */; };
@@ -787,8 +785,6 @@
 		A5F802960D8E378300A84685 /* WCMonitorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCMonitorCell.h; path = Sources/WCMonitorCell.h; sourceTree = "<group>"; };
 		A5F802970D8E378300A84685 /* WCMonitorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCMonitorCell.m; path = Sources/WCMonitorCell.m; sourceTree = "<group>"; };
 		B12BA438219369020090B54E /* WiredPlus.WiredEmoticons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WiredPlus.WiredEmoticons; path = Emoticons/WiredPlus.WiredEmoticons; sourceTree = "<group>"; };
-		B1304CC22193A5920071B6C2 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = ../../../../usr/local/Cellar/openssl/1.0.2p/lib/libcrypto.dylib; sourceTree = "<group>"; };
-		B1304CC42193A5A00071B6C2 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = ../../../../usr/local/Cellar/openssl/1.0.2p/lib/libssl.dylib; sourceTree = "<group>"; };
 		B1D840D32191AEF700B991C8 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		B1D840D52191AF0300B991C8 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
 		F7D369A6437514269AF02479 /* Pods-Wired Client.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wired Client.test.xcconfig"; path = "Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client.test.xcconfig"; sourceTree = "<group>"; };
@@ -820,8 +816,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1304CC62193A5F90071B6C2 /* libcrypto.dylib in Frameworks */,
-				B1304CC72193A5FF0071B6C2 /* libssl.dylib in Frameworks */,
 				B1D840D62191AF0300B991C8 /* libxml2.2.dylib in Frameworks */,
 				B1D840D42191AEF700B991C8 /* libz.1.dylib in Frameworks */,
 				A55C73440F268087006E8568 /* libicucore.dylib in Frameworks */,
@@ -1524,8 +1518,6 @@
 		A55C73450F268093006E8568 /* Linked Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				B1304CC42193A5A00071B6C2 /* libssl.dylib */,
-				B1304CC22193A5920071B6C2 /* libcrypto.dylib */,
 				B1D840D32191AEF700B991C8 /* libz.1.dylib */,
 				B1D840D52191AF0300B991C8 /* libxml2.2.dylib */,
 				A55C73430F268087006E8568 /* libicucore.dylib */,
@@ -2887,7 +2879,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/prefix.pch;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -2985,7 +2977,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/prefix.pch;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -3029,7 +3021,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/prefix.pch;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -3044,7 +3036,7 @@
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClient";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClientDebug";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClient";
 				PRODUCT_NAME = "Wired Client";
 				PROVISIONING_PROFILE_SPECIFIER = "";

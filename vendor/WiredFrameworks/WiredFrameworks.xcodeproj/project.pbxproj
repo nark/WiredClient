@@ -374,8 +374,6 @@
 		4CFDCBC915694FC300DA17A6 /* WIChatHistoryBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CFDCBC715694FC300DA17A6 /* WIChatHistoryBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CFDCBCA15694FC300DA17A6 /* WIChatHistoryBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDCBC815694FC300DA17A6 /* WIChatHistoryBundle.m */; };
 		4CFDCBDC1569537B00DA17A6 /* ChatHistory-default.WiredHistory in Resources */ = {isa = PBXBuildFile; fileRef = 4CFDCBD01569533C00DA17A6 /* ChatHistory-default.WiredHistory */; };
-		B130E0842195D47E00C4E225 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B130E0822195D45600C4E225 /* libcrypto.dylib */; };
-		B130E0852195D48100C4E225 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B130E0802195D45000C4E225 /* libssl.dylib */; };
 		B130E0862195D63700C4E225 /* libicucore.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B12D6E1521930AE600307DFA /* libicucore.A.dylib */; };
 		B130E0892195D7F600C4E225 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B130E0882195D7F600C4E225 /* libz.1.dylib */; };
 		B130E08B2195D80600C4E225 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B130E08A2195D80600C4E225 /* libxml2.2.dylib */; };
@@ -928,8 +926,6 @@
 		B12D6E122193096800307DFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ViewOptions.xib; sourceTree = "<group>"; };
 		B12D6E1521930AE600307DFA /* libicucore.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.A.dylib; path = ../../../../../../usr/lib/libicucore.A.dylib; sourceTree = "<group>"; };
 		B12D6E1721930AF200307DFA /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
-		B130E0802195D45000C4E225 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = ../../../../../../usr/local/Cellar/openssl/1.0.2p/lib/libssl.dylib; sourceTree = "<group>"; };
-		B130E0822195D45600C4E225 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = ../../../../../../usr/local/Cellar/openssl/1.0.2p/lib/libcrypto.dylib; sourceTree = "<group>"; };
 		B130E0872195D66600C4E225 /* libwired.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwired.a; sourceTree = "<group>"; };
 		B130E0882195D7F600C4E225 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		B130E08A2195D80600C4E225 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
@@ -967,9 +963,7 @@
 				4CE151E617FDFD62004DA093 /* WiredFoundation.framework in Frameworks */,
 				B1F944942191B8B900641324 /* Cocoa.framework in Frameworks */,
 				4CA9B2E01807228000FDDB3A /* wired.a in Frameworks */,
-				B130E0842195D47E00C4E225 /* libcrypto.dylib in Frameworks */,
 				B130E08D2195D83400C4E225 /* libxml2.2.dylib in Frameworks */,
-				B130E0852195D48100C4E225 /* libssl.dylib in Frameworks */,
 				B130E08C2195D82C00C4E225 /* libz.1.dylib in Frameworks */,
 				DE17659A3DE4DFAF4657610E /* Pods_WiredNetworking.framework in Frameworks */,
 			);
@@ -1713,8 +1707,6 @@
 				B130E0872195D66600C4E225 /* libwired.a */,
 				B130E08A2195D80600C4E225 /* libxml2.2.dylib */,
 				B130E0882195D7F600C4E225 /* libz.1.dylib */,
-				B130E0822195D45600C4E225 /* libcrypto.dylib */,
-				B130E0802195D45000C4E225 /* libssl.dylib */,
 				B12D6E1521930AE600307DFA /* libicucore.A.dylib */,
 				B12D6E1721930AF200307DFA /* libxml2.2.dylib */,
 			);

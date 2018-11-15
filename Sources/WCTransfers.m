@@ -466,7 +466,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 		[alert addButtonWithTitle:NSLS(@"Cancel", @"Transfers overwrite alert button")];
 		[alert addButtonWithTitle:NSLS(@"Overwrite", @"Transfers overwrite alert button")];
 		
-		if([alert runModal] == NSAlertDefaultReturn)
+		if([alert runModal] == NSAlertFirstButtonReturn)
 			return NO;
 		
 		enumerator = [existingFiles objectEnumerator];
@@ -614,7 +614,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 			[alert addButtonWithTitle:NSLS(@"Cancel", @"Transfers resource fork alert button")];
 			[alert addButtonWithTitle:NSLS(@"Upload", @"Transfers resource fork alert button")];
 			
-			if([alert runModal] == NSAlertDefaultReturn)
+			if([alert runModal] == NSAlertFirstButtonReturn)
 				return NO;
 		}
 	}
