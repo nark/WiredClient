@@ -39,7 +39,6 @@
 #import "WCSourceSplitView.h"
 #import "WCStats.h"
 #import "WCUser.h"
-#import "WCEmoticonViewController.h"
 #import "WCDatabaseController.h"
 #import "WDWiredModel.h"
 #import "NSManagedObjectContext+Fetch.h"
@@ -1809,22 +1808,15 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 - (IBAction)showEmoticons:(id)sender {
-    [[WCEmoticonViewController emoticonController] setDelegate:self];
-    [[WCEmoticonViewController emoticonController] popoverWithSender:sender
-                                                            textField:_messageTextField];
+    NSRange selectedRange = [[_messageTextField currentEditor] selectedRange];
+    
+    [_messageTextField.window makeFirstResponder:_messageTextField];
+    [[_messageTextField currentEditor] setSelectedRange:selectedRange];
+    
+    [NSApp orderFrontCharacterPalette:sender];
 }
 
 
-
-
-#pragma mark -
-
-- (void)emoticonViewController:(WCEmoticonViewController *)controller didInsertEmoticon:(WIEmoticon *)emoticon inControl:(NSControl *)control {
-    if(control == _messageTextField) {
-        NSLog(@"didInsertEmoticon");
-        [self _adjustMessageTextFieldHeight];
-    }
-}
 
 
 
