@@ -2353,9 +2353,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)setTopicSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+	WIP7Message		*message;
 	
-    WIP7Message		*message;
-	if(returnCode == NSModalResponseOK) {
+	if(returnCode == NSAlertDefaultReturn) {
 		message = [WIP7Message messageWithName:@"wired.chat.set_topic" spec:WCP7Spec];
 		[message setUInt32:[self chatID] forName:@"wired.chat.id"];
 		[message setString:[_setTopicTextView string] forName:@"wired.chat.topic.topic"];
@@ -2397,7 +2397,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	WIP7Message		*message;
 	WCUser			*user = contextInfo;
 	
-	if(returnCode == NSModalResponseOK) {
+	if(returnCode == NSAlertDefaultReturn) {
 		message = [WIP7Message messageWithName:@"wired.chat.kick_user" spec:WCP7Spec];
 		[message setUInt32:[user userID] forName:@"wired.user.id"];
 		[message setUInt32:[self chatID] forName:@"wired.chat.id"];

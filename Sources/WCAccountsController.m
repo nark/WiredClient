@@ -231,7 +231,7 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	if(_touched && !_saving) {
 		_saving = YES;
 		
-		dictionary = [[NSMutableDictionary alloc] init];
+		dictionary = [[[NSMutableDictionary alloc] init] autorelease];
 					  
 		[dictionary setObject:[NSNumber numberWithInteger:action] forKey:@"WCAccountsAction"];
 		
@@ -258,8 +258,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 						  modalDelegate:self
 						 didEndSelector:@selector(saveSheetDidEnd:returnCode:contextInfo:)
 							contextInfo:dictionary];
-		[alert release];
-		
 		return NO;
 	}
 	

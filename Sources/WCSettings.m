@@ -217,7 +217,7 @@ NSString * const WCMigrated20B                          = @"WCMigrated20B";
 
 @implementation WCSettings(Private)
 
-static NSString         *basicThemeIdentifier;
+static NSString *basicThemeIdentifier;
 
 - (void)_upgrade {
     
@@ -564,108 +564,244 @@ static NSString         *basicThemeIdentifier;
 #pragma mark -
 
 - (NSDictionary *)_defaultBasicTheme {
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-     NSLS(@"Basic", @"Theme"),										WCThemesName,
-     @"Basic",														WCThemesBuiltinName,
-     [NSString UUIDString],											WCThemesIdentifier,
-     @"fr.read-write.Basic",										WCThemesTemplate,
-     WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),		WCThemesChatFont,
-     WIStringFromColor([NSColor blackColor]),						WCThemesChatTextColor,
-     WIStringFromColor([NSColor whiteColor]),						WCThemesChatBackgroundColor,
-     WIStringFromColor([NSColor redColor]),							WCThemesChatEventsColor,
-     WIStringFromColor([NSColor redColor]),							WCThemesChatTimestampEveryLineColor,
-     WIStringFromColor([NSColor blueColor]),						WCThemesChatURLsColor,
-     WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesMessagesFont,
-     WIStringFromColor([NSColor blackColor]),						WCThemesMessagesTextColor,
-     WIStringFromColor([NSColor whiteColor]),						WCThemesMessagesBackgroundColor,
-     WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),	WCThemesBoardsFont,
-     WIStringFromColor([NSColor blackColor]),						WCThemesBoardsTextColor,
-     WIStringFromColor([NSColor whiteColor]),						WCThemesBoardsBackgroundColor,
-     [NSNumber numberWithBool:YES],									WCThemesShowSmileys,
-     [NSNumber numberWithBool:YES],									WCThemesChatTimestampEveryLine,
-     [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],	WCThemesUserListIconSize,
-     [NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
-     [NSNumber numberWithBool:YES],									WCThemesFileListAlternateRows,
-     [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],	WCThemesFileListIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
-     [NSNumber numberWithBool:YES],									WCThemesTransferListAlternateRows,
-     [NSNumber numberWithBool:YES],									WCThemesTrackerListAlternateRows,
-     [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],		WCThemesMonitorIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesMonitorAlternateRows,
-    NULL];
     
+    NSDictionary *dictionary;
+    
+    if (@available(macOS 10.14, *)) {
+        if ([[[NSAppearance currentAppearance] name] containsString:NSAppearanceNameDarkAqua]) {
+            dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                          NSLS(@"Basic", @"Theme"),                                            WCThemesName,
+                          @"Basic",                                                            WCThemesBuiltinName,
+                          [NSString UUIDString],                                               WCThemesIdentifier,
+                          @"fr.read-write.Basic",                                              WCThemesTemplate,
+                          WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),            WCThemesChatFont,
+                          WIStringFromColor([NSColor whiteColor]),                             WCThemesChatTextColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.1215 green:0.1254 blue:0.1372 alpha:1.0000]), WCThemesChatBackgroundColor,
+                          WIStringFromColor([NSColor redColor]),                               WCThemesChatEventsColor,
+                          WIStringFromColor([NSColor redColor]),                               WCThemesChatTimestampEveryLineColor,
+                          WIStringFromColor([NSColor blueColor]),                              WCThemesChatURLsColor,
+                          WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),      WCThemesMessagesFont,
+                          WIStringFromColor([NSColor whiteColor]),                             WCThemesMessagesTextColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.1215 green:0.1254 blue:0.1372 alpha:1.0000]), WCThemesMessagesBackgroundColor,
+                          WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),     WCThemesBoardsFont,
+                          WIStringFromColor([NSColor whiteColor]),                            WCThemesBoardsTextColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.1215 green:0.1254 blue:0.1372 alpha:1.0000]),  WCThemesBoardsBackgroundColor,
+                          [NSNumber numberWithBool:YES],                                        WCThemesShowSmileys,
+                          [NSNumber numberWithBool:YES],                                        WCThemesChatTimestampEveryLine,
+                          [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],        WCThemesUserListIconSize,
+                          [NSNumber numberWithBool:NO],                                        WCThemesUserListAlternateRows,
+                          [NSNumber numberWithBool:YES],                                        WCThemesFileListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],        WCThemesFileListIconSize,
+                          [NSNumber numberWithBool:YES],                                        WCThemesTransferListShowProgressBar,
+                          [NSNumber numberWithBool:YES],                                        WCThemesTransferListAlternateRows,
+                          [NSNumber numberWithBool:YES],                                        WCThemesTrackerListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],            WCThemesMonitorIconSize,
+                          [NSNumber numberWithBool:YES],                                        WCThemesMonitorAlternateRows,
+                          NULL];
+        } else {
+            dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                          NSLS(@"Basic", @"Theme"),                                            WCThemesName,
+                          @"Basic",                                                            WCThemesBuiltinName,
+                          [NSString UUIDString],                                                WCThemesIdentifier,
+                          @"fr.read-write.Basic",                                            WCThemesTemplate,
+                          WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),            WCThemesChatFont,
+                          WIStringFromColor([NSColor blackColor]),                            WCThemesChatTextColor,
+                          WIStringFromColor([NSColor whiteColor]),                            WCThemesChatBackgroundColor,
+                          WIStringFromColor([NSColor redColor]),                                WCThemesChatEventsColor,
+                          WIStringFromColor([NSColor redColor]),                                WCThemesChatTimestampEveryLineColor,
+                          WIStringFromColor([NSColor blueColor]),                            WCThemesChatURLsColor,
+                          WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesMessagesFont,
+                          WIStringFromColor([NSColor blackColor]),                            WCThemesMessagesTextColor,
+                          WIStringFromColor([NSColor whiteColor]),                            WCThemesMessagesBackgroundColor,
+                          WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesBoardsFont,
+                          WIStringFromColor([NSColor blackColor]),                            WCThemesBoardsTextColor,
+                          WIStringFromColor([NSColor whiteColor]),                            WCThemesBoardsBackgroundColor,
+                          [NSNumber numberWithBool:YES],                                        WCThemesShowSmileys,
+                          [NSNumber numberWithBool:YES],                                        WCThemesChatTimestampEveryLine,
+                          [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],        WCThemesUserListIconSize,
+                          [NSNumber numberWithBool:NO],                                        WCThemesUserListAlternateRows,
+                          [NSNumber numberWithBool:YES],                                        WCThemesFileListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],        WCThemesFileListIconSize,
+                          [NSNumber numberWithBool:YES],                                        WCThemesTransferListShowProgressBar,
+                          [NSNumber numberWithBool:YES],                                        WCThemesTransferListAlternateRows,
+                          [NSNumber numberWithBool:YES],                                        WCThemesTrackerListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],            WCThemesMonitorIconSize,
+                          [NSNumber numberWithBool:YES],                                        WCThemesMonitorAlternateRows,
+                          NULL];
+        }
+    }
     return dictionary;
 }
 
 - (NSDictionary *)_defaultHackerTheme {
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-     NSLS(@"Hacker", @"Theme"),										WCThemesName,
-     @"Hacker",														WCThemesBuiltinName,
-     [NSString UUIDString],											WCThemesIdentifier,
-     @"fr.read-write.Vintage",										WCThemesTemplate,
-     WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),	WCThemesChatFont,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesChatTextColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesChatBackgroundColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.7136 green:1.0000 blue:0.9645 alpha:1.0000]), WCThemesChatEventsColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.7315 green:0.7472 blue:0.4047 alpha:1.0000]), WCThemesChatTimestampEveryLineColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.8344 green:0.8901 blue:0.0000 alpha:1.0000]), WCThemesChatURLsColor,
-     WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),	WCThemesMessagesFont,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesMessagesTextColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesMessagesBackgroundColor,
-     WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),	WCThemesBoardsFont,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesBoardsTextColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesBoardsBackgroundColor,
-     [NSNumber numberWithBool:YES],									WCThemesShowSmileys,
-     [NSNumber numberWithBool:NO],									WCThemesChatTimestampEveryLine,
-     [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],		WCThemesUserListIconSize,
-     [NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
-     [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],		WCThemesFileListIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesFileListAlternateRows,
-     [NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
-     [NSNumber numberWithBool:YES],									WCThemesTransferListAlternateRows,
-     [NSNumber numberWithBool:YES],									WCThemesTrackerListAlternateRows,
-     [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],		WCThemesMonitorIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesMonitorAlternateRows,
-     NULL];
+    NSDictionary *dictionary;
+    
+    if (@available(macOS 10.14, *)) {
+        if ([[[NSAppearance currentAppearance] name] containsString:NSAppearanceNameDarkAqua]){
+            dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                          NSLS(@"Hacker", @"Theme"),										WCThemesName,
+                          @"Hacker",														WCThemesBuiltinName,
+                          [NSString UUIDString],											WCThemesIdentifier,
+                          @"fr.read-write.Vintage",										WCThemesTemplate,
+                          WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),	WCThemesChatFont,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesChatTextColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesChatBackgroundColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.7136 green:1.0000 blue:0.9645 alpha:1.0000]), WCThemesChatEventsColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.7315 green:0.7472 blue:0.4047 alpha:1.0000]), WCThemesChatTimestampEveryLineColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.8344 green:0.8901 blue:0.0000 alpha:1.0000]), WCThemesChatURLsColor,
+                          WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),	WCThemesMessagesFont,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesMessagesTextColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesMessagesBackgroundColor,
+                          WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),	WCThemesBoardsFont,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesBoardsTextColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesBoardsBackgroundColor,
+                          [NSNumber numberWithBool:YES],									WCThemesShowSmileys,
+                          [NSNumber numberWithBool:NO],									WCThemesChatTimestampEveryLine,
+                          [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],		WCThemesUserListIconSize,
+                          [NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],		WCThemesFileListIconSize,
+                          [NSNumber numberWithBool:YES],									WCThemesFileListAlternateRows,
+                          [NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
+                          [NSNumber numberWithBool:YES],									WCThemesTransferListAlternateRows,
+                          [NSNumber numberWithBool:YES],									WCThemesTrackerListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],		WCThemesMonitorIconSize,
+                          [NSNumber numberWithBool:YES],									WCThemesMonitorAlternateRows,
+                          NULL];
+            }
+    }else {
+        dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                      NSLS(@"Hacker", @"Theme"),                                        WCThemesName,
+                      @"Hacker",                                                        WCThemesBuiltinName,
+                      [NSString UUIDString],                                            WCThemesIdentifier,
+                      @"fr.read-write.Vintage",                                        WCThemesTemplate,
+                      WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),    WCThemesChatFont,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesChatTextColor,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesChatBackgroundColor,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.7136 green:1.0000 blue:0.9645 alpha:1.0000]), WCThemesChatEventsColor,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.7315 green:0.7472 blue:0.4047 alpha:1.0000]), WCThemesChatTimestampEveryLineColor,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.8344 green:0.8901 blue:0.0000 alpha:1.0000]), WCThemesChatURLsColor,
+                      WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),    WCThemesMessagesFont,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesMessagesTextColor,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesMessagesBackgroundColor,
+                      WIStringFromFont([NSFont fontWithName:@"Monaco" size:11.0]),    WCThemesBoardsFont,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.3680 green:0.7385 blue:0.2999 alpha:1.0000]), WCThemesBoardsTextColor,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.0642 green:0.1134 blue:0.0069 alpha:1.0000]), WCThemesBoardsBackgroundColor,
+                      [NSNumber numberWithBool:YES],                                    WCThemesShowSmileys,
+                      [NSNumber numberWithBool:NO],                                    WCThemesChatTimestampEveryLine,
+                      [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],        WCThemesUserListIconSize,
+                      [NSNumber numberWithBool:NO],                                    WCThemesUserListAlternateRows,
+                      [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],        WCThemesFileListIconSize,
+                      [NSNumber numberWithBool:YES],                                    WCThemesFileListAlternateRows,
+                      [NSNumber numberWithBool:YES],                                    WCThemesTransferListShowProgressBar,
+                      [NSNumber numberWithBool:YES],                                    WCThemesTransferListAlternateRows,
+                      [NSNumber numberWithBool:YES],                                    WCThemesTrackerListAlternateRows,
+                      [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],        WCThemesMonitorIconSize,
+                      [NSNumber numberWithBool:YES],                                    WCThemesMonitorAlternateRows,
+                      NULL];
+    }
     
     return dictionary;
 }
 
 - (NSDictionary *)_defaultNeoTheme {
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-     NSLS(@"Neo", @"Theme"),                                                         WCThemesName,
-     @"Neo",                                                                         WCThemesBuiltinName,
-     basicThemeIdentifier,                                                           WCThemesIdentifier,
-     @"fr.read-write.Neo",                                                           WCThemesTemplate,
-     WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesChatFont,
-     WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesChatTextColor,
-     WIStringFromColor([NSColor whiteColor]),                                        WCThemesChatBackgroundColor,
-     WIStringFromColor([NSColor whiteColor]),                                        WCThemesChatEventsColor,
-     WIStringFromColor([NSColor colorWithCalibratedWhite:0.8000 alpha:1.0000]),      WCThemesChatTimestampEveryLineColor,
-     WIStringFromColor([NSColor colorWithCalibratedRed:0.2000 green:0.6000 blue:0.8000 alpha:1.0000]), WCThemesChatURLsColor,
-     WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesMessagesFont,
-     WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesMessagesTextColor,
-     WIStringFromColor([NSColor whiteColor]),                                        WCThemesMessagesBackgroundColor,
-     WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),             WCThemesBoardsFont,
-     WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),      WCThemesBoardsTextColor,
-     WIStringFromColor([NSColor whiteColor]),                                       WCThemesBoardsBackgroundColor,
-     [NSNumber numberWithBool:YES],									WCThemesShowSmileys,
-     [NSNumber numberWithBool:YES],									WCThemesChatTimestampEveryLine,
-     [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],		WCThemesUserListIconSize,
-     [NSNumber numberWithBool:NO],									WCThemesUserListAlternateRows,
-     [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],		WCThemesFileListIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesFileListAlternateRows,
-     [NSNumber numberWithBool:YES],									WCThemesTransferListShowProgressBar,
-     [NSNumber numberWithBool:YES],									WCThemesTransferListAlternateRows,
-     [NSNumber numberWithBool:YES],									WCThemesTrackerListAlternateRows,
-     [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],		WCThemesMonitorIconSize,
-     [NSNumber numberWithBool:YES],									WCThemesMonitorAlternateRows,
-     NULL];
+    NSDictionary *dictionary = nil;
+    if (@available(macOS 10.14, *)) {
+        if ([[[NSAppearance currentAppearance] name] containsString:NSAppearanceNameDarkAqua]){
+            dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                            NSLS(@"Neo", @"Theme"),                                                        WCThemesName,
+                            @"Neo",                                                                        WCThemesBuiltinName,
+                            basicThemeIdentifier,                                                          WCThemesIdentifier,
+                            @"fr.read-write.Neo",                                                          WCThemesTemplate,
+                            WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesChatFont,
+                            WIStringFromColor([NSColor colorWithCalibratedWhite:0.6667 alpha:1.0000]),     WCThemesChatTextColor,
+                            WIStringFromColor([NSColor blackColor]),                                       WCThemesChatBackgroundColor,
+                            WIStringFromColor([NSColor whiteColor]),                                       WCThemesChatEventsColor,
+                            WIStringFromColor([NSColor colorWithCalibratedWhite:0.8000 alpha:1.0000]),     WCThemesChatTimestampEveryLineColor,
+                            WIStringFromColor([NSColor colorWithCalibratedRed:0.2000 green:0.6000 blue:0.8000 alpha:1.0000]), WCThemesChatURLsColor,
+                            WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesMessagesFont,
+                            WIStringFromColor([NSColor colorWithCalibratedWhite:0.6667 alpha:1.0000]),     WCThemesMessagesTextColor,
+                            WIStringFromColor([NSColor blackColor]),                                       WCThemesMessagesBackgroundColor,
+                            WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesBoardsFont,
+                            WIStringFromColor([NSColor colorWithCalibratedWhite:0.6667 alpha:1.0000]),     WCThemesBoardsTextColor,
+                            WIStringFromColor([NSColor blackColor]),                                       WCThemesBoardsBackgroundColor,
+                            [NSNumber numberWithBool:YES],                                                    WCThemesShowSmileys,
+                            [NSNumber numberWithBool:YES],                                                    WCThemesChatTimestampEveryLine,
+                            [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],                    WCThemesUserListIconSize,
+                            [NSNumber numberWithBool:NO],                                                    WCThemesUserListAlternateRows,
+                            [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],                    WCThemesFileListIconSize,
+                            [NSNumber numberWithBool:YES],                                                    WCThemesFileListAlternateRows,
+                            [NSNumber numberWithBool:YES],                                                    WCThemesTransferListShowProgressBar,
+                            [NSNumber numberWithBool:YES],                                                    WCThemesTransferListAlternateRows,
+                            [NSNumber numberWithBool:YES],                                                    WCThemesTrackerListAlternateRows,
+                            [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],                        WCThemesMonitorIconSize,
+                            [NSNumber numberWithBool:YES],                                                    WCThemesMonitorAlternateRows,
+                            NULL];
+        }else{
+            dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                          NSLS(@"Neo", @"Theme"),                                                        WCThemesName,
+                          @"Neo",                                                                        WCThemesBuiltinName,
+                          basicThemeIdentifier,                                                          WCThemesIdentifier,
+                          @"fr.read-write.Neo",                                                          WCThemesTemplate,
+                          WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesChatFont,
+                          WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),     WCThemesChatTextColor,
+                          WIStringFromColor([NSColor whiteColor]),                                       WCThemesChatBackgroundColor,
+                          WIStringFromColor([NSColor whiteColor]),                                       WCThemesChatEventsColor,
+                          WIStringFromColor([NSColor colorWithCalibratedWhite:0.8000 alpha:1.0000]),     WCThemesChatTimestampEveryLineColor,
+                          WIStringFromColor([NSColor colorWithCalibratedRed:0.2000 green:0.6000 blue:0.8000 alpha:1.0000]), WCThemesChatURLsColor,
+                          WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesMessagesFont,
+                          WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),     WCThemesMessagesTextColor,
+                          WIStringFromColor([NSColor whiteColor]),                                       WCThemesMessagesBackgroundColor,
+                          WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesBoardsFont,
+                          WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),     WCThemesBoardsTextColor,
+                          WIStringFromColor([NSColor whiteColor]),                                       WCThemesBoardsBackgroundColor,
+                          [NSNumber numberWithBool:YES],                                                    WCThemesShowSmileys,
+                          [NSNumber numberWithBool:YES],                                                    WCThemesChatTimestampEveryLine,
+                          [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],                    WCThemesUserListIconSize,
+                          [NSNumber numberWithBool:NO],                                                    WCThemesUserListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],                    WCThemesFileListIconSize,
+                          [NSNumber numberWithBool:YES],                                                    WCThemesFileListAlternateRows,
+                          [NSNumber numberWithBool:YES],                                                    WCThemesTransferListShowProgressBar,
+                          [NSNumber numberWithBool:YES],                                                    WCThemesTransferListAlternateRows,
+                          [NSNumber numberWithBool:YES],                                                    WCThemesTrackerListAlternateRows,
+                          [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],                        WCThemesMonitorIconSize,
+                          [NSNumber numberWithBool:YES],                                                    WCThemesMonitorAlternateRows,
+                          NULL];
+        }
+        
+    }else{
+        dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                      NSLS(@"Neo", @"Theme"),                                                        WCThemesName,
+                      @"Neo",                                                                        WCThemesBuiltinName,
+                      basicThemeIdentifier,                                                          WCThemesIdentifier,
+                      @"fr.read-write.Neo",                                                          WCThemesTemplate,
+                      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesChatFont,
+                      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),     WCThemesChatTextColor,
+                      WIStringFromColor([NSColor whiteColor]),                                       WCThemesChatBackgroundColor,
+                      WIStringFromColor([NSColor whiteColor]),                                       WCThemesChatEventsColor,
+                      WIStringFromColor([NSColor colorWithCalibratedWhite:0.8000 alpha:1.0000]),     WCThemesChatTimestampEveryLineColor,
+                      WIStringFromColor([NSColor colorWithCalibratedRed:0.2000 green:0.6000 blue:0.8000 alpha:1.0000]), WCThemesChatURLsColor,
+                      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesMessagesFont,
+                      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),     WCThemesMessagesTextColor,
+                      WIStringFromColor([NSColor whiteColor]),                                       WCThemesMessagesBackgroundColor,
+                      WIStringFromFont([NSFont fontWithName:@"Lucida Grande" size:11.0]),            WCThemesBoardsFont,
+                      WIStringFromColor([NSColor colorWithCalibratedWhite:0.3333 alpha:1.0000]),     WCThemesBoardsTextColor,
+                      WIStringFromColor([NSColor whiteColor]),                                       WCThemesBoardsBackgroundColor,
+                      [NSNumber numberWithBool:YES],                                                    WCThemesShowSmileys,
+                      [NSNumber numberWithBool:YES],                                                    WCThemesChatTimestampEveryLine,
+                      [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],                    WCThemesUserListIconSize,
+                      [NSNumber numberWithBool:NO],                                                    WCThemesUserListAlternateRows,
+                      [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],                    WCThemesFileListIconSize,
+                      [NSNumber numberWithBool:YES],                                                    WCThemesFileListAlternateRows,
+                      [NSNumber numberWithBool:YES],                                                    WCThemesTransferListShowProgressBar,
+                      [NSNumber numberWithBool:YES],                                                    WCThemesTransferListAlternateRows,
+                      [NSNumber numberWithBool:YES],                                                    WCThemesTrackerListAlternateRows,
+                      [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],                        WCThemesMonitorIconSize,
+                      [NSNumber numberWithBool:YES],                                                    WCThemesMonitorAlternateRows,
+                      NULL];
+    }
     
     return dictionary;
 }
-
-
 
 @end
 

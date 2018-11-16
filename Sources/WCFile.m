@@ -248,7 +248,6 @@
 		case WCFileDirectory:
 			if(!folder)
 				LSCopyKindStringForTypeInfo('fold', kLSUnknownCreator, NULL, (CFStringRef *) &folder);
-			
 			return folder;
 			break;
 			

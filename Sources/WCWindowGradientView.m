@@ -14,10 +14,11 @@
 #endif
 
 
-//#define WC_WINDOW_STARTING_KEY_COLOR        [NSColor colorWithCalibratedRed:0.8162 green:0.8163 blue:0.8161 alpha:1.0000]
 #define WC_WINDOW_STARTING_KEY_COLOR        [NSColor colorWithCalibratedRed:0.8684 green:0.8685 blue:0.8683 alpha:1.0000]
 #define WC_WINDOW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedRed:0.8684 green:0.8685 blue:0.8683 alpha:1.0000]
-//#define WC_WINDOW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedRed:0.8162 green:0.8163 blue:0.8161 alpha:1.0000]
+
+#define WC_WINDOW_STARTING_KEY_COLOR_DM     [NSColor colorWithCalibratedRed:0.0862 green:0.0862 blue:0.0901 alpha:1.0000]
+#define WC_WINDOW_ENDING_KEY_COLOR_DM       [NSColor colorWithCalibratedRed:0.0862 green:0.0862 blue:0.0901 alpha:1.0000]
 
 #define WC_WINDOW_STARTING_COLOR            [NSColor colorWithCalibratedRed:0.9555 green:0.9557 blue:0.9555 alpha:1.0000]
 #define WC_WINDOW_ENDING_COLOR              [NSColor colorWithCalibratedRed:0.9555 green:0.9557 blue:0.9555 alpha:1.0000]
@@ -62,12 +63,25 @@
     bottomBarRect    = NSMakeRect(rect.origin.x, rect.size.height-33, rect.size.width, 33);
     
     if ([[self window] isKeyWindow]) {
-        [WC_WINDOW_ENDING_KEY_COLOR set];
-        NSRectFill(rect);
         
-        fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_ENDING_KEY_COLOR
-                                             endingColor:WC_WINDOW_STARTING_KEY_COLOR];
-        
+        if (@available(macOS 10.14, *)) {
+            if ([[[NSAppearance currentAppearance] name] containsString:NSAppearanceNameDarkAqua]) {
+                [WC_WINDOW_ENDING_KEY_COLOR_DM set];
+                NSRectFill(rect);
+                fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_ENDING_KEY_COLOR_DM
+                                                     endingColor:WC_WINDOW_STARTING_KEY_COLOR_DM];
+            } else {
+                [WC_WINDOW_ENDING_KEY_COLOR set];
+                NSRectFill(rect);
+                fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_ENDING_KEY_COLOR
+                                                     endingColor:WC_WINDOW_STARTING_KEY_COLOR];
+            }
+        }else {
+            [WC_WINDOW_ENDING_KEY_COLOR set];
+            NSRectFill(rect);
+            fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_ENDING_KEY_COLOR
+                                                 endingColor:WC_WINDOW_STARTING_KEY_COLOR];
+        }
         
     } else {
         [WC_WINDOW_ENDING_COLOR set];
