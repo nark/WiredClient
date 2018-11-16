@@ -734,8 +734,8 @@ static WCApplicationController		*sharedController;
 
 	[self _update];
 	[self _updateBookmarksMenu];
-    //[self _reloadEmoticons];
-	[self _reloadChatLogsControllerWithPath:[self chatLogsPath]];
+
+    [self _reloadChatLogsControllerWithPath:[self chatLogsPath]];
 
     if([[WCSettings settings] boolForKey:WCShowChatWindowAtStartup])
 		[[WCPublicChat publicChat] showWindow:self];

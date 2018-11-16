@@ -45,11 +45,6 @@ extern NSString * const						WCConfirmDisconnect;
 extern NSString * const						WCAutoReconnect;
 extern NSString * const						WCOrderFrontWhenDisconnected;
 
-
-extern NSString * const						WCEnabledEmoticonPacks;
-extern NSString * const						WCEmoticonPacksOrdering;
-extern NSString * const						WCDisabledEmoticons;
-
 extern NSString * const						WCTheme;
 
 extern NSString * const						WCThemes;
