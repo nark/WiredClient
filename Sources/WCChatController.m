@@ -46,9 +46,8 @@
 #import "WCBoard.h"
 #import "WCPublicChat.h"
 #import "WCUserTableCellView.h"
-#import "WCEmoticonViewController.h"
-#import "WCEmoticonPreferences.h"
 #import "iTunes.h"
+#import "NSString+Emoji.h"
 
 
 #define WCPublicChatID											1
@@ -1018,62 +1017,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 + (void)applyHTMLTagsForSmileysToMutableString:(NSMutableString *)mutableString {
-    __block WIEmoticon          *emoticon;
-    __block NSArray             *textEquivalents;
-    __block NSString            *html;
-    
-    textEquivalents = [[[WCPreferences preferences] emoticonPreferences] emoticonEquivalents];
-    
-    [textEquivalents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSMutableString     *equivalent;
-        NSRange             range;
-        BOOL                match;
-        
-        match               = NO;
-        equivalent          = [NSMutableString stringWithString:obj];
-        
-        [[self class] applyHTMLEscapingToMutableString:equivalent];
-        
-        do {
-            range = [mutableString rangeOfString:equivalent options:NSCaseInsensitiveSearch];
-            
-            if(range.location != NSNotFound) {
-                
-                // is exact string
-                if(range.location == 0 && range.length == mutableString.length) {
-                    match = YES;
-                }
-                
-                // has a space before
-                if(!match && (mutableString.length >= range.location-1) && ([mutableString characterAtIndex:range.location-1] == ' ')) {
-                    match = YES;
-                }
-                
-                // has a return line before
-                if(!match && (mutableString.length >= range.location-1) && ([mutableString characterAtIndex:range.location-1] == '\n')) {
-                    match = YES;
-                }
-                
-                // has a space after
-                if(!match && (range.length < mutableString.length && range.location == 0) && ([mutableString characterAtIndex:range.location+range.length] == ' ')) {
-                    match = YES;
-                }
-                
-                if(match) {
-                    emoticon = [[[WCPreferences preferences] emoticonPreferences] emoticonForEquivalent:obj];
-                    
-                    if(emoticon) {
-                        html = [NSSWF:@"<img src=\"%@\" alt=\"%@\" />", [emoticon path], [emoticon name]];
-                        [mutableString replaceCharactersInRange:range withString:html];
-                    }
-                }
-                else {
-                    stop = (BOOL*)YES;
-                    return;
-                }
-            }
-        } while(range.location != NSNotFound);
-    }];
+    NSString *string = [NSString stringWithString:mutableString];
+    [mutableString deleteCharactersInRange:NSMakeRange(0, mutableString.length)];
+    [mutableString appendString:[string stringByReplacingEmojiCheatCodesWithUnicode]];
 }
 
 
@@ -2517,8 +2463,12 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (IBAction)showEmoticons:(id)sender {
-    [[WCEmoticonViewController emoticonController] popoverWithSender:sender
-                                                            textField:_chatInputTextField];
+    NSRange selectedRange = [[_chatInputTextField currentEditor] selectedRange];
+    
+    [_chatInputTextField.window makeFirstResponder:_chatInputTextField];
+    [[_chatInputTextField currentEditor] setSelectedRange:selectedRange];
+    
+    [NSApp orderFrontCharacterPalette:sender];
 }
 
 

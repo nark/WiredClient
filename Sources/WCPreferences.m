@@ -27,7 +27,6 @@
  */
 
 #import "WCApplicationController.h"
-#import "WCEmoticonPreferences.h"
 #import "WCThemesPreferences.h"
 #import "WCChatHistory.h"
 #import "WCKeychain.h"
@@ -43,7 +42,6 @@
 
 
 NSString * const WCPreferencesDidChangeNotification			= @"WCPreferencesDidChangeNotification";
-NSString * const WCEmoticonsDidChangeNotification           = @"WCEmoticonsDidChangeNotification";
 NSString * const WCThemeDidChangeNotification				= @"WCThemeDidChangeNotification";
 NSString * const WCSelectedThemeDidChangeNotification		= @"WCSelectedThemeDidChangeNotification";
 NSString * const WCChatLogsFolderPathChangedNotification	= @"WCChatLogsFolderPathChangedNotification";
@@ -65,8 +63,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (void)_reloadThemes;
 - (void)_reloadTheme;
-
-- (void)_reloadEmoticons;
 
 - (void)_reloadTemplates;
 - (void)_reloadTemplatesForMenu:(NSMenu *)menu;
@@ -114,57 +110,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarkDidChangeNotification object:bookmark];
 	[[NSNotificationCenter defaultCenter] postNotificationName:WCBookmarksDidChangeNotification];
 }
-
-
-
-#pragma mark -
-
-- (void)_reloadEmoticons {
-    NSMenuItem          *item;
-    NSArray             *packs, *enabledPacks;
-    WIEmoticonPack      *selectedPack;
-    NSInteger           index;
-    
-    [_emoticonPacksPopUpButton setAutoenablesItems:NO];
-    
-    while((index = [_emoticonPacksPopUpButton indexOfItemWithTag:0]) != -1)
-        [_emoticonPacksPopUpButton removeItemAtIndex:index];
-    
-    packs           = [self.emoticonPreferences availableEmoticonPacks];
-    enabledPacks    = [self.emoticonPreferences enabledEmoticonPacks];
-    selectedPack    = nil;
-    
-    if([enabledPacks count] > 1) {
-        item    = [NSMenuItem itemWithTitle:@"Multiple Selection"
-                                     action:@selector(customizeEmoticons:)];
-        
-        [item setRepresentedObject:enabledPacks];
-        [_emoticonPacksPopUpButton addItem:item];
-        [_emoticonPacksPopUpButton selectItem:item];
-    }
-    else if([enabledPacks count] == 1) {
-        selectedPack = [enabledPacks objectAtIndex:0];
-    }
-    else if([enabledPacks count] == 0) {
-        [_emoticonPacksPopUpButton selectItemAtIndex:0];
-    }
-    
-    [_emoticonPacksPopUpButton addItem:[NSMenuItem separatorItem]];
-    
-    for(WIEmoticonPack *pack in packs) {
-        item    = [NSMenuItem itemWithTitle:[pack name]
-                                     action:nil];
-        
-        [item setImage:[pack previewImage]];
-        [item setRepresentedObject:pack];
-        
-        [_emoticonPacksPopUpButton addItem:item];
-    }
-    
-    if(selectedPack)
-        [_emoticonPacksPopUpButton selectItemWithTitle:[selectedPack name]];
-}
-
 
 
 
@@ -627,9 +572,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 #pragma mark -
 
-@synthesize emoticonPreferences = _emoticonPreferences;
-
-
 
 - (id)init {
 	self = [super initWithWindowNibName:@"Preferences"];
@@ -638,11 +580,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	_publicTemplateManager	= [[WITemplateBundleManager templateManagerForPath:[WCApplicationSupportPath stringByStandardizingPath] isPrivate:NO] retain];
 	
 	[self window];
-    
-    [[NSNotificationCenter defaultCenter]
-        addObserver:self
-           selector:@selector(emoticonsDidChange:)
-               name:WCEmoticonsDidChangeNotification];
 
     [[NSNotificationCenter defaultCenter]
         addObserver:self
@@ -724,7 +661,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_highlightsTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	[_ignoresTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	
-    [self _reloadEmoticons];
 	[self _reloadThemes];
 	[self _reloadTheme];
 	[self _reloadTemplates];
@@ -774,12 +710,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[super windowDidLoad];
 }
 
-
-
-- (void)emoticonsDidChange:(NSNotification *)notification {
-    NSLog(@"emoticonsDidChange");
-    [self _reloadEmoticons];
-}
 
 
 
@@ -1111,38 +1041,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
                                    
                                    
     [[NSNotificationCenter defaultCenter] postNotificationName:WCPreferencesDidChangeNotification];
-}
-
-
-
-
-#pragma mark -
-
-- (IBAction)customizeEmoticons:(id)sender {
-    [_emoticonPreferences open:sender];
-}
-
-
-- (IBAction)selectEmoticonPack:(id)sender {
-    WIEmoticonPack *pack;
-    id              object;
-    
-    if([_emoticonPacksPopUpButton selectedTag] == 1) {
-        [[WCSettings settings] setObject:[NSArray array] forKey:WCEnabledEmoticonPacks];
-    }
-    else {
-        object = [[_emoticonPacksPopUpButton selectedItem] representedObject];
-        
-        if([object isKindOfClass:[WIEmoticonPack class]]) {
-            pack = (WIEmoticonPack *)object;
-        
-            [[WCSettings settings] setObject:[NSArray arrayWithObject:[pack packKey]]
-                                      forKey:WCEnabledEmoticonPacks];
-        }
-    }
-    
-    [[self emoticonPreferences] reloadEmoticons];
-    [[NSNotificationCenter defaultCenter] postNotificationName:WCEmoticonsDidChangeNotification];
 }
 
 
@@ -2090,19 +1988,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     }];
 }
 
-
-
-
-
-
-#pragma mark -
-
-- (void)menuNeedsUpdate:(NSMenu *)menu {
-    if(menu == [_emoticonPacksPopUpButton menu]) {
-        [self _reloadEmoticons];
-    }
-}
-	
 
 
 

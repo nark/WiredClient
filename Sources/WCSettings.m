@@ -85,10 +85,6 @@ NSString * const WCConfirmDisconnect					= @"WCConfirmDisconnect";
 NSString * const WCAutoReconnect						= @"WCAutoReconnect";
 NSString * const WCOrderFrontWhenDisconnected           = @"WCOrderFrontWhenDisconnected";
 
-NSString * const WCEnabledEmoticonPacks                 = @"WCEnabledEmoticonPacks";
-NSString * const WCEmoticonPacksOrdering                = @"WCEmoticonPacksOrdering";
-NSString * const WCDisabledEmoticons                    = @"WCDisabledEmoticons";
-
 NSString * const WCTheme								= @"WCTheme";
 
 NSString * const WCThemes								= @"WCThemes";
@@ -809,9 +805,6 @@ static NSString         *basicThemeIdentifier;
                     
 			[NSNumber numberWithBool:YES],
 				WCCheckForUpdate,
-			
-            [NSArray arrayWithObject:@"Pack:Wired"],
-                WCEnabledEmoticonPacks,
                     
 			basicThemeIdentifier,
 				WCTheme,

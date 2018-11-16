@@ -28,7 +28,6 @@
 
 extern NSString * const								WCPreferencesDidChangeNotification;
 extern NSString * const								WCThemeDidChangeNotification;
-extern NSString * const								WCEmoticonsDidChangeNotification;
 extern NSString * const								WCSelectedThemeDidChangeNotification;
 extern NSString * const								WCChatLogsFolderPathChangedNotification;
 extern NSString * const								WCBookmarksDidChangeNotification;
@@ -40,7 +39,7 @@ extern NSString * const								WCNickDidChangeNotification;
 extern NSString * const								WCStatusDidChangeNotification;
 extern NSString * const								WCIconDidChangeNotification;
 
-@class WCEmoticonPreferences, WCThemesPreferences;
+@class WCThemesPreferences;
 
 @interface WCPreferences : WIPreferencesController <NSMenuDelegate, NSTableViewDelegate> {
 	IBOutlet NSView									*_generalView;
@@ -66,8 +65,7 @@ extern NSString * const								WCIconDidChangeNotification;
     IBOutlet NSButton								*_orderFrontOnDisconnectButton;
     
     IBOutlet NSMatrix								*_threadsSplitViewMatrix;
-    IBOutlet NSPopUpButton							*_emoticonPacksPopUpButton;
-	
+    
     IBOutlet NSWindow                               *_themesWindow;
     IBOutlet NSWindow                               *_addThemeWindow;
     IBOutlet NSWindow                               *_manageThemesWindow;
@@ -160,7 +158,6 @@ extern NSString * const								WCIconDidChangeNotification;
 	IBOutlet NSView									*_bookmarksExportView;
     
     IBOutlet WCThemesPreferences                    *_themesPreferences;
-	IBOutlet WCEmoticonPreferences                  *_emoticonPreferences;
     
 	WITemplateBundleManager							*_privateTemplateManager;
 	WITemplateBundleManager							*_publicTemplateManager;
@@ -168,8 +165,6 @@ extern NSString * const								WCIconDidChangeNotification;
 	NSString										*_bookmarksPassword;
 	NSString										*_trackerBookmarksPassword;
 }
-
-@property (readwrite, retain) IBOutlet              WCEmoticonPreferences *emoticonPreferences;
 
 + (WCPreferences *)preferences;
 
@@ -180,9 +175,6 @@ extern NSString * const								WCIconDidChangeNotification;
 - (NSImage *)imageForTheme:(NSDictionary *)theme size:(NSSize)size;
 
 - (IBAction)changePreferences:(id)sender;
-
-- (IBAction)customizeEmoticons:(id)sender;
-- (IBAction)selectEmoticonPack:(id)sender;
 
 - (IBAction)customizeTheme:(id)sender;
 - (IBAction)closeTheme:(id)sender;

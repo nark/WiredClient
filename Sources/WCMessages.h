@@ -26,14 +26,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "WCEmoticonViewController.h"
-
 extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
 
 @class WCConversationController, WCSourceSplitView;
 @class WDConversation, WCConversation, WCMessageConversation, WCBroadcastConversation, WCUser;
 
-@interface WCMessages : NSWindowController <WCEmoticonViewControllerDelegate> {
+@interface WCMessages : NSWindowController {
 	IBOutlet WCConversationController				*_conversationController;
 	
 	IBOutlet WCSourceSplitView						*_conversationsSplitView;
