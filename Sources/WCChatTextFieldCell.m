@@ -6,7 +6,7 @@
 //
 //
 
-#import "WCChatTextFieldCell.h"
+#import "WCChatTextFieldCell.h" // mausi
 
 #define WC_CHATTEXTFIELD_CORNER_RADIUS 3.0
 
@@ -22,7 +22,7 @@
     
     if (self.isBezeled) {
         [betterBounds setLineWidth:2];
-        [[NSColor darkGrayColor] setStroke];   // lightGrayColor
+        [[NSColor darkGrayColor] setStroke];   // mausi lightGrayColor
         [betterBounds stroke];
     }
 }

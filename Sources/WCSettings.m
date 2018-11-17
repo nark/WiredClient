@@ -563,7 +563,7 @@ static NSString *basicThemeIdentifier;
 
 #pragma mark -
 
-- (NSDictionary *)_defaultBasicTheme {
+- (NSDictionary *)_defaultBasicTheme {  // mausi
     
     NSDictionary *dictionary;
     

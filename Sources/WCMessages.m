@@ -190,7 +190,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
-- (void)_themeDidChange {
+- (void)_themeDidChange {   // mausi
     
 	NSDictionary				*theme;
 	NSFont						*font;
