@@ -197,7 +197,7 @@
             <point key="canvasLocation" x="116" y="87"/>
         </window>
         <segmentedControl verticalHuggingPriority="750" id="691">
-            <rect key="frame" x="0.5" y="0.0" width="67" height="25"/>
+            <rect key="frame" x="0.0" y="0.0" width="67" height="25"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="selectAny" id="692">
                 <font key="font" metaFont="system"/>
@@ -216,7 +216,7 @@
                 <outlet property="delegate" destination="-2" id="719"/>
             </connections>
         </menu>
-        <window title="Bearbeite Server-Lesezeichen" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" animationBehavior="default" id="732">
+        <window title="Edit Server Bookmark" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" animationBehavior="default" id="732">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="163" y="199" width="361" height="401"/>
@@ -252,23 +252,23 @@
                     <textField verticalHuggingPriority="750" id="780">
                         <rect key="frame" x="21" y="243" width="68" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Passwort:" id="808">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Password:" id="808">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="781">
-                        <rect key="frame" x="35" y="192" width="52" height="17"/>
+                        <rect key="frame" x="39" y="192" width="50" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Thema:" id="807">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Theme:" id="807">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="782">
-                        <rect key="frame" x="41" y="275" width="43" height="17"/>
+                        <rect key="frame" x="48" y="275" width="41" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Login:" id="806">
                             <font key="font" metaFont="system"/>
@@ -277,9 +277,9 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="783">
-                        <rect key="frame" x="25" y="307" width="60" height="17"/>
+                        <rect key="frame" x="31" y="307" width="58" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Adresse:" id="805">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Address:" id="805">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -306,7 +306,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="787">
-                        <rect key="frame" x="48" y="95" width="36" height="17"/>
+                        <rect key="frame" x="53" y="95" width="36" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Nick:" id="803">
                             <font key="font" metaFont="system"/>
@@ -315,7 +315,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="788">
-                        <rect key="frame" x="38" y="63" width="47" height="17"/>
+                        <rect key="frame" x="42" y="63" width="47" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Status:" id="802">
                             <font key="font" metaFont="system"/>
@@ -347,7 +347,7 @@
                     <button id="791">
                         <rect key="frame" x="88" y="164" width="255" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="check" title="Beim Starten verbinden" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="799">
+                        <buttonCell key="cell" type="check" title="Connect at Startup" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="799">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -355,7 +355,7 @@
                     <button id="792">
                         <rect key="frame" x="88" y="144" width="255" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="check" title="Nach Trennung wiederverbinden" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="798">
+                        <buttonCell key="cell" type="check" title="Reconnect When Disconnected" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="798">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -391,7 +391,7 @@ DQ
                     <button verticalHuggingPriority="750" id="817">
                         <rect key="frame" x="149" y="13" width="108" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Abbrechen" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="818">
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="818">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -415,7 +415,7 @@ Gw
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="883">
-                        <rect key="frame" x="38" y="361" width="45" height="17"/>
+                        <rect key="frame" x="39" y="361" width="45" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Name:" id="884">
                             <font key="font" metaFont="system"/>
@@ -429,8 +429,9 @@ Gw
                     </box>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="138.5" y="147.5"/>
         </window>
-        <window title="Bearbeite Tracker-Lesenzeichen" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" animationBehavior="default" id="819">
+        <window title="Edit Tracker Bookmark" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" animationBehavior="default" id="819">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="163" y="199" width="361" height="220"/>
@@ -464,16 +465,16 @@ Gw
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="836">
-                        <rect key="frame" x="18" y="63" width="68" height="17"/>
+                        <rect key="frame" x="18" y="63" width="66" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Passwort:" id="841">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Password:" id="841">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="834">
-                        <rect key="frame" x="38" y="95" width="43" height="17"/>
+                        <rect key="frame" x="43" y="95" width="41" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Login:" id="843">
                             <font key="font" metaFont="system"/>
@@ -482,9 +483,9 @@ Gw
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="833">
-                        <rect key="frame" x="24" y="127" width="60" height="17"/>
+                        <rect key="frame" x="26" y="127" width="58" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Adresse:" id="844">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Address:" id="844">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -516,7 +517,7 @@ DQ
                     <button verticalHuggingPriority="750" id="821">
                         <rect key="frame" x="149" y="13" width="108" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Abbrechen" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="857">
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="857">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -540,7 +541,7 @@ Gw
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="890">
-                        <rect key="frame" x="38" y="181" width="45" height="17"/>
+                        <rect key="frame" x="40" y="181" width="44" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Name:" id="891">
                             <font key="font" metaFont="system"/>

@@ -2245,11 +2245,12 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	else
 		[cell setFont:[[cell font] fontByAddingTrait:NSUnboldFontMask]];
 	
+    
 	if([cell respondsToSelector:@selector(setTextColor:)]) {
 		if([value isKindOfClass:value] && [value isEqualToString:NSLS(@"<Multiple values>", @"Account field value")])
 			[cell setTextColor:[NSColor grayColor]];
-		else
-			[cell setTextColor:[NSColor blackColor]];
+		//else
+			//[cell setTextColor:[NSColor blackColor]];
 	}
 	
 	if(tableColumn == _valueTableColumn)

@@ -1946,7 +1946,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (void)deleteIgnoreSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSNumber	*row = contextInfo;
 	
-	if(returnCode == NSModalResponseOK) {
+	if(returnCode == NSAlertFirstButtonReturn) {
 		[[WCSettings settings] removeObjectAtIndex:[row integerValue] fromArrayForKey:WCIgnores];
 		
 		[_ignoresTableView reloadData];
