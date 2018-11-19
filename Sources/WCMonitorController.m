@@ -430,16 +430,32 @@
 - (IBAction)disconnect:(id)sender {
 	if(![self _validateDisconnect])
 		return;
-	
+    
+    [NSApp beginSheet:_disconnectMessagePanel modalForWindow:[_administration window] didEndBlock:^(NSModalResponse returnCode){
+        WIP7Message *message;
+        WCUser *user = [[self _selectedUser] retain];
+        if(returnCode == NSModalResponseOK) {
+            message = [WIP7Message messageWithName:@"wired.user.disconnect_user" spec:WCP7Spec];
+            [message setUInt32:[user userID] forName:@"wired.user.id"];
+            [message setString:[_disconnectMessageTextField stringValue] forName:@"wired.user.disconnect_message"];
+            [[_administration connection] sendMessage:message fromObserver:self selector:@selector(wiredUserDisconnectUserReply:)];
+        }
+        [user release];
+        [_disconnectMessagePanel close];
+        [_disconnectMessageTextField setStringValue:@""];
+    }];
+    
+    /*
 	[NSApp beginSheet:_disconnectMessagePanel
 	   modalForWindow:[_administration window]
 		modalDelegate:self
 	   didEndSelector:@selector(disconnectSheetDidEnd:returnCode:contextInfo:)
 		  contextInfo:[[self _selectedUser] retain]];
+     */
 }
 
 
-
+/*
 - (void)disconnectSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	WIP7Message		*message;
 	WCUser			*user = contextInfo;
@@ -456,7 +472,7 @@
 	[_disconnectMessagePanel close];
 	[_disconnectMessageTextField setStringValue:@""];
 }
-
+*/
 
 
 - (IBAction)search:(id)sender {

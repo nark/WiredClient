@@ -14,11 +14,18 @@
 @implementation WCPreferencesController
 
 - (IBAction)open:(id)sender {
+    
+    [NSApp beginSheet:self.window modalForWindow:[[WCPreferences preferences] window] didEndBlock:^(NSModalResponse returnCode){
+        {}
+    }];
+    
+    /*
     [NSApp beginSheet:self.window
        modalForWindow:[[WCPreferences preferences] window]
         modalDelegate:self
        didEndSelector:nil
           contextInfo:nil];
+     */
 }
 
 

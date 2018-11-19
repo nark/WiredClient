@@ -1249,7 +1249,7 @@ static WCApplicationController		*sharedController;
     attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                   [NSFont boldSystemFontOfSize:11.0],	NSFontAttributeName,
                   [NSColor grayColor],					NSForegroundColorAttributeName,
-                  style,									NSParagraphStyleAttributeName,
+                  style,								NSParagraphStyleAttributeName,
                   NULL];
     string = [NSSWF:@"%@\n", NSLS(@"Stats", @"About box title")];
     header = [NSAttributedString attributedStringWithString:string attributes:attributes];
