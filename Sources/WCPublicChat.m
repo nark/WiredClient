@@ -580,7 +580,7 @@ typedef enum _WCChatActivity				WCChatActivity;
     [_serversOutlineView expandItem:_trackers];
     
     [_tabBarView setTabView:_chatTabView];
-	[_tabBarView setStyleNamed:@"Mojave"];
+	[_tabBarView setStyleNamed:@"Yosemite"];
 	[_tabBarView setDelegate:self];
 	[_tabBarView setCanCloseOnlyTab:YES];
     [_tabBarView setShowAddTabButton:YES];
