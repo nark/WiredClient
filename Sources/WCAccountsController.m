@@ -231,14 +231,14 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	if(_touched && !_saving) {
 		_saving = YES;
 		
-		dictionary = [[[NSMutableDictionary alloc] init] autorelease];
+		dictionary = [[NSMutableDictionary alloc] init];
 					  
 		[dictionary setObject:[NSNumber numberWithInteger:action] forKey:@"WCAccountsAction"];
 		
 		if(argument)
 			[dictionary setObject:argument forKey:@"WCAccountsArgument"];
 		
-		alert = [[NSAlert alloc] init];
+        alert = [[NSAlert alloc] init];
 		
 		if([_accounts count] == 1) {
 			[alert setMessageText:[NSSWF:
@@ -249,15 +249,17 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 				NSLS(@"Save changes to %u accounts?", @"Save account dialog title (count)"),
 				[_accounts count]]];
 		}
-		
+        // mausi
 		[alert setInformativeText:NSLS(@"If you don't save the changes, they will be lost.", @"Save account dialog description")];
 		[alert addButtonWithTitle:NSLS(@"Save", @"Save account dialog button")];
 		[alert addButtonWithTitle:NSLS(@"Cancel", @"Save account dialog button")];
 		[alert addButtonWithTitle:NSLS(@"Don't Save", @"Save account dialog button")];
 		[alert beginSheetModalForWindow:[_administration window]
 						  modalDelegate:self
-						 didEndSelector:@selector(saveSheetDidEnd:returnCode:contextInfo:)
-							contextInfo:dictionary];
+                            didEndSelector:@selector(saveSheetDidEnd:returnCode:contextInfo:)
+                                contextInfo:dictionary];
+        [alert release];
+		
 		return NO;
 	}
 	
