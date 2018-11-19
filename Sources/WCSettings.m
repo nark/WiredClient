@@ -542,11 +542,10 @@ static NSString *basicThemeIdentifier;
 }
 
 
-
 #pragma mark -
 
 - (NSDictionary *)_themeWithBuiltinName:(NSString *)builtinName {
-	NSEnumerator	*enumerator;
+    NSEnumerator	*enumerator;
 	NSDictionary	*theme;
 	
 	enumerator = [[self objectForKey:WCThemes] objectEnumerator];
@@ -563,7 +562,7 @@ static NSString *basicThemeIdentifier;
 
 #pragma mark -
 
-- (NSDictionary *)_defaultBasicTheme {  // mausi
+- (NSDictionary *)_defaultBasicTheme {
     
     NSDictionary *dictionary;
     
@@ -1237,7 +1236,7 @@ static NSString *basicThemeIdentifier;
 #pragma mark -
 
 - (NSDictionary *)eventWithTag:(NSUInteger)tag {
-	NSEnumerator	*enumerator;
+    NSEnumerator	*enumerator;
 	NSDictionary	*event;
 	
 	enumerator = [[self objectForKey:WCEvents] objectEnumerator];

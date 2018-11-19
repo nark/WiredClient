@@ -90,6 +90,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 @implementation WCPreferences(Private)
 
 - (void)_validate {
+    
 	NSDictionary		*theme;
 	NSInteger			row;
 	
@@ -521,6 +522,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)_changeSelectedThemeToTheme:(NSDictionary *)theme {
+    
     NSMutableDictionary		*newTheme;
 	
 	if([theme objectForKey:WCThemesBuiltinName]) {
@@ -550,7 +552,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 	}
 }
-
 
 
 - (void)_changeBuiltinThemePanelDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
@@ -773,8 +774,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	[super windowDidLoad];
 }
-
-
 
 - (void)emoticonsDidChange:(NSNotification *)notification {
     NSLog(@"emoticonsDidChange");
@@ -1023,7 +1022,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     
 	[image unlockFocus];
 	
-	[image setScalesWhenResized:YES];
+	//[image setScalesWhenResized:YES];
 	[image setSize:size];
 	
 	return [image autorelease];
@@ -1771,17 +1770,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
         [_chatLogsFolderPopUpButton selectItem:_chatLogsFolderMenuItem];
     }];
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 #pragma mark -

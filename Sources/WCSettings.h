@@ -218,10 +218,8 @@ extern NSString * const						WCMigrated20B;
 @interface WCSettings : WISettings
 
 - (NSDictionary *)bookmarkForURL:(WIURL *)url;
-
 - (NSDictionary *)themeWithIdentifier:(NSString *)identifier;
 - (WITemplateBundle *)templateBundleWithIdentifier:(NSString *)identifier;
-
 - (NSDictionary *)eventWithTag:(NSUInteger)tag;
 
 @end

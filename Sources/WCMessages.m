@@ -63,7 +63,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 @interface WCMessages (Private)
 
 - (void)                    _validate;
-- (void)  _themeDidChange;
+- (void)                    _themeDidChange;
 - (void)                    _adjustMessageTextFieldHeight;
 
 - (void)                    _showDialogForMessage:(WDMessage *)message;
@@ -190,7 +190,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 
-- (void)_themeDidChange {   // mausi
+- (void)_themeDidChange {
     
 	NSDictionary				*theme;
 	NSFont						*font;
@@ -799,6 +799,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         for(WCConversation *conv in array) {
             nbMessage += [conv numberOfMessages];
         }
+        
         
         NSAlert *alert = [NSAlert alertWithMessageText:NSLS(@"Messages Migration", @"Messages Migration Title")
                                          defaultButton:NSLS(@"Migrate", @"Messages Migration Migrate Button")

@@ -6,7 +6,7 @@
 //  Copyright 2011 Read-Write.fr. All rights reserved.
 //
 
-#import "WCWindowGradientView.h"    // mausi
+#import "WCWindowGradientView.h"
 
 
 #ifndef NSAppKitVersionNumber10_8

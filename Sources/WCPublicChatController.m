@@ -46,13 +46,16 @@
 @end
 
 
+
 @implementation WCPublicChatController(Private)
 
 - (id)_initPublicChatControllerWithConnection:(WCServerConnection *)connection {
 	self = [super init];
-	
-	[NSBundle loadNibNamed:@"PublicChat" owner:self];
-	
+    [NSBundle loadNibNamed:@"PublicChat" owner:self];
+    
+    // the new method crashes wired
+    //[[NSBundle mainBundle] loadNibNamed:@"PublicChat" owner:self topLevelObjects:nil];
+    
 	_loadedNib = YES;
 	
 	[self setConnection:connection];

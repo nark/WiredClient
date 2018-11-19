@@ -6,8 +6,6 @@
 //
 //
 
-// mausi
-
 #define WC_VIEW_STARTING_KEY_COLOR        [NSColor colorWithCalibratedWhite:0.8068 alpha:1.0000]
 #define WC_VIEW_STARTING_COLOR            [NSColor colorWithCalibratedWhite:0.8068 alpha:0.9]
 #define WC_VIEW_ENDING_KEY_COLOR          [NSColor colorWithCalibratedWhite:0.8068 alpha:1.0000]

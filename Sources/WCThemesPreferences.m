@@ -75,6 +75,7 @@ NSString * const WCThemesDidChangeNotification      = @"WCThemesDidChangeNotific
 #pragma mark -
 
 - (void)awakeFromNib {
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(themesDidChange:)
                                                  name:WCThemesDidChangeNotification
