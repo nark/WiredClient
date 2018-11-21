@@ -1102,11 +1102,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [[WCSettings settings] setBool:[_networkCompressionButton state] forKey:WCNetworkCompressionEnabled];
     
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:@"Network Settings Changed"];
+    [alert setMessageText:NSLS(@"Network Settings Changed", @"")];
     [alert addButtonWithTitle:@"OK"];
-    [alert setInformativeText:@"This change cannot be applied to already active connections. Change will only take effect for newly initiated connections."];
-                                   
-     [alert runModal];
+    [alert setInformativeText:NSLS(@"This change cannot be applied to already active connections. Change will only take effect for newly initiated connections.", @"")];
+    [alert runModal];
                                    
                                    
     [[NSNotificationCenter defaultCenter] postNotificationName:WCPreferencesDidChangeNotification];
@@ -1185,6 +1184,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 //    }
 }
 
+/*
 - (void)customizeBuiltInAlertDidEnd:(NSAlert *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSMutableDictionary		*newTheme;
     NSString                *newName;
@@ -1218,7 +1218,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
     }
 }
-
+*/
 
 - (IBAction)closeTheme:(id)sender {
     if([_themesWindow isVisible]) {

@@ -239,7 +239,7 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 			[dictionary setObject:argument forKey:@"WCAccountsArgument"];
 		
         alert = [[NSAlert alloc] init];
-		
+        
 		if([_accounts count] == 1) {
 			[alert setMessageText:[NSSWF:
 				NSLS(@"Save changes to the \u201c%@\u201d account?", @"Save account dialog title (name)"),
@@ -250,19 +250,64 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 				[_accounts count]]];
 		}
         // mausi
+        action      = [[dictionary objectForKey:@"WCAccountsAction"] integerValue];
+        argument    = [dictionary objectForKey:@"WCAccountsArgument"];
+        
+       
 		[alert setInformativeText:NSLS(@"If you don't save the changes, they will be lost.", @"Save account dialog description")];
 		[alert addButtonWithTitle:NSLS(@"Save", @"Save account dialog button")];
 		[alert addButtonWithTitle:NSLS(@"Cancel", @"Save account dialog button")];
 		[alert addButtonWithTitle:NSLS(@"Don't Save", @"Save account dialog button")];
-		[alert beginSheetModalForWindow:[_administration window]
-						  modalDelegate:self
-                            didEndSelector:@selector(saveSheetDidEnd:returnCode:contextInfo:)
-                                contextInfo:dictionary];
-        [alert release];
-		
-		return NO;
+        NSInteger returnCode = [alert runModal];
+            if(returnCode != NSAlertSecondButtonReturn) {
+                if(returnCode == NSAlertFirstButtonReturn) {
+                    [self _save];
+                    
+                    [_selectAccounts removeAllObjects];
+                } else {
+                    [_accounts removeAllObjects];
+                    
+                    _creating   = NO;
+                    _editing    = NO;
+                    
+                    [self _validateForAccounts];
+                    [self _readFromAccounts];
+                    
+                    [[_administration window] setDocumentEdited:NO];
+                    
+                    [self _validate];
+                }
+                _touched = NO;
+                switch(action) {
+                    case WCAccountsDoNothing:
+                    default:
+                        break;
+                        
+                    case WCAccountsCloseWindow:
+                        [_accountsTableView deselectAll:self];
+                        
+                        [_administration close];
+                        break;
+                        
+                    case WCAccountsSelectTab:
+                        [_accountsTableView deselectAll:self];
+                        
+                        [_administration selectController:argument];
+                        break;
+                        
+                    case WCAccountsSelectRow:
+                        [_selectAccounts removeAllObjects];
+                        
+                        [_accountsTableView selectRowIndexes:argument byExtendingSelection:NO];
+                        break;
+                }
+                
+                [alert release];
+            }
+        _saving = NO;
+        return NO;
 	}
-	
+    
 	return YES;
 }
 
@@ -1372,7 +1417,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 									   @"Delete and disconnect account dialog description");
 				}
 				
-				alert = [[NSAlert alloc] init];
 				[alert setMessageText:title];
 				[alert setInformativeText:description];
 				[alert addButtonWithTitle:NSLS(@"Delete & Disconnect", @"Delete and disconnect account dialog button title")];
@@ -1957,7 +2001,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 	
 	_saving = NO;
-	
 	[dictionary release];
 }
 
