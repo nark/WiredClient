@@ -383,7 +383,6 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 }
 
 
-
 - (BOOL)_validateQuickLook {
 	NSEnumerator	*enumerator;
 	NSArray			*files;
@@ -2605,9 +2604,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	}
 }
 
-
 - (void)quickLookSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	if(returnCode == NSModalResponseOK)
+	if(returnCode == NSAlertFirstButtonReturn)
 		[self _quickLook];
 }
 

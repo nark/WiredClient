@@ -53,9 +53,6 @@
 	self = [super init];
     [NSBundle loadNibNamed:@"PublicChat" owner:self];
     
-    // the new method crashes wired
-    //[[NSBundle mainBundle] loadNibNamed:@"PublicChat" owner:self topLevelObjects:nil];
-    
 	_loadedNib = YES;
 	
 	[self setConnection:connection];

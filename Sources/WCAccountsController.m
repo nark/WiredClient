@@ -249,7 +249,7 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 				NSLS(@"Save changes to %u accounts?", @"Save account dialog title (count)"),
 				[_accounts count]]];
 		}
-        // mausi
+        
         action      = [[dictionary objectForKey:@"WCAccountsAction"] integerValue];
         argument    = [dictionary objectForKey:@"WCAccountsArgument"];
         
