@@ -296,7 +296,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)_printChat:(NSString *)chat by:(WCUser *)user {
     WIChatLogController     *logController;
-	NSBundle                *template;
 	NSString                *nick, *formattedDate, *formattedLogs;
 	NSMutableString         *mutableOutput;
     NSDictionary            *jsonProxy;
@@ -307,7 +306,6 @@ typedef enum _WCChatFormat					WCChatFormat;
     logController   = [[WCApplicationController sharedController] logController];
 	timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
 	nick			= [user nick];
-	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
 	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
 	formattedLogs   = [NSSWF:@"[%@]\t%@: %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], nick, chat];
     
@@ -337,7 +335,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)_printActionChat:(NSString *)chat by:(WCUser *)user {
     WIChatLogController     *logController;
-	NSBundle                *template;
 	NSString                *formattedDate, *formattedNick, *formattedLogs;
 	NSMutableString         *mutableOutput;
     NSDictionary            *jsonProxy;
@@ -346,7 +343,6 @@ typedef enum _WCChatFormat					WCChatFormat;
     chat            = [[chat componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
     mutableOutput	= [NSMutableString stringWithString:chat];
     logController   = [[WCApplicationController sharedController] logController];
-	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
 	timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
 	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
     formattedNick   = [NSSWF:@" *** %@", [user nick]];
@@ -2196,7 +2192,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)printEvent:(NSString *)message {
     WIChatLogController     *logController;
-    NSBundle                *template;
 	NSString                *output, *formattedDate;
 	NSMutableString         *mutableOutput;
     NSDictionary            *jsonProxy;
@@ -2204,7 +2199,6 @@ typedef enum _WCChatFormat					WCChatFormat;
     logController   = [[WCApplicationController sharedController] logController];
 	output			= [NSSWF:NSLS(@"<<< %@ >>>", @"Chat event (message)"), message];
 	mutableOutput	= [NSMutableString stringWithString:output];
-	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
 	formattedDate	= [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]];
 	
 	if([[[self connection] theme] boolForKey:WCThemesShowSmileys])

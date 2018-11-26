@@ -22,7 +22,7 @@
     
     if (self.isBezeled) {
         [betterBounds setLineWidth:2];
-        [[NSColor lightGrayColor] setStroke];
+        [[NSColor darkGrayColor] setStroke];
         [betterBounds stroke];
     }
 }
