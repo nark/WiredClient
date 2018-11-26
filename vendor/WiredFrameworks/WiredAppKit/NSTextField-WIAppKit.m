@@ -28,7 +28,7 @@
 
 #import <WiredAppKit/NSTextField-WIAppKit.h>
 
-#define WI_APPKIT_MESSAGE_VIEW_DEFAULT_HEIGHT 64
+#define WI_APPKIT_MESSAGE_VIEW_DEFAULT_HEIGHT 48
 
 @implementation NSTextField(WIAppKit)
 

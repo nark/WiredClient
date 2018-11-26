@@ -106,7 +106,7 @@
 	
 	pool	= wi_pool_init(wi_pool_alloc());
 	string	= wi_string_with_cstring([path fileSystemRepresentation]);
-	spec	= wi_p7_spec_init_with_file(wi_p7_spec_alloc(), string, originator);
+	spec	= wi_p7_spec_init_with_file(wi_p7_spec_alloc(), string, (wi_p7_originator_t)originator);
 	
 	if(!spec) {
 		if(error) {

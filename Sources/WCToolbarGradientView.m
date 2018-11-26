@@ -47,7 +47,7 @@
     BOOL            keyWindow;
     
     keyWindow       = [[self window] isKeyWindow];
-    rect            = [self bounds];
+	rect            = [self bounds];
     
     if (@available(macOS 10.14, *)) {
         if ([[[NSAppearance currentAppearance] name] containsString:NSAppearanceNameDarkAqua]) {

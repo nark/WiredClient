@@ -77,7 +77,7 @@
                 fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_ENDING_KEY_COLOR
                                                      endingColor:WC_WINDOW_STARTING_KEY_COLOR];
             }
-        } else {
+        }else {
             [WC_WINDOW_ENDING_KEY_COLOR set];
             NSRectFill(rect);
             fade = [[NSGradient alloc] initWithStartingColor:WC_WINDOW_ENDING_KEY_COLOR

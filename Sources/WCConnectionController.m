@@ -57,7 +57,7 @@
 
 
 - (void)_disconnectSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	if(returnCode == NSAlertDefaultReturn)
+	if(returnCode == NSModalResponseOK)
 		[[self connection] disconnect];
 }
 

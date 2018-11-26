@@ -1965,10 +1965,6 @@ typedef enum _WCChatActivity				WCChatActivity;
 	}
 }
 
-
-
-
-
 #pragma mark -
 
 - (void)addChatController:(WCPublicChatController *)chatController {
@@ -2023,8 +2019,6 @@ typedef enum _WCChatActivity				WCChatActivity;
     if(firstResponder)
         [[self window] makeFirstResponder:[[self selectedChatController] insertionTextField]];
 }
-
-
 
 
 - (WCPublicChatController *)selectedChatController {

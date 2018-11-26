@@ -41,7 +41,7 @@
 
 
 - (id)copyWithZone:(NSZone *)zone {
-    WIIconCell		*cell;
+    WIIconCell *cell;
 	
 	cell = [super copyWithZone:zone];
 	

@@ -754,7 +754,6 @@ static WCApplicationController		*sharedController;
 }
 
 
-
 #pragma mark -
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)application {
@@ -1115,8 +1114,8 @@ static WCApplicationController		*sharedController;
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item {
+    
 	SEL		selector;
-
 	selector = [item action];
 	
 	if(selector == @selector(disconnect:) || selector == @selector(reconnect:) ||
@@ -1250,7 +1249,7 @@ static WCApplicationController		*sharedController;
     attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                   [NSFont boldSystemFontOfSize:11.0],	NSFontAttributeName,
                   [NSColor grayColor],					NSForegroundColorAttributeName,
-                  style,									NSParagraphStyleAttributeName,
+                  style,								NSParagraphStyleAttributeName,
                   NULL];
     string = [NSSWF:@"%@\n", NSLS(@"Stats", @"About box title")];
     header = [NSAttributedString attributedStringWithString:string attributes:attributes];
@@ -1347,9 +1346,10 @@ static WCApplicationController		*sharedController;
 	NSFileWrapper		*wrapper;
 	NSTextAttachment	*attachment;
 	NSAttributedString	*attributedString;
-	
-	wrapper				= [[NSFileWrapper alloc] initWithPath:[sender representedObject]];
-	attachment			= [[WITextAttachment alloc] initWithFileWrapper:wrapper string:[sender toolTip]];
+	//wrapper                = [[NSFileWrapper alloc] initWithPath:[sender representedObject]];
+    wrapper             = [[NSFileWrapper alloc] initWithURL:[sender representedObject] options:NSFileWrapperReadingImmediate error:NULL];
+    
+    attachment			= [[WITextAttachment alloc] initWithFileWrapper:wrapper string:[sender toolTip]];
 	attributedString	= [NSAttributedString attributedStringWithAttachment:attachment];
 	
 	[[[NSApp keyWindow] firstResponder] tryToPerform:@selector(insertText:) with:attributedString];

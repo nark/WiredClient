@@ -40,7 +40,7 @@ If you encounter an error during compilation with Xcode crying about `wired.h` n
 
 If you encounter any other problem, feel free to report it in the issues section here on GitHub.
 
-## Contributeto the project
+## Contribute to the project
 
 If you want to contribute to the Wired Client coding effort, check the following steps:
 

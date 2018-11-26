@@ -2313,7 +2313,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)setTopicSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	WIP7Message		*message;
-	
+    
 	if(returnCode == NSAlertDefaultReturn) {
 		message = [WIP7Message messageWithName:@"wired.chat.set_topic" spec:WCP7Spec];
 		[message setUInt32:[self chatID] forName:@"wired.chat.id"];

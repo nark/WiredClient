@@ -39,6 +39,7 @@ extern NSString * const								WCMessagesDidChangeUnreadCountNotification;
     
 	IBOutlet WIOutlineView							*_conversationsOutlineView;
     IBOutlet NSTreeController                       *_conversationsTreeController;
+    IBOutlet NSTableColumn                          *_conversationTableColumn;
     IBOutlet NSPopUpButton                          *_conversationPopUpButton;
     IBOutlet NSPopUpButton                          *_conversationsFiltersPopUpButton;
     IBOutlet NSSearchField                          *_conversationsSearchField;

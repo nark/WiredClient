@@ -170,9 +170,6 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 @end
 
 
-
-
-
 @implementation WCMessages(Private)
 
 - (void)_validate {
@@ -193,6 +190,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 
 - (void)_themeDidChange {
+    
 	NSDictionary				*theme;
 	NSFont						*font;
 	NSColor						*textColor, *backgroundColor;
@@ -206,10 +204,13 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
 	templateBundle				= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
     
+    
+    
 	font						= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
 	textColor					= WIColorFromString([theme objectForKey:WCThemesMessagesTextColor]);
 	backgroundColor				= WIColorFromString([theme objectForKey:WCThemesMessagesBackgroundColor]);
 	templatePath				= [templateBundle bundlePath];
+    
     
 	[_conversationController setTemplatePath:templatePath];
 	[_conversationController setFont:font];
@@ -236,9 +237,6 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     [_messageTextField adjustHeightForTopView:_conversationWebView bottomView:_messagesView];
     [_conversationWebView scrollToBottom];
 }
-
-
-
 
 
 #pragma mark -
@@ -800,6 +798,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         for(WCConversation *conv in array) {
             nbMessage += [conv numberOfMessages];
         }
+        
         
         NSAlert *alert = [NSAlert alertWithMessageText:NSLS(@"Messages Migration", @"Messages Migration Title")
                                          defaultButton:NSLS(@"Migrate", @"Messages Migration Migrate Button")

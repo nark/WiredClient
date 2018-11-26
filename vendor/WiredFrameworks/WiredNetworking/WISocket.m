@@ -173,7 +173,7 @@ static void _WISocketCallback(CFSocketRef socketRef, CFSocketCallBackType callba
 	wi_socket_t		*socket;
 	
 	pool = wi_pool_init(wi_pool_alloc());
-	socket = wi_socket_init_with_address(wi_socket_alloc(), [address address], type);
+	socket = wi_socket_init_with_address(wi_socket_alloc(), [address address], (wi_socket_type_t)type);
 
 	self = [self _initWithSocket:socket address:address];
 	

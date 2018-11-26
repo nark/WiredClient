@@ -3026,7 +3026,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	
 	if(index != NSNotFound) {
 		frame				= [_transfersTableView convertRect:[_transfersTableView frameOfCellAtColumn:0 row:index] toView:NULL];
-		frame.origin		= [[self window] convertBaseToScreen:frame.origin];
+		frame.origin		= [[self window] convertPointToScreen:frame.origin];
 
 		return NSMakeRect(frame.origin.x, frame.origin.y, frame.size.height, frame.size.height);
 	}

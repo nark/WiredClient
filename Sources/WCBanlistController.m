@@ -398,36 +398,24 @@
 - (IBAction)addBan:(id)sender {
 	if(![self _validateAddBan])
 		return;
-	
-	[NSApp beginSheet:_addBanPanel
-	   modalForWindow:[_administration window]
-		modalDelegate:self
-	   didEndSelector:@selector(addSheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:NULL];
+    
+    [NSApp beginSheet:_addBanPanel modalForWindow:[_administration window] didEndBlock:^(NSModalResponse returnCode){
+        WIP7Message *message;
+        if(returnCode == NSModalResponseOK) {
+            message = [WIP7Message messageWithName:@"wired.banlist.add_ban" spec:WCP7Spec];
+            [message setString:[_addBanTextField stringValue] forName:@"wired.banlist.ip"];
+            
+            if([_addBanPopUpButton tagOfSelectedItem] > 0) {
+                [message setDate:[NSDate dateWithTimeIntervalSinceNow:[_addBanPopUpButton tagOfSelectedItem]]
+                         forName:@"wired.banlist.expiration_date"];
+            }
+            
+            [[_administration connection] sendMessage:message fromObserver:self selector:@selector(wiredBanlistAddBanReply:)];
+        }
+        [_addBanPanel close];
+        [_addBanTextField setStringValue:@""];
+    }];
 }
-
-
-
-- (void)addSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	WIP7Message		*message;
-	
-	if(returnCode == NSAlertDefaultReturn) {
-		message = [WIP7Message messageWithName:@"wired.banlist.add_ban" spec:WCP7Spec];
-		[message setString:[_addBanTextField stringValue] forName:@"wired.banlist.ip"];
-		
-		if([_addBanPopUpButton tagOfSelectedItem] > 0) {
-			[message setDate:[NSDate dateWithTimeIntervalSinceNow:[_addBanPopUpButton tagOfSelectedItem]]
-					 forName:@"wired.banlist.expiration_date"];
-		}
-		
-		[[_administration connection] sendMessage:message fromObserver:self selector:@selector(wiredBanlistAddBanReply:)];
-	}
-	
-	[_addBanPanel close];
-	[_addBanTextField setStringValue:@""];
-}
-
-
 
 - (IBAction)deleteBan:(id)sender {
 	NSAlert			*alert;
@@ -468,7 +456,7 @@
 	WIP7Message		*message;
 	WCBan			*ban;
 	
-	if(returnCode == NSAlertDefaultReturn) {
+	if(returnCode == NSAlertFirstButtonReturn) {
 		enumerator = [[self _selectedBans] objectEnumerator];
 		
 		while((ban = [enumerator nextObject])) {

@@ -86,6 +86,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 @implementation WCPreferences(Private)
 
 - (void)_validate {
+    
 	NSDictionary		*theme;
 	NSInteger			row;
 	
@@ -466,6 +467,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)_changeSelectedThemeToTheme:(NSDictionary *)theme {
+    
     NSMutableDictionary		*newTheme;
 	
 	if([theme objectForKey:WCThemesBuiltinName]) {
@@ -495,7 +497,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 	}
 }
-
 
 
 - (void)_changeBuiltinThemePanelDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
@@ -709,8 +710,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	
 	[super windowDidLoad];
 }
-
-
 
 
 - (void)themesDidChange:(NSNotification *)notification {
@@ -953,7 +952,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     
 	[image unlockFocus];
 	
-	[image setScalesWhenResized:YES];
+	//[image setScalesWhenResized:YES];
 	[image setSize:size];
 	
 	return [image autorelease];
@@ -1033,11 +1032,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [[WCSettings settings] setBool:[_networkCompressionButton state] forKey:WCNetworkCompressionEnabled];
     
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:@"Network Settings Changed"];
+    [alert setMessageText:NSLS(@"Network Settings Changed", @"")];
     [alert addButtonWithTitle:@"OK"];
-    [alert setInformativeText:@"This change cannot be applied to already active connections. Change will only take effect for newly initiated connections."];
-                                   
-     [alert runModal];
+    [alert setInformativeText:NSLS(@"This change cannot be applied to already active connections. Change will only take effect for newly initiated connections.", @"")];
+    [alert runModal];
                                    
                                    
     [[NSNotificationCenter defaultCenter] postNotificationName:WCPreferencesDidChangeNotification];
@@ -1084,6 +1082,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 //    }
 }
 
+/*
 - (void)customizeBuiltInAlertDidEnd:(NSAlert *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSMutableDictionary		*newTheme;
     NSString                *newName;
@@ -1117,7 +1116,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
     }
 }
-
+*/
 
 - (IBAction)closeTheme:(id)sender {
     if([_themesWindow isVisible]) {
@@ -1522,7 +1521,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (IBAction)deleteThemeTemplate:(id)sender {
 	WITemplateBundle		*selectedTemplate;
-	NSAlert					*alert;
+	NSAlert	*alert = [[[NSAlert alloc] init] autorelease];
 	BOOL					inUse;
 	
 	if([_themesTemplatesTableView selectedRow] != -1) {
@@ -1669,17 +1668,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
         [_chatLogsFolderPopUpButton selectItem:_chatLogsFolderMenuItem];
     }];
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 #pragma mark -
@@ -1844,7 +1832,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (void)deleteIgnoreSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
 	NSNumber	*row = contextInfo;
 	
-	if(returnCode == NSAlertDefaultReturn) {
+	if(returnCode == NSAlertFirstButtonReturn) {
 		[[WCSettings settings] removeObjectAtIndex:[row integerValue] fromArrayForKey:WCIgnores];
 		
 		[_ignoresTableView reloadData];

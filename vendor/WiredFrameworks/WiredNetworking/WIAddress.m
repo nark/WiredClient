@@ -77,7 +77,7 @@
 	wi_address_t	*address;
 	
 	pool = wi_pool_init(wi_pool_alloc());
-    address = wi_address_wildcard_for_family(family);
+    address = wi_address_wildcard_for_family((wi_address_family_t)family);
 	
 	self = [self _initWithAddress:address];
 	

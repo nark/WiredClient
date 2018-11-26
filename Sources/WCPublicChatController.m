@@ -46,13 +46,13 @@
 @end
 
 
+
 @implementation WCPublicChatController(Private)
 
 - (id)_initPublicChatControllerWithConnection:(WCServerConnection *)connection {
 	self = [super init];
-	
-	[NSBundle loadNibNamed:@"PublicChat" owner:self];
-	
+    [NSBundle loadNibNamed:@"PublicChat" owner:self];
+    
 	_loadedNib = YES;
 	
 	[self setConnection:connection];
@@ -283,7 +283,7 @@
 
 	[_changePasswordPanel close];
 
-	if(returnCode == NSAlertDefaultReturn) {
+	if(returnCode == NSModalResponseOK) {
 		message = [WIP7Message messageWithName:@"wired.account.change_password" spec:WCP7Spec];
 		[message setString:[[_newPasswordTextField stringValue] SHA1] forName:@"wired.account.password"];
 		[[self connection] sendMessage:message fromObserver:self selector:@selector(wiredAccountChangePasswordReply:)];

@@ -52,6 +52,10 @@
 	IBOutlet NSTextField			*_serializationTextField;
 	IBOutlet NSTextField			*_compressionTitleTextField;
 	IBOutlet NSTextField			*_compressionTextField;
+    IBOutlet NSTextField            *_sslProtocolTextField;
+    IBOutlet NSTextField            *_sslProtocolTitleTextField;
+    IBOutlet NSTextField            *_certificateTextField;
+    IBOutlet NSTextField            *_certificateTitleTextField;
 	
 	WIDateFormatter					*_dateFormatter;
 	WITimeIntervalFormatter			*_timeIntervalFormatter;
