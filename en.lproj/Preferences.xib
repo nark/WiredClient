@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="10000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -37,7 +36,6 @@
                 <outlet property="_customizeThemesButton" destination="3614" id="lZa-vZ-yVj"/>
                 <outlet property="_deleteHighlightButton" destination="2559" id="3107"/>
                 <outlet property="_deleteIgnoreButton" destination="2493" id="2576"/>
-                <outlet property="_emoticonPacksPopUpButton" destination="3627" id="3637"/>
                 <outlet property="_emoticonPreferences" destination="3711" id="3719"/>
                 <outlet property="_eventsBounceInDockButton" destination="2612" id="3181"/>
                 <outlet property="_eventsEventPopUpButton" destination="2608" id="3182"/>
@@ -267,7 +265,7 @@
             </subviews>
         </customView>
         <customView id="3604" userLabel="Appearance">
-            <rect key="frame" x="0.0" y="0.0" width="502" height="205"/>
+            <rect key="frame" x="0.0" y="0.0" width="502" height="174"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" id="3606">
@@ -299,47 +297,6 @@
                         <action selector="customizeTheme:" target="-2" id="3742"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" id="3626">
-                    <rect key="frame" x="50" y="166" width="74" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Emoticons:" id="3635">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" id="3627">
-                    <rect key="frame" x="127" y="161" width="218" height="26"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="3630">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="menu"/>
-                        <menu key="menu" title="OtherViews" id="3631">
-                            <items>
-                                <menuItem title="None" tag="1" id="3721">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                            </items>
-                            <connections>
-                                <outlet property="delegate" destination="-2" id="FZk-zV-7fs"/>
-                            </connections>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <action selector="selectEmoticonPack:" target="-2" id="3732"/>
-                    </connections>
-                </popUpButton>
-                <button verticalHuggingPriority="750" id="3628">
-                    <rect key="frame" x="344" y="157" width="112" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="push" title="Customize..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3629">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="customizeEmoticons:" target="-2" id="3720"/>
-                    </connections>
-                </button>
                 <popUpButton verticalHuggingPriority="750" id="3429">
                     <rect key="frame" x="127" y="99" width="218" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -362,7 +319,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <box autoresizesSubviews="NO" verticalHuggingPriority="750" boxType="separator" id="FJQ-97-skt">
+                <box verticalHuggingPriority="750" boxType="separator" id="FJQ-97-skt">
                     <rect key="frame" x="54" y="79" width="396" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </box>
@@ -402,6 +359,7 @@
                     </textFieldCell>
                 </textField>
             </subviews>
+            <point key="canvasLocation" x="141" y="139"/>
         </customView>
         <customView id="2264" userLabel="Chat">
             <rect key="frame" x="0.0" y="0.0" width="522" height="276"/>
@@ -576,11 +534,11 @@
                                         <rect key="frame" x="17" y="39" width="442" height="152"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="7vv-Ch-q7U">
-                                            <rect key="frame" x="1" y="0.0" width="425" height="151"/>
+                                            <rect key="frame" x="1" y="0.0" width="424" height="151"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="2564" id="2561" customClass="WITableView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="425" height="134"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="424" height="134"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -599,7 +557,7 @@
                                                             </textFieldCell>
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                         </tableColumn>
-                                                        <tableColumn editable="NO" width="57" minWidth="32.805" maxWidth="1000" id="2566">
+                                                        <tableColumn editable="NO" width="56" minWidth="32.805" maxWidth="1000" id="2566">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Color">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -625,11 +583,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="2562">
-                                            <rect key="frame" x="426" y="17" width="15" height="134"/>
+                                            <rect key="frame" x="425" y="17" width="16" height="134"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <tableHeaderView key="headerView" id="2564">
-                                            <rect key="frame" x="0.0" y="0.0" width="425" height="17"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="424" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                     </scrollView>
@@ -678,17 +636,17 @@
                                         <rect key="frame" x="17" y="39" width="442" height="152"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="Kca-x6-EBN">
-                                            <rect key="frame" x="1" y="0.0" width="425" height="151"/>
+                                            <rect key="frame" x="1" y="0.0" width="424" height="151"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="2499" id="2496" customClass="WITableView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="425" height="134"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="424" height="134"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn width="422" minWidth="40" maxWidth="1000" id="2500">
+                                                        <tableColumn width="421" minWidth="40" maxWidth="1000" id="2500">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Nick">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -714,11 +672,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="2497">
-                                            <rect key="frame" x="426" y="17" width="15" height="134"/>
+                                            <rect key="frame" x="425" y="17" width="16" height="134"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <tableHeaderView key="headerView" id="2499">
-                                            <rect key="frame" x="0.0" y="0.0" width="425" height="17"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="424" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                     </scrollView>
@@ -1541,7 +1499,7 @@ DQ
                             <action selector="close:" target="3711" id="3718"/>
                         </connections>
                     </button>
-                    <box autoresizesSubviews="NO" verticalHuggingPriority="750" boxType="separator" id="3710">
+                    <box verticalHuggingPriority="750" boxType="separator" id="3710">
                         <rect key="frame" x="-6" y="58" width="501" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
