@@ -323,6 +323,8 @@ typedef enum _WCChatFormat					WCChatFormat;
                  nick,          @"nick",
                  mutableOutput, @"message", nil];
     
+    NSLog(@"jsonProxy : %@", jsonProxy);
+    
     [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
         [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
 	
@@ -1093,6 +1095,12 @@ typedef enum _WCChatFormat					WCChatFormat;
      selector:@selector(preferencesDidChange:)
      name:WCPreferencesDidChangeNotification];
     
+    [[NSDistributedNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(appleInterfaceThemeChanged:)
+     name:@"AppleInterfaceThemeChangedNotification"
+     object: nil];
+    
 	return self;
 }
 
@@ -1171,8 +1179,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	[[_topicTextField cell] setBackgroundStyle:NSBackgroundStyleRaised];
 	
-	theme		= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-	template	= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+    theme        = [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
+    template    = [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
 
     [self _loadTheme:theme withTemplate:template];
     
@@ -1188,7 +1196,27 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 #pragma mark -
 
+- (void)appleInterfaceThemeChanged:(NSNotification *) notification {
+    NSDictionary *theme;
+    
+    if ([NSApp darkModeEnabled:_chatView.effectiveAppearance]) {
+        NSLog(@"dark");
+        theme = [[WCSettings settings] themeWithName:@"Dark"];
+    } else {
+        NSLog(@"light");
+        theme = [[WCSettings settings] themeWithName:@"Light"];
+    }
+    
+    [[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
+}
+
+
+
+
 - (void)themeDidChange:(NSDictionary *)theme {
+    NSLog(@"themeDidChange");
+    
 	WITemplateBundle		*templateBundle;
 	NSColor					*textColor, *backgroundColor, *timestampColor, *eventColor, *urlColor;
 	NSFont					*font;
@@ -1295,6 +1323,14 @@ typedef enum _WCChatFormat					WCChatFormat;
     
 	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[urlColor HTMLValue]]
                     toAttribute:WITemplateAttributesURLTextColor
+                         ofType:WITemplateTypeChat];
+    
+    [templateBundle setCSSValue:[NSApp darkModeEnabled:_chatView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+                    toAttribute:@"<? eventbackground ?>"
+                         ofType:WITemplateTypeChat];
+    
+    [templateBundle setCSSValue:[NSApp darkModeEnabled:_chatView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+                    toAttribute:@"<? sidebarbackground ?>"
                          ofType:WITemplateTypeChat];
 	
 	[templateBundle saveChangesForType:WITemplateTypeChat];

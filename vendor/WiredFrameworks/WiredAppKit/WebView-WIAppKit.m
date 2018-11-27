@@ -201,7 +201,10 @@
     
     header = (DOMHTMLElement *)[[[self mainFrame] DOMDocument] getElementById:elementID];
     
-	[header setAttribute:@"href" value:[template defaultStylesheetPathForType:type]];
+    NSString * timestamp = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970] * 1000];
+    NSString *path = [NSString stringWithFormat:@"%@?version=%@", [template defaultStylesheetPathForType:type], timestamp];
+    
+	[header setAttribute:@"href" value:path];
 }
 
 

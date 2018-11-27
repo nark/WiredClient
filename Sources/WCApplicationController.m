@@ -642,13 +642,18 @@ static WCApplicationController		*sharedController;
 		addObserver:self
 		   selector:@selector(serverConnectionTriggeredEvent:)
 			   name:WCServerConnectionTriggeredEventNotification];
+    
+    NSString *themeName = [NSApp darkModeEnabled:[NSAppearance currentAppearance]] ? @"Dark" : @"Light";
+    NSDictionary *theme = [[WCSettings settings] themeWithName:themeName];
+    [[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 	
 	[[NSAppleEventManager sharedAppleEventManager]
 		setEventHandler:self
 			andSelector:@selector(handleAppleEvent:withReplyEvent:)
 		  forEventClass:kInternetEventClass
 			 andEventID:kAEGetURL];
-	
+    
 	[[NSFileManager defaultManager] createDirectoryAtPath:[WCApplicationSupportPath stringByStandardizingPath]];
 	
 	date = [[NSDate dateAtStartOfCurrentDay] dateByAddingDays:1];
@@ -813,7 +818,6 @@ static WCApplicationController		*sharedController;
     [[WCPublicChat publicChat] showWindow:self];
     return NO;
 }
-
 
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {

@@ -34,4 +34,7 @@
 - (void)beginSheet:(NSWindow *)sheet
     modalForWindow:(NSWindow *)docWindow
        didEndBlock:(void (^)(NSInteger returnCode))block;
+
+- (BOOL)darkModeEnabled:(NSAppearance *)appearance;
+
 @end

@@ -852,7 +852,6 @@ static NSDictionary * s_cheatCodesToUnicode = nil;
     [forwardMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([obj isKindOfClass:[NSArray class]]) {
             for (NSString *object in obj) {
-                NSLog(@"key : %@ -> %@", object, key);
                 [reversedMap setObject:key forKey:object];
             }
         } else {

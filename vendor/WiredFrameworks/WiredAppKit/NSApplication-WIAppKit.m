@@ -74,4 +74,16 @@
          contextInfo:Block_copy((__bridge void *)block)];
 }
 
+
+- (BOOL)darkModeEnabled:(NSAppearance *)appearance {
+    if (@available(macOS 10.14, *)) {
+        NSAppearanceName basicAppearance = [appearance bestMatchFromAppearancesWithNames:@[
+                                                                                           NSAppearanceNameAqua,
+                                                                                           NSAppearanceNameDarkAqua
+                                                                                           ]];
+        return [basicAppearance isEqualToString:NSAppearanceNameDarkAqua];
+    }
+    return NO;
+}
+
 @end
