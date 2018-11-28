@@ -401,7 +401,10 @@
 	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]] toAttribute:WITemplateAttributesFontSize ofType:WITemplateTypeBoards];
 	[template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_textColor HTMLValue]] toAttribute:WITemplateAttributesFontColor ofType:WITemplateTypeBoards];
 	[template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_backgroundColor HTMLValue]] toAttribute:WITemplateAttributesBackgroundColor ofType:WITemplateTypeBoards];
-	
+    [template setCSSValue:[NSApp darkModeEnabled:_threadWebView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+              toAttribute:@"<? headerbackground ?>"
+                   ofType:WITemplateTypeBoards];
+    
 	[template saveChangesForType:WITemplateTypeBoards];
 	
 	[_threadWebView reloadStylesheetWithID:@"wc-stylesheet"

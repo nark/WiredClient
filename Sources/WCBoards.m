@@ -319,7 +319,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 - (void)_themeDidChange {
 	NSDictionary		*theme;
 	NSString			*templatePath;
-	NSBundle			*templateBundle;
+	WITemplateBundle    *templateBundle;
 	
 	theme				= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
 	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];

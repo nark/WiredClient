@@ -1,53 +1,173 @@
+* {
+    padding:0;
+    margin:0;
+}
+
+html {
+    background-color: <? backgroundcolor ?>;
+}
 
 body {
-	font: normal <? fontsize ?> "<? fontname ?>", sans-serif;
-	background-color: rgba(227, 231, 237, 1);
-	color: <? textcolor ?>;
+    font: normal <? fontsize ?> "<? fontname ?>", sans-serif;
+    color: <? textcolor ?>;
+    background-color: <? backgroundcolor ?>;
+    line-height: 16px;
 }
+
+#thread-content {
+    padding-left: 10px;
+    padding-right: 12px;
+    padding-top: 10px;
+}
+
 
 div.post {
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #bfbfbf;
+    margin-bottom: 20px;
+    background-color: <? backgroundcolor ?>;
+    border-radius: 3px;
+    border: 1px solid #999;
 }
 
 
-img.postunread { margin-left: 6px; }
+div.postheader {
+    font: normal 12px "Helvetica", sans-serif;
+    background-color: <? headerbackground ?>;
+    padding: 7px;
+    min-height: 33px;
+    border-bottom: 1px solid #999;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
 
-div.postheader { font: normal 12px "Helvetica", sans-serif; }
+div.postinfo {
+    width: 165px;
+    float: left;
+}
+
+
+div.postheadertitles {
+    float: left;
+}
 
 span.postheadertitle {
-	font-weight: bold;
-	color: gray;
-	text-align: right;
-	vertical-align: top;
-	float: left;
-	width: 6em;
-	padding-right: 0.5em;
+    font-weight: bold;
+    display: block;
+    color: gray;
+    text-align: right;
+    width: 45px;
+    margin-left: 10px;
+    padding-right: 5px;
 }
 
-div.posticon { float: right; }
+div.postheadervalues {
+    
+}
 
-div.postbody {
-	margin: 10px 0 10px 0;
-	padding-top: 10px;
-	border-top: 1px solid #bfbfbf;
-	clear: both;
+span.postheadervalue {
+    display: block;
+}
+
+
+span.postfrom {
+    min-width: 400px;
+    text-align: left;
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+span.postpostdatestring, span.posteditdatestring {
+    font-size: 9px;
+}
+
+span.postpostdate, span.posteditdate {
+    font-size: 9px;
+}
+
+
+div.posticon { float: left; }
+
+.postunread {
+    float: right;
+    display: block;
+    padding-top: 6px;
 }
 
 div.postbuttons {
-	text-align: right;
+    padding: 5px;
+    margin-right: 5px;
+    text-align: right;
+    width: auto;
+    float: right;
 }
 
-input.postbutton {
-	font: normal 10px "Helvetica", sans-serif;
+input.replybutton {
+    background: transparent url("../img/reply.svg") no-repeat;
+}
+
+input.quotebutton {
+    background: transparent url("../img/quote.svg") no-repeat;
+}
+
+input.editbutton {
+    background: transparent url("../img/edit.svg") no-repeat;
+}
+
+input.deletebutton {
+    background: transparent url("../img/delete.svg") no-repeat;
+}
+
+.postbuttons input[type="button"] {
+    margin-left: 16px;
+}
+
+input[type="button"] {
+    height: 20px;
+    width: 16px;
+    background-size: 16px 20px;
+    background-position: center center;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    opacity: 0.3;
+    border: none;
+    
+    -webkit-appearance: none;
+    -webkit-transition: opacity 0.2s ease-in-out;
+}
+
+input[type="button"]:not(.disabled):hover {
+    opacity: 0.75;
+}
+
+
+div.postbody {
+    padding: 10px;
+    clear: both;
+}
+
+div.postbody img, div.postbody iframe, div.postbody embed {
+    max-width: 100%;
+}
+
+div.reply {
+    padding: 10px;
+    background-color: <? headerbackground ?>;
+}
+
+div.reply input {
+    display: inline-block;
+    min-width: 80px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: rgba(0,255,10,0.1);
 }
 
 blockquote {
-	margin: 0px 0px 0px 15px;
-	padding: 8px;
-	border: 1px solid #bfbfbf;
-	background-color: #e8e8e8;
+    margin: 0px 0px 0px 15px;
+    padding: 8px;
+    border: 1px solid #bfbfbf;
+    background-color: #e8e8e8;
 }
 
 pre { margin: 0px; }

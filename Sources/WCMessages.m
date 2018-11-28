@@ -195,7 +195,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	NSFont						*font;
 	NSColor						*textColor, *backgroundColor;
 	NSString					*templatePath;
-	NSBundle					*templateBundle;
+	WITemplateBundle            *templateBundle;
     
 	theme						= [[[self _selectedConversation] connection] theme];
 	

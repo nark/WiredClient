@@ -226,6 +226,10 @@
 	[template setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[_backgroundColor HTMLValue]]
               toAttribute:WITemplateAttributesBackgroundColor
                    ofType:WITemplateTypeMessages];
+    
+    [template setCSSValue:[NSApp darkModeEnabled:_conversationWebView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+                    toAttribute:@"<? headerbackground ?>"
+                         ofType:WITemplateTypeMessages];
 	
 	[template saveChangesForType:WITemplateTypeMessages];
 	
