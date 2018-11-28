@@ -269,4 +269,32 @@
 	return [image autorelease];
 }
 
+
+- (NSImage *)imageByScalingProportionallyToSize:(NSSize)newSize {
+    NSSize aspectSize = NSZeroSize;
+    NSImage *sourceImage = self;
+    [sourceImage setScalesWhenResized:YES];
+    
+    CGFloat ratio = newSize.width / self.size.width;
+    CGFloat aspectHeight = self.size.height * ratio;
+    NSLog(@"ratio : %f", ratio);
+    NSLog(@"aspectHeight : %f", aspectHeight);
+    
+    aspectSize = NSMakeSize(newSize.width, aspectHeight);
+    
+    // Report an error if the source isn't a valid image
+    if (![sourceImage isValid]){
+        NSLog(@"Invalid Image");
+    } else {
+        NSImage *smallImage = [[NSImage alloc] initWithSize: aspectSize];
+        [smallImage lockFocus];
+        [sourceImage setSize: aspectSize];
+        [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+        [sourceImage drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, aspectSize.width, aspectSize.height) operation:NSCompositeCopy fraction:1.0];
+        [smallImage unlockFocus];
+        return smallImage;
+    }
+    return nil;
+}
+
 @end

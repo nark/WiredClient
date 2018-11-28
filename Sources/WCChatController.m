@@ -469,11 +469,20 @@ typedef enum _WCChatFormat					WCChatFormat;
     
     
 - (void)_sendLocalImage:(NSURL *)url {
+    NSImage             *image;
     NSString            *html;
     NSString            *base64ImageString;
     NSData              *imageData;
     
-    imageData = [NSData dataWithContentsOfURL:url];
+    image = [NSImage imageWithData:[NSData dataWithContentsOfURL:url]];
+    
+    if (image.size.width > 350) {
+        image = [image imageByScalingProportionallyToSize:NSMakeSize(350, 1)];
+    }
+
+    NSLog(@"image : %@", image);
+    
+    imageData = [image TIFFRepresentation];
     base64ImageString = [imageData base64EncodedString];
     
     html = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64ImageString];

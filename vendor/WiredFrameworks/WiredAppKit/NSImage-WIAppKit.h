@@ -39,5 +39,6 @@
 - (NSImage *)imageBySuperimposingImage:(NSImage *)image;
 
 - (NSImage *)imageWithAffineTransform:(NSAffineTransform *)transform action:(SEL)action;
+- (NSImage *)imageByScalingProportionallyToSize:(NSSize)targetSize;
 
 @end
