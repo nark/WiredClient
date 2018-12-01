@@ -223,8 +223,32 @@
 	[WCPrivateChat privateChatWithConnection:[self connection] inviteUser:user];
 }
 
+- (IBAction)ban:(id)sender{
+    
+    WCUser *user = [self selectedUser];
+    [NSApp beginSheet:self->_banMessagePanel modalForWindow:[_userListSplitView window] didEndBlock:^(NSModalResponse returnCode){
+        {
+            WIP7Message *message;
+            if(returnCode == NSModalResponseOK) {
+                message = [WIP7Message messageWithName:@"wired.user.ban_user" spec:WCP7Spec];
+                [message setUInt32:[user userID] forName:@"wired.user.id"];
+                [message setString:[_banMessageTextField stringValue] forName:@"wired.user.disconnect_message"];
+                
+                if([_banMessagePopUpButton tagOfSelectedItem] > 0) {
+                    [message setDate:[NSDate dateWithTimeIntervalSinceNow:[_banMessagePopUpButton tagOfSelectedItem]]
+                             forName:@"wired.banlist.expiration_date"];
+                }
+                
+                [[self connection] sendMessage:message fromObserver:self selector:@selector(wiredUserBanUserReply:)];
+            }
+        }
+        [user release];
+        [_banMessagePanel close];
+        [_banMessageTextField setStringValue:@""];
+    }];
+}
 
-
+/*
 - (IBAction)ban:(id)sender {
 	[NSApp beginSheet:_banMessagePanel
 	   modalForWindow:[_userListSplitView window]
@@ -258,7 +282,7 @@
 	[_banMessageTextField setStringValue:@""];
 }
 
-
+*/
 
 #pragma mark -
 

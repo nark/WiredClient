@@ -204,9 +204,9 @@ NSString * const WCMigrated20B                          = @"WCMigrated20B";
 
 - (NSDictionary *)_themeWithBuiltinName:(NSString *)builtinName;
 
-- (NSDictionary *)_defaultBasicTheme;
-- (NSDictionary *)_defaultHackerTheme;
-- (NSDictionary *)_defaultNeoTheme;
+//- (NSDictionary *)_defaultBasicTheme;
+//- (NSDictionary *)_defaultHackerTheme;
+//- (NSDictionary *)_defaultNeoTheme;
 
 @end
 
