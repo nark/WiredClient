@@ -76,7 +76,7 @@
 #pragma mark -
 
 - (void)_requestSettings {
-	WIP7Message		*message;
+	WIP7Message *message;
 	
 	if([[_administration connection] isConnected] && [[[_administration connection] account] settingsGetSettings] && !_touched) {
 		message = [WIP7Message messageWithName:@"wired.settings.get_settings" spec:WCP7Spec];
@@ -352,7 +352,7 @@
 
 
 - (IBAction)deleteCategory:(id)sender {
-	NSInteger		row;
+	NSInteger row;
 	
 	row = [_categoriesTableView selectedRow];
 	

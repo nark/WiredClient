@@ -2243,7 +2243,7 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	else if(type == WCAccountFieldTypeEnum) {
 		if([value integerValue] < 0)
 			return;
-		
+        
 		if([[cell itemAtIndex:0] tag] == -1)
 			value = [NSNumber numberWithInteger:[value integerValue] - 2];
 	}

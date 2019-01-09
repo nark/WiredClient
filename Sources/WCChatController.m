@@ -49,7 +49,6 @@
 #import "iTunes.h"
 #import "NSString+Emoji.h"
 
-
 #define WCPublicChatID											1
 
 #define WCLastChatFormat										@"WCLastChatFormat"
@@ -409,7 +408,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-- (void)_sendiTunes {
+- (void)_sendiTunes
+{
 	iTunesApplication	*iTunes;
 	WIP7Message			*message;
 	WCUser				*user;
@@ -417,9 +417,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	user	= [self userWithUserID:[[self connection] userID]];
 	iTunes	= [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
-	
+    
 	if([iTunes isRunning] && [iTunes currentTrack]) {
-		
 		name		= [[iTunes currentTrack] name];
 		artist		= [[iTunes currentTrack] artist];
 		album		= [[iTunes currentTrack] album];
@@ -595,8 +594,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 		return YES;
 	}
 	else if([command isEqualToString:@"/exec"] && [argument length] > 0) {
-		NSString			*output;
-		
+		NSString *output;
 		output = [[self class] outputForShellCommand:argument];
 		
 		if(output && [output length] > 0) {

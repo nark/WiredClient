@@ -227,7 +227,6 @@
     
     WCUser *user = [self selectedUser];
     [NSApp beginSheet:self->_banMessagePanel modalForWindow:[_userListSplitView window] didEndBlock:^(NSModalResponse returnCode){
-        {
             WIP7Message *message;
             if(returnCode == NSModalResponseOK) {
                 message = [WIP7Message messageWithName:@"wired.user.ban_user" spec:WCP7Spec];
@@ -241,7 +240,6 @@
                 
                 [[self connection] sendMessage:message fromObserver:self selector:@selector(wiredUserBanUserReply:)];
             }
-        }
         [user release];
         [_banMessagePanel close];
         [_banMessageTextField setStringValue:@""];

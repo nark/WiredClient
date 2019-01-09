@@ -39,12 +39,14 @@
 
 
 - (NSUInteger)systemVersion {
-    SInt32		systemVersion;
-    OSErr		err;
+    NSInteger		systemVersion;
+    //OSErr		err;
+	// err = Gestalt(gestaltSystemVersion, &systemVersion);
 	
-	err = Gestalt(gestaltSystemVersion, &systemVersion);
-	
-	if(err == noErr)
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+    systemVersion = [[NSString stringWithFormat:@"%li%li%li", version.majorVersion, version.minorVersion,version.patchVersion] integerValue];
+    
+	if(systemVersion == noErr)
 		return systemVersion;
 
 	return 0x1000;

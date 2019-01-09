@@ -3585,7 +3585,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (IBAction)markAsRead:(id)sender {
-	NSArray		*threads;
+	NSArray	*threads;
 	
 	threads = [self _selectedThreads];
 	

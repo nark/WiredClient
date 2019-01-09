@@ -166,7 +166,7 @@
 	if(error) {
 		if([[error domain] isEqualToString:WIWiredNetworkingErrorDomain] &&
 		   [error code] == WISocketConnectFailed &&
-		   [[[error userInfo] objectForKey:WILibWiredErrorKey] code] == WI_ERROR_P7_INCOMPATIBLESPEC) {
+           [[[error userInfo] objectForKey:WILibWiredErrorKey] code] == WI_ERROR_P7_INCOMPATIBLESPEC) {
 			userInfo = [[[error userInfo] mutableCopy] autorelease];
 			
 			reason = [NSSWF:@"%@\n\n%@",
