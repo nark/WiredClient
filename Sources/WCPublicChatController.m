@@ -53,6 +53,8 @@
 	self = [super init];
     [NSBundle loadNibNamed:@"PublicChat" owner:self];
     
+    //[[NSBundle mainBundle] loadNibNamed:@"PublicChat" owner:self topLevelObjects:nil];
+    
 	_loadedNib = YES;
 	
 	[self setConnection:connection];

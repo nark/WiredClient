@@ -847,18 +847,15 @@ static void _WITableViewManagerShader(void *info, const CGFloat *in, CGFloat *ou
 }
 
 
-
+/*
 - (IBAction)submitSheet:(id)sender {
     [[[_tableView window] windowController] submitSheet:sender];
 }
 
-
-
 - (IBAction)cancelSheet:(id)sender {
     [[[_tableView window] windowController] cancelSheet:sender];
 }
-
-
+*/
 
 #pragma mark -
 

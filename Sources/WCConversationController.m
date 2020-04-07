@@ -51,6 +51,12 @@
 	self = [super init];
 	
     _conversation = nil;
+    
+    [[NSDistributedNotificationCenter defaultCenter]
+    addObserver:self
+    selector:@selector(appleInterfaceThemeChanged:)
+    name:@"AppleInterfaceThemeChangedNotification"
+    object: nil];
 	
 	return self;
 }
@@ -85,11 +91,22 @@
 
 #pragma mark -
 
+- (void)appleInterfaceThemeChanged:(NSNotification *) notification {
+    [self reloadTemplate];
+}
+
+
+
+
+#pragma mark -
+
 - (void)setConversation:(WDConversation *)conversation {
     [conversation retain];
 	[_conversation release];
     
 	_conversation	= conversation;
+    
+    [self reloadTemplate];
 }
 
 - (WDConversation *)conversation {
@@ -206,6 +223,8 @@
 
 
 - (void)reloadTemplate {
+    NSLog(@"reloadTemplate");
+    
 	WITemplateBundle			*template;
 	
 	template  = [WITemplateBundle templateWithPath:_templatePath];
@@ -219,15 +238,15 @@
               toAttribute:WITemplateAttributesFontSize
                    ofType:WITemplateTypeMessages];
     
-	[template setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[_textColor HTMLValue]]
+	[template setCSSValue:[NSApp darkModeEnabled] ? @"gainsboro" : @"dimgray"
               toAttribute:WITemplateAttributesFontColor
                    ofType:WITemplateTypeMessages];
     
-	[template setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[_backgroundColor HTMLValue]]
+	[template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"white"
               toAttribute:WITemplateAttributesBackgroundColor
                    ofType:WITemplateTypeMessages];
     
-    [template setCSSValue:[NSApp darkModeEnabled:_conversationWebView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+    [template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
                     toAttribute:@"<? headerbackground ?>"
                          ofType:WITemplateTypeMessages];
 	

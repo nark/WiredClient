@@ -1894,7 +1894,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (IBAction)otherDownloadFolder:(id)sender {
 	NSOpenPanel		*openPanel;
-	
 	openPanel = [NSOpenPanel openPanel];
 	[openPanel setCanChooseFiles:NO];
 	[openPanel setCanChooseDirectories:YES];

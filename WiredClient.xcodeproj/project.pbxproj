@@ -122,7 +122,6 @@
 		4C82441B17DF73610065CEEE /* WCToolbarGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82441A17DF73610065CEEE /* WCToolbarGradientView.m */; };
 		4C82442D17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */; };
 		4C82443717DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */; };
-		4C8865BF219E0570002A7F8A /* NSString+Emoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8865BE219E0570002A7F8A /* NSString+Emoji.m */; };
 		4C97DE3415630D8A00D88C11 /* WCWindowGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */; };
 		4C97DE421564632900D88C11 /* WCChatTopicView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE411564632900D88C11 /* WCChatTopicView.m */; };
 		4C97DE4515658A9C00D88C11 /* WCChatInputTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE4415658A9B00D88C11 /* WCChatInputTextView.m */; };
@@ -226,6 +225,7 @@
 		A5F7F95E0F1D2588007BF4FD /* WCSourceBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F7F95D0F1D2588007BF4FD /* WCSourceBackgroundView.m */; };
 		A5F7F9F90F1D52DB007BF4FD /* WCSourceImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F7F9F80F1D52DB007BF4FD /* WCSourceImageView.m */; };
 		A5F802980D8E378300A84685 /* WCMonitorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F802970D8E378300A84685 /* WCMonitorCell.m */; };
+		B18D7AB82395C70A000E202E /* NSString+Emoji.m in Sources */ = {isa = PBXBuildFile; fileRef = B18D7AB42395C70A000E202E /* NSString+Emoji.m */; };
 		B1D840CA2191AD8C00B991C8 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1533E1800D94A004DA093 /* Growl.framework */; };
 		B1D840D42191AEF700B991C8 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D840D32191AEF700B991C8 /* libz.1.dylib */; };
 		B1D840D62191AF0300B991C8 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D840D52191AF0300B991C8 /* libxml2.2.dylib */; };
@@ -328,16 +328,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4C2BDA5417F909230069B38E /* Copy Emoticon Packs */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Emoticons;
-			dstSubfolderSpec = 7;
-			files = (
-			);
-			name = "Copy Emoticon Packs";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4CF094B21559D529005D77BB /* Copy Templates */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -518,8 +508,6 @@
 		4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Fetch.m"; sourceTree = "<group>"; };
 		4C82443517DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBJsonWriter+WCJsonWriter.h"; sourceTree = "<group>"; };
 		4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBJsonWriter+WCJsonWriter.m"; sourceTree = "<group>"; };
-		4C8865BB219E0570002A7F8A /* NSString+Emoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Emoji.h"; sourceTree = "<group>"; };
-		4C8865BE219E0570002A7F8A /* NSString+Emoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Emoji.m"; sourceTree = "<group>"; };
 		4C97DE3215630D8A00D88C11 /* WCWindowGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCWindowGradientView.h; sourceTree = "<group>"; };
 		4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCWindowGradientView.m; sourceTree = "<group>"; };
 		4C97DE401564632900D88C11 /* WCChatTopicView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCChatTopicView.h; sourceTree = "<group>"; };
@@ -734,6 +722,8 @@
 		A5F7F9F80F1D52DB007BF4FD /* WCSourceImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCSourceImageView.m; sourceTree = "<group>"; };
 		A5F802960D8E378300A84685 /* WCMonitorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCMonitorCell.h; path = Sources/WCMonitorCell.h; sourceTree = "<group>"; };
 		A5F802970D8E378300A84685 /* WCMonitorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCMonitorCell.m; path = Sources/WCMonitorCell.m; sourceTree = "<group>"; };
+		B18D7AB42395C70A000E202E /* NSString+Emoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Emoji.m"; sourceTree = "<group>"; };
+		B18D7AB72395C70A000E202E /* NSString+Emoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Emoji.h"; sourceTree = "<group>"; };
 		B1D840D32191AEF700B991C8 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		B1D840D52191AF0300B991C8 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
 		F7D369A6437514269AF02479 /* Pods-Wired Client.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wired Client.test.xcconfig"; path = "Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client.test.xcconfig"; sourceTree = "<group>"; };
@@ -985,8 +975,8 @@
 		4C82442A17DFB3D20065CEEE /* Additions */ = {
 			isa = PBXGroup;
 			children = (
-				4C8865BB219E0570002A7F8A /* NSString+Emoji.h */,
-				4C8865BE219E0570002A7F8A /* NSString+Emoji.m */,
+				B18D7AB72395C70A000E202E /* NSString+Emoji.h */,
+				B18D7AB42395C70A000E202E /* NSString+Emoji.m */,
 				4C82442B17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.h */,
 				4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */,
 				4C82443517DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.h */,
@@ -1530,7 +1520,6 @@
 				770FF23110342F39009D0F58 /* Run Script (XSD Schema) */,
 				4CF094B21559D529005D77BB /* Copy Templates */,
 				770B8A64075C86BD005327F5 /* Copy Frameworks */,
-				4C2BDA5417F909230069B38E /* Copy Emoticon Packs */,
 				41A4977D16E8C8CEE4C029C0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -1554,7 +1543,6 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1010;
 				TargetAttributes = {
 					8D1107260486CEB800E47090 = {
@@ -1570,8 +1558,6 @@
 				en,
 				fr,
 				de,
-				ja,
-				it,
 				Base,
 				nl,
 			);
@@ -1708,7 +1694,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Wired Client/Pods-Wired Client-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/NSDate+TimeAgo/NSDate_TimeAgo.framework",
 				"${BUILT_PRODUCTS_DIR}/SBJson4/SBJson4.framework",
 				"${PODS_ROOT}/Sparkle/Sparkle.framework",
@@ -1723,7 +1709,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Wired Client/Pods-Wired Client-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Wired Client/Pods-Wired Client-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4C06678915DEC69F00E8D810 /* ShellScript */ = {
@@ -1751,7 +1737,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/mogenerator -m \"$SRCROOT/CoreData/WiredClient.xcdatamodeld/WiredClient.xcdatamodel\" -O \"$SRCROOT/Sources/\" --includeh \"$SRCROOT/Sources/WDWiredModel.h\"";
+			shellScript = "/usr/local/bin/mogenerator -m \"$SRCROOT/CoreData/WiredClient.xcdatamodeld/WiredClient.xcdatamodel\" -O \"$SRCROOT/Sources/\" --includeh \"$SRCROOT/Sources/WDWiredModel.h\"\n";
 		};
 		4C89D6F3182FA6BB0011D61D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1850,6 +1836,7 @@
 				A5DC7EC8057AAEAD00736BBF /* WCApplicationController.m in Sources */,
 				A5D409770D897771007851BD /* WCBanlistController.m in Sources */,
 				77CED3A50EC068F500123164 /* WCBoard.m in Sources */,
+				B18D7AB82395C70A000E202E /* NSString+Emoji.m in Sources */,
 				77CED3A60EC068F500123164 /* WCBoardPost.m in Sources */,
 				77CED3A70EC068F500123164 /* WCBoards.m in Sources */,
 				773FEF141084CE2F002AF8DF /* WCBoardsButtonCell.m in Sources */,
@@ -1908,7 +1895,6 @@
 				A5752D8C06ECD6F900444067 /* WCTopic.m in Sources */,
 				A5492D150D8EA6A4002D37D7 /* WCTrackerConnection.m in Sources */,
 				A5DC7FAD057AB0A600736BBF /* WCTransfer.m in Sources */,
-				4C8865BF219E0570002A7F8A /* NSString+Emoji.m in Sources */,
 				A5DC7F8D057AB05F00736BBF /* WCTransferCell.m in Sources */,
 				A5D8DBB00D707E2E001E2CE8 /* WCTransferConnection.m in Sources */,
 				A5DC7EE8057AAF2900736BBF /* WCTransfers.m in Sources */,
@@ -2495,7 +2481,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = codesign;
+				CODE_SIGN_IDENTITY = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = stabs;
@@ -2526,6 +2512,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2550,7 +2537,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 2.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClientDebug";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClient";
@@ -2570,6 +2558,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2595,11 +2584,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClient";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClient";
 				PRODUCT_NAME = "Wired Client";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2649,7 +2640,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = codesign;
+				CODE_SIGN_IDENTITY = "-";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2673,8 +2664,13 @@
 		};
 		B1F9165221B41EF2009164C7 /* Test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7D369A6437514269AF02479 /* Pods-Wired Client.test.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CURRENT_PROJECT_VERSION = 31;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_NAME = "Wired Client";
 			};
 			name = Test;

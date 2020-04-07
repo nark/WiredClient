@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -48,7 +48,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="MJj-0A-Csh">
                                             <rect key="frame" x="0.0" y="0.0" width="173" height="402"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" indentationPerLevel="20" outlineTableColumn="645" id="641" customClass="WIOutlineView">
                                                     <rect key="frame" x="0.0" y="0.0" width="173" height="402"/>
@@ -107,40 +107,40 @@
                                             <menu key="menu" title="OtherViews" id="662">
                                                 <items>
                                                     <menuItem state="on" image="NSActionTemplate" hidden="YES" id="672"/>
-                                                    <menuItem title="Neue Verbindung…" id="675">
+                                                    <menuItem title="New Connection…" id="675">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="connect:" target="-2" id="702"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="709"/>
-                                                    <menuItem title="Füge Server-Lesezeichen hinzu..." id="673">
+                                                    <menuItem title="Add Server Bookmark..." id="673">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="addServerBookmark:" target="-2" id="711"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Füge Tracker-Lesezeichen hinzu..." id="707">
+                                                    <menuItem title="Add Tracker Bookmark..." id="707">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="addTrackerBookmark:" target="-2" id="712"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="731"/>
-                                                    <menuItem title="Bearbeite Lesezeichen..." id="730">
+                                                    <menuItem title="Edit Bookmark..." id="730">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="editBookmark:" target="-2" id="867"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Dupliziere Lesenzeichen..." id="729">
+                                                    <menuItem title="Duplicate Bookmark..." id="729">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="duplicateBookmark:" target="-2" id="901"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="726"/>
-                                                    <menuItem title="Entferne Lesezeichen" id="727">
+                                                    <menuItem title="Delete Bookmark" id="727">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="deleteServerOrTrackerBookmark:" target="-2" id="868"/>

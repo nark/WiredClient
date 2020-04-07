@@ -77,8 +77,8 @@
 - (void)flagsChanged:(id)sender;
 
 - (IBAction)showViewOptions:(id)sender;
-- (IBAction)submitSheet:(id)sender;
-- (IBAction)cancelSheet:(id)sender;
+//- (IBAction)submitSheet:(id)sender;
+//- (IBAction)cancelSheet:(id)sender;
 
 - (NSArray *)allTableColumns;
 - (void)includeTableColumn:(NSTableColumn *)tableColumn;

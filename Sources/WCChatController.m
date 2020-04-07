@@ -349,8 +349,8 @@ typedef enum _WCChatFormat					WCChatFormat;
     formattedNick   = [NSSWF:@" *** %@", [user nick]];
 	formattedLogs   = [NSSWF:@"[%@]\t*** %@ %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], [user nick], chat];
 	
-	if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
-		[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
+	//if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
+		//[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
 	
     [self _applyHTMLTagsForHighlightsToMutableString:mutableOutput];
     [[self class] applyHTMLTagsForURLToMutableString:mutableOutput];
@@ -406,8 +406,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 #pragma mark -
 
-
-
 - (void)_sendiTunes
 {
 	iTunesApplication	*iTunes;
@@ -416,7 +414,12 @@ typedef enum _WCChatFormat					WCChatFormat;
 	NSString			*chat, *name, *artist, *album;
 	
 	user	= [self userWithUserID:[[self connection] userID]];
-	iTunes	= [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
+    
+    if (@available(macOS 10.15, *)) {
+          iTunes    = [SBApplication applicationWithBundleIdentifier:@"com.apple.Music"];
+    } else {
+          iTunes    = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
+    }
     
 	if([iTunes isRunning] && [iTunes currentTrack]) {
 		name		= [[iTunes currentTrack] name];
@@ -497,7 +500,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	NSArray			*parameters;
 	WIP7Message		*message;
 	   
-	if([[url scheme] containsSubstring:@"http"]) {
+	if([[url scheme] containsSubstring:@"https"]) {
 		
 		if([[url host] containsSubstring:@"youtu.be"])
 			videoID = [[url absoluteString] lastPathComponent];
@@ -521,7 +524,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 		//NSLog(@"videoID : %@", videoID);
 		
 		if(videoID)
-			html = [NSSWF:@"<div class='chat-media-frame'><iframe width='300' height='233' src='http://www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe></div>", videoID];
+			html = [NSSWF:@"<div class='chat-media-frame'><iframe width='300' height='233' src='https://www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe></div>", videoID];
 	} else {
 		html = nil;
 	}
@@ -534,8 +537,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	}
 }
 
-
-
+// https://youtu.be/rynxqdNMry4
+// <div class="video-container"><iframe src="https://www.youtube-nocookie.com/embed/LJUaJ5PSXGE?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
 
 
 
@@ -1019,15 +1022,11 @@ typedef enum _WCChatFormat					WCChatFormat;
 	} while(range.location != NSNotFound);
 }
 
-
-
 + (void)applyHTMLTagsForSmileysToMutableString:(NSMutableString *)mutableString {
     NSString *string = [NSString stringWithString:mutableString];
     [mutableString deleteCharactersInRange:NSMakeRange(0, mutableString.length)];
     [mutableString appendString:[string stringByReplacingEmojiCheatCodesWithUnicode]];
 }
-
-
 
 + (void)applyHTMLEscapingToMutableString:(NSMutableString *)mutableString {
 	[mutableString replaceOccurrencesOfString:@"&" withString:@"&#38;"];
@@ -1037,9 +1036,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[mutableString replaceOccurrencesOfString:@"\'" withString:@"&#39;"];
     [mutableString replaceOccurrencesOfString:@"\n" withString:@"<br />"];
 }
-
-
-
 
 + (BOOL)checkHTMLRestrictionsForString:(NSString *)string {
 	NSRange range;
@@ -1206,7 +1202,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (void)appleInterfaceThemeChanged:(NSNotification *) notification {
     NSDictionary *theme;
     
-    if ([NSApp darkModeEnabled:_chatView.effectiveAppearance]) {
+    if ([NSApp darkModeEnabled]) {
         NSLog(@"dark");
         theme = [[WCSettings settings] themeWithName:@"Dark"];
     } else {
@@ -1221,15 +1217,13 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-- (void)themeDidChange:(NSDictionary *)theme {
-    NSLog(@"themeDidChange");
-    
+- (void)themeDidChange:(NSDictionary *)theme {    
 	WITemplateBundle		*templateBundle;
 	NSColor					*textColor, *backgroundColor, *timestampColor, *eventColor, *urlColor;
 	NSFont					*font;
 	BOOL					reload = NO;
 	
-	font					= WIFontFromString([theme objectForKey:WCThemesChatFont]);
+	font					= WIFontFromString ([theme objectForKey:WCThemesChatFont]);
 	textColor				= WIColorFromString([theme objectForKey:WCThemesChatTextColor]);
 	urlColor				= WIColorFromString([theme objectForKey:WCThemesChatURLsColor]);
 	backgroundColor			= WIColorFromString([theme objectForKey:WCThemesChatBackgroundColor]);
@@ -1331,12 +1325,12 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[urlColor HTMLValue]]
                     toAttribute:WITemplateAttributesURLTextColor
                          ofType:WITemplateTypeChat];
-    
-    [templateBundle setCSSValue:[NSApp darkModeEnabled:_chatView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+        
+    [templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
                     toAttribute:@"<? eventbackground ?>"
                          ofType:WITemplateTypeChat];
     
-    [templateBundle setCSSValue:[NSApp darkModeEnabled:_chatView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+    [templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
                     toAttribute:@"<? sidebarbackground ?>"
                          ofType:WITemplateTypeChat];
 	

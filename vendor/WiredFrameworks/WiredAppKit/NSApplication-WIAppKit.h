@@ -35,6 +35,6 @@
     modalForWindow:(NSWindow *)docWindow
        didEndBlock:(void (^)(NSInteger returnCode))block;
 
-- (BOOL)darkModeEnabled:(NSAppearance *)appearance;
+- (BOOL)darkModeEnable;
 
 @end

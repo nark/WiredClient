@@ -150,14 +150,12 @@
 
 #pragma mark -
 
-- (void)webView:(WebView *)webView didCommitLoadForFrame:(WebFrame *)frame {
-}
-
 - (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame {
     WITemplateBundle    *template;
     NSURL               *jqueryURL, *functionsURL, *mainURL;
     
     template        = [WITemplateBundle templateWithPath:_templatePath];
+    
     
     if(!template) {
         NSLog(@"Error: Template not found. (%@)", _templatePath);
@@ -401,7 +399,7 @@
 	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]] toAttribute:WITemplateAttributesFontSize ofType:WITemplateTypeBoards];
 	[template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_textColor HTMLValue]] toAttribute:WITemplateAttributesFontColor ofType:WITemplateTypeBoards];
 	[template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_backgroundColor HTMLValue]] toAttribute:WITemplateAttributesBackgroundColor ofType:WITemplateTypeBoards];
-    [template setCSSValue:[NSApp darkModeEnabled:_threadWebView.effectiveAppearance] ? @"dimgray" : @"gainsboro"
+    [template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
               toAttribute:@"<? headerbackground ?>"
                    ofType:WITemplateTypeBoards];
     

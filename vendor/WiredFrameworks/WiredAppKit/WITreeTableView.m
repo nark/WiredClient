@@ -55,8 +55,10 @@
 
 - (void)scrollWheel:(NSEvent *)event {
 	if(WIAbs([event deltaX]) > WIAbs([event deltaY]) && WIAbs([event deltaX]) > WIAbs([event deltaZ])) {
-        if([[self delegate] respondsToSelector:@selector(scrollWheel:)])
-            [self  scrollWheel:event];
+        // disabled for now, was running infinite loop
+        // TODO: look closer at what it does and why it crash on 10.15
+//        if([[self delegate] respondsToSelector:@selector(scrollWheel:)])
+//            [self  scrollWheel:event];
 	} else{
 		[super scrollWheel:event];
     }

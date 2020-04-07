@@ -643,7 +643,7 @@ static WCApplicationController		*sharedController;
 		   selector:@selector(serverConnectionTriggeredEvent:)
 			   name:WCServerConnectionTriggeredEventNotification];
     
-    NSString *themeName = [NSApp darkModeEnabled:[NSAppearance currentAppearance]] ? @"Dark" : @"Light";
+    NSString *themeName = [NSApp darkModeEnabled] ? @"Dark" : @"Light";
     NSDictionary *theme = [[WCSettings settings] themeWithName:themeName];
     [[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
     [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
@@ -701,31 +701,24 @@ static WCApplicationController		*sharedController;
     
 	[WIDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 	[NSNumberFormatter setDefaultFormatterBehavior:NSNumberFormatterBehavior10_4];
-    
+/*
     // set the auto-update feed URL regarding to the selected configuration (Debug or Release)
 #ifdef WCConfigurationRelease
     [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/sparkle.php?file=wiredclientcast"]];
 #else
-    [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/sparkle.php?file=wiredclient_debugcast"]];
+   [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/sparkle.php?file=wiredclient_debugcast"]];
 #endif
     
-	[_updater setSendsSystemProfile:YES];
-    [_updater performSelector:@selector(checkForUpdatesInBackground) afterDelay:5.0f];
-	
+     [_updater setSendsSystemProfile:YES];
+     [_updater performSelector:@selector(checkForUpdatesInBackground) afterDelay:5.0f];
+*/
 	path = [[NSBundle mainBundle] pathForResource:@"wired" ofType:@"xml"];
-	
+
     // verify the P7 specification in debug mode
 #ifdef WCConfigurationDebug
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"WebKitDeveloperExtras"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
-//	if([[NSFileManager defaultManager] fileExistsAtPath:@"p7-specification.xsd"]) {
-//		if(![[[NSXMLDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSXMLDocumentValidate error:(NSError **) &error] autorelease]) {
-//			[[error alert] runModal];
-//			
-//			[NSApp terminate:self];
-//		}
-//	}
+
 #endif
 	
     // init and load the Wired 2.0 P7 Specification
@@ -937,9 +930,9 @@ static WCApplicationController		*sharedController;
 			[NSSound playSoundNamed:sound atVolume:[[WCSettings settings] floatForKey:WCEventsVolume]];
 	}
 	
-	if([event boolForKey:WCEventsBounceInDock])
-		[NSApp requestUserAttention:NSInformationalRequest];
-    
+    if([event boolForKey:WCEventsBounceInDock]){
+        [[NSApplication sharedApplication] requestUserAttention:NSInformationalRequest];
+    }
     if ([NSUserNotification class] && [NSUserNotificationCenter class]) {
         [self _userNotificationWithNotification:notification];
     }
@@ -1244,12 +1237,13 @@ static WCApplicationController		*sharedController;
 	NSAttributedString			*header, *stats;
 	NSData						*rtf;
 	NSString					*string;
-	
+    
     rtf = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Credits" ofType:@"rtf"]];
     credits = [[[NSMutableAttributedString alloc] initWithRTF:rtf documentAttributes:NULL] autorelease];
     
     style = [[[NSMutableParagraphStyle alloc] init] autorelease];
     [style setAlignment:NSCenterTextAlignment];
+    
     attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                   [NSFont boldSystemFontOfSize:11.0],	NSFontAttributeName,
                   [NSColor grayColor],					NSForegroundColorAttributeName,
@@ -1260,16 +1254,18 @@ static WCApplicationController		*sharedController;
     
     attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                   [NSFont systemFontOfSize:11.0],			NSFontAttributeName,
+                  [NSColor controlTextColor],               NSForegroundColorAttributeName,
                   style,									NSParagraphStyleAttributeName,
                   NULL];
     string = [NSSWF:@"%@\n\n", [[WCStats stats] stringValue]];
     stats = [NSAttributedString attributedStringWithString:string attributes:attributes];
     
+    
+    
     [credits insertAttributedString:stats atIndex:0];
     [credits insertAttributedString:header atIndex:0];
     
-    [NSApp orderFrontStandardAboutPanelWithOptions:
-     [NSDictionary dictionaryWithObject:credits forKey:@"Credits"]];
+    [NSApp orderFrontStandardAboutPanelWithOptions: [NSDictionary dictionaryWithObject:credits forKey:@"Credits"]];
 }
 
 

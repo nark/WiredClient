@@ -2327,7 +2327,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 
 
 - (IBAction)enclosingFolder:(id)sender {
-	WCFile		*file;
+	WCFile *file;
 	
 	if(![[_currentDirectory path] isEqualToString:@"/"]) {
 		[_selectFiles removeAllObjects];

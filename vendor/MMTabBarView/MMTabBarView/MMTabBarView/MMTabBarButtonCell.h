@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-property-type"
-@property (assign) MMTabBarButton *controlView;
+@property (unsafe_unretained) MMTabBarButton *controlView;
 #pragma clang diagnostic pop
 
 /**

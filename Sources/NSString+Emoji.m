@@ -845,7 +845,9 @@ static NSDictionary * s_cheatCodesToUnicode = nil;
                                  @"🔳": @":white_square_button:",
                                  @"🚺": @":womens:",
                                  @"❌": @":x:",
-                                 @"0⃣": @":zero:"
+                                 @"0⃣": @":zero:",
+                                 @"🤓": @":nerd:",
+                                 @"🤪": @":goofy:",
                                  };
 
     NSMutableDictionary *reversedMap = [NSMutableDictionary dictionaryWithCapacity:[forwardMap count]];

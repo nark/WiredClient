@@ -783,7 +783,7 @@ static NSString *darkThemeIdentifier;
 			[NSNumber numberWithBool:YES],
 				WCCheckForUpdate,
                     
-            [NSApp darkModeEnabled:[NSAppearance currentAppearance]] ? darkThemeIdentifier : lightThemeIdentifier,
+            [NSApp darkModeEnabled] ? darkThemeIdentifier : lightThemeIdentifier,
 				WCTheme,
                     
 			[NSArray arrayWithObjects:
@@ -798,11 +798,11 @@ static NSString *darkThemeIdentifier;
             [NSArray arrayWithObject:
                 [NSDictionary dictionaryWithObjectsAndKeys:
                     @"Wired Dev Server",			WCBookmarksName,
-                    @"wired.read-write.fr",		WCBookmarksAddress,
+                    @"wired.read-write.fr",		    WCBookmarksAddress,
                     @"guest",						WCBookmarksLogin,
                     @"",							WCBookmarksNick,
                     @"",							WCBookmarksStatus,
-                    [NSString UUIDString],		WCBookmarksIdentifier,
+                    [NSString UUIDString],		    WCBookmarksIdentifier,
                 NULL]],
                 WCBookmarks,
 			

@@ -1038,6 +1038,10 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 																 image:[NSImage imageNamed:@"LabelBlue"]]];
 					[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Purple", @"Account color")
 																 image:[NSImage imageNamed:@"LabelPurple"]]];
+                    //[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Gray", @"Account color")
+                                                                 //image:[NSImage imageNamed:@"LabelGray"]]];
+                    //[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Yellow", @"Account color")
+                                                                 //image:[NSImage imageNamed:@"LabelYellow"]]];
 				}
 				
 				[setting setObject:popUpButtonCell forKey:WCAccountsFieldCell];
@@ -2119,7 +2123,7 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 			return NULL;
 		
 		if(type == WCAccountFieldTypeEnum) {
-			if([[cell itemAtIndex:0] tag] == -1) {
+			if([[(NSPopUpButton*)cell itemAtIndex:0] tag] == -1) {
 				[cell removeItemAtIndex:0];
 				[cell removeItemAtIndex:0];
 			}
@@ -2244,7 +2248,7 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		if([value integerValue] < 0)
 			return;
         
-		if([[cell itemAtIndex:0] tag] == -1)
+		if([[(NSPopUpButton*)cell itemAtIndex:0] tag] == -1)
 			value = [NSNumber numberWithInteger:[value integerValue] - 2];
 	}
 

@@ -297,7 +297,7 @@ NSString * const WCServerConnectionEventInfo2Key						= @"WCServerConnectionEven
 				[_chatController printEvent:reason];
 			
 			if([[_error domain] isEqualToString:WIWiredNetworkingErrorDomain] && [_error code] == WISocketConnectFailed) {
-				code = [[[_error userInfo]objectForKey:WILibWiredErrorKey]code];
+				code = [[[_error userInfo]objectForKey:WILibWiredErrorKey] code];
 				
 				if(code == WI_ERROR_P7_HANDSHAKEFAILED ||
 				   code == WI_ERROR_P7_INCOMPATIBLESPEC ||

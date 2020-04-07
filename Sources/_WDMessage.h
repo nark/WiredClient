@@ -47,8 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString*)primitiveMessage;
 - (void)setPrimitiveMessage:(nullable NSString*)value;
 
-- (WDConversation*)primitiveConversation;
-- (void)setPrimitiveConversation:(WDConversation*)value;
+- (nullable WDConversation*)primitiveConversation;
+- (void)setPrimitiveConversation:(nullable WDConversation*)value;
 
 @end
 

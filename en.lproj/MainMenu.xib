@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="10000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -460,6 +459,7 @@ CA
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="139" y="154"/>
         </menu>
         <customObject id="248" userLabel="WCApplicationController" customClass="WCApplicationController">
             <connections>
@@ -487,7 +487,7 @@ CA
             <rect key="frame" x="0.0" y="0.0" width="434" height="57"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" id="922">
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="922">
                     <rect key="frame" x="49" y="20" width="368" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="The file will contain your passwords in unencrypted form." id="923">
@@ -496,12 +496,13 @@ CA
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <imageView id="921">
+                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="921">
                     <rect key="frame" x="20" y="17" width="24" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="Warning" id="924"/>
                 </imageView>
             </subviews>
+            <point key="canvasLocation" x="63" y="337"/>
         </customView>
     </objects>
     <resources>

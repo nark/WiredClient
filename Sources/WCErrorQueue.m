@@ -134,6 +134,7 @@
 - (void)showError:(NSError *)error withIdentifier:(NSString *)identifier {
 	if(!_errorPanel)
 		[NSBundle loadNibNamed:@"Error" owner:self];
+        //[[NSBundle mainBundle] loadNibNamed:@"Error" owner:self topLevelObjects:nil];
 	
 	[_errors addObject:error];
 	[_identifiers addObject:identifier ? identifier : @""];

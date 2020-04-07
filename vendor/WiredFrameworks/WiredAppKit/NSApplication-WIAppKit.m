@@ -76,14 +76,13 @@
          contextInfo:Block_copy((__bridge void *)block)];
 }
 
-
-- (BOOL)darkModeEnabled:(NSAppearance *)appearance {
+- (BOOL)darkModeEnabled {
     if (@available(macOS 10.14, *)) {
-        NSAppearanceName basicAppearance = [appearance bestMatchFromAppearancesWithNames:@[
-                                                                                           NSAppearanceNameAqua,
-                                                                                           NSAppearanceNameDarkAqua
-                                                                                           ]];
-        return [basicAppearance isEqualToString:NSAppearanceNameDarkAqua];
+        NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+        
+        if ([osxMode isEqualTo:@"Dark"]) {
+            return YES;
+        }
     }
     return NO;
 }
