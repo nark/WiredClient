@@ -223,7 +223,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     [[_messageTextField.cell fieldEditorForView:_messageTextField] setInsertionPointColor:textColor];
 	[_messageTextField setBackgroundColor:backgroundColor];
 	
-	[_broadcastTextView setFont:font];
+//	[_broadcastTextView setFont:font];
 	[_broadcastTextView setTextColor:textColor];
 	[_broadcastTextView setInsertionPointColor:textColor];
 	[_broadcastTextView setBackgroundColor:backgroundColor];
@@ -394,43 +394,6 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 		[self _printHTML:html];
 }
 
-- (void)_sendYouTube:(NSURL *)url {
-	NSString		*html, *videoID;
-	NSArray			*parameters;
-	
-	if([[url scheme] containsSubstring:@"http"]) {
-		
-		if([[url host] containsSubstring:@"youtu.be"])
-			videoID = [[url absoluteString] lastPathComponent];
-		
-		else if([[url host] containsSubstring:@"youtube.com"]) {
-			parameters = [[url query] componentsSeparatedByString:@"&"];
-			
-			for (NSString * pair in parameters) {
-				NSArray * bits = [pair componentsSeparatedByString:@"="];
-				NSString * key = [[bits objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-				NSString * value = [[bits objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-				
-				if([key isEqualToString:@"v"]) {
-					videoID = value;
-					continue;
-				}
-			}
-		} else
-			videoID = nil;
-		
-		NSLog(@"videoID : %@", videoID);
-		
-		if(videoID)
-			html = [NSSWF:@"<div class='chat-media-frame'><iframe width='300' height='233' src='http://www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe></div>", videoID];
-	} else {
-		html = nil;
-	}
-	
-	if(html && [html length] > 0) {
-		[self _printHTML:html];
-	}
-}
 
 
 
@@ -439,9 +402,6 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 - (NSArray *)_commands {
 	return [NSArray arrayWithObjects:
 			@"/img",
-			@"/html",
-			@"/youtube",
-			@"/utube",
 			NULL];
 }
 
@@ -473,16 +433,6 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 		if(argument && [argument length] > 0)
 			if([[WCChatController class] checkHTMLRestrictionsForString:argument])
 				[self _printHTML:argument];
-		
-		return YES;
-	}
-	else if([command isEqualToString:@"/youtube"] || [command isEqualToString:@"/utube"]) {
-		if(argument && [argument length] > 0) {
-			NSURL *url = [NSURL URLWithString:argument];
-			
-			if(url)
-				[self _sendYouTube:url];
-		}
 		
 		return YES;
 	}

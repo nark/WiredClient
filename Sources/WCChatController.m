@@ -103,7 +103,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (void)_printHTML:(NSString *)html by:(WCUser *)user;
 
 - (void)_sendImage:(NSURL *)url;
-- (void)_sendYouTube:(NSURL *)url;
 - (void)_sendiTunes;
 
 - (NSArray *)_commands;
@@ -495,52 +494,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 }
 
 
-- (void)_sendYouTube:(NSURL *)url {
-	NSString		*html = nil, *videoID;
-	NSArray			*parameters;
-	WIP7Message		*message;
-	   
-	if([[url scheme] containsSubstring:@"https"]) {
-		
-		if([[url host] containsSubstring:@"youtu.be"])
-			videoID = [[url absoluteString] lastPathComponent];
-		
-		else if([[url host] containsSubstring:@"youtube.com"]) {
-			parameters = [[url query] componentsSeparatedByString:@"&"];
-			
-			for (NSString * pair in parameters) {
-				NSArray * bits = [pair componentsSeparatedByString:@"="];
-				NSString * key = [[bits objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-				NSString * value = [[bits objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-				
-				if([key isEqualToString:@"v"]) {
-					videoID = value;
-					continue;
-				}
-			}
-		} else
-			videoID = nil;
-		
-		//NSLog(@"videoID : %@", videoID);
-		
-		if(videoID)
-			html = [NSSWF:@"<div class='chat-media-frame'><iframe width='300' height='233' src='https://www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe></div>", videoID];
-	} else {
-		html = nil;
-	}
-	
-	if(html && [html length] > 0) {
-		message = [WIP7Message messageWithName:@"wired.chat.send_me" spec:WCP7Spec];
-		[message setUInt32:[self chatID] forName:@"wired.chat.id"];
-		[message setString:html forName:@"wired.chat.me"];
-		[[self connection] sendMessage:message];
-	}
-}
-
-// https://youtu.be/rynxqdNMry4
-// <div class="video-container"><iframe src="https://www.youtube-nocookie.com/embed/LJUaJ5PSXGE?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
-
-
 
 
 #pragma mark -
@@ -559,10 +512,7 @@ typedef enum _WCChatFormat					WCChatFormat;
             @"/ping",
             @"/afk",
             @"/img",
-            @"/html",
             @"/itunes",
-            @"/youtube",
-            @"/utube",
             NULL];
 }
 
@@ -678,29 +628,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 		
 		return YES;
 	}
-	else if([command isEqualToString:@"/html"]) {
-		if(argument && [argument length] > 0) {
-			if([[self class] checkHTMLRestrictionsForString:argument]) {
-				message = [WIP7Message messageWithName:@"wired.chat.send_say" spec:WCP7Spec];
-				[message setUInt32:[self chatID] forName:@"wired.chat.id"];
-				[message setString:argument forName:@"wired.chat.say"];
-				[[self connection] sendMessage:message];
-			}
-		}
-		return YES;
-	}
 	else if([command isEqualToString:@"/itunes"]) {
 		[self _sendiTunes];
-		
-		return YES;
-	}
-	else if([command isEqualToString:@"/youtube"] || [command isEqualToString:@"/utube"]) {
-		if(argument && [argument length] > 0) {
-			NSURL *url = [NSURL URLWithString:argument];
-			
-			if(url)
-				[self _sendYouTube:url];
-		}
 		
 		return YES;
 	}
@@ -1203,10 +1132,8 @@ typedef enum _WCChatFormat					WCChatFormat;
     NSDictionary *theme;
     
     if ([NSApp darkModeEnabled]) {
-        NSLog(@"dark");
         theme = [[WCSettings settings] themeWithName:@"Dark"];
     } else {
-        NSLog(@"light");
         theme = [[WCSettings settings] themeWithName:@"Light"];
     }
     
@@ -1217,7 +1144,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-- (void)themeDidChange:(NSDictionary *)theme {    
+- (void)themeDidChange:(NSDictionary *)theme {
 	WITemplateBundle		*templateBundle;
 	NSColor					*textColor, *backgroundColor, *timestampColor, *eventColor, *urlColor;
 	NSFont					*font;
@@ -1306,11 +1233,11 @@ typedef enum _WCChatFormat					WCChatFormat;
                     toAttribute:WITemplateAttributesFontSize
                          ofType:WITemplateTypeChat];
     
-	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[textColor HTMLValue]]
+	[templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"white" : @"dimgray"
                     toAttribute:WITemplateAttributesFontColor
                          ofType:WITemplateTypeChat];
     
-	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[backgroundColor HTMLValue]]
+	[templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
                     toAttribute:WITemplateAttributesBackgroundColor
                          ofType:WITemplateTypeChat];
     

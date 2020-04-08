@@ -223,8 +223,6 @@
 
 
 - (void)reloadTemplate {
-    NSLog(@"reloadTemplate");
-    
 	WITemplateBundle			*template;
 	
 	template  = [WITemplateBundle templateWithPath:_templatePath];
@@ -242,7 +240,7 @@
               toAttribute:WITemplateAttributesFontColor
                    ofType:WITemplateTypeMessages];
     
-	[template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"white"
+	[template setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
               toAttribute:WITemplateAttributesBackgroundColor
                    ofType:WITemplateTypeMessages];
     

@@ -45,6 +45,7 @@ a { color: <? urltextcolor ?>; }
 	min-height : 10px;
 	padding: 5px;
 	padding-bottom: 7px;
+    color: <? eventcolor ?>;
 }
 
 span.timestamp {
@@ -52,18 +53,18 @@ span.timestamp {
 }
 
 .chat-line span.timestamp {
-
+    color: <? timestampcolor ?>;
 }
 
 .chat-event span.timestamp {
-
+    color: <? timestampcolor ?>;
 }
 
 
 span.nick {
     width: 80px;
     float : right;
-    color: #444;
+    color: <? textcolor ?>;
     text-align: right;
     font-weight: bold;
     text-overflow: ellipsis;

@@ -538,7 +538,8 @@ static NSString *darkThemeIdentifier;
 //    /* Update from 2.0 (263) to 2.0 (264 - application menu) */
 //    if(![self objectForKey:WCApplicationMenuEnabled])
 //        [self setObject:[NSNumber numberWithBool:NO] forKey:WCApplicationMenuEnabled];
-
+    
+    NSLog(@"upgrade");
 }
 
 
@@ -574,8 +575,8 @@ static NSString *darkThemeIdentifier;
                   WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),            WCThemesChatFont,
                   WIStringFromColor([NSColor darkGrayColor]),                            WCThemesChatTextColor,
                   WIStringFromColor([NSColor whiteColor]),                            WCThemesChatBackgroundColor,
-                  WIStringFromColor([NSColor redColor]),                                WCThemesChatEventsColor,
-                  WIStringFromColor([NSColor redColor]),                                WCThemesChatTimestampEveryLineColor,
+                  WIStringFromColor([NSColor lightGrayColor]),                      WCThemesChatEventsColor,
+                  WIStringFromColor([NSColor lightGrayColor]),                      WCThemesChatTimestampEveryLineColor,
                   WIStringFromColor([NSColor blueColor]),                            WCThemesChatURLsColor,
                   WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesMessagesFont,
                   WIStringFromColor([NSColor darkGrayColor]),                            WCThemesMessagesTextColor,
@@ -612,8 +613,8 @@ static NSString *darkThemeIdentifier;
                   WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),            WCThemesChatFont,
                   WIStringFromColor([NSColor whiteColor]),                            WCThemesChatTextColor,
                   WIStringFromColor([NSColor darkGrayColor]),                            WCThemesChatBackgroundColor,
-                  WIStringFromColor([NSColor redColor]),                                WCThemesChatEventsColor,
-                  WIStringFromColor([NSColor redColor]),                                WCThemesChatTimestampEveryLineColor,
+                  WIStringFromColor([NSColor lightGrayColor]),                                WCThemesChatEventsColor,
+                  WIStringFromColor([NSColor whiteColor]),                                WCThemesChatTimestampEveryLineColor,
                   WIStringFromColor([NSColor blueColor]),                            WCThemesChatURLsColor,
                   WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesMessagesFont,
                   WIStringFromColor([NSColor whiteColor]),                            WCThemesMessagesTextColor,
@@ -940,7 +941,7 @@ static NSString *darkThemeIdentifier;
 			NULL];
 	}
 	
-	return defaults;
+    return defaults;
 }
 
 

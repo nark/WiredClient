@@ -117,6 +117,37 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 #pragma mark -
 
+- (void)_updateTheme:(NSMutableDictionary *)theme {
+    [theme setObject:WIStringFromColor([_themesChatTextColorWell color]) forKey:WCThemesChatTextColor];
+    [theme setObject:WIStringFromColor([_themesChatBackgroundColorWell color]) forKey:WCThemesChatBackgroundColor];
+    [theme setObject:WIStringFromColor([_themesChatEventsColorWell color]) forKey:WCThemesChatEventsColor];
+    [theme setObject:WIStringFromColor([_themesChatTimestampEveryLineColorWell color]) forKey:WCThemesChatTimestampEveryLineColor];
+    [theme setObject:WIStringFromColor([_themesChatURLsColorWell color]) forKey:WCThemesChatURLsColor];
+    
+    [theme setObject:WIStringFromColor([_themesMessagesTextColorWell color]) forKey:WCThemesMessagesTextColor];
+    [theme setObject:WIStringFromColor([_themesMessagesBackgroundColorWell color]) forKey:WCThemesMessagesBackgroundColor];
+    [theme setObject:WIStringFromColor([_themesBoardsTextColorWell color]) forKey:WCThemesBoardsTextColor];
+    [theme setObject:WIStringFromColor([_themesBoardsBackgroundColorWell color]) forKey:WCThemesBoardsBackgroundColor];
+    
+    [theme setBool:[_themesShowSmileysButton state] forKey:WCThemesShowSmileys];
+    
+    [theme setBool:[_themesChatTimestampEveryLineButton state] forKey:WCThemesChatTimestampEveryLine];
+    
+    [theme setInteger:[_themesUserListIconSizeMatrix selectedTag] forKey:WCThemesUserListIconSize];
+    [theme setBool:[_themesUserListAlternateRowsButton state] forKey:WCThemesUserListAlternateRows];
+    
+    [theme setInteger:[_themesFileListIconSizeMatrix selectedTag] forKey:WCThemesFileListIconSize];
+    [theme setBool:[_themesFileListAlternateRowsButton state] forKey:WCThemesFileListAlternateRows];
+    
+    [theme setBool:[_themesTransferListShowProgressBarButton state] forKey:WCThemesTransferListShowProgressBar];
+    [theme setBool:[_themesTransferListAlternateRowsButton state] forKey:WCThemesTransferListAlternateRows];
+    
+    [theme setBool:[_themesTrackerListAlternateRowsButton state] forKey:WCThemesTrackerListAlternateRows];
+
+    [theme setInteger:[_themesMonitorIconSizeMatrix selectedTag] forKey:WCThemesMonitorIconSize];
+    [theme setBool:[_themesMonitorAlternateRowsButton state] forKey:WCThemesMonitorAlternateRows];
+}
+
 - (NSInteger)_selectedThemeRow {
     return [_themesPopUpButton indexOfItem:[_themesPopUpButton selectedItem]];
 }
@@ -470,24 +501,25 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     
     NSMutableDictionary		*newTheme;
 	
-	if([theme objectForKey:WCThemesBuiltinName]) {
-        newTheme = [[theme mutableCopy] autorelease];
-        [newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
-                     forKey:WCThemesName];
-        [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-        [newTheme removeObjectForKey:WCThemesBuiltinName];
-        
-        [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
-        [[WCSettings settings] setObject:[newTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
-        [self _reloadThemes];
-        
-        [_themesPopUpButton selectItemAtIndex:[[[WCSettings settings] objectForKey:WCThemes] count]-1];
-        
-        [self _reloadTheme];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:newTheme];
-        
-	} else {
+//	if([theme objectForKey:WCThemesBuiltinName]) {
+//        NSLog(@"WCThemesBuiltinName");
+//        newTheme = [[theme mutableCopy] autorelease];
+//        [newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
+//                     forKey:WCThemesName];
+//        [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
+//        [newTheme removeObjectForKey:WCThemesBuiltinName];
+//        
+//        [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
+//        [[WCSettings settings] setObject:[newTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
+//        [self _reloadThemes];
+//        
+//        [_themesPopUpButton selectItemAtIndex:[[[WCSettings settings] objectForKey:WCThemes] count]-1];
+//        
+//        [self _reloadTheme];
+//        
+//        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:newTheme];
+//        
+//	} else {
 		[[WCSettings settings] replaceObjectAtIndex:[self _selectedThemeRow] withObject:theme inArrayForKey:WCThemes];
         
 		[self _reloadTheme];
@@ -495,7 +527,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
         
         [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 
-	}
+//	}
 }
 
 
@@ -1335,50 +1367,32 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 
+
 - (IBAction)changeTheme:(id)sender {
-	NSMutableDictionary		*theme;
-	NSDictionary			*oldTheme;
-	NSInteger				row;
-	
-	row = [self _selectedThemeRow];
-	   
-	if(row < 0 || [[[WCSettings settings] objectForKey:WCThemes] count] < (NSUInteger)row)
-		return;
+    NSArray     *themes;
+    NSInteger   index;
+ 
+    index       = 0;
+    themes      = [[WCSettings settings] objectForKey:WCThemes];
+    
+    NSMutableDictionary *theme = [[[self _selectedTheme] mutableCopy] autorelease];
+    
+    [self _updateTheme:theme];
+    
+    for(NSDictionary *oldTheme in themes) {
+        NSMutableDictionary *theme = [[oldTheme mutableCopy] autorelease];
 
-	oldTheme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] retain] autorelease];
-	theme			= [[oldTheme mutableCopy] autorelease];
-	
-	[theme setObject:WIStringFromColor([_themesChatTextColorWell color]) forKey:WCThemesChatTextColor];
-	[theme setObject:WIStringFromColor([_themesChatBackgroundColorWell color]) forKey:WCThemesChatBackgroundColor];
-	[theme setObject:WIStringFromColor([_themesChatEventsColorWell color]) forKey:WCThemesChatEventsColor];
-	[theme setObject:WIStringFromColor([_themesChatTimestampEveryLineColorWell color]) forKey:WCThemesChatTimestampEveryLineColor];
-	[theme setObject:WIStringFromColor([_themesChatURLsColorWell color]) forKey:WCThemesChatURLsColor];
-	
-	[theme setObject:WIStringFromColor([_themesMessagesTextColorWell color]) forKey:WCThemesMessagesTextColor];
-	[theme setObject:WIStringFromColor([_themesMessagesBackgroundColorWell color]) forKey:WCThemesMessagesBackgroundColor];
-	[theme setObject:WIStringFromColor([_themesBoardsTextColorWell color]) forKey:WCThemesBoardsTextColor];
-	[theme setObject:WIStringFromColor([_themesBoardsBackgroundColorWell color]) forKey:WCThemesBoardsBackgroundColor];
-	
-	[theme setBool:[_themesShowSmileysButton state] forKey:WCThemesShowSmileys];
-	
-	[theme setBool:[_themesChatTimestampEveryLineButton state] forKey:WCThemesChatTimestampEveryLine];
-	
-	[theme setInteger:[_themesUserListIconSizeMatrix selectedTag] forKey:WCThemesUserListIconSize];
-	[theme setBool:[_themesUserListAlternateRowsButton state] forKey:WCThemesUserListAlternateRows];
-	
-	[theme setInteger:[_themesFileListIconSizeMatrix selectedTag] forKey:WCThemesFileListIconSize];
-	[theme setBool:[_themesFileListAlternateRowsButton state] forKey:WCThemesFileListAlternateRows];
-	
-	[theme setBool:[_themesTransferListShowProgressBarButton state] forKey:WCThemesTransferListShowProgressBar];
-	[theme setBool:[_themesTransferListAlternateRowsButton state] forKey:WCThemesTransferListAlternateRows];
-	
-	[theme setBool:[_themesTrackerListAlternateRowsButton state] forKey:WCThemesTrackerListAlternateRows];
+        [self _updateTheme:theme];
 
-	[theme setInteger:[_themesMonitorIconSizeMatrix selectedTag] forKey:WCThemesMonitorIconSize];
-	[theme setBool:[_themesMonitorAlternateRowsButton state] forKey:WCThemesMonitorAlternateRows];
-	
-	if(![oldTheme isEqualToDictionary:theme])
-		[self _changeSelectedThemeToTheme:theme];
+        [[WCSettings settings] removeObjectAtIndex:index fromArrayForKey:WCThemes];
+        [[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
+
+        index += 1;
+    }
+
+    [self _changeSelectedThemeToTheme:theme];
+    
+    [[WCSettings settings] synchronize];
 }
 
 

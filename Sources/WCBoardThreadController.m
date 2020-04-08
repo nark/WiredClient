@@ -391,6 +391,8 @@
 #pragma mark Reload CSS Template
 
 - (void)reloadTemplate {
+    NSLog(@"Thread reloadTemplate");
+    
 	WITemplateBundle	*template;
 	
 	template			= [WITemplateBundle templateWithPath:_templatePath];
@@ -398,7 +400,11 @@
 	[template setCSSValue:[_font fontName] toAttribute:WITemplateAttributesFontName ofType:WITemplateTypeBoards];
 	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]] toAttribute:WITemplateAttributesFontSize ofType:WITemplateTypeBoards];
 	[template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_textColor HTMLValue]] toAttribute:WITemplateAttributesFontColor ofType:WITemplateTypeBoards];
-	[template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_backgroundColor HTMLValue]] toAttribute:WITemplateAttributesBackgroundColor ofType:WITemplateTypeBoards];
+    
+	[template setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
+              toAttribute:WITemplateAttributesBackgroundColor
+                   ofType:WITemplateTypeBoards];
+    
     [template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
               toAttribute:@"<? headerbackground ?>"
                    ofType:WITemplateTypeBoards];

@@ -316,7 +316,16 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 #pragma mark -
 
+- (void)appleInterfaceThemeChanged:(NSNotification *) notification {
+
+}
+
+
+
+
 - (void)_themeDidChange {
+    NSLog(@"_themeDidChange");
+    
 	NSDictionary		*theme;
 	NSString			*templatePath;
 	WITemplateBundle    *templateBundle;
@@ -324,6 +333,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	theme				= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
 	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
 	templatePath		= [templateBundle bundlePath];
+    
+    NSLog(@"theme : %@", [theme valueForKey:WCThemesName]);
     
 	[_threadController setFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont])];
     [_threadController setTextColor:WIColorFromString([theme objectForKey:WCThemesBoardsTextColor])];
@@ -660,13 +671,15 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		[_threadController setThread:thread];
 		
 		if([thread isLoaded])
-			[_threadController reloadData];		
+			[_threadController reloadData];
 	}
 	else {
 		[_threadController setBoard:NULL];
 		[_threadController setThread:NULL];
 		[_threadController reloadData];
 	}
+    
+    [self _themeDidChange];
 }
 
 
@@ -1459,6 +1472,12 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		addObserver:self
 		   selector:@selector(boardsDidChangeUnreadCount:)
 			   name:WCBoardsDidChangeUnreadCountNotification];
+    
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self
+        selector:@selector(themeDidChange:)
+                name:WCThemeDidChangeNotification
+                object: nil];
 
 	[self window];
 
@@ -1690,6 +1709,13 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		@"MarkAllAsRead",
 		@"Search",
 		NULL];
+}
+
+
+
+- (void)themeDidChange:(NSDictionary *)theme {
+    NSLog(@"Boards themeDidChange:");
+    [self _themeDidChange];
 }
 
 
