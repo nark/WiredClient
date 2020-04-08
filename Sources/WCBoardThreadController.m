@@ -390,9 +390,7 @@
 #pragma mark -
 #pragma mark Reload CSS Template
 
-- (void)reloadTemplate {
-    NSLog(@"Thread reloadTemplate");
-    
+- (void)reloadTemplate {    
 	WITemplateBundle	*template;
 	
 	template			= [WITemplateBundle templateWithPath:_templatePath];

@@ -539,7 +539,20 @@ static NSString *darkThemeIdentifier;
 //    if(![self objectForKey:WCApplicationMenuEnabled])
 //        [self setObject:[NSNumber numberWithBool:NO] forKey:WCApplicationMenuEnabled];
     
-    NSLog(@"upgrade");
+    NSLog(@"Upgrade settings...");
+    
+    if (![self boolForKey:@"WCMigratedTo_2_5__31"]) {
+        NSLog(@"Upgrade settings to 2_5__31...");
+        
+        // make sure to reset old versions themes
+        [self removeObjectForKey:WCThemes];
+        [self setString:[NSApp darkModeEnabled] ? darkThemeIdentifier : lightThemeIdentifier forKey:WCTheme];
+
+        [self setObject:[NSArray arrayWithObjects: [self _defaultLightTheme], [self _defaultDarkTheme], NULL]
+                 forKey:WCThemes];
+        
+        [self setBool:true forKey:@"WCMigratedTo_2_5__31"];
+    }
 }
 
 

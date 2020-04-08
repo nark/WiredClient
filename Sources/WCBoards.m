@@ -323,9 +323,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 
-- (void)_themeDidChange {
-    NSLog(@"_themeDidChange");
-    
+- (void)_themeDidChange {    
 	NSDictionary		*theme;
 	NSString			*templatePath;
 	WITemplateBundle    *templateBundle;
@@ -333,9 +331,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	theme				= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
 	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
 	templatePath		= [templateBundle bundlePath];
-    
-    NSLog(@"theme : %@", [theme valueForKey:WCThemesName]);
-    
+        
 	[_threadController setFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont])];
     [_threadController setTextColor:WIColorFromString([theme objectForKey:WCThemesBoardsTextColor])];
 	[_threadController setBackgroundColor:WIColorFromString([theme objectForKey:WCThemesBoardsBackgroundColor])];
