@@ -42,23 +42,23 @@
 #pragma mark -
 
 - (void)_reloadThemes {
-	NSEnumerator	*enumerator;
-	NSDictionary	*theme;
-	NSMenuItem		*item;
-	NSInteger		index;
-	
-	while((index = [_bookmarksThemePopUpButton indexOfItemWithTag:0]) != -1)
-		[_bookmarksThemePopUpButton removeItemAtIndex:index];
-	
-	enumerator = [[[WCSettings settings] objectForKey:WCThemes] objectEnumerator];
-	
-	while((theme = [enumerator nextObject])) {
-		item = [NSMenuItem itemWithTitle:[theme objectForKey:WCThemesName]];
-		[item setRepresentedObject:[theme objectForKey:WCThemesIdentifier]];
-		[item setImage:[[WCPreferences preferences] imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
-		
-		[[_bookmarksThemePopUpButton menu] addItem:item];
-	}
+//	NSEnumerator	*enumerator;
+//	NSDictionary	*theme;
+//	NSMenuItem		*item;
+//	NSInteger		index;
+//
+//	while((index = [_bookmarksThemePopUpButton indexOfItemWithTag:0]) != -1)
+//		[_bookmarksThemePopUpButton removeItemAtIndex:index];
+//
+//	enumerator = [[[WCSettings settings] objectForKey:WCThemes] objectEnumerator];
+//
+//	while((theme = [enumerator nextObject])) {
+//		item = [NSMenuItem itemWithTitle:[theme objectForKey:WCThemesName]];
+//		[item setRepresentedObject:[theme objectForKey:WCThemesIdentifier]];
+//		[item setImage:[[WCPreferences preferences] imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
+//
+//		[[_bookmarksThemePopUpButton menu] addItem:item];
+//	}
 }
 
 
@@ -87,12 +87,12 @@
         else
             [_bookmarksPasswordTextField setStringValue:@""];
         
-        theme = [_bookmark objectForKey:WCBookmarksTheme];
-        
-        if(theme && (index = [_bookmarksThemePopUpButton indexOfItemWithRepresentedObject:theme]) != -1)
-            [_bookmarksThemePopUpButton selectItemAtIndex:index];
-        else
-            [_bookmarksThemePopUpButton selectItemAtIndex:0];
+//        theme = [_bookmark objectForKey:WCBookmarksTheme];
+//
+//        if(theme && (index = [_bookmarksThemePopUpButton indexOfItemWithRepresentedObject:theme]) != -1)
+//            [_bookmarksThemePopUpButton selectItemAtIndex:index];
+//        else
+//            [_bookmarksThemePopUpButton selectItemAtIndex:0];
         
         [_bookmarksAutoConnectButton setState:[_bookmark boolForKey:WCBookmarksAutoConnect]];
         [_bookmarksAutoReconnectButton setState:[_bookmark boolForKey:WCBookmarksAutoReconnect]];
@@ -123,10 +123,10 @@
         [_bookmark setObject:[_bookmarksAddressTextField stringValue] forKey:WCBookmarksAddress];
         [_bookmark setObject:[_bookmarksLoginTextField stringValue] forKey:WCBookmarksLogin];
         
-        if([_bookmarksThemePopUpButton representedObjectOfSelectedItem])
-            [_bookmark setObject:[_bookmarksThemePopUpButton representedObjectOfSelectedItem] forKey:WCBookmarksTheme];
-        else
-            [_bookmark removeObjectForKey:WCBookmarksTheme];
+//        if([_bookmarksThemePopUpButton representedObjectOfSelectedItem])
+//            [_bookmark setObject:[_bookmarksThemePopUpButton representedObjectOfSelectedItem] forKey:WCBookmarksTheme];
+//        else
+//            [_bookmark removeObjectForKey:WCBookmarksTheme];
         
         [_bookmark setBool:[_bookmarksAutoConnectButton state] forKey:WCBookmarksAutoConnect];
         [_bookmark setBool:[_bookmarksAutoReconnectButton state] forKey:WCBookmarksAutoReconnect];
@@ -167,10 +167,10 @@
         [_bookmark setObject:[_bookmarksAddressTextField stringValue] forKey:WCBookmarksAddress];
         [_bookmark setObject:[_bookmarksLoginTextField stringValue] forKey:WCBookmarksLogin];
         
-        if([_bookmarksThemePopUpButton representedObjectOfSelectedItem])
-            [_bookmark setObject:[_bookmarksThemePopUpButton representedObjectOfSelectedItem] forKey:WCBookmarksTheme];
-        else
-            [_bookmark removeObjectForKey:WCBookmarksTheme];
+//        if([_bookmarksThemePopUpButton representedObjectOfSelectedItem])
+//            [_bookmark setObject:[_bookmarksThemePopUpButton representedObjectOfSelectedItem] forKey:WCBookmarksTheme];
+//        else
+//            [_bookmark removeObjectForKey:WCBookmarksTheme];
         
         [_bookmark setBool:[_bookmarksAutoConnectButton state] forKey:WCBookmarksAutoConnect];
         [_bookmark setBool:[_bookmarksAutoReconnectButton state] forKey:WCBookmarksAutoReconnect];
