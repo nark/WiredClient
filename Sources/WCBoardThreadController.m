@@ -63,8 +63,6 @@
     // get theme and template
     theme			= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
 	template		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-	
-    //[self reloadTemplate];
     
     // load the webView
     if(template) {
@@ -74,6 +72,8 @@
         
         [[_threadWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
     }
+    
+    [self reloadTemplate];
 }
 
 
@@ -107,6 +107,12 @@
 	_defaultIconBase64String	= [[[[NSImage imageNamed:@"DefaultIcon"] TIFFRepresentation] base64EncodedString] retain];
 	
 	_smileyBase64Strings		= [[NSMutableDictionary alloc] init];
+    
+    [[NSDistributedNotificationCenter defaultCenter]
+    addObserver:self
+    selector:@selector(appleInterfaceThemeChanged:)
+    name:@"AppleInterfaceThemeChangedNotification"
+    object: nil];
 	
 	return self;
 }
@@ -244,6 +250,17 @@
 
 - (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
     // useless but required
+}
+
+
+
+
+
+
+#pragma mark -
+
+- (void)appleInterfaceThemeChanged:(NSNotification *) notification {
+    [self reloadTemplate];
 }
 
 
@@ -390,14 +407,17 @@
 #pragma mark -
 #pragma mark Reload CSS Template
 
-- (void)reloadTemplate {    
+- (void)reloadTemplate {
 	WITemplateBundle	*template;
 	
 	template			= [WITemplateBundle templateWithPath:_templatePath];
 	
 	[template setCSSValue:[_font fontName] toAttribute:WITemplateAttributesFontName ofType:WITemplateTypeBoards];
 	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]] toAttribute:WITemplateAttributesFontSize ofType:WITemplateTypeBoards];
-	[template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_textColor HTMLValue]] toAttribute:WITemplateAttributesFontColor ofType:WITemplateTypeBoards];
+    
+	[template setCSSValue:[NSApp darkModeEnabled] ? @"gainsboro" : @"dimgray"
+              toAttribute:WITemplateAttributesFontColor
+                   ofType:WITemplateTypeBoards];
     
 	[template setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
               toAttribute:WITemplateAttributesBackgroundColor

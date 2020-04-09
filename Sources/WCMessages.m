@@ -204,11 +204,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
 	templateBundle				= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
     
-    
-    
 	font						= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
-	textColor					= WIColorFromString([theme objectForKey:WCThemesMessagesTextColor]);
-	backgroundColor				= WIColorFromString([theme objectForKey:WCThemesMessagesBackgroundColor]);
+	textColor					= [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
+	backgroundColor				= [NSApp darkModeEnabled] ? [NSColor darkGrayColor] : [NSColor whiteColor];
 	templatePath				= [templateBundle bundlePath];
     
     
@@ -217,16 +215,15 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[_conversationController setTextColor:textColor];
 	[_conversationController setBackgroundColor:backgroundColor];
 		
-	[_messageTextField setFont:font];
-	[_messageTextField setTextColor:textColor];
-	//[_messageTextField setInsertionPointColor:textColor];
-    [[_messageTextField.cell fieldEditorForView:_messageTextField] setInsertionPointColor:textColor];
-	[_messageTextField setBackgroundColor:backgroundColor];
-	
-//	[_broadcastTextView setFont:font];
-	[_broadcastTextView setTextColor:textColor];
-	[_broadcastTextView setInsertionPointColor:textColor];
-	[_broadcastTextView setBackgroundColor:backgroundColor];
+//	[_messageTextField setFont:font];
+//	[_messageTextField setTextColor:textColor];
+//    [[_messageTextField.cell fieldEditorForView:_messageTextField] setInsertionPointColor:textColor];
+//    [_messageTextField setBackgroundColor:backgroundColor];
+//	
+////	[_broadcastTextView setFont:font];
+//	[_broadcastTextView setTextColor:textColor];
+//	[_broadcastTextView setInsertionPointColor:textColor];
+//	[_broadcastTextView setBackgroundColor:backgroundColor];
 	
 	[_conversationController reloadTemplate];
     [_conversationController reloadData];
@@ -1039,6 +1036,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
             [self _sortConversations];
         }
 	}
+    
+    [self _themeDidChange];
 }
 
 

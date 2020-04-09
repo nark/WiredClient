@@ -316,25 +316,23 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 #pragma mark -
 
-- (void)appleInterfaceThemeChanged:(NSNotification *) notification {
-
-}
-
-
-
-
 - (void)_themeDidChange {    
 	NSDictionary		*theme;
 	NSString			*templatePath;
 	WITemplateBundle    *templateBundle;
+    NSColor             *textColor;
+    NSColor             *backgroundColor;
 	
 	theme				= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
 	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
 	templatePath		= [templateBundle bundlePath];
         
+    textColor           = [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
+    backgroundColor     = [NSApp darkModeEnabled] ? [NSColor darkGrayColor] : [NSColor whiteColor];
+        
 	[_threadController setFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont])];
-    [_threadController setTextColor:WIColorFromString([theme objectForKey:WCThemesBoardsTextColor])];
-	[_threadController setBackgroundColor:WIColorFromString([theme objectForKey:WCThemesBoardsBackgroundColor])];
+    [_threadController setTextColor:textColor];
+	[_threadController setBackgroundColor:backgroundColor];
 	[_threadController setTemplatePath:templatePath];
 
 	[_threadController reloadTemplate];
@@ -653,7 +651,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	
 	board		= [self _selectedBoard];
 	thread		= [self _selectedThread];
-		
+    		
 	if(thread) {
 		if(![thread isLoaded]) {
 			[thread removeAllPosts];
@@ -665,7 +663,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         
         [_threadController setBoard:board];
 		[_threadController setThread:thread];
-		
+        		
 		if([thread isLoaded])
 			[_threadController reloadData];
 	}
@@ -674,8 +672,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		[_threadController setThread:NULL];
 		[_threadController reloadData];
 	}
-    
-    [self _themeDidChange];
 }
 
 
@@ -1710,7 +1706,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (void)themeDidChange:(NSDictionary *)theme {
-    NSLog(@"Boards themeDidChange:");
     [self _themeDidChange];
 }
 
@@ -2823,6 +2818,9 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     
 	thread		= [self _selectedThread];
 	board		= [_boardsByThreadID objectForKey:[thread threadID]];
+    
+    if (board == nil)
+        return;
     
 	[self _reloadBoardListsSelectingBoard:board]; 
 	
