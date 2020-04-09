@@ -226,10 +226,8 @@
 		A5F7F9F90F1D52DB007BF4FD /* WCSourceImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F7F9F80F1D52DB007BF4FD /* WCSourceImageView.m */; };
 		A5F802980D8E378300A84685 /* WCMonitorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F802970D8E378300A84685 /* WCMonitorCell.m */; };
 		B18D7AB82395C70A000E202E /* NSString+Emoji.m in Sources */ = {isa = PBXBuildFile; fileRef = B18D7AB42395C70A000E202E /* NSString+Emoji.m */; };
-		B1D840CA2191AD8C00B991C8 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1533E1800D94A004DA093 /* Growl.framework */; };
 		B1D840D42191AEF700B991C8 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D840D32191AEF700B991C8 /* libz.1.dylib */; };
 		B1D840D62191AF0300B991C8 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D840D52191AF0300B991C8 /* libxml2.2.dylib */; };
-		B1D840D72191AFA500B991C8 /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1533E1800D94A004DA093 /* Growl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E631FE006AB48726F7BBB212 /* Pods_Wired_Client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EA4DF030F0053EC62511D55 /* Pods_Wired_Client.framework */; };
 /* End PBXBuildFile section */
 
@@ -240,6 +238,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8D1107260486CEB800E47090;
 			remoteInfo = "Wired Client";
+		};
+		4C9C2541243F6746005F214C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C0B22FB176C95A600B2BF34 /* WiredFrameworks.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C417208147DC2B300DC0A9A;
+			remoteInfo = WiredFoundation;
 		};
 		4CDBF1F014BC4CB8007142D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -338,7 +343,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B1D840D72191AFA500B991C8 /* Growl.framework in Copy Frameworks */,
 				4C9CEB99243F2CDF00B45DEC /* WiredFoundation.framework in Copy Frameworks */,
 				4CE153271800D665004DA093 /* MMTabBarView.framework in Copy Frameworks */,
 				4CE153291800D665004DA093 /* WiredNetworking.framework in Copy Frameworks */,
@@ -751,7 +755,6 @@
 				A5A3400707216D8900A16E9A /* Security.framework in Frameworks */,
 				777D36C50987E125005B5EC1 /* WebKit.framework in Frameworks */,
 				4C67D559156ADE230057D15A /* ScriptingBridge.framework in Frameworks */,
-				B1D840CA2191AD8C00B991C8 /* Growl.framework in Frameworks */,
 				E631FE006AB48726F7BBB212 /* Pods_Wired_Client.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1523,6 +1526,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4C9C2542243F6746005F214C /* PBXTargetDependency */,
 				4CE153151800D639004DA093 /* PBXTargetDependency */,
 				4CE1531B1800D639004DA093 /* PBXTargetDependency */,
 				4CE1531D1800D639004DA093 /* PBXTargetDependency */,
@@ -1948,6 +1952,11 @@
 			isa = PBXTargetDependency;
 			target = 8D1107260486CEB800E47090 /* Wired Client */;
 			targetProxy = 4C3E7EF815DEDEB800E9B096 /* PBXContainerItemProxy */;
+		};
+		4C9C2542243F6746005F214C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WiredFoundation;
+			targetProxy = 4C9C2541243F6746005F214C /* PBXContainerItemProxy */;
 		};
 		4CDBF1F114BC4CB8007142D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

@@ -1036,6 +1036,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
             [self _sortConversations];
         }
 	}
+    
+    [_conversationController reloadTemplate];
 }
 
 
