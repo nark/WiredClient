@@ -498,36 +498,12 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)_changeSelectedThemeToTheme:(NSDictionary *)theme {
+    [[WCSettings settings] replaceObjectAtIndex:0 withObject:theme inArrayForKey:WCThemes];
     
-    NSMutableDictionary		*newTheme;
-	
-//	if([theme objectForKey:WCThemesBuiltinName]) {
-//        NSLog(@"WCThemesBuiltinName");
-//        newTheme = [[theme mutableCopy] autorelease];
-//        [newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
-//                     forKey:WCThemesName];
-//        [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-//        [newTheme removeObjectForKey:WCThemesBuiltinName];
-//        
-//        [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
-//        [[WCSettings settings] setObject:[newTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
-//        [self _reloadThemes];
-//        
-//        [_themesPopUpButton selectItemAtIndex:[[[WCSettings settings] objectForKey:WCThemes] count]-1];
-//        
-//        [self _reloadTheme];
-//        
-//        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:newTheme];
-//        
-//	} else {
-		[[WCSettings settings] replaceObjectAtIndex:[self _selectedThemeRow] withObject:theme inArrayForKey:WCThemes];
-        
-		[self _reloadTheme];
-		[self _reloadThemes];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
-
-//	}
+    [self _reloadTheme];
+    [self _reloadThemes];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
 
 
@@ -1369,30 +1345,15 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (IBAction)changeTheme:(id)sender {
-    NSArray     *themes;
-    NSInteger   index;
- 
-    index       = 0;
-    themes      = [[WCSettings settings] objectForKey:WCThemes];
+    NSMutableDictionary     *theme;
     
-    NSMutableDictionary *theme = [[[self _selectedTheme] mutableCopy] autorelease];
+    theme = [[[[WCSettings settings] themeWithName:@"Wired"] mutableCopy] autorelease];
     
     [self _updateTheme:theme];
     
-    for(NSDictionary *oldTheme in themes) {
-        NSMutableDictionary *theme = [[oldTheme mutableCopy] autorelease];
-
-        [self _updateTheme:theme];
-
-        [[WCSettings settings] removeObjectAtIndex:index fromArrayForKey:WCThemes];
-        [[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-
-        index += 1;
-    }
-
-    [self _changeSelectedThemeToTheme:theme];
+    [[WCSettings settings] setObject:[NSArray arrayWithObject:theme] forKey:WCThemes];
     
-    [[WCSettings settings] synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
 
 
@@ -1427,44 +1388,50 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (void)setChatFont:(id)sender {
 	NSMutableDictionary		*theme;
 	NSFont					*font, *newFont;
-	
-	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
-	font		= WIFontFromString([theme objectForKey:WCThemesChatFont]);
-	newFont		= [sender convertFont:font];
-	
-	[theme setObject:WIStringFromFont(newFont) forKey:WCThemesChatFont];
-	
-	[self _changeSelectedThemeToTheme:theme];
+	    
+    theme = [[[[WCSettings settings] themeWithName:@"Wired"] mutableCopy] autorelease];
+    font        = WIFontFromString([theme objectForKey:WCThemesChatFont]);
+    newFont     = [sender convertFont:font];
+    
+    [theme setObject:WIStringFromFont(newFont) forKey:WCThemesChatFont];
+    
+    [[WCSettings settings] setObject:[NSArray arrayWithObject:theme] forKey:WCThemes];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
 
 
 
 - (void)setMessagesFont:(id)sender {
-	NSMutableDictionary		*theme;
-	NSFont					*font, *newFont;
-	
-	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
-	font		= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
-	newFont		= [sender convertFont:font];
-	
-	[theme setObject:WIStringFromFont(newFont) forKey:WCThemesMessagesFont];
-	
-	[self _changeSelectedThemeToTheme:theme];
+    NSMutableDictionary        *theme;
+    NSFont                    *font, *newFont;
+        
+    theme = [[[[WCSettings settings] themeWithName:@"Wired"] mutableCopy] autorelease];
+    font        = WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
+    newFont     = [sender convertFont:font];
+    
+    [theme setObject:WIStringFromFont(newFont) forKey:WCThemesMessagesFont];
+    
+    [[WCSettings settings] setObject:[NSArray arrayWithObject:theme] forKey:WCThemes];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
 
 
 
 - (void)setBoardsFont:(id)sender {
-	NSMutableDictionary		*theme;
-	NSFont					*font, *newFont;
-	
-	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
-	font		= WIFontFromString([theme objectForKey:WCThemesBoardsFont]);
-	newFont		= [sender convertFont:font];
-	
-	[theme setObject:WIStringFromFont(newFont) forKey:WCThemesBoardsFont];
-	
-	[self _changeSelectedThemeToTheme:theme];
+    NSMutableDictionary        *theme;
+    NSFont                    *font, *newFont;
+        
+    theme = [[[[WCSettings settings] themeWithName:@"Wired"] mutableCopy] autorelease];
+    font        = WIFontFromString([theme objectForKey:WCThemesBoardsFont]);
+    newFont     = [sender convertFont:font];
+    
+    [theme setObject:WIStringFromFont(newFont) forKey:WCThemesBoardsFont];
+    
+    [[WCSettings settings] setObject:[NSArray arrayWithObject:theme] forKey:WCThemes];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
 
 

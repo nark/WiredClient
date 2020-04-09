@@ -643,8 +643,7 @@ static WCApplicationController		*sharedController;
 		   selector:@selector(serverConnectionTriggeredEvent:)
 			   name:WCServerConnectionTriggeredEventNotification];
     
-    NSString *themeName = [NSApp darkModeEnabled] ? @"Dark" : @"Light";
-    NSDictionary *theme = [[WCSettings settings] themeWithName:themeName];
+    NSDictionary *theme = [[WCSettings settings] themeWithName:@"Wired"];
     [[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
     [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 	

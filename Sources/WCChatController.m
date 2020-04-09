@@ -842,6 +842,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	htmlPath	= [template htmlPathForType:WITemplateTypeChat];
     
 	[[_chatOutputWebView preferences] setAutosaves:YES];
+
     [[_chatOutputWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:htmlPath]]];
     
     [self themeDidChange:theme];
@@ -1111,9 +1112,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	[[_topicTextField cell] setBackgroundStyle:NSBackgroundStyleRaised];
 	
-    theme        = [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
+    theme        = [[WCSettings settings] themeWithName:@"Wired"];
     template    = [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-
+    
     [self _loadTheme:theme withTemplate:template];
     
     if([[WCSettings settings] boolForKey:WCHideUserList])
@@ -1129,15 +1130,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 #pragma mark -
 
 - (void)appleInterfaceThemeChanged:(NSNotification *) notification {
-    NSDictionary *theme;
+    NSDictionary *theme = [[WCSettings settings] themeWithName:@"Wired"];
     
-    if ([NSApp darkModeEnabled]) {
-        theme = [[WCSettings settings] themeWithName:@"Dark"];
-    } else {
-        theme = [[WCSettings settings] themeWithName:@"Light"];
-    }
-    
-    [[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
     [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
 

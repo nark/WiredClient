@@ -213,8 +213,7 @@ NSString * const WCMigrated20B                          = @"WCMigrated20B";
 
 @implementation WCSettings(Private)
 
-static NSString *lightThemeIdentifier;
-static NSString *darkThemeIdentifier;
+static NSString *defaultThemeIdentifier;
 
 
 - (void)_upgrade {
@@ -541,17 +540,17 @@ static NSString *darkThemeIdentifier;
     
     NSLog(@"Upgrade settings...");
     
-    if (![self boolForKey:@"WCMigratedTo_2_5__31"]) {
-        NSLog(@"Upgrade settings to 2_5__31...");
+    if (![self boolForKey:@"WCMigratedTo_2_5__32"]) {
+        NSLog(@"Upgrade settings to 2_5__32...");
         
         // make sure to reset old versions themes
         [self removeObjectForKey:WCThemes];
-        [self setString:[NSApp darkModeEnabled] ? darkThemeIdentifier : lightThemeIdentifier forKey:WCTheme];
+        [self setString:defaultThemeIdentifier forKey:WCTheme];
 
-        [self setObject:[NSArray arrayWithObjects: [self _defaultLightTheme], [self _defaultDarkTheme], NULL]
+        [self setObject:[NSArray arrayWithObjects: [self _defaultTheme], NULL]
                  forKey:WCThemes];
-        
-        [self setBool:true forKey:@"WCMigratedTo_2_5__31"];
+
+        [self setBool:true forKey:@"WCMigratedTo_2_5__32"];
     }
 }
 
@@ -576,14 +575,13 @@ static NSString *darkThemeIdentifier;
 
 #pragma mark -
 
-- (NSDictionary *)_defaultLightTheme {
-    
+- (NSDictionary *)_defaultTheme {
     NSDictionary *dictionary;
     
     dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                  NSLS(@"Light", @"Theme"),                                            WCThemesName,
-                  @"Light",                                                            WCThemesBuiltinName,
-                  lightThemeIdentifier,                                                WCThemesIdentifier,
+                  NSLS(@"Wired", @"Theme"),                                            WCThemesName,
+                  @"Wired",                                                            WCThemesBuiltinName,
+                  defaultThemeIdentifier,                                                WCThemesIdentifier,
                   @"fr.read-write.Neo",                                            WCThemesTemplate,
                   WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),            WCThemesChatFont,
                   WIStringFromColor([NSColor darkGrayColor]),                            WCThemesChatTextColor,
@@ -613,44 +611,6 @@ static NSString *darkThemeIdentifier;
     return dictionary;
 }
 
-
-- (NSDictionary *)_defaultDarkTheme {
-    
-    NSDictionary *dictionary;
-    
-    dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                  NSLS(@"Dark", @"Theme"),                                            WCThemesName,
-                  @"Dark",                                                            WCThemesBuiltinName,
-                  darkThemeIdentifier,                                                WCThemesIdentifier,
-                  @"fr.read-write.Neo",                                            WCThemesTemplate,
-                  WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),            WCThemesChatFont,
-                  WIStringFromColor([NSColor whiteColor]),                            WCThemesChatTextColor,
-                  WIStringFromColor([NSColor darkGrayColor]),                            WCThemesChatBackgroundColor,
-                  WIStringFromColor([NSColor lightGrayColor]),                                WCThemesChatEventsColor,
-                  WIStringFromColor([NSColor whiteColor]),                                WCThemesChatTimestampEveryLineColor,
-                  WIStringFromColor([NSColor blueColor]),                            WCThemesChatURLsColor,
-                  WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesMessagesFont,
-                  WIStringFromColor([NSColor whiteColor]),                            WCThemesMessagesTextColor,
-                  WIStringFromColor([NSColor darkGrayColor]),                            WCThemesMessagesBackgroundColor,
-                  WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesBoardsFont,
-                  WIStringFromColor([NSColor whiteColor]),                            WCThemesBoardsTextColor,
-                  WIStringFromColor([NSColor darkGrayColor]),                            WCThemesBoardsBackgroundColor,
-                  [NSNumber numberWithBool:YES],                                        WCThemesShowSmileys,
-                  [NSNumber numberWithBool:YES],                                        WCThemesChatTimestampEveryLine,
-                  [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],        WCThemesUserListIconSize,
-                  [NSNumber numberWithBool:NO],                                        WCThemesUserListAlternateRows,
-                  [NSNumber numberWithBool:YES],                                        WCThemesFileListAlternateRows,
-                  [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],        WCThemesFileListIconSize,
-                  [NSNumber numberWithBool:YES],                                        WCThemesTransferListShowProgressBar,
-                  [NSNumber numberWithBool:YES],                                        WCThemesTransferListAlternateRows,
-                  [NSNumber numberWithBool:YES],                                        WCThemesTrackerListAlternateRows,
-                  [NSNumber numberWithInteger:WCThemesMonitorIconSizeLarge],            WCThemesMonitorIconSize,
-                  [NSNumber numberWithBool:YES],                                        WCThemesMonitorAlternateRows,
-                  NULL];
-    
-    return dictionary;
-}
-
 @end
 
 
@@ -664,11 +624,9 @@ static NSString *darkThemeIdentifier;
 	id					settings;
 	
     
-    if(!lightThemeIdentifier)
-        lightThemeIdentifier = [[NSString UUIDString] retain];
+    if(!defaultThemeIdentifier)
+        defaultThemeIdentifier = [[NSString UUIDString] retain];
     
-    if(!darkThemeIdentifier)
-        darkThemeIdentifier = [[NSString UUIDString] retain];
     
 //#ifdef WCConfigurationDebug
 //	domain = @"fr.read-write.WiredClientDebug";
@@ -797,13 +755,12 @@ static NSString *darkThemeIdentifier;
 			[NSNumber numberWithBool:YES],
 				WCCheckForUpdate,
                     
-            [NSApp darkModeEnabled] ? darkThemeIdentifier : lightThemeIdentifier,
+            defaultThemeIdentifier,
 				WCTheme,
                     
 			[NSArray arrayWithObjects:
-				[self _defaultLightTheme],
-				[self _defaultDarkTheme],
-			 NULL],
+             [self _defaultTheme],
+             NULL],
 				WCThemes,
                     
             [NSNumber numberWithInteger:WCThreadsSplitViewOrientationVertical],
