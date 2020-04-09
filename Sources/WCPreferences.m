@@ -1425,95 +1425,46 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (void)setChatFont:(id)sender {
-    NSArray                 *themes;
 	NSMutableDictionary		*theme;
 	NSFont					*font, *newFont;
-	NSInteger               index;
-    
-    theme       = [[[self _selectedTheme] mutableCopy] autorelease];
-    font        = WIFontFromString([theme objectForKey:WCThemesChatFont]);
-    newFont     = [sender convertFont:font];
-    themes      = [[WCSettings settings] objectForKey:WCThemes];
-    
-    [theme setObject:WIStringFromFont(newFont) forKey:WCThemesChatFont];
-    
-    for(NSDictionary *oldTheme in themes) {
-        NSMutableDictionary *theme = [[oldTheme mutableCopy] autorelease];
-
-        [theme setObject:WIStringFromFont(newFont) forKey:WCThemesChatFont];
-
-        [[WCSettings settings] removeObjectAtIndex:index fromArrayForKey:WCThemes];
-        [[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-
-        index += 1;
-    }
 	
-    [self _changeSelectedThemeToTheme:theme];
-    
-    [[WCSettings settings] synchronize];
+	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
+	font		= WIFontFromString([theme objectForKey:WCThemesChatFont]);
+	newFont		= [sender convertFont:font];
+	
+	[theme setObject:WIStringFromFont(newFont) forKey:WCThemesChatFont];
+	
+	[self _changeSelectedThemeToTheme:theme];
 }
 
 
 
 - (void)setMessagesFont:(id)sender {
-    NSArray                 *themes;
-    NSMutableDictionary        *theme;
-    NSFont                    *font, *newFont;
-    NSInteger               index;
-    
-    theme       = [[[self _selectedTheme] mutableCopy] autorelease];
-    font        = WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
-    newFont     = [sender convertFont:font];
-    themes      = [[WCSettings settings] objectForKey:WCThemes];
-    
-    [theme setObject:WIStringFromFont(newFont) forKey:WCThemesMessagesFont];
-    
-    for(NSDictionary *oldTheme in themes) {
-        NSMutableDictionary *theme = [[oldTheme mutableCopy] autorelease];
-
-        [theme setObject:WIStringFromFont(newFont) forKey:WCThemesMessagesFont];
-
-        [[WCSettings settings] removeObjectAtIndex:index fromArrayForKey:WCThemes];
-        [[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-
-        index += 1;
-    }
-    
-    [self _changeSelectedThemeToTheme:theme];
-    
-    [[WCSettings settings] synchronize];
+	NSMutableDictionary		*theme;
+	NSFont					*font, *newFont;
+	
+	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
+	font		= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
+	newFont		= [sender convertFont:font];
+	
+	[theme setObject:WIStringFromFont(newFont) forKey:WCThemesMessagesFont];
+	
+	[self _changeSelectedThemeToTheme:theme];
 }
 
 
 
 - (void)setBoardsFont:(id)sender {
-    NSArray                 *themes;
-    NSMutableDictionary        *theme;
-    NSFont                    *font, *newFont;
-    NSInteger               index;
-    
-    theme       = [[[self _selectedTheme] mutableCopy] autorelease];
-    font        = WIFontFromString([theme objectForKey:WCThemesBoardsFont]);
-    newFont     = [sender convertFont:font];
-    themes      = [[WCSettings settings] objectForKey:WCThemes];
-    
-    [theme setObject:WIStringFromFont(newFont) forKey:WCThemesBoardsFont];
-    
-    for(NSDictionary *oldTheme in themes) {
-        NSMutableDictionary *theme = [[oldTheme mutableCopy] autorelease];
-
-        [theme setObject:WIStringFromFont(newFont) forKey:WCThemesBoardsFont];
-
-        [[WCSettings settings] removeObjectAtIndex:index fromArrayForKey:WCThemes];
-        [[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-
-        index += 1;
-    }
-    
-    [self _changeSelectedThemeToTheme:theme];
-    
-    [[WCSettings settings] synchronize];
-
+	NSMutableDictionary		*theme;
+	NSFont					*font, *newFont;
+	
+	theme		= [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
+	font		= WIFontFromString([theme objectForKey:WCThemesBoardsFont]);
+	newFont		= [sender convertFont:font];
+	
+	[theme setObject:WIStringFromFont(newFont) forKey:WCThemesBoardsFont];
+	
+	[self _changeSelectedThemeToTheme:theme];
 }
 
 
@@ -1534,7 +1485,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		[theme setValue:value forKey:WCThemesTemplate];
 		
 		[self _changeSelectedThemeToTheme:theme];
-        [[WCSettings settings] synchronize];
 	}
 }
 
