@@ -219,7 +219,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 //	[_messageTextField setTextColor:textColor];
 //    [[_messageTextField.cell fieldEditorForView:_messageTextField] setInsertionPointColor:textColor];
 //    [_messageTextField setBackgroundColor:backgroundColor];
-//	
+//
 ////	[_broadcastTextView setFont:font];
 //	[_broadcastTextView setTextColor:textColor];
 //	[_broadcastTextView setInsertionPointColor:textColor];
@@ -1036,8 +1036,6 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
             [self _sortConversations];
         }
 	}
-    
-    [self _themeDidChange];
 }
 
 
