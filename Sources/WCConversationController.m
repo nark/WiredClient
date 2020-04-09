@@ -67,6 +67,7 @@
     
 	[_font release];
 	[_textColor release];
+    [_URLTextColor release];
 	[_backgroundColor release];
     
     [_conversation release];
@@ -159,6 +160,19 @@
 
 
 
+- (void)setURLTextColor:(NSColor *)textColor {
+    [textColor retain];
+    [_URLTextColor release];
+    
+    _URLTextColor = textColor;
+}
+
+- (NSColor *)URLTextColor {
+    return _URLTextColor;
+}
+
+
+
 - (void)setBackgroundColor:(NSColor *)backgroundColor {
 	[backgroundColor retain];
 	[_backgroundColor release];
@@ -234,6 +248,10 @@
     
 	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]]
               toAttribute:WITemplateAttributesFontSize
+                   ofType:WITemplateTypeMessages];
+    
+    [template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_URLTextColor HTMLValue]]
+              toAttribute:WITemplateAttributesURLTextColor
                    ofType:WITemplateTypeMessages];
     
 	[template setCSSValue:[NSApp darkModeEnabled] ? @"gainsboro" : @"dimgray"

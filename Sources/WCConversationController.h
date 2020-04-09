@@ -37,6 +37,7 @@
 	NSString							*_templatePath;
 	NSFont								*_font;
 	NSColor								*_textColor;
+    NSColor                             *_URLTextColor;
 	NSColor								*_backgroundColor;
 }
 
@@ -56,6 +57,9 @@
 
 - (void)setTextColor:(NSColor *)textColor;
 - (NSColor *)textColor;
+
+- (void)setURLTextColor:(NSColor *)textColor;
+- (NSColor *)URLTextColor;
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;

@@ -51,7 +51,8 @@
 	NSFont								*_font;
 	NSColor								*_textColor;
 	NSColor								*_backgroundColor;
-
+    NSColor                             *_URLTextColor;
+    
 	WIDateFormatter						*_dateFormatter;
 	
 	WCBoardPost							*_selectPost;
@@ -60,14 +61,22 @@
 
 - (void)setBoard:(WCBoard *)board;
 - (WCBoard *)board;
+
 - (void)setThread:(WCBoardThread *)thread;
 - (WCBoardThread *)thread;
+
 - (void)setTemplatePath:(NSString *)path;
 - (NSString *)templatePath;
+
 - (void)setFont:(NSFont *)font;
 - (NSFont *)font;
+
 - (void)setTextColor:(NSColor *)textColor;
 - (NSColor *)textColor;
+
+- (void)setURLTextColor:(NSColor *)textColor;
+- (NSColor *)URLTextColor;
+
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;
 

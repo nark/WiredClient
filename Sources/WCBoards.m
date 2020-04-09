@@ -320,8 +320,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	NSDictionary		*theme;
 	NSString			*templatePath;
 	WITemplateBundle    *templateBundle;
-    NSColor             *textColor;
-    NSColor             *backgroundColor;
+    NSColor             *textColor, *URLTextColor, *backgroundColor;
 	
 	theme				= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
 	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
@@ -329,9 +328,11 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         
     textColor           = [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
     backgroundColor     = [NSApp darkModeEnabled] ? [NSColor darkGrayColor] : [NSColor whiteColor];
-        
+    URLTextColor        = WIColorFromString([theme objectForKey:WCThemesChatURLsColor]);
+    
 	[_threadController setFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont])];
     [_threadController setTextColor:textColor];
+    [_threadController setURLTextColor:URLTextColor];
 	[_threadController setBackgroundColor:backgroundColor];
 	[_threadController setTemplatePath:templatePath];
 

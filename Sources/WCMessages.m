@@ -193,7 +193,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     
 	NSDictionary				*theme;
 	NSFont						*font;
-	NSColor						*textColor, *backgroundColor;
+	NSColor						*textColor, *backgroundColor, *URLTextColor;
 	NSString					*templatePath;
 	WITemplateBundle            *templateBundle;
     
@@ -205,6 +205,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	templateBundle				= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
     
 	font						= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
+    URLTextColor                = WIColorFromString([theme objectForKey:WCThemesChatURLsColor]);
 	textColor					= [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
 	backgroundColor				= [NSApp darkModeEnabled] ? [NSColor darkGrayColor] : [NSColor whiteColor];
 	templatePath				= [templateBundle bundlePath];
@@ -213,6 +214,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[_conversationController setTemplatePath:templatePath];
 	[_conversationController setFont:font];
 	[_conversationController setTextColor:textColor];
+    [_conversationController setURLTextColor:URLTextColor];
 	[_conversationController setBackgroundColor:backgroundColor];
 		
 //	[_messageTextField setFont:font];
