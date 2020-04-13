@@ -495,6 +495,9 @@ static void _WITableViewManagerShader(void *info, const CGFloat *in, CGFloat *ou
 	_sortDescendingImage = [[NSImage alloc] initWithContentsOfFile:
 		[[NSBundle bundleForClass:[self class]] pathForResource:@"WITableViewManager-SortDescending" ofType:@"tiff"]];
     
+    [_sortAscendingImage setTemplate:true];
+    [_sortDescendingImage setTemplate:true];
+    
 	if([_tableView isKindOfClass:[NSOutlineView class]]) {
 		_stringValueForRow		= @selector(outlineView:stringValueForRow:);
 		_shouldCopyInfo			= @selector(outlineViewShouldCopyInfo:);

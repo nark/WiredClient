@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="WCFiles">
             <connections>
-                <outlet property="_allServersButton" destination="267" id="274"/>
+                <outlet property="_allServersButton" destination="KTu-YW-UVa" id="YMH-mb-WN2"/>
                 <outlet property="_createFolderButton" destination="202" id="237"/>
                 <outlet property="_createFolderPanel" destination="1" id="158"/>
                 <outlet property="_createdTableColumn" destination="48" id="117"/>
@@ -234,17 +234,6 @@
                                                     <rect key="frame" x="-2" y="0.0" width="5" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 </box>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="267">
-                                                    <rect key="frame" x="199" y="4" width="75" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="recessed" title="Alle Server" bezelStyle="recessed" alignment="center" controlSize="small" lineBreakMode="truncatingTail" borderStyle="border" inset="2" id="270" customClass="WCFilterButtonCell">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                        <font key="font" metaFont="smallSystemBold"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="allServers:" target="-2" id="276"/>
-                                                    </connections>
-                                                </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="268">
                                                     <rect key="frame" x="58" y="4" width="133" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -265,6 +254,17 @@
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KTu-YW-UVa">
+                                                    <rect key="frame" x="199" y="4" width="83" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="recessed" title="Alle Server" bezelStyle="recessed" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CgU-QR-Cbw">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                                        <font key="font" metaFont="systemBold" size="12"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="allServers:" target="-2" id="GZ1-Dm-fWY"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </customView>
                                     </subviews>
@@ -273,7 +273,7 @@
                             <tabViewItem label="Baumstruktur" identifier="Tree" id="37">
                                 <view key="view" id="38">
                                     <rect key="frame" x="0.0" y="0.0" width="453" height="446"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="133">
                                             <rect key="frame" x="0.0" y="0.0" width="453" height="446"/>
@@ -323,7 +323,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="183"/>
             </connections>
-            <point key="canvasLocation" x="139" y="147"/>
+            <point key="canvasLocation" x="417" y="-47"/>
         </window>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1" userLabel="New Folder" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
@@ -627,18 +627,20 @@ Gw
                     </connections>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="139" y="401"/>
         </menu>
         <menu id="3" userLabel="Title Bar Menu">
             <items>
                 <menuItem title="&lt;&lt; do not localize &gt;&gt;" id="56"/>
             </items>
+            <point key="canvasLocation" x="139" y="982"/>
         </menu>
         <customView id="190" userLabel="Toolbar Views">
             <rect key="frame" x="0.0" y="0.0" width="754" height="62"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="191">
-                    <rect key="frame" x="13.5" y="19" width="63" height="23"/>
+                    <rect key="frame" x="14.5" y="19" width="63" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="192">
                         <font key="font" metaFont="system"/>
@@ -649,7 +651,7 @@ Gw
                     </segmentedCell>
                 </segmentedControl>
                 <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="195">
-                    <rect key="frame" x="86.5" y="18" width="58" height="25"/>
+                    <rect key="frame" x="87.5" y="18" width="58" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedRounded" trackingMode="selectOne" id="196">
                         <font key="font" metaFont="system"/>
@@ -662,7 +664,7 @@ Gw
                     </segmentedCell>
                 </segmentedControl>
                 <button toolTip="Eine Datei/Ordner herunterladen" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="199">
-                    <rect key="frame" x="152.5" y="18" width="40" height="25"/>
+                    <rect key="frame" x="153.5" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="Download" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="212">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -670,7 +672,7 @@ Gw
                     </buttonCell>
                 </button>
                 <button toolTip="Eine Datei/Ordner hochladen" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="200">
-                    <rect key="frame" x="200.5" y="18" width="40" height="25"/>
+                    <rect key="frame" x="201.5" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="Upload" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="211">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -678,7 +680,7 @@ Gw
                     </buttonCell>
                 </button>
                 <button toolTip="Zeigt Informationen über das gewählte Objekt" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="201">
-                    <rect key="frame" x="248.5" y="18" width="40" height="25"/>
+                    <rect key="frame" x="249.5" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="FileInfo" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="210">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -688,7 +690,7 @@ Gw
                     </buttonCell>
                 </button>
                 <button toolTip="Fügt einen Ordner hinzu" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="202">
-                    <rect key="frame" x="344.5" y="18" width="40" height="25"/>
+                    <rect key="frame" x="345.5" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NewFolder" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" id="209">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -696,7 +698,7 @@ Gw
                     </buttonCell>
                 </button>
                 <button toolTip="Liest die Liste erneut ein" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="203">
-                    <rect key="frame" x="392.5" y="18" width="40" height="25"/>
+                    <rect key="frame" x="393.5" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="ReloadFiles" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="208">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -704,7 +706,7 @@ Gw
                     </buttonCell>
                 </button>
                 <button toolTip="Vorschau von dem gewählten Objekt" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="204">
-                    <rect key="frame" x="296.5" y="18" width="40" height="25"/>
+                    <rect key="frame" x="297.5" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="QuickLook" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="207">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -712,7 +714,7 @@ Gw
                     </buttonCell>
                 </button>
                 <button toolTip="Löscht das/die gewählte/n Objekt/e" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="205">
-                    <rect key="frame" x="440.5" y="18" width="40" height="25"/>
+                    <rect key="frame" x="441.5" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="DeleteFile" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="206">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

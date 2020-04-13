@@ -1574,12 +1574,12 @@ static WCApplicationController		*sharedController;
 
 
 - (IBAction)manual:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://wired.read-write.fr/wiki/"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://wired.read-write.fr/"]];
 }
 
 
 - (IBAction)support:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/nark/WiredClient/issues?milestone=1&state=open"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/nark/WiredClient/issues?state=open"]];
 }
 
 @end

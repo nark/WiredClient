@@ -1210,7 +1210,7 @@ NSString * const WIFileModificationDate					= @"WIFileModificationDate";
 #pragma mark -
 
 - (void)drawRect:(NSRect)rect {
-	[[NSColor whiteColor] set];
+	[[NSColor controlBackgroundColor] set];
 	NSRectFill(rect);
 }
 

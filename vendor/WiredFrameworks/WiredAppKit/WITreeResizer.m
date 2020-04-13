@@ -139,8 +139,8 @@ static void _WITreeResizerShader(void *info, const CGFloat *in, CGFloat *out) {
 
 
 - (void)drawRect:(NSRect)rect {
-	[self _drawGradientWithStartingColor:[NSColor colorWithCalibratedWhite:203.0 / 255.0 alpha:1.0]
-							 endingColor:[NSColor colorWithCalibratedWhite:255.0 / 255.0 alpha:1.0]
+	[self _drawGradientWithStartingColor:[NSColor controlBackgroundColor]
+							 endingColor:[NSColor controlBackgroundColor]
 								  inRect:rect];
 	
 	[[NSColor colorWithCalibratedWhite:0.33 alpha:1.0] set];

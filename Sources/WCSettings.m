@@ -598,7 +598,7 @@ static NSString *defaultThemeIdentifier;
                   [NSNumber numberWithBool:YES],                                        WCThemesShowSmileys,
                   [NSNumber numberWithBool:YES],                                        WCThemesChatTimestampEveryLine,
                   [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],        WCThemesUserListIconSize,
-                  [NSNumber numberWithBool:NO],                                        WCThemesUserListAlternateRows,
+                  [NSNumber numberWithBool:YES],                                        WCThemesUserListAlternateRows,
                   [NSNumber numberWithBool:YES],                                        WCThemesFileListAlternateRows,
                   [NSNumber numberWithInteger:WCThemesFileListIconSizeLarge],        WCThemesFileListIconSize,
                   [NSNumber numberWithBool:YES],                                        WCThemesTransferListShowProgressBar,

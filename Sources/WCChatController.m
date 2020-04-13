@@ -1152,13 +1152,13 @@ typedef enum _WCChatFormat					WCChatFormat;
 	eventColor				= WIColorFromString([theme objectForKey:WCThemesChatEventsColor]);
 	
 	// Cocoa UI reload
-//	if(![[_setTopicTextView font] isEqualTo:font]) {
-//		[_chatInputTextView setFont:font];
-//		[_setTopicTextView setFont:font];
-//		
-//		[_chatFont release];
-//		_chatFont = [font retain];
-//	}
+	if(![[_setTopicTextView font] isEqualTo:font]) {
+		[_chatInputTextField setFont:font];
+		[_setTopicTextView setFont:font];
+		
+		[_chatFont release];
+		_chatFont = [font retain];
+	}
 //	
 //	if(![[_chatInputTextView backgroundColor] isEqualTo:backgroundColor]) {
 //		[_chatInputTextView setBackgroundColor:backgroundColor];

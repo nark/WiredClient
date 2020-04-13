@@ -217,16 +217,9 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     [_conversationController setURLTextColor:URLTextColor];
 	[_conversationController setBackgroundColor:backgroundColor];
 		
-//	[_messageTextField setFont:font];
-//	[_messageTextField setTextColor:textColor];
-//    [[_messageTextField.cell fieldEditorForView:_messageTextField] setInsertionPointColor:textColor];
-//    [_messageTextField setBackgroundColor:backgroundColor];
-//
-////	[_broadcastTextView setFont:font];
-//	[_broadcastTextView setTextColor:textColor];
-//	[_broadcastTextView setInsertionPointColor:textColor];
-//	[_broadcastTextView setBackgroundColor:backgroundColor];
-	
+	[_messageTextField setFont:font];
+    [_broadcastTextView setFont:font];
+
 	[_conversationController reloadTemplate];
     [_conversationController reloadData];
 }
