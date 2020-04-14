@@ -700,17 +700,18 @@ static WCApplicationController		*sharedController;
     
 	[WIDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 	[NSNumberFormatter setDefaultFormatterBehavior:NSNumberFormatterBehavior10_4];
-/*
+
+    
     // set the auto-update feed URL regarding to the selected configuration (Debug or Release)
 #ifdef WCConfigurationRelease
-    [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/sparkle.php?file=wiredclientcast"]];
+    [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/wiredclientcast.xml"]];
 #else
-   [_updater setFeedURL:[NSURL URLWithString:@"http://wired.read-write.fr/xml/sparkle.php?file=wiredclient_debugcast"]];
+   [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/wiredclient_debugcast.xml"]];
 #endif
     
      [_updater setSendsSystemProfile:YES];
      [_updater performSelector:@selector(checkForUpdatesInBackground) afterDelay:5.0f];
-*/
+
 	path = [[NSBundle mainBundle] pathForResource:@"wired" ofType:@"xml"];
 
     // verify the P7 specification in debug mode
@@ -1574,7 +1575,7 @@ static WCApplicationController		*sharedController;
 
 
 - (IBAction)manual:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://wired.read-write.fr/"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/nark/WiredClient/wiki"]];
 }
 
 
