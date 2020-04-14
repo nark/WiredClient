@@ -704,9 +704,9 @@ static WCApplicationController		*sharedController;
     
     // set the auto-update feed URL regarding to the selected configuration (Debug or Release)
 #ifdef WCConfigurationRelease
-    [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/wiredclientcast.xml"]];
+    [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/sparkle/wiredclient_cast.xml"]];
 #else
-   [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/wiredclient_debugcast.xml"]];
+   [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/sparkle/wiredclient_debugcast.xml"]];
 #endif
     
      [_updater setSendsSystemProfile:YES];
