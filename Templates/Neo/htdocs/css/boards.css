@@ -35,17 +35,21 @@ div.postheader {
     font: normal 12px "Helvetica", sans-serif; 
     background-color: <? headerbackground ?>;
     padding: 7px;
-    min-height: 33px;
+    min-height: 42px;
     border-bottom: 1px solid #999;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 }
 
 div.postinfo {
-	width: 165px;
+	width: 215px;
 	float: left;
 }
 
+
+div.postattributes {
+    margin-left: 10px;
+}
 
 div.postheadertitles {
 	float: left;
@@ -79,15 +83,15 @@ span.postfrom {
 }
 
 span.postpostdatestring, span.posteditdatestring {
-	font-size: 9px;
+    font: normal 9px "<? fontname ?>", sans-serif;
 }
 
 span.postpostdate, span.posteditdate {
-	font-size: 9px;
+	font: normal 9px "<? fontname ?>", sans-serif;
 }
 
 
-div.posticon { float: left; }
+div.posticon { float: left; margin-top: 5px; }
 
 .postunread {
 	float: right;
@@ -98,6 +102,7 @@ div.posticon { float: left; }
 div.postbuttons {
 	padding: 5px;
 	margin-right: 5px;
+    margin-top: 5px;
 	text-align: right;
 	width: auto;
 	float: right;

@@ -588,7 +588,7 @@ static NSString *defaultThemeIdentifier;
                   WIStringFromColor([NSColor whiteColor]),                            WCThemesChatBackgroundColor,
                   WIStringFromColor([NSColor lightGrayColor]),                      WCThemesChatEventsColor,
                   WIStringFromColor([NSColor lightGrayColor]),                      WCThemesChatTimestampEveryLineColor,
-                  WIStringFromColor([NSColor blueColor]),                            WCThemesChatURLsColor,
+                  WIStringFromColor([NSColor linkColor]),                            WCThemesChatURLsColor,
                   WIStringFromFont([NSFont fontWithName:@"Helvetica" size:13.0]),    WCThemesMessagesFont,
                   WIStringFromColor([NSColor darkGrayColor]),                            WCThemesMessagesTextColor,
                   WIStringFromColor([NSColor whiteColor]),                            WCThemesMessagesBackgroundColor,

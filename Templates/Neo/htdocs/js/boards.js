@@ -127,14 +127,12 @@ function _formatPostAsHTHML(post) {
 					'<div class="postinfo">' +
 						'<span class="postfrom">' + post["from"] + '</span>' + 
 						'<div class="postattributes">' +
-							'<div class="postheadertitles">' +
-								'<span class="postpostdatestring postheadertitle">' + post["postDateString"] + '</span>' +
-								'<span class="posteditdatestring postheadertitle">' + post["editDateString"] + '</span>' +
-							'</div>' +
-							'<div class="postheadervalues">' +
-								'<span class="postheadervalue postpostdate">' + post["postDate"] + '</span>' +
-								'<span class="postheadervalue posteditdate">' + post["editDate"] + '</span>' +
-							'</div>' +
+                            '<span class="postpostdatestring">' + post["postDateString"] + '</span>' +
+                            '<span class="postpostdate"> ' + post["postDate"] + '</span>' +
+                        '</div>' +
+                        '<div class="postattributes">' +
+                            '<span class="posteditdatestring ">' + post["editDateString"] + '</span>' +
+                            '<span class="posteditdate"> ' + post["editDate"] + '</span>' +
 						'</div>' +
 					'</div>' +
 					'<span class="postunread"></span>' +
