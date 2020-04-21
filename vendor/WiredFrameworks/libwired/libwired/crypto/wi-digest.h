@@ -35,15 +35,13 @@
 
 #define WI_MD5_DIGEST_LENGTH			16
 #define WI_SHA1_DIGEST_LENGTH			20
-#define WI_SHA256_DIGEST_LENGTH			32
-
+#define WI_SHA256_DIGEST_LENGTH         32
+#define WI_SHA512_DIGEST_LENGTH         64
 
 typedef struct _wi_md5					wi_md5_t;
 typedef struct _wi_sha1					wi_sha1_t;
-typedef struct _wi_sha256				wi_sha256_t;
-
-
-#pragma mark -
+typedef struct _wi_sha256               wi_sha256_t;
+typedef struct _wi_sha512               wi_sha512_t;
 
 WI_EXPORT void							wi_md5_digest(const void *, wi_uinteger_t, unsigned char *);
 WI_EXPORT wi_string_t *					wi_md5_digest_string(wi_data_t *);
@@ -60,7 +58,6 @@ WI_EXPORT void							wi_md5_get_data(wi_md5_t *, unsigned char *);
 WI_EXPORT wi_data_t *					wi_md5_data(wi_md5_t *);
 WI_EXPORT wi_string_t *					wi_md5_string(wi_md5_t *);
 
-#pragma mark -
 
 WI_EXPORT void							wi_sha1_digest(const void *, wi_uinteger_t, unsigned char *);
 WI_EXPORT wi_string_t *					wi_sha1_digest_string(wi_data_t *);
@@ -77,25 +74,40 @@ WI_EXPORT void							wi_sha1_get_data(wi_sha1_t *, unsigned char *);
 WI_EXPORT wi_data_t *					wi_sha1_data(wi_sha1_t *);
 WI_EXPORT wi_string_t *					wi_sha1_string(wi_sha1_t *);
 
-#pragma mark -
 
-WI_EXPORT void							wi_sha256_digest(const void *, wi_uinteger_t, unsigned char *);
-WI_EXPORT wi_string_t *					wi_sha256_digest_string(wi_data_t *);
+WI_EXPORT void                          wi_sha256_digest(const void *, wi_uinteger_t, unsigned char *);
+WI_EXPORT wi_string_t *                 wi_sha256_digest_string(wi_data_t *);
 
-WI_EXPORT wi_sha256_t *					wi_sha256(void);
+WI_EXPORT wi_sha256_t *                 wi_sha256(void);
 
-WI_EXPORT wi_sha256_t *					wi_sha256_alloc(void);
-WI_EXPORT wi_sha256_t *					wi_sha256_init(wi_sha256_t *);
+WI_EXPORT wi_sha256_t *                 wi_sha256_alloc(void);
+WI_EXPORT wi_sha256_t *                 wi_sha256_init(wi_sha256_t *);
 
-WI_EXPORT void							wi_sha256_update(wi_sha256_t *, const void *, wi_uinteger_t);
-WI_EXPORT void							wi_sha256_close(wi_sha256_t *);
+WI_EXPORT void                          wi_sha256_update(wi_sha256_t *, const void *, wi_uinteger_t);
+WI_EXPORT void                          wi_sha256_close(wi_sha256_t *);
 
-WI_EXPORT void							wi_sha256_get_data(wi_sha256_t *, unsigned char *);
-WI_EXPORT wi_data_t *					wi_sha256_data(wi_sha256_t *);
-WI_EXPORT wi_string_t *					wi_sha256_string(wi_sha256_t *);
+WI_EXPORT void                          wi_sha256_get_data(wi_sha256_t *, unsigned char *);
+WI_EXPORT wi_data_t *                   wi_sha256_data(wi_sha256_t *);
+WI_EXPORT wi_string_t *                 wi_sha256_string(wi_sha256_t *);
 
 
-#pragma mark -
+WI_EXPORT void                          wi_sha512_digest(const void *, wi_uinteger_t, unsigned char *);
+WI_EXPORT wi_string_t *                 wi_sha512_digest_string(wi_data_t *);
+
+WI_EXPORT wi_sha512_t *                 wi_sha512(void);
+
+WI_EXPORT wi_sha512_t *                 wi_sha512_alloc(void);
+WI_EXPORT wi_sha512_t *                 wi_sha512_init(wi_sha512_t *);
+
+WI_EXPORT void                          wi_sha512_update(wi_sha512_t *, const void *, wi_uinteger_t);
+WI_EXPORT void                          wi_sha512_close(wi_sha512_t *);
+
+WI_EXPORT void                          wi_sha512_get_data(wi_sha512_t *, unsigned char *);
+WI_EXPORT wi_data_t *                   wi_sha512_data(wi_sha512_t *);
+WI_EXPORT wi_string_t *                 wi_sha512_string(wi_sha512_t *);
+
+
+
 
 WI_EXPORT wi_string_t *					wi_base64_string_from_data(wi_data_t *);
 WI_EXPORT wi_data_t *					wi_data_from_base64_string(wi_string_t *);

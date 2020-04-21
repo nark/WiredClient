@@ -118,34 +118,31 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 #pragma mark -
 
 - (void)_updateTheme:(NSMutableDictionary *)theme {
-    [theme setObject:WIStringFromColor([_themesChatTextColorWell color]) forKey:WCThemesChatTextColor];
-    [theme setObject:WIStringFromColor([_themesChatBackgroundColorWell color]) forKey:WCThemesChatBackgroundColor];
-    [theme setObject:WIStringFromColor([_themesChatEventsColorWell color]) forKey:WCThemesChatEventsColor];
-    [theme setObject:WIStringFromColor([_themesChatTimestampEveryLineColorWell color]) forKey:WCThemesChatTimestampEveryLineColor];
-    [theme setObject:WIStringFromColor([_themesChatURLsColorWell color]) forKey:WCThemesChatURLsColor];
-    
-    [theme setObject:WIStringFromColor([_themesMessagesTextColorWell color]) forKey:WCThemesMessagesTextColor];
-    [theme setObject:WIStringFromColor([_themesMessagesBackgroundColorWell color]) forKey:WCThemesMessagesBackgroundColor];
-    [theme setObject:WIStringFromColor([_themesBoardsTextColorWell color]) forKey:WCThemesBoardsTextColor];
-    [theme setObject:WIStringFromColor([_themesBoardsBackgroundColorWell color]) forKey:WCThemesBoardsBackgroundColor];
-    
-    [theme setBool:[_themesShowSmileysButton state] forKey:WCThemesShowSmileys];
-    
-    [theme setBool:[_themesChatTimestampEveryLineButton state] forKey:WCThemesChatTimestampEveryLine];
-    
-    [theme setInteger:[_themesUserListIconSizeMatrix selectedTag] forKey:WCThemesUserListIconSize];
-    [theme setBool:[_themesUserListAlternateRowsButton state] forKey:WCThemesUserListAlternateRows];
-    
-    [theme setInteger:[_themesFileListIconSizeMatrix selectedTag] forKey:WCThemesFileListIconSize];
-    [theme setBool:[_themesFileListAlternateRowsButton state] forKey:WCThemesFileListAlternateRows];
-    
-    [theme setBool:[_themesTransferListShowProgressBarButton state] forKey:WCThemesTransferListShowProgressBar];
-    [theme setBool:[_themesTransferListAlternateRowsButton state] forKey:WCThemesTransferListAlternateRows];
-    
-    [theme setBool:[_themesTrackerListAlternateRowsButton state] forKey:WCThemesTrackerListAlternateRows];
+//  [theme setObject:WIStringFromColor([_themesChatTextColorWell color]) forKey:WCThemesChatTextColor];
+//  [theme setObject:WIStringFromColor([_themesChatBackgroundColorWell color]) forKey:WCThemesChatBackgroundColor];
+//  [theme setObject:WIStringFromColor([_themesMessagesTextColorWell color]) forKey:WCThemesMessagesTextColor];
+//  [theme setObject:WIStringFromColor([_themesMessagesBackgroundColorWell color]) forKey:WCThemesMessagesBackgroundColor];
+//  [theme setObject:WIStringFromColor([_themesBoardsTextColorWell color]) forKey:WCThemesBoardsTextColor];
+//  [theme setObject:WIStringFromColor([_themesBoardsBackgroundColorWell color]) forKey:WCThemesBoardsBackgroundColor];
+  
+  [theme setObject:WIStringFromColor([_themesChatEventsColorWell color]) forKey:WCThemesChatEventsColor];
+  [theme setObject:WIStringFromColor([_themesChatTimestampEveryLineColorWell color]) forKey:WCThemesChatTimestampEveryLineColor];
+  [theme setObject:WIStringFromColor([_themesChatURLsColorWell color]) forKey:WCThemesChatURLsColor];
+  [theme setBool:[_themesShowSmileysButton state] forKey:WCThemesShowSmileys];
+  [theme setBool:[_themesChatTimestampEveryLineButton state] forKey:WCThemesChatTimestampEveryLine];
+  [theme setInteger:[_themesUserListIconSizeMatrix selectedTag] forKey:WCThemesUserListIconSize];
+  [theme setBool:[_themesUserListAlternateRowsButton state] forKey:WCThemesUserListAlternateRows];
+  
+  [theme setInteger:[_themesFileListIconSizeMatrix selectedTag] forKey:WCThemesFileListIconSize];
+  [theme setBool:[_themesFileListAlternateRowsButton state] forKey:WCThemesFileListAlternateRows];
+  
+  [theme setBool:[_themesTransferListShowProgressBarButton state] forKey:WCThemesTransferListShowProgressBar];
+  [theme setBool:[_themesTransferListAlternateRowsButton state] forKey:WCThemesTransferListAlternateRows];
+  
+  [theme setBool:[_themesTrackerListAlternateRowsButton state] forKey:WCThemesTrackerListAlternateRows];
 
-    [theme setInteger:[_themesMonitorIconSizeMatrix selectedTag] forKey:WCThemesMonitorIconSize];
-    [theme setBool:[_themesMonitorAlternateRowsButton state] forKey:WCThemesMonitorAlternateRows];
+  [theme setInteger:[_themesMonitorIconSizeMatrix selectedTag] forKey:WCThemesMonitorIconSize];
+  [theme setBool:[_themesMonitorAlternateRowsButton state] forKey:WCThemesMonitorAlternateRows];
 }
 
 - (NSInteger)_selectedThemeRow {

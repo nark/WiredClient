@@ -383,10 +383,12 @@ wi_string_t * wi_data_sha1(wi_data_t *data) {
 	return wi_sha1_digest_string(data);
 }
 
-
-
 wi_string_t * wi_data_sha256(wi_data_t *data) {
-	return wi_sha256_digest_string(data);
+    return wi_sha256_digest_string(data);
+}
+
+wi_string_t * wi_data_sha512(wi_data_t *data) {
+    return wi_sha512_digest_string(data);
 }
 
 

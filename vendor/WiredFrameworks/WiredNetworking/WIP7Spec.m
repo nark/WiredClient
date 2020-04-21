@@ -225,6 +225,7 @@
 
 
 
+
 #pragma mark -
 
 - (NSArray *)fields {
@@ -293,6 +294,96 @@
 	}
 	
 	return NULL;
+}
+
+
+
+- (NSDictionary *)encryptionSchemes {
+    NSMutableDictionary     *dictionary;
+    wi_dictionary_t         *schemes;
+    wi_pool_t               *pool;
+    wi_enumerator_t         *enumerator;
+    wi_p7_spec_field_t      *field;
+    wi_string_t             *key;
+    wi_integer_t            value;
+    
+    pool = wi_pool_init(wi_pool_alloc());
+    
+    dictionary  = [NSMutableDictionary dictionary];
+    field       = wi_p7_spec_field_with_name(wi_p7_spec_builtin_spec(), WI_STR("p7.handshake.encryption"));
+    schemes     = wi_p7_spec_field_enums_by_name(field);
+    enumerator  = wi_dictionary_key_enumerator(schemes);
+    
+    while((key = wi_enumerator_next_data(enumerator))) {
+        value = (wi_integer_t) wi_dictionary_data_for_key(schemes, key);
+        
+        [dictionary setObject:[NSString stringWithWiredString:key]
+                       forKey:[NSNumber numberWithLongLong:value]];
+    }
+    
+    wi_release(pool);
+    
+    return dictionary;
+}
+
+
+
+- (NSString *)nameForEncryptionSchemeID:(NSString *)encryptionID {
+    switch ([encryptionID intValue]) {
+        case 0:
+            return @"RSA - AES/128 - SHA1";
+            break;
+        case 1:
+            return @"RSA - AES/192 - SHA1";
+            break;
+        case 2:
+            return @"RSA - AES/256 - SHA1";
+            break;
+        case 3:
+            return @"RSA - BF/128 - SHA1";
+            break;
+        case 4:
+            return @"RSA - 3DES/192 - SHA1";
+            break;
+            
+        case 5:
+            return @"RSA - AES/128 - SHA256";
+            break;
+        case 6:
+            return @"RSA - AES/192 - SHA256";
+            break;
+        case 7:
+            return @"RSA - AES/256 - SHA256";
+            break;
+        case 8:
+            return @"RSA - BF/128 - SHA256";
+            break;
+        case 9:
+            return @"RSA - 3DES/192 - SHA256";
+            break;
+        
+        case 10:
+            return @"RSA - AES/128 - SHA512";
+            break;
+        case 11:
+            return @"RSA - AES/192 - SHA512";
+            break;
+        case 12:
+            return @"RSA - AES/256 - SHA512";
+            break;
+        case 13:
+            return @"RSA - BF/128 - SHA512";
+            break;
+        case 14:
+            return @"RSA - 3DES/192 - SHA512";
+            break;
+            
+        default:
+            return NULL;
+            break;
+    }
+    
+    return NULL;
 }
 
 

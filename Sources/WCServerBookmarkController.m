@@ -15,7 +15,7 @@
 @interface WCServerBookmarkController (Private)
 
 - (void)_savePasswordForBookmark:(NSArray *)arguments;
-- (void)_reloadThemes;
+- (void)_reloadCiphers;
 
 @end
 
@@ -41,24 +41,22 @@
 
 #pragma mark -
 
-- (void)_reloadThemes {
-//	NSEnumerator	*enumerator;
-//	NSDictionary	*theme;
-//	NSMenuItem		*item;
-//	NSInteger		index;
-//
-//	while((index = [_bookmarksThemePopUpButton indexOfItemWithTag:0]) != -1)
-//		[_bookmarksThemePopUpButton removeItemAtIndex:index];
-//
-//	enumerator = [[[WCSettings settings] objectForKey:WCThemes] objectEnumerator];
-//
-//	while((theme = [enumerator nextObject])) {
-//		item = [NSMenuItem itemWithTitle:[theme objectForKey:WCThemesName]];
-//		[item setRepresentedObject:[theme objectForKey:WCThemesIdentifier]];
-//		[item setImage:[[WCPreferences preferences] imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
-//
-//		[[_bookmarksThemePopUpButton menu] addItem:item];
-//	}
+- (void)_reloadCiphers {
+	NSMenuItem		*item;
+    NSDictionary    *schemes;
+    NSArray         *schemeKeys;
+    
+    [[_bookmarksCipherPopUpButton menu] removeAllItems];
+        
+    schemes     = [WCP7Spec encryptionSchemes];
+    schemeKeys  = [[schemes allKeys] sortedArrayUsingSelector:@selector(compare:)];
+        
+    for(NSNumber *key in schemeKeys) {
+        NSString *name = [WCP7Spec nameForEncryptionSchemeID:[key stringValue]];
+        item = [NSMenuItem itemWithTitle:name tag:[key intValue]];
+
+        [[_bookmarksCipherPopUpButton menu] addItem:item];
+    }
 }
 
 
@@ -69,10 +67,9 @@
 #pragma mark -
 
 - (void)load {
-    NSDictionary    *theme;
-    NSInteger		index;
+    NSNumber        *encryptionCipher;
     
-    [self _reloadThemes];
+    [self _reloadCiphers];
     
     if(_bookmark) {
         [_bookmarksNameTextField setStringValue:[_bookmark objectForKey:WCBookmarksName]];
@@ -87,12 +84,12 @@
         else
             [_bookmarksPasswordTextField setStringValue:@""];
         
-//        theme = [_bookmark objectForKey:WCBookmarksTheme];
-//
-//        if(theme && (index = [_bookmarksThemePopUpButton indexOfItemWithRepresentedObject:theme]) != -1)
-//            [_bookmarksThemePopUpButton selectItemAtIndex:index];
-//        else
-//            [_bookmarksThemePopUpButton selectItemAtIndex:0];
+        encryptionCipher = [_bookmark objectForKey:WCBookmarksEncryptionCipher];
+        
+        if (encryptionCipher)
+            [_bookmarksCipherPopUpButton selectItemWithTag:[encryptionCipher intValue]];
+        else
+            [_bookmarksCipherPopUpButton selectItemWithTag:[[WCSettings settings] intForKey:WCNetworkEncryptionCipher]];
         
         [_bookmarksAutoConnectButton setState:[_bookmark boolForKey:WCBookmarksAutoConnect]];
         [_bookmarksAutoReconnectButton setState:[_bookmark boolForKey:WCBookmarksAutoReconnect]];
@@ -123,11 +120,6 @@
         [_bookmark setObject:[_bookmarksAddressTextField stringValue] forKey:WCBookmarksAddress];
         [_bookmark setObject:[_bookmarksLoginTextField stringValue] forKey:WCBookmarksLogin];
         
-//        if([_bookmarksThemePopUpButton representedObjectOfSelectedItem])
-//            [_bookmark setObject:[_bookmarksThemePopUpButton representedObjectOfSelectedItem] forKey:WCBookmarksTheme];
-//        else
-//            [_bookmark removeObjectForKey:WCBookmarksTheme];
-        
         [_bookmark setBool:[_bookmarksAutoConnectButton state] forKey:WCBookmarksAutoConnect];
         [_bookmark setBool:[_bookmarksAutoReconnectButton state] forKey:WCBookmarksAutoReconnect];
         [_bookmark setObject:[_bookmarksNickTextField stringValue] forKey:WCBookmarksNick];
@@ -149,6 +141,10 @@
             passwordChanged = YES;
         }
         
+        if(([_bookmarksCipherPopUpButton selectedTag] != [[WCSettings settings] intForKey:WCNetworkEncryptionCipher]) ||
+           ([_bookmark integerForKey:WCBookmarksEncryptionCipher] != [_bookmarksCipherPopUpButton selectedTag]))
+            [_bookmark setObject:[NSNumber numberWithInt:[_bookmarksCipherPopUpButton selectedTag]] forKey:WCBookmarksEncryptionCipher];
+        
         if(![_oldBookmark isEqualToDictionary:_bookmark] || passwordChanged) {
             [[WCSettings settings] replaceObjectAtIndex:row withObject:_bookmark inArrayForKey:WCBookmarks];
             
@@ -167,15 +163,13 @@
         [_bookmark setObject:[_bookmarksAddressTextField stringValue] forKey:WCBookmarksAddress];
         [_bookmark setObject:[_bookmarksLoginTextField stringValue] forKey:WCBookmarksLogin];
         
-//        if([_bookmarksThemePopUpButton representedObjectOfSelectedItem])
-//            [_bookmark setObject:[_bookmarksThemePopUpButton representedObjectOfSelectedItem] forKey:WCBookmarksTheme];
-//        else
-//            [_bookmark removeObjectForKey:WCBookmarksTheme];
-        
         [_bookmark setBool:[_bookmarksAutoConnectButton state] forKey:WCBookmarksAutoConnect];
         [_bookmark setBool:[_bookmarksAutoReconnectButton state] forKey:WCBookmarksAutoReconnect];
         [_bookmark setObject:[_bookmarksNickTextField stringValue] forKey:WCBookmarksNick];
         [_bookmark setObject:[_bookmarksStatusTextField stringValue] forKey:WCBookmarksStatus];
+        
+        if([[WCSettings settings] intForKey:WCNetworkEncryptionCipher] != [_bookmarksCipherPopUpButton selectedTag])
+            [_bookmark setObject:[NSNumber numberWithInt:[_bookmarksCipherPopUpButton selectedTag]] forKey:WCBookmarksEncryptionCipher];
         
         [[WCKeychain keychain] setPassword:password forBookmark:_bookmark];
         

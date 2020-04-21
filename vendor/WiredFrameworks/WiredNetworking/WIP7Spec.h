@@ -36,7 +36,7 @@ enum _WIP7Originator {
 typedef enum _WIP7Originator		WIP7Originator;
 
 
-@class WIP7SpecMessage, WIP7Message, WIError;
+@class WIP7SpecMessage, WIP7Message, WIError, WIP7SpecField;
 
 @interface WIP7Spec : WIObject	{
 	wi_p7_spec_t					*_spec;
@@ -62,6 +62,9 @@ typedef enum _WIP7Originator		WIP7Originator;
 - (NSArray *)fields;
 - (NSArray *)messages;
 - (WIP7SpecMessage *)messageWithName:(NSString *)name;
+
+- (NSDictionary *)encryptionSchemes;
+- (NSString *)nameForEncryptionSchemeID:(NSString *)encryptionID;
 
 - (BOOL)verifyMessage:(WIP7Message *)message error:(WIError **)error;
 

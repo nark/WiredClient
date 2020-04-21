@@ -132,6 +132,7 @@ NSString * const WCBookmarksStatus						= @"Status";
 NSString * const WCBookmarksAutoConnect					= @"AutoJoin";
 NSString * const WCBookmarksAutoReconnect				= @"AutoReconnect";
 NSString * const WCBookmarksTheme						= @"Theme";
+NSString * const WCBookmarksEncryptionCipher            = @"EncryptionCipher";
 
 NSString * const WCChatHistoryScrollback				= @"WCHistoryScrollback";
 NSString * const WCChatHistoryScrollbackModifier		= @"WCHistoryScrollbackModifier";

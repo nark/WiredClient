@@ -96,6 +96,28 @@
 	} else {
 		[_cipherTextField setStringValue:NSLS(@"None", @"Encryption disabled")];
 	}
+    
+    wi_p7_options_t options = wi_p7_socket_options([socket P7Socket]);
+    
+    if (options & WI_P7_ENCRYPTION_RSA_AES128_SHA1 ||
+        options & WI_P7_ENCRYPTION_RSA_AES192_SHA1 ||
+        options & WI_P7_ENCRYPTION_RSA_AES256_SHA1 ||
+        options & WI_P7_ENCRYPTION_RSA_BF128_SHA1 ||
+        options & WI_P7_ENCRYPTION_RSA_3DES192_SHA1) {
+        [_checksumTextField setStringValue:@"SHA1"];
+    } else if (options & WI_P7_ENCRYPTION_RSA_AES128_SHA256 ||
+        options & WI_P7_ENCRYPTION_RSA_AES192_SHA256 ||
+        options & WI_P7_ENCRYPTION_RSA_AES256_SHA256 ||
+        options & WI_P7_ENCRYPTION_RSA_BF128_SHA256 ||
+        options & WI_P7_ENCRYPTION_RSA_3DES192_SHA256) {
+        [_checksumTextField setStringValue:@"SHA256"];
+    } else if (options & WI_P7_ENCRYPTION_RSA_AES128_SHA512 ||
+       options & WI_P7_ENCRYPTION_RSA_AES192_SHA512 ||
+       options & WI_P7_ENCRYPTION_RSA_AES256_SHA512 ||
+       options & WI_P7_ENCRYPTION_RSA_BF128_SHA512 ||
+       options & WI_P7_ENCRYPTION_RSA_3DES192_SHA512) {
+       [_checksumTextField setStringValue:@"SHA512"];
+    }
 	
 	if([socket usesCompression]) {
 		[_compressionTextField setStringValue:[NSSWF:NSLS(@"Yes, compression ratio %.2f", @"Compression enabled (ratio)"),
@@ -108,6 +130,7 @@
 	
 	[self resizeTitleTextField:_compressionTitleTextField withTextField:_compressionTextField];
 	[self resizeTitleTextField:_serializationTitleTextField withTextField:_serializationTextField];
+    [self resizeTitleTextField:_checksumTitleTextField withTextField:_checksumTextField];
 	[self resizeTitleTextField:_cipherTitleTextField withTextField:_cipherTextField];
 	[self resizeTitleTextField:_protocolTitleTextField withTextField:_protocolTextField];
 	[self resizeTitleTextField:_versionTitleTextField withTextField:_versionTextField];

@@ -217,7 +217,7 @@ void * wi_malloc(size_t size) {
 	pointer = calloc(1, size);
 	
 	if(pointer == NULL)
-		__builtin_trap();
+		wi_crash();
 
 	return pointer;
 }
@@ -230,7 +230,7 @@ void * wi_realloc(void *pointer, size_t size) {
 	newpointer = realloc(pointer, size);
 	
 	if(newpointer == NULL)
-		__builtin_trap();
+		wi_crash();
 	
 	return newpointer;
 }

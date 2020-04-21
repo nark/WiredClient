@@ -51,7 +51,7 @@
 #pragma mark -
 
 - (wi_string_t *)wiredString {
-	return wi_string_with_cstring([self UTF8String]);
+    return wi_string_with_cstring([self cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 @end

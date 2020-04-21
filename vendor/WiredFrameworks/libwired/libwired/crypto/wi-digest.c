@@ -87,15 +87,27 @@ typedef struct _wi_sha1_ctx				_wi_sha1_ctx_t;
 
 struct _wi_sha256_ctx {
 #ifdef WI_DIGEST_OPENSSL
-	SHA256_CTX							openssl_ctx;
+    SHA256_CTX                          openssl_ctx;
 #endif
-	
+    
 #ifdef WI_DIGEST_COMMONCRYPTO
-	CC_SHA256_CTX						commondigest_ctx;
+    CC_SHA256_CTX                       commondigest_ctx;
 #endif
 };
-typedef struct _wi_sha256_ctx			_wi_sha256_ctx_t;
+typedef struct _wi_sha256_ctx           _wi_sha256_ctx_t;
 
+
+
+struct _wi_sha512_ctx {
+#ifdef WI_DIGEST_OPENSSL
+    SHA512_CTX                          openssl_ctx;
+#endif
+    
+#ifdef WI_DIGEST_COMMONCRYPTO
+    CC_SHA512_CTX                       commondigest_ctx;
+#endif
+};
+typedef struct _wi_sha512_ctx           _wi_sha512_ctx_t;
 
 
 
@@ -122,15 +134,25 @@ struct _wi_sha1 {
 
 
 struct _wi_sha256 {
-	wi_runtime_base_t					base;
-	
-	_wi_sha256_ctx_t					ctx;
-	
-	unsigned char						buffer[WI_SHA256_DIGEST_LENGTH];
-	
-	wi_boolean_t						closed;
+    wi_runtime_base_t                    base;
+    
+    _wi_sha256_ctx_t                     ctx;
+    
+    unsigned char                        buffer[WI_SHA256_DIGEST_LENGTH];
+    
+    wi_boolean_t                        closed;
 };
 
+
+struct _wi_sha512 {
+    wi_runtime_base_t                    base;
+    
+    _wi_sha512_ctx_t                     ctx;
+    
+    unsigned char                        buffer[WI_SHA512_DIGEST_LENGTH];
+    
+    wi_boolean_t                        closed;
+};
 
 
 
@@ -159,14 +181,24 @@ static wi_runtime_class_t				_wi_sha1_runtime_class = {
 	NULL
 };
 
-static wi_runtime_id_t					_wi_sha256_runtime_id = WI_RUNTIME_ID_NULL;
-static wi_runtime_class_t				_wi_sha256_runtime_class = {
-	"wi_sha256_t",
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
+static wi_runtime_id_t                   _wi_sha256_runtime_id = WI_RUNTIME_ID_NULL;
+static wi_runtime_class_t                _wi_sha256_runtime_class = {
+    "wi_sha256_t",
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+static wi_runtime_id_t                   _wi_sha512_runtime_id = WI_RUNTIME_ID_NULL;
+static wi_runtime_class_t                _wi_sha512_runtime_class = {
+    "wi_sha512_t",
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
 
@@ -176,7 +208,8 @@ static wi_runtime_class_t				_wi_sha256_runtime_class = {
 void wi_digest_register(void) {
 	_wi_md5_runtime_id		= wi_runtime_register_class(&_wi_md5_runtime_class);
 	_wi_sha1_runtime_id		= wi_runtime_register_class(&_wi_sha1_runtime_class);
-	_wi_sha256_runtime_id	= wi_runtime_register_class(&_wi_sha256_runtime_class);
+    _wi_sha256_runtime_id   = wi_runtime_register_class(&_wi_sha256_runtime_class);
+    _wi_sha512_runtime_id   = wi_runtime_register_class(&_wi_sha512_runtime_class);
 }
 
 
@@ -262,15 +295,16 @@ static void _wi_sha1_ctx_final(unsigned char *buffer, _wi_sha1_ctx_t *ctx) {
 
 
 
+
 #pragma mark -
 
 static void _wi_sha256_ctx_init(_wi_sha256_ctx_t *ctx) {
 #ifdef WI_DIGEST_OPENSSL
-	SHA256_Init(&ctx->openssl_ctx);
+    SHA256_Init(&ctx->openssl_ctx);
 #endif
 
 #ifdef WI_DIGEST_COMMONCRYPTO
-	CC_SHA256_Init(&ctx->commondigest_ctx);
+    CC_SHA256_Init(&ctx->commondigest_ctx);
 #endif
 }
 
@@ -278,11 +312,11 @@ static void _wi_sha256_ctx_init(_wi_sha256_ctx_t *ctx) {
 
 static void _wi_sha256_ctx_update(_wi_sha256_ctx_t *ctx, const void *data, unsigned long length) {
 #ifdef WI_DIGEST_OPENSSL
-	SHA256_Update(&ctx->openssl_ctx, data, length);
+    SHA256_Update(&ctx->openssl_ctx, data, length);
 #endif
 
 #ifdef WI_DIGEST_COMMONCRYPTO
-	CC_SHA256_Update(&ctx->commondigest_ctx, data, length);
+    CC_SHA256_Update(&ctx->commondigest_ctx, data, length);
 #endif
 }
 
@@ -290,13 +324,53 @@ static void _wi_sha256_ctx_update(_wi_sha256_ctx_t *ctx, const void *data, unsig
 
 static void _wi_sha256_ctx_final(unsigned char *buffer, _wi_sha256_ctx_t *ctx) {
 #ifdef WI_DIGEST_OPENSSL
-	SHA256_Final(buffer, &ctx->openssl_ctx);
+    SHA256_Final(buffer, &ctx->openssl_ctx);
 #endif
 
 #ifdef WI_DIGEST_COMMONCRYPTO
-	CC_SHA256_Final(buffer, &ctx->commondigest_ctx);
+    CC_SHA256_Final(buffer, &ctx->commondigest_ctx);
 #endif
 }
+
+
+
+#pragma mark -
+
+static void _wi_sha512_ctx_init(_wi_sha512_ctx_t *ctx) {
+#ifdef WI_DIGEST_OPENSSL
+    SHA512_Init(&ctx->openssl_ctx);
+#endif
+
+#ifdef WI_DIGEST_COMMONCRYPTO
+    CC_SHA512_Init(&ctx->commondigest_ctx);
+#endif
+}
+
+
+
+static void _wi_sha512_ctx_update(_wi_sha512_ctx_t *ctx, const void *data, unsigned long length) {
+#ifdef WI_DIGEST_OPENSSL
+    SHA512_Update(&ctx->openssl_ctx, data, length);
+#endif
+
+#ifdef WI_DIGEST_COMMONCRYPTO
+    CC_SHA512_Update(&ctx->commondigest_ctx, data, length);
+#endif
+}
+
+
+
+static void _wi_sha512_ctx_final(unsigned char *buffer, _wi_sha512_ctx_t *ctx) {
+#ifdef WI_DIGEST_OPENSSL
+    SHA512_Final(buffer, &ctx->openssl_ctx);
+#endif
+
+#ifdef WI_DIGEST_COMMONCRYPTO
+    CC_SHA512_Final(buffer, &ctx->commondigest_ctx);
+#endif
+}
+
+
 
 
 
@@ -514,27 +588,32 @@ wi_string_t * wi_sha1_string(wi_sha1_t *sha1) {
 
 
 
+
+
+
+
+
 #pragma mark -
 
 void wi_sha256_digest(const void *data, wi_uinteger_t length, unsigned char *buffer) {
-	_wi_sha256_ctx_t 	c;
+  _wi_sha256_ctx_t      c;
 
-	_wi_sha256_ctx_init(&c);
-	_wi_sha256_ctx_update(&c, data, length);
-	_wi_sha256_ctx_final(buffer, &c);
+  _wi_sha256_ctx_init(&c);
+  _wi_sha256_ctx_update(&c, data, length);
+  _wi_sha256_ctx_final(buffer, &c);
 }
 
 
 
 wi_string_t * wi_sha256_digest_string(wi_data_t *data) {
-	wi_sha256_t	*sha256;
-	
-	sha256 = wi_sha256();
-	
-	wi_sha256_update(sha256, wi_data_bytes(data), wi_data_length(data));
-	wi_sha256_close(sha256);
-	
-	return wi_sha256_string(sha256);
+  wi_sha256_t *sha256;
+  
+  sha256 = wi_sha256();
+  
+  wi_sha256_update(sha256, wi_data_bytes(data), wi_data_length(data));
+  wi_sha256_close(sha256);
+  
+  return wi_sha256_string(sha256);
 }
 
 
@@ -542,7 +621,7 @@ wi_string_t * wi_sha256_digest_string(wi_data_t *data) {
 #pragma mark -
 
 wi_sha256_t * wi_sha256(void) {
-	return wi_autorelease(wi_sha256_init(wi_sha256_alloc()));
+  return wi_autorelease(wi_sha256_init(wi_sha256_alloc()));
 }
 
 
@@ -550,15 +629,15 @@ wi_sha256_t * wi_sha256(void) {
 #pragma mark -
 
 wi_sha256_t * wi_sha256_alloc(void) {
-	return wi_runtime_create_instance_with_options(_wi_sha256_runtime_id, sizeof(wi_sha256_t), 0);
+  return wi_runtime_create_instance_with_options(_wi_sha256_runtime_id, sizeof(wi_sha256_t), 0);
 }
 
 
 
 wi_sha256_t * wi_sha256_init(wi_sha256_t *sha256) {
-	_wi_sha256_ctx_init(&sha256->ctx);
-	
-	return sha256;
+  _wi_sha256_ctx_init(&sha256->ctx);
+  
+  return sha256;
 }
 
 
@@ -566,57 +645,167 @@ wi_sha256_t * wi_sha256_init(wi_sha256_t *sha256) {
 #pragma mark -
 
 void wi_sha256_update(wi_sha256_t *sha256, const void *data, wi_uinteger_t length) {
-	_WI_DIGEST_ASSERT_OPEN(sha256);
-	
-	_wi_sha256_ctx_update(&sha256->ctx, data, length);
+  _WI_DIGEST_ASSERT_OPEN(sha256);
+  
+  _wi_sha256_ctx_update(&sha256->ctx, data, length);
 }
 
 
 
 void wi_sha256_close(wi_sha256_t *sha256) {
-	_WI_DIGEST_ASSERT_OPEN(sha256);
-	
-	_wi_sha256_ctx_final(sha256->buffer, &sha256->ctx);
-	
-	sha256->closed = true;
+  _WI_DIGEST_ASSERT_OPEN(sha256);
+  
+  _wi_sha256_ctx_final(sha256->buffer, &sha256->ctx);
+  
+  sha256->closed = true;
 }
+
 
 
 
 #pragma mark -
 
 void wi_sha256_get_data(wi_sha256_t *sha256, unsigned char *buffer) {
-	_WI_DIGEST_ASSERT_CLOSED(sha256);
-	
-	memcpy(buffer, sha256->buffer, sizeof(sha256->buffer));
+  _WI_DIGEST_ASSERT_CLOSED(sha256);
+  
+  memcpy(buffer, sha256->buffer, sizeof(sha256->buffer));
 }
 
 
 
 wi_data_t * wi_sha256_data(wi_sha256_t *sha256) {
-	_WI_DIGEST_ASSERT_CLOSED(sha256);
-	
-	return wi_data_with_bytes(sha256->buffer, sizeof(sha256->buffer));
+  _WI_DIGEST_ASSERT_CLOSED(sha256);
+  
+  return wi_data_with_bytes(sha256->buffer, sizeof(sha256->buffer));
 }
 
 
 
 wi_string_t * wi_sha256_string(wi_sha256_t *sha256) {
-	static unsigned char	hex[] = "0123456789abcdef";
-	char					sha256_hex[sizeof(sha256->buffer) * 2 + 1];
-	wi_uinteger_t			i;
+  static unsigned char  hex[] = "0123456789abcdef";
+  char                  sha256_hex[sizeof(sha256->buffer) * 2 + 1];
+  wi_uinteger_t         i;
 
-	_WI_DIGEST_ASSERT_CLOSED(sha256);
-	
-	for(i = 0; i < sizeof(sha256->buffer); i++) {
-		sha256_hex[i+i]	= hex[sha256->buffer[i] >> 4];
-		sha256_hex[i+i+1] = hex[sha256->buffer[i] & 0x0F];
-	}
+  _WI_DIGEST_ASSERT_CLOSED(sha256);
+  
+  for(i = 0; i < sizeof(sha256->buffer); i++) {
+    sha256_hex[i+i] = hex[sha256->buffer[i] >> 4];
+    sha256_hex[i+i+1] = hex[sha256->buffer[i] & 0x0F];
+  }
 
-	sha256_hex[i+i] = '\0';
+  sha256_hex[i+i] = '\0';
 
-	return wi_string_with_cstring(sha256_hex);
+  return wi_string_with_cstring(sha256_hex);
 }
+
+
+
+#pragma mark -
+
+void wi_sha512_digest(const void *data, wi_uinteger_t length, unsigned char *buffer) {
+  _wi_sha512_ctx_t      c;
+
+  _wi_sha512_ctx_init(&c);
+  _wi_sha512_ctx_update(&c, data, length);
+  _wi_sha512_ctx_final(buffer, &c);
+}
+
+
+
+wi_string_t * wi_sha512_digest_string(wi_data_t *data) {
+  wi_sha512_t *sha512;
+  
+  sha512 = wi_sha512();
+  
+  wi_sha512_update(sha512, wi_data_bytes(data), wi_data_length(data));
+  wi_sha512_close(sha512);
+  
+  return wi_sha512_string(sha512);
+}
+
+
+
+#pragma mark -
+
+wi_sha512_t * wi_sha512(void) {
+  return wi_autorelease(wi_sha512_init(wi_sha512_alloc()));
+}
+
+
+
+#pragma mark -
+
+wi_sha512_t * wi_sha512_alloc(void) {
+  return wi_runtime_create_instance_with_options(_wi_sha512_runtime_id, sizeof(wi_sha512_t), 0);
+}
+
+
+
+wi_sha512_t * wi_sha512_init(wi_sha512_t *sha512) {
+  _wi_sha512_ctx_init(&sha512->ctx);
+  
+  return sha512;
+}
+
+
+
+#pragma mark -
+
+void wi_sha512_update(wi_sha512_t *sha512, const void *data, wi_uinteger_t length) {
+  _WI_DIGEST_ASSERT_OPEN(sha512);
+  
+  _wi_sha512_ctx_update(&sha512->ctx, data, length);
+}
+
+
+
+void wi_sha512_close(wi_sha512_t *sha512) {
+  _WI_DIGEST_ASSERT_OPEN(sha512);
+  
+  _wi_sha512_ctx_final(sha512->buffer, &sha512->ctx);
+  
+  sha512->closed = true;
+}
+
+
+
+
+#pragma mark -
+
+void wi_sha512_get_data(wi_sha512_t *sha512, unsigned char *buffer) {
+  _WI_DIGEST_ASSERT_CLOSED(sha512);
+  
+  memcpy(buffer, sha512->buffer, sizeof(sha512->buffer));
+}
+
+
+
+wi_data_t * wi_sha512_data(wi_sha512_t *sha512) {
+  _WI_DIGEST_ASSERT_CLOSED(sha512);
+  
+  return wi_data_with_bytes(sha512->buffer, sizeof(sha512->buffer));
+}
+
+
+
+wi_string_t * wi_sha512_string(wi_sha512_t *sha512) {
+  static unsigned char  hex[] = "0123456789abcdef";
+  char                  sha512_hex[sizeof(sha512->buffer) * 2 + 1];
+  wi_uinteger_t         i;
+
+  _WI_DIGEST_ASSERT_CLOSED(sha512);
+  
+  for(i = 0; i < sizeof(sha512->buffer); i++) {
+    sha512_hex[i+i] = hex[sha512->buffer[i] >> 4];
+    sha512_hex[i+i+1] = hex[sha512->buffer[i] & 0x0F];
+  }
+
+  sha512_hex[i+i] = '\0';
+
+  return wi_string_with_cstring(sha512_hex);
+}
+
+
 
 
 #endif

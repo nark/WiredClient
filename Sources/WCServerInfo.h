@@ -48,6 +48,8 @@
 	IBOutlet NSTextField			*_protocolTextField;
 	IBOutlet NSTextField			*_cipherTitleTextField;
 	IBOutlet NSTextField			*_cipherTextField;
+    IBOutlet NSTextField            *_checksumTitleTextField;
+    IBOutlet NSTextField            *_checksumTextField;
 	IBOutlet NSTextField			*_serializationTitleTextField;
 	IBOutlet NSTextField			*_serializationTextField;
 	IBOutlet NSTextField			*_compressionTitleTextField;

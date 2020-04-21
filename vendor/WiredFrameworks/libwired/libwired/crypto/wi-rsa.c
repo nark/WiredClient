@@ -96,14 +96,24 @@ wi_rsa_t * wi_rsa_alloc(void) {
 
 
 wi_rsa_t * wi_rsa_init_with_bits(wi_rsa_t *rsa, wi_uinteger_t size) {
-	rsa->rsa = RSA_generate_key((int)size, RSA_F4, NULL, NULL);
-	if(!rsa->rsa) {
-		wi_release(rsa);
-		
-		return NULL;
-	}
-	
-	return rsa;
+    int         rc;
+    BIGNUM      *e;
+
+    e = BN_new();
+
+    rsa->rsa = RSA_new();
+
+    BN_set_word(e, 65537);
+
+    rc = RSA_generate_key_ex(rsa->rsa, (int)size, e, NULL);
+
+    BN_free(e);
+
+    if (rc == -1 || !rsa->rsa) {
+        return NULL;
+    }
+
+    return rsa;
 }
 
 

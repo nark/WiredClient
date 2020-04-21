@@ -351,6 +351,9 @@ NSString * const WCLinkConnectionLoggedInNotification					= @"WCLinkConnectionLo
 
 
 - (NSUInteger)linkCipher:(WIP7Link *)link {
+    if(_bookmark && [_bookmark objectForKey:WCBookmarksEncryptionCipher])
+        return [[_bookmark objectForKey:WCBookmarksEncryptionCipher] integerValue];
+    
 	if([[WCSettings settings] objectForKey:WCNetworkEncryptionCipher])
         return [[[WCSettings settings] objectForKey:WCNetworkEncryptionCipher] integerValue];
 	

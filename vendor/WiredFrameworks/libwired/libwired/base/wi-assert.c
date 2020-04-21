@@ -51,5 +51,5 @@ static void wi_assert_default_handler(const char *file, unsigned int line, wi_st
 	
 	wi_release(string);
 	
-	__builtin_trap();
+	wi_crash();
 }

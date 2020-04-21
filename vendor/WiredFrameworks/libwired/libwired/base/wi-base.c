@@ -218,8 +218,13 @@ void wi_abort(void) {
 	abort();
 }
 
-void __builtin_trap (void);
-
+void wi_crash(void) {
+#if __has_builtin(__builtin_trap)
+    __builtin_trap();
+#else
+    *((char *) NULL) = 0;
+#endif
+}
 
 #pragma mark -
 

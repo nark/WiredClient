@@ -9,11 +9,11 @@
 #import "WCBookmarkController.h"
 
 @interface WCServerBookmarkController : WCBookmarkController {
-	IBOutlet NSPopUpButton          *_bookmarksThemePopUpButton;
 	IBOutlet NSButton               *_bookmarksAutoConnectButton;
 	IBOutlet NSButton               *_bookmarksAutoReconnectButton;
 	IBOutlet NSTextField            *_bookmarksNickTextField;
 	IBOutlet NSTextField            *_bookmarksStatusTextField;
+    IBOutlet NSPopUpButton          *_bookmarksCipherPopUpButton;
 }
 
 @end

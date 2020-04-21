@@ -154,7 +154,8 @@ WI_EXPORT double							wi_string_double(wi_string_t *);
 WI_EXPORT wi_data_t *						wi_string_data(wi_string_t *);
 WI_EXPORT wi_string_t *						wi_string_md5(wi_string_t *);
 WI_EXPORT wi_string_t *						wi_string_sha1(wi_string_t *);
-WI_EXPORT wi_string_t * 					wi_string_sha256(wi_string_t *);
+WI_EXPORT wi_string_t *                     wi_string_sha256(wi_string_t *string);
+WI_EXPORT wi_string_t *                     wi_string_sha512(wi_string_t *string);
 WI_EXPORT wi_string_t *						wi_string_base64(wi_string_t *);
 
 WI_EXPORT wi_string_t *						wi_string_by_converting_encoding(wi_string_t *, wi_string_encoding_t *, wi_string_encoding_t *);

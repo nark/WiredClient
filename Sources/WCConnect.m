@@ -50,14 +50,13 @@
 	_url = [url retain];
     
     // check that bookmark password was loaded from keychain
-    if (_url.password == nil) {
+    if (_url.password == nil)
         [_url setPassword:[[WCKeychain keychain] passwordForBookmark:bookmark]];
-    }
     
 	_connection = [[WCServerConnection connection] retain];
 	[_connection setURL:url];
 	[_connection setBookmark:bookmark];
-	
+	    
 	theme = [[WCSettings settings] themeWithIdentifier:[bookmark objectForKey:WCBookmarksTheme]];
 	
 	if(!theme)

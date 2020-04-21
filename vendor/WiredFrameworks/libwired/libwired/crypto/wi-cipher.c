@@ -315,7 +315,6 @@ static wi_boolean_t _wi_cipher_set_type(wi_cipher_t *cipher, wi_cipher_type_t ty
 #endif
 			
 #ifdef WI_CIPHER_COMMONCRYPTO
-    printf("WI_CIPHER_COMMONCRYPTO : %d\n", cipher->type);
 	switch(cipher->type) {
 		case WI_CIPHER_AES128:
 		case WI_CIPHER_AES192:

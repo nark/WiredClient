@@ -65,7 +65,8 @@ WI_EXPORT wi_data_t *					wi_data_by_appending_bytes(wi_data_t *, const void *, 
 
 WI_EXPORT wi_string_t *					wi_data_md5(wi_data_t *);
 WI_EXPORT wi_string_t *					wi_data_sha1(wi_data_t *);
-WI_EXPORT wi_string_t *					wi_data_sha256(wi_data_t *);
+WI_EXPORT wi_string_t *                 wi_data_sha256(wi_data_t *);
+WI_EXPORT wi_string_t *                 wi_data_sha512(wi_data_t *data);
 WI_EXPORT wi_string_t *					wi_data_base64(wi_data_t *);
 
 WI_EXPORT wi_boolean_t					wi_data_write_to_file(wi_data_t *, wi_string_t *);

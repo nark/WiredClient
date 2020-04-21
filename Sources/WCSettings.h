@@ -114,6 +114,7 @@ extern NSString * const						WCBookmarksStatus;
 extern NSString * const						WCBookmarksAutoConnect;
 extern NSString * const						WCBookmarksAutoReconnect;
 extern NSString * const						WCBookmarksTheme;
+extern NSString * const                     WCBookmarksEncryptionCipher;
 
 extern NSString * const						WCChatHistoryScrollback;
 extern NSString * const						WCChatHistoryScrollbackModifier;
