@@ -190,16 +190,20 @@ $(document).ready(function(){
 
 	var controller	= window.Controller;
 	var posts 		= eval(controller.JSONObjects());
-
+    
 	for (var i in posts) {
 		_appendPost(posts[i]);
 		_scrollToBottom();
 	}
 
-	$("img").load(function() {
-        _scrollToBottom();
+    if ( $("img").length && $("img").attr("src") != "data:image/tiff;base64," ) {
+        $("img").load(function() {
+            _scrollToBottom();
+            $('#thread-content').fadeIn();
+        });
+    } else {
         $('#thread-content').fadeIn();
-    });
+    }
 });
 
 

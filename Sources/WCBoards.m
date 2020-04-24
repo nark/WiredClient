@@ -1851,6 +1851,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 - (void)boardsDidChangeUnreadCount:(NSNotification *)notification {
     NSArray     *threads;
 	NSSet		*readIDs;
+    
+    NSLog(@"boardsDidChangeUnreadCount");
 	
     threads = nil;
 
@@ -4414,7 +4416,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
             [readIDs addObject:[post postID]];
             [posts addObject:[self _JSONProxyForPost:post]];
         }
-        
+                
         jsonString = [[SBJson4Writer writer] stringWithObject:posts];
         
         [thread setLoaded:YES];
