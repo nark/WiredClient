@@ -620,7 +620,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
             [self _reloadBoard:board];
 		}
 	}
-	//[_boardsOutlineView setNeedsDisplay:YES];
 }
 
 
@@ -1849,11 +1848,11 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (void)boardsDidChangeUnreadCount:(NSNotification *)notification {
-    NSArray     *threads;
-	NSSet		*readIDs;
-    
-    NSLog(@"boardsDidChangeUnreadCount");
-	
+    WCBoardThread   *thread;
+    WCBoard         *parent;
+    NSArray         *threads;
+	NSSet		    *readIDs;
+    	
     threads = nil;
 
     if([[notification object] isKindOfClass:[NSSet class]]) {
@@ -1871,9 +1870,16 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         [self _reloadThreads:threads];
     }
     if([[notification object] isKindOfClass:[WCBoardThread class]]) {
-        threads = @[[notification object]];
+        thread = [notification object];
+        parent = [_boards boardForPath:[thread board]];
+        
+        if (parent)
+            [self _reloadBoard:parent];
+        
+        threads = @[thread];
         [self _reloadThreads:threads];
     }
+    
     [self _reloadBoard:[self selectedBoard]];
     [self _reloadFilters];
 }

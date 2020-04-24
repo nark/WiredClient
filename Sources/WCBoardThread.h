@@ -29,6 +29,7 @@
 @class WCBoard, WCBoardThreadFilter, WCBoardPost;
 
 @interface WCBoardThread : WCServerConnectionObject {
+    NSString                            *_board;
 	NSString							*_threadID;
 	NSUInteger							_replies;
 	NSString							*_subject;
@@ -50,6 +51,8 @@
 
 + (WCBoardThread *)threadWithMessage:(WIP7Message *)message connection:(WCServerConnection *)connection;
 
+- (NSString *)board;
+- (void)setBoard:(NSString *)board;
 - (NSString *)threadID;
 - (void)setSubject:(NSString *)subject;
 - (NSString *)subject;
