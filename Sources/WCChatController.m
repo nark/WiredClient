@@ -2609,10 +2609,10 @@ dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
         } break;
 	}
     
-    if(row != [tableView selectedRow])
+    //if(row != [tableView selectedRow])
         cellView.nickTextField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
-    else
-        cellView.nickTextField.textColor = [NSColor whiteColor];
+    //else
+    //    cellView.nickTextField.textColor = [NSColor whiteColor];
     
     [cellView.nickTextField setAllowsEditingTextAttributes:YES];
     
