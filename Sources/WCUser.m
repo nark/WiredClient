@@ -97,10 +97,16 @@
 + (NSColor *)colorForColor:(WCAccountColor)color idleTint:(BOOL)idleTint {
 	NSColor		*value;
 	
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    
 	switch(color) {
 		case WCAccountColorBlack:
 		default:
-			value = [NSColor colorWithCalibratedHue:0.0 saturation:0.0 brightness:0.0 alpha:1.0];
+            if (osxMode == nil) {
+			  value = [NSColor colorWithCalibratedHue:0.0 saturation:0.0 brightness:0.0 alpha:1.0]; //Light mode
+            } else {
+              value = [NSColor colorWithCalibratedHue:0.0 saturation:0.0 brightness:1.0 alpha:1.0]; //Dark mode
+            }
 			break;
 			
 		case WCAccountColorRed:
