@@ -122,11 +122,19 @@
 			break;
 			
 		case WCAccountColorBlue:
-			value = [NSColor blueColor];
+            if (osxMode == nil) {
+              value = [NSColor blueColor]; //Light mode
+            } else {
+              value = [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:1.0 alpha:1.0]; //Dark mode
+            }
 			break;
 			
 		case WCAccountColorPurple:
-			value = [NSColor purpleColor];
+			if (osxMode == nil) {
+              value = [NSColor purpleColor]; //Light mode
+            } else {
+                value = [NSColor colorWithCalibratedRed:248.0/255.0 green:91.0/255 blue:228.0/255.0 alpha:1.0]; //Dark mode
+            }
 			break;
 	}
 	
