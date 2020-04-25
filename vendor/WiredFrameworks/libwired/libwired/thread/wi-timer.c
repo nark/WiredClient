@@ -132,7 +132,7 @@ static void _wi_timer_thread(wi_runtime_instance_t *argument) {
 	
 	pool = wi_pool_init(wi_pool_alloc());
 	
-	while(true) {//always true
+	while(true) {
 		fire_timer	= NULL;
 		locked		= true;
 		interval	= wi_time_interval();

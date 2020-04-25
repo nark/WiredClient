@@ -67,8 +67,8 @@ struct _wi_cipher {
 	
 #ifdef WI_CIPHER_OPENSSL
 	const EVP_CIPHER					*cipher;
-	EVP_CIPHER_CTX						encrypt_ctx;
-	EVP_CIPHER_CTX						decrypt_ctx;
+	EVP_CIPHER_CTX						*encrypt_ctx;
+	EVP_CIPHER_CTX						*decrypt_ctx;
 #endif
 	
 #ifdef WI_CIPHER_COMMONCRYPTO
@@ -174,8 +174,11 @@ static wi_cipher_t * _wi_cipher_init_with_key(wi_cipher_t *cipher, wi_data_t *ke
 	cipher->key			= wi_retain(key);
 	cipher->iv			= wi_retain(iv);
 	
-#ifdef WI_CIPHER_OPENSSL    
-	if(EVP_EncryptInit(&cipher->encrypt_ctx, cipher->cipher, NULL, NULL) != 1) {
+#ifdef WI_CIPHER_OPENSSL
+    cipher->encrypt_ctx = EVP_CIPHER_CTX_new();
+    cipher->decrypt_ctx = EVP_CIPHER_CTX_new();
+    
+	if(EVP_EncryptInit(cipher->encrypt_ctx, cipher->cipher, NULL, NULL) != 1) {
 		wi_error_set_openssl_error();
 		
 		wi_release(cipher);
@@ -183,7 +186,7 @@ static wi_cipher_t * _wi_cipher_init_with_key(wi_cipher_t *cipher, wi_data_t *ke
 		return NULL;
 	}
 	
-	if(EVP_DecryptInit(&cipher->decrypt_ctx, cipher->cipher, NULL, NULL) != 1) {
+	if(EVP_DecryptInit(cipher->decrypt_ctx, cipher->cipher, NULL, NULL) != 1) {
 		wi_error_set_openssl_error();
 		
 		wi_release(cipher);
@@ -193,7 +196,7 @@ static wi_cipher_t * _wi_cipher_init_with_key(wi_cipher_t *cipher, wi_data_t *ke
 	
 	_wi_cipher_configure_cipher(cipher);
 	
-	if(EVP_EncryptInit(&cipher->encrypt_ctx, cipher->cipher, key_buffer, iv_buffer) != 1) {
+	if(EVP_EncryptInit(cipher->encrypt_ctx, cipher->cipher, key_buffer, iv_buffer) != 1) {
 		wi_error_set_openssl_error();
 		
 		wi_release(cipher);
@@ -201,7 +204,7 @@ static wi_cipher_t * _wi_cipher_init_with_key(wi_cipher_t *cipher, wi_data_t *ke
 		return NULL;
 	}
 	
-	if(EVP_DecryptInit(&cipher->decrypt_ctx, cipher->cipher, key_buffer, iv_buffer) != 1) {
+	if(EVP_DecryptInit(cipher->decrypt_ctx, cipher->cipher, key_buffer, iv_buffer) != 1) {
 		wi_error_set_openssl_error();
 		
 		wi_release(cipher);
@@ -253,8 +256,8 @@ static void _wi_cipher_dealloc(wi_runtime_instance_t *instance) {
 	wi_cipher_t		*cipher = instance;
 
 #ifdef WI_CIPHER_OPENSSL
-	EVP_CIPHER_CTX_cleanup(&cipher->encrypt_ctx);
-	EVP_CIPHER_CTX_cleanup(&cipher->decrypt_ctx);
+	EVP_CIPHER_CTX_free(cipher->encrypt_ctx);
+	EVP_CIPHER_CTX_free(cipher->decrypt_ctx);
 #endif
 	
 #ifdef WI_CIPHER_COMMONCRYPTO
@@ -338,8 +341,8 @@ static wi_boolean_t _wi_cipher_set_type(wi_cipher_t *cipher, wi_cipher_type_t ty
 
 static void _wi_cipher_configure_cipher(wi_cipher_t *cipher) {
 	if(cipher->type == WI_CIPHER_BF128) {
-		EVP_CIPHER_CTX_set_key_length(&cipher->encrypt_ctx, 16);
-		EVP_CIPHER_CTX_set_key_length(&cipher->decrypt_ctx, 16);
+		EVP_CIPHER_CTX_set_key_length(cipher->encrypt_ctx, 16);
+		EVP_CIPHER_CTX_set_key_length(cipher->decrypt_ctx, 16);
 	}
 }
 
@@ -461,19 +464,19 @@ wi_integer_t wi_cipher_encrypt_bytes(wi_cipher_t *cipher, const void *decrypted_
 #ifdef WI_CIPHER_OPENSSL
 	int			encrypted_length, padded_length;
 	
-	if(EVP_EncryptUpdate(&cipher->encrypt_ctx, encrypted_buffer, &encrypted_length, decrypted_buffer, decrypted_length) != 1) {
+	if(EVP_EncryptUpdate(cipher->encrypt_ctx, encrypted_buffer, &encrypted_length, decrypted_buffer, decrypted_length) != 1) {
 		wi_error_set_openssl_error();
 		
 		return -1;
 	}
 	
-	if(EVP_EncryptFinal_ex(&cipher->encrypt_ctx, encrypted_buffer + encrypted_length, &padded_length) != 1) {
+	if(EVP_EncryptFinal_ex(cipher->encrypt_ctx, encrypted_buffer + encrypted_length, &padded_length) != 1) {
 		wi_error_set_openssl_error();
 		
 		return -1;
 	}
 	
-	if(EVP_EncryptInit_ex(&cipher->encrypt_ctx, NULL, NULL, NULL, NULL) != 1) {
+	if(EVP_EncryptInit_ex(cipher->encrypt_ctx, NULL, NULL, NULL, NULL) != 1) {
 		wi_error_set_openssl_error();
 		
 		return -1;
@@ -548,19 +551,19 @@ wi_integer_t wi_cipher_decrypt_bytes(wi_cipher_t *cipher, const void *encrypted_
 #ifdef WI_CIPHER_OPENSSL
 	int			decrypted_length, padded_length;
 	
-	if(EVP_DecryptUpdate(&cipher->decrypt_ctx, decrypted_buffer, &decrypted_length, encrypted_buffer, encrypted_length) != 1) {
+	if(EVP_DecryptUpdate(cipher->decrypt_ctx, decrypted_buffer, &decrypted_length, encrypted_buffer, encrypted_length) != 1) {
 		wi_error_set_openssl_error();
 		
 		return -1;
 	}
 	
-	if(EVP_DecryptFinal_ex(&cipher->decrypt_ctx, decrypted_buffer + decrypted_length, &padded_length) != 1) {
+	if(EVP_DecryptFinal_ex(cipher->decrypt_ctx, decrypted_buffer + decrypted_length, &padded_length) != 1) {
 		wi_error_set_openssl_error();
 		
 		return -1;
 	}
 	
-	if(EVP_DecryptInit_ex(&cipher->decrypt_ctx, NULL, NULL, NULL, NULL) != 1) {
+	if(EVP_DecryptInit_ex(cipher->decrypt_ctx, NULL, NULL, NULL, NULL) != 1) {
 		wi_error_set_openssl_error();
 		
 		return -1;

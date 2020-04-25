@@ -56,6 +56,7 @@
 	[message getBool:&ownThread forName:@"wired.board.own_thread"];
 	
 	_replies			= replies;
+    _board              = [[message stringForName:@"wired.board.board"] retain];
 	_threadID			= [[message UUIDForName:@"wired.board.thread"] retain];
 	_subject			= [[message stringForName:@"wired.board.subject"] retain];
 	_postDate			= [[message dateForName:@"wired.board.post_date"] retain];
@@ -82,6 +83,7 @@
 
 
 - (void)dealloc {
+    [_board release];
 	[_threadID release];
 	[_posts release];
 
@@ -117,6 +119,17 @@
 
 
 #pragma mark -
+
+- (NSString *)board {
+    return _board;
+}
+
+- (void)setBoard:(NSString *)board {
+    [board retain];
+    [_board release];
+    
+    _board = board;
+}
 
 - (NSString *)threadID {
 	return _threadID;
