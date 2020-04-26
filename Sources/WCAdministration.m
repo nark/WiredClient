@@ -61,6 +61,11 @@
 	_views			= [[NSMutableDictionary alloc] init];
 
 	[self window];
+    
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self
+                                                        selector:@selector(appleInterfaceThemeChanged:)
+                                                            name:@"AppleInterfaceThemeChangedNotification"
+                                                          object: nil];
 	
 	return self;
 }
@@ -225,9 +230,9 @@
 	NSWindow		*window;
 	NSToolbar		*toolbar;
 	NSDictionary	*dictionary;
-	NSString		*key, *string;
-
-    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+	NSString		*key, *string, *imageName;
+    
+    imageName       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
     
 	[self _addAdministrationView:_settingsView
 							name:NSLS(@"Settings", @"Settings toolbar item")
@@ -252,19 +257,13 @@
 						   image:[NSImage imageNamed:@"Log"]
 					  identifier:@"Log"
 					  controller:_logController];
-    if (osxMode == nil) {
-	  [self _addAdministrationView:_accountsView
-							name:NSLS(@"Accounts", @"Accounts toolbar item")
-						   image:[NSImage imageNamed:@"Accounts"]
-					  identifier:@"Accounts"
-					  controller:_accountsController]; // Light mode
-    } else {
-      [self _addAdministrationView:_accountsView
-                                name:NSLS(@"Accounts", @"Accounts toolbar item")
-                               image:[NSImage imageNamed:@"Accounts_dark"]
-                          identifier:@"Accounts"
-                          controller:_accountsController]; // Dark mode
-    }
+
+    [self _addAdministrationView:_accountsView
+                            name:NSLS(@"Accounts", @"Accounts toolbar item")
+                           image:[NSImage imageNamed:imageName]
+                      identifier:@"Accounts"
+                      controller:_accountsController];
+
     
 	[self _addAdministrationView:_banlistView
 							name:NSLS(@"Banlist", @"Banlist toolbar item")
@@ -448,6 +447,23 @@
 
 	[super serverConnectionPrivilegesDidChange:notification];
 }
+
+
+
+
+#pragma mark -
+
+- (void)appleInterfaceThemeChanged:(NSNotification *)notification {
+    NSToolbarItem       *item;
+    NSString            *imageName;
+    
+    item                = [[[self window] toolbar] itemWithIdentifier:@"Accounts"];
+    imageName           = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
+    
+    item.image          = [NSImage imageNamed:imageName];
+}
+
+
 
 
 
@@ -659,7 +675,6 @@
 
 - (void)controllerDidUnselect {
 }
-
 
 
 #pragma mark -

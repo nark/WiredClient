@@ -80,6 +80,8 @@ extern NSString * const					WCAccountsControllerAccountsDidChangeNotification;
 	IBOutlet WIOutlineView				*_settingsOutlineView;
 	IBOutlet NSTableColumn				*_settingTableColumn;
 	IBOutlet NSTableColumn				*_valueTableColumn;
+    
+    NSPopUpButtonCell                   *_popUpButtonCell;
 	
 	NSArray								*_allSettings;
 	NSMutableArray						*_shownSettings;

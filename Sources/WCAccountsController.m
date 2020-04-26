@@ -216,6 +216,37 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	}
 }
 
+- (void)_reloadColorsPopUpButtonMenu {
+    NSInteger   selectedItemIndex;
+    NSString    *imageName, *menuName;
+    
+    if (!_popUpButtonCell)
+        return;
+    
+    imageName           = [NSApp darkModeEnabled] ? @"LabelWhite"   : @"LabelBlack";
+    menuName            = [NSApp darkModeEnabled] ? @"White"        : @"Black";
+    selectedItemIndex   = [_popUpButtonCell indexOfSelectedItem];
+    
+    [_popUpButtonCell removeAllItems];
+    
+    [_popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(menuName, @"Account color")
+                                                  image:[NSImage imageNamed:imageName]]];
+    [_popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Red", @"Account color")
+                                                 image:[NSImage imageNamed:@"LabelRed"]]];
+    [_popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Orange", @"Account color")
+                                                 image:[NSImage imageNamed:@"LabelOrange"]]];
+    [_popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Green", @"Account color")
+                                                 image:[NSImage imageNamed:@"LabelGreen"]]];
+    [_popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Blue", @"Account color")
+                                                 image:[NSImage imageNamed:@"LabelBlue"]]];
+    [_popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Purple", @"Account color")
+                                                 image:[NSImage imageNamed:@"LabelPurple"]]];
+    
+    if (selectedItemIndex != -1)
+        [_popUpButtonCell selectItemAtIndex:selectedItemIndex];
+}
+
+
 #pragma mark -
 
 - (NSDictionary *)_settingForRow:(NSInteger)row {
@@ -970,7 +1001,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 	NSMutableArray			*basicsSettings, *filesSettings, *boardsSettings, *trackerSettings, *usersSettings, *accountsSettings, *administrationSettings, *limitsSettings;
 	NSButtonCell			*buttonCell;
 	NSTextFieldCell			*textFieldCell;
-	NSPopUpButtonCell		*popUpButtonCell;
 	
 	self = [super init];
 	
@@ -1020,39 +1050,22 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 				break;
 			
 			case WCAccountFieldTypeEnum:
-				popUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
-				[popUpButtonCell setControlSize:NSSmallControlSize];
-				[popUpButtonCell setBordered:NO];
-				[popUpButtonCell setFont:[NSFont smallSystemFont]];
-                
-                NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+				_popUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
+				[_popUpButtonCell setControlSize:NSSmallControlSize];
+				[_popUpButtonCell setBordered:NO];
+				[_popUpButtonCell setFont:[NSFont smallSystemFont]];
                 
 				if([[setting objectForKey:WCAccountFieldNameKey] isEqualToString:@"wired.account.color"]) {
-                    if (osxMode == nil) {
-                      [popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Black", @"Account color")
-                      image:[NSImage imageNamed:@"LabelBlack"]]];  //Light mode
-                    } else {
-                      [popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"White", @"Account color")
-                      image:[NSImage imageNamed:@"LabelWhite"]]];  //Dark mode
-                    }
-					[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Red", @"Account color")
-																 image:[NSImage imageNamed:@"LabelRed"]]];
-					[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Orange", @"Account color")
-																 image:[NSImage imageNamed:@"LabelOrange"]]];
-					[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Green", @"Account color")
-																 image:[NSImage imageNamed:@"LabelGreen"]]];
-					[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Blue", @"Account color")
-																 image:[NSImage imageNamed:@"LabelBlue"]]];
-					[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Purple", @"Account color")
-																 image:[NSImage imageNamed:@"LabelPurple"]]];
+                    [self _reloadColorsPopUpButtonMenu];
                     //[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Gray", @"Account color")
                                                                  //image:[NSImage imageNamed:@"LabelGray"]]];
                     //[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Yellow", @"Account color")
                                                                  //image:[NSImage imageNamed:@"LabelYellow"]]];
 				}
 				
-				[setting setObject:popUpButtonCell forKey:WCAccountsFieldCell];
-				[popUpButtonCell release];
+				[setting setObject:_popUpButtonCell forKey:WCAccountsFieldCell];
+				[_popUpButtonCell autorelease];
+                
 				break;
 			
 			case WCAccountFieldTypeDate:
@@ -1134,8 +1147,13 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		NULL];
 	
 	_shownSettings = [_allSettings mutableCopy];
+    
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self
+                                                        selector:@selector(appleInterfaceThemeChanged:)
+                                                            name:@"AppleInterfaceThemeChangedNotification"
+                                                          object: nil];
 
-	return self;
+    return self;
 }
 
 - (void)dealloc {
@@ -1486,6 +1504,12 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 		return [self _validateDuplicateAccount];
 	
 	return YES;
+}
+
+#pragma mark -
+
+- (void)appleInterfaceThemeChanged:(NSNotification *)notification {
+    [self _reloadColorsPopUpButtonMenu];
 }
 
 #pragma mark -
