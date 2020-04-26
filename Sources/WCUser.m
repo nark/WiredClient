@@ -271,9 +271,16 @@
 
 
 - (NSImage *)iconWithIdleTint:(BOOL)value {
-	return _idle && value
-		? [_icon tintedImageWithColor:[NSColor colorWithDeviceWhite:1.0 alpha:0.5]]
-		: _icon;
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+        if (osxMode == nil) {
+              return _idle && value
+              ? [_icon tintedImageWithColor:[NSColor colorWithDeviceWhite:1.0 alpha:0.5]]
+              : _icon; //Light mode
+        } else {
+              return _idle && value
+              ? [_icon tintedImageWithColor:[NSColor colorWithDeviceWhite:0.0 alpha:0.5]]
+              : _icon; //Dark mode
+        }
 }
 
 
