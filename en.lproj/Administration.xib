@@ -376,7 +376,7 @@ DQ
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <clipView key="contentView" id="z8z-8q-HbN">
                         <rect key="frame" x="1" y="1" width="264" height="70"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="428">
                                 <rect key="frame" x="0.0" y="0.0" width="264" height="70"/>
@@ -489,7 +489,7 @@ DQ
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <clipView key="contentView" id="laL-QY-xQ6">
                         <rect key="frame" x="1" y="0.0" width="516" height="71"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" headerView="439" id="442">
                                 <rect key="frame" x="0.0" y="0.0" width="516" height="46"/>
@@ -591,11 +591,11 @@ DQ
                     <rect key="frame" x="-1" y="-1" width="854" height="549"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="CbS-0n-aei">
-                        <rect key="frame" x="1" y="1" width="836" height="547"/>
+                        <rect key="frame" x="1" y="1" width="852" height="547"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="46" id="338" customClass="WITableView">
-                                <rect key="frame" x="0.0" y="0.0" width="836" height="547"/>
+                                <rect key="frame" x="0.0" y="0.0" width="852" height="547"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -620,7 +620,7 @@ DQ
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                     </tableColumn>
-                                    <tableColumn identifier="Status" editable="NO" width="641" minWidth="10" maxWidth="1000" id="341">
+                                    <tableColumn identifier="Status" editable="NO" width="657" minWidth="10" maxWidth="1000" id="341">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -641,7 +641,7 @@ DQ
                             </tableView>
                         </subviews>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="339">
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="339">
                         <rect key="frame" x="-100" y="-100" width="766" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -1527,7 +1527,7 @@ Gw
                         <tabViewItem label="Settings" identifier="" id="564">
                             <view key="view" id="613">
                                 <rect key="frame" x="10" y="33" width="453" height="391"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="615">
                                         <rect key="frame" x="54" y="353" width="188" height="22"/>
@@ -1558,15 +1558,15 @@ Gw
                                     <scrollView focusRingType="none" fixedFrame="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="614">
                                         <rect key="frame" x="17" y="17" width="419" height="332"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" ambiguous="YES" id="ywi-Nv-tzs">
+                                        <clipView key="contentView" id="ywi-Nv-tzs">
                                             <rect key="frame" x="1" y="0.0" width="417" height="331"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" autosaveColumns="NO" rowHeight="15" headerView="622" indentationPerLevel="16" outlineTableColumn="627" id="623" customClass="WIOutlineView">
                                                     <rect key="frame" x="0.0" y="0.0" width="417" height="306"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>

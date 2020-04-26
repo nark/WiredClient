@@ -1143,6 +1143,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 	NSColor					*textColor, *backgroundColor, *timestampColor, *eventColor, *urlColor;
 	NSFont					*font;
 	BOOL					reload = NO;
+    
+    if (theme == nil)
+        return;
 	
 	font					= WIFontFromString ([theme objectForKey:WCThemesChatFont]);
 	textColor				= WIColorFromString([theme objectForKey:WCThemesChatTextColor]);
@@ -1152,7 +1155,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	eventColor				= WIColorFromString([theme objectForKey:WCThemesChatEventsColor]);
 	
 	// Cocoa UI reload
-	if(![[_setTopicTextView font] isEqualTo:font]) {
+	if(font && ![[_setTopicTextView font] isEqualTo:font]) {
 		[_chatInputTextField setFont:font];
 		[_setTopicTextView setFont:font];
 		
