@@ -1024,7 +1024,6 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 				[popUpButtonCell setControlSize:NSSmallControlSize];
 				[popUpButtonCell setBordered:NO];
 				[popUpButtonCell setFont:[NSFont smallSystemFont]];
-				//LUIGI
                 
                 NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
                 
