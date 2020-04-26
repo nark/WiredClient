@@ -96,11 +96,17 @@
 
 + (NSColor *)colorForColor:(WCAccountColor)color idleTint:(BOOL)idleTint {
 	NSColor		*value;
-	
+
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    
 	switch(color) {
 		case WCAccountColorBlack:
 		default:
-			value = [NSColor colorWithCalibratedHue:0.0 saturation:0.0 brightness:0.0 alpha:1.0];
+            if (osxMode == nil) {
+			  value = [NSColor colorWithCalibratedHue:0.0 saturation:0.0 brightness:0.0 alpha:1.0]; //Light mode
+            } else {
+              value = [NSColor colorWithCalibratedHue:0.0 saturation:0.0 brightness:1.0 alpha:1.0]; //Dark mode
+            }
 			break;
 			
 		case WCAccountColorRed:
@@ -116,11 +122,19 @@
 			break;
 			
 		case WCAccountColorBlue:
-			value = [NSColor blueColor];
+            if (osxMode == nil) {
+              value = [NSColor blueColor]; //Light mode
+            } else {
+              value = [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:1.0 alpha:1.0]; //Dark mode
+            }
 			break;
 			
 		case WCAccountColorPurple:
-			value = [NSColor purpleColor];
+			if (osxMode == nil) {
+              value = [NSColor purpleColor]; //Light mode
+            } else {
+                value = [NSColor colorWithCalibratedRed:248.0/255.0 green:91.0/255 blue:228.0/255.0 alpha:1.0]; //Dark mode
+            }
 			break;
 	}
 	
@@ -257,9 +271,16 @@
 
 
 - (NSImage *)iconWithIdleTint:(BOOL)value {
-	return _idle && value
-		? [_icon tintedImageWithColor:[NSColor colorWithDeviceWhite:1.0 alpha:0.5]]
-		: _icon;
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+        if (osxMode == nil) {
+              return _idle && value
+              ? [_icon tintedImageWithColor:[NSColor colorWithDeviceWhite:1.0 alpha:0.5]]
+              : _icon; //Light mode
+        } else {
+              return _idle && value
+              ? [_icon tintedImageWithColor:[NSColor colorWithDeviceWhite:0.0 alpha:0.5]]
+              : _icon; //Dark mode
+        }
 }
 
 
