@@ -623,6 +623,8 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)identifier willBeInsertedIntoToolbar:(BOOL)willBeInsertedIntoToolbar {
 	NSButton		*button;
+    
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
 	
 	if([identifier isEqualToString:@"Banner"]) {
 		button = [[[NSButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200.0, 32.0)] autorelease];
@@ -715,11 +717,19 @@ typedef enum _WCChatActivity				WCChatActivity;
 												 action:@selector(chatHistory:)];
 	}
 	else if([identifier isEqualToString:@"Accounts"]) {
-		return [NSToolbarItem toolbarItemWithIdentifier:identifier
+        if (osxMode == nil) {
+            return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Accounts", @"Accounts toolbar item")
 												content:[NSImage imageNamed:@"Accounts"]
 												 target:self
-												 action:@selector(accounts:)];
+												 action:@selector(accounts:)]; // Light mode
+        } else {
+            return [NSToolbarItem toolbarItemWithIdentifier:identifier
+                                                   name:NSLS(@"Accounts", @"Accounts toolbar item")
+                                                content:[NSImage imageNamed:@"Accounts_dark"]
+                                                 target:self
+                                                 action:@selector(accounts:)]; // Dark mode
+        }
 	}
 	else if([identifier isEqualToString:@"Banlist"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier

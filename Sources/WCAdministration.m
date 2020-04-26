@@ -226,7 +226,9 @@
 	NSToolbar		*toolbar;
 	NSDictionary	*dictionary;
 	NSString		*key, *string;
-	
+
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    
 	[self _addAdministrationView:_settingsView
 							name:NSLS(@"Settings", @"Settings toolbar item")
 						   image:[NSImage imageNamed:@"Settings"]
@@ -250,13 +252,20 @@
 						   image:[NSImage imageNamed:@"Log"]
 					  identifier:@"Log"
 					  controller:_logController];
-	
-	[self _addAdministrationView:_accountsView
+    if (osxMode == nil) {
+	  [self _addAdministrationView:_accountsView
 							name:NSLS(@"Accounts", @"Accounts toolbar item")
 						   image:[NSImage imageNamed:@"Accounts"]
 					  identifier:@"Accounts"
-					  controller:_accountsController];
-	
+					  controller:_accountsController]; // Light mode
+    } else {
+      [self _addAdministrationView:_accountsView
+                                name:NSLS(@"Accounts", @"Accounts toolbar item")
+                               image:[NSImage imageNamed:@"Accounts_dark"]
+                          identifier:@"Accounts"
+                          controller:_accountsController]; // Dark mode
+    }
+    
 	[self _addAdministrationView:_banlistView
 							name:NSLS(@"Banlist", @"Banlist toolbar item")
 						   image:[NSImage imageNamed:@"Banlist"]
