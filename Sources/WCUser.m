@@ -96,7 +96,7 @@
 
 + (NSColor *)colorForColor:(WCAccountColor)color idleTint:(BOOL)idleTint {
 	NSColor		*value;
-	
+
     NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
     
 	switch(color) {
