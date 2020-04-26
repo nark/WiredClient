@@ -1030,10 +1030,10 @@ typedef enum _WCAccountsAction										WCAccountsAction;
 				if([[setting objectForKey:WCAccountFieldNameKey] isEqualToString:@"wired.account.color"]) {
                     if (osxMode == nil) {
                       [popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Black", @"Account color")
-                      image:[NSImage imageNamed:@"LabelBlack"]]]; //Light mode
+                      image:[NSImage imageNamed:@"LabelBlack"]]];  //Light mode
                     } else {
                       [popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"White", @"Account color")
-                      image:[NSImage imageNamed:@"LabelWhite"]]]; //Dark mode
+                      image:[NSImage imageNamed:@"LabelWhite"]]];  //Dark mode
                     }
 					[popUpButtonCell addItem:[NSMenuItem itemWithTitle:NSLS(@"Red", @"Account color")
 																 image:[NSImage imageNamed:@"LabelRed"]]];
