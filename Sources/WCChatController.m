@@ -2609,10 +2609,10 @@ dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
         } break;
 	}
     
-    if(row != [tableView selectedRow])
+    //if(row != [tableView selectedRow])
         cellView.nickTextField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
-    else
-        cellView.nickTextField.textColor = [NSColor whiteColor];
+    //else
+    //    cellView.nickTextField.textColor = [NSColor whiteColor];
     
     [cellView.nickTextField setAllowsEditingTextAttributes:YES];
     
@@ -2632,11 +2632,17 @@ dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
     
     cellView.nickTextField.attributedStringValue = [NSAttributedString attributedStringWithString:[user nick]
                                                                                    attributes:attributes];
-    
     cellView.nickTextField.toolTip = [user nick];
-    
     cellView.statusTextField.toolTip = [user status];
     cellView.statusTextField.stringValue = [user status];
+    
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    if (osxMode == nil) {
+        cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1.0]; //Light mode
+    } else {
+      cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:197.0/255.0 green:197.0/255.0 blue:197.0/255.0 alpha:1.0]; //Dark mode
+    }
+
     cellView.imageView.image = [user iconWithIdleTint:YES];
     
     return cellView;
