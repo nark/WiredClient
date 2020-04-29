@@ -122,8 +122,24 @@ typedef enum _WCChatActivity				WCChatActivity;
     item = [[[self window] toolbar] itemWithIdentifier:@"Transfers"];
     
     [item setImage:[[NSImage imageNamed:@"Transfers"] badgedImageWithInt:[[WCTransfers transfers] numberOfUncompleteTransfers]]];
+    
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self
+                                                        selector:@selector(appleInterfaceThemeChanged:)
+                                                            name:@"AppleInterfaceThemeChangedNotification"
+                                                          object: nil];
 }
 
+#pragma mark -
+
+- (void)appleInterfaceThemeChanged:(NSNotification *)notification {
+    NSToolbarItem       *itemAccounts;
+    NSString            *imageAccounts;
+    
+    itemAccounts        = [[[self window] toolbar] itemWithIdentifier:@"Accounts"];
+    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
+ 
+    itemAccounts.image  = [NSImage imageNamed:imageAccounts];
+}
 
 
 - (void)_updateBannerToolbarItem:(NSToolbarItem *)item forConnection:(WCServerConnection *)connection {
@@ -623,9 +639,10 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)identifier willBeInsertedIntoToolbar:(BOOL)willBeInsertedIntoToolbar {
 	NSButton		*button;
+    NSString        *imageAccounts;
     
-    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
-	
+    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
+
 	if([identifier isEqualToString:@"Banner"]) {
 		button = [[[NSButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200.0, 32.0)] autorelease];
 		[button setBordered:NO];
@@ -717,20 +734,12 @@ typedef enum _WCChatActivity				WCChatActivity;
 												 action:@selector(chatHistory:)];
 	}
 	else if([identifier isEqualToString:@"Accounts"]) {
-        if (osxMode == nil) {
             return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Accounts", @"Accounts toolbar item")
-												content:[NSImage imageNamed:@"Accounts"]
+												content:[NSImage imageNamed:imageAccounts]
 												 target:self
-												 action:@selector(accounts:)]; // Light mode
-        } else {
-            return [NSToolbarItem toolbarItemWithIdentifier:identifier
-                                                   name:NSLS(@"Accounts", @"Accounts toolbar item")
-                                                content:[NSImage imageNamed:@"Accounts_dark"]
-                                                 target:self
-                                                 action:@selector(accounts:)]; // Dark mode
-        }
-	}
+												 action:@selector(accounts:)];
+ 	}
 	else if([identifier isEqualToString:@"Banlist"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Banlist", @"Banlist toolbar item")
