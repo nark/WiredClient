@@ -655,7 +655,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	else if([identifier isEqualToString:@"Files"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Files", @"Files toolbar item")
-												content:[NSImage imageNamed:@"FolderMainview"]
+												content:[NSImage imageNamed:@"Folder"]
 												 target:self
 												 action:@selector(files:)];
 	}
