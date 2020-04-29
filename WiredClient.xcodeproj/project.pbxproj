@@ -1500,6 +1500,7 @@
 				4CF094B21559D529005D77BB /* Copy Templates */,
 				770B8A64075C86BD005327F5 /* Copy Frameworks */,
 				41A4977D16E8C8CEE4C029C0 /* [CP] Embed Pods Frameworks */,
+				4C52C881245A0D0500BFB5AE /* Code Sign */,
 			);
 			buildRules = (
 			);
@@ -1704,6 +1705,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "sh \"$SRCROOT/../wired_client_distribute.sh\" Debug >> \"$BUILT_PRODUCTS_DIR/wired_client_distribute_debug.log\"\n";
+		};
+		4C52C881245A0D0500BFB5AE /* Code Sign */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Code Sign";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Type a script or drag a script file from your workspace to insert its path.\ncodesign --force --sign \"Developer ID Application: Rafael Warnault (7KTXA5Y36K)\" \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app\"\n";
 		};
 		4C8243FB17DE37C90065CEEE /* Generate Core Data Model */ = {
 			isa = PBXShellScriptBuildPhase;
