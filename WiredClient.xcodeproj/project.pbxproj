@@ -1500,7 +1500,6 @@
 				4CF094B21559D529005D77BB /* Copy Templates */,
 				770B8A64075C86BD005327F5 /* Copy Frameworks */,
 				41A4977D16E8C8CEE4C029C0 /* [CP] Embed Pods Frameworks */,
-				4CE1792E244078A0004EFD52 /* Code Sign */,
 			);
 			buildRules = (
 			);
@@ -1526,8 +1525,8 @@
 				LastUpgradeCheck = 1010;
 				TargetAttributes = {
 					8D1107260486CEB800E47090 = {
-						DevelopmentTeam = 7KTXA5Y36K;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 4ATFWV7M4B;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -1746,24 +1745,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "sh \"$SRCROOT/../wired_client_distribute.sh\" >> \"$BUILT_PRODUCTS_DIR/wired_client_distribute.log\"\n";
-		};
-		4CE1792E244078A0004EFD52 /* Code Sign */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Code Sign";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncodesign --force --sign \"Developer ID Application: Rafael Warnault (7KTXA5Y36K)\" \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app\"\n";
 		};
 		4D5C19408B81356B3BB3BE34 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2335,17 +2316,17 @@
 		};
 		4C9C2553243F78F4005F214C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 52A30D560B7D36A2AD0F2511 /* Pods-Wired Client.debug.xcconfig */;
+			baseConfigurationReference = 8412F05D439B9F0793485926 /* Pods-Wired Client.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 53;
-				DEVELOPMENT_TEAM = 7KTXA5Y36K;
+				CURRENT_PROJECT_VERSION = 55;
+				DEVELOPMENT_TEAM = 4ATFWV7M4B;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2371,7 +2352,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 2.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClient";
@@ -2595,11 +2576,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 53;
-				DEVELOPMENT_TEAM = 7KTXA5Y36K;
+				CURRENT_PROJECT_VERSION = 55;
+				DEVELOPMENT_TEAM = 4ATFWV7M4B;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2625,7 +2606,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 2.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClientDebug";
@@ -2700,14 +2681,14 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
 				CODE_SIGN_IDENTITY = "-";
-				CURRENT_PROJECT_VERSION = 53;
+				CURRENT_PROJECT_VERSION = 55;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/Sparkle",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 2.5;
 				PRODUCT_NAME = "Wired Client";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"/**";

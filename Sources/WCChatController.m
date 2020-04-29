@@ -2615,7 +2615,7 @@ dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
     //if(row != [tableView selectedRow])
         cellView.nickTextField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
     //else
-    //    cellView.nickTextField.textColor = [NSColor whiteColor];
+    //  cellView.nickTextField.textColor = [NSColor whiteColor];
     
     [cellView.nickTextField setAllowsEditingTextAttributes:YES];
     
@@ -2639,11 +2639,12 @@ dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
     cellView.statusTextField.toolTip = [user status];
     cellView.statusTextField.stringValue = [user status];
     
+    
     NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
     if (osxMode == nil) {
         cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1.0]; //Light mode
     } else {
-      cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:197.0/255.0 green:197.0/255.0 blue:197.0/255.0 alpha:1.0]; //Dark mode
+      cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:130.0/255.0 green:130.0/255.0 blue:130.0/255.0 alpha:0.7 ] ; //Dark mode
     }
 
     cellView.imageView.image = [user iconWithIdleTint:YES];

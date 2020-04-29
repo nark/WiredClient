@@ -122,6 +122,7 @@ typedef enum _WCChatActivity				WCChatActivity;
     item = [[[self window] toolbar] itemWithIdentifier:@"Transfers"];
     
     [item setImage:[[NSImage imageNamed:@"Transfers"] badgedImageWithInt:[[WCTransfers transfers] numberOfUncompleteTransfers]]];
+    
 }
 
 
@@ -623,7 +624,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)identifier willBeInsertedIntoToolbar:(BOOL)willBeInsertedIntoToolbar {
 	NSButton		*button;
-	
+
 	if([identifier isEqualToString:@"Banner"]) {
 		button = [[[NSButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200.0, 32.0)] autorelease];
 		[button setBordered:NO];
@@ -715,12 +716,12 @@ typedef enum _WCChatActivity				WCChatActivity;
 												 action:@selector(chatHistory:)];
 	}
 	else if([identifier isEqualToString:@"Accounts"]) {
-		return [NSToolbarItem toolbarItemWithIdentifier:identifier
+            return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Accounts", @"Accounts toolbar item")
 												content:[NSImage imageNamed:@"Accounts"]
 												 target:self
 												 action:@selector(accounts:)];
-	}
+ 	}
 	else if([identifier isEqualToString:@"Banlist"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Banlist", @"Banlist toolbar item")
