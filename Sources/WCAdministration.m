@@ -61,11 +61,6 @@
 	_views			= [[NSMutableDictionary alloc] init];
 
 	[self window];
-    
-    [[NSDistributedNotificationCenter defaultCenter] addObserver:self
-                                                        selector:@selector(appleInterfaceThemeChanged:)
-                                                            name:@"AppleInterfaceThemeChangedNotification"
-                                                          object: nil];
 	
 	return self;
 }
@@ -230,10 +225,9 @@
 	NSWindow		*window;
 	NSToolbar		*toolbar;
 	NSDictionary	*dictionary;
-	NSString		*key, *string, *imageAccounts;
+	NSString		*key, *string;
     
-    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
-    
+
 	[self _addAdministrationView:_settingsView
 							name:NSLS(@"Settings", @"Settings toolbar item")
 						   image:[NSImage imageNamed:@"Settings"]
@@ -260,7 +254,7 @@
 
     [self _addAdministrationView:_accountsView
                             name:NSLS(@"Accounts", @"Accounts toolbar item")
-                           image:[NSImage imageNamed:imageAccounts]
+                           image:[NSImage imageNamed:@"Accounts"]
                       identifier:@"Accounts"
                       controller:_accountsController];
 
@@ -448,23 +442,6 @@
 	[super serverConnectionPrivilegesDidChange:notification];
 }
 
-
-
-
-#pragma mark -
-
-- (void)appleInterfaceThemeChanged:(NSNotification *)notification {
-    NSToolbarItem       *itemAccounts, *itemEvents;
-    NSString            *imageAccounts, *imageEvents;
-    
-    itemAccounts        = [[[self window] toolbar] itemWithIdentifier:@"Accounts"];
-    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
-    itemAccounts.image  = [NSImage imageNamed:imageAccounts];
-    
-    itemEvents        = [[[self window] toolbar] itemWithIdentifier:@"Events"];
-    imageEvents       = [NSApp darkModeEnabled] ? @"Events_dark" : @"Events";
-    itemEvents.image  = [NSImage imageNamed:imageEvents];
-}
 
 
 

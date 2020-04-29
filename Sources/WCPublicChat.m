@@ -123,26 +123,8 @@ typedef enum _WCChatActivity				WCChatActivity;
     
     [item setImage:[[NSImage imageNamed:@"Transfers"] badgedImageWithInt:[[WCTransfers transfers] numberOfUncompleteTransfers]]];
     
-    [[NSDistributedNotificationCenter defaultCenter] addObserver:self
-                                                        selector:@selector(appleInterfaceThemeChanged:)
-                                                            name:@"AppleInterfaceThemeChangedNotification"
-                                                          object: nil];
 }
 
-#pragma mark -
-
-- (void)appleInterfaceThemeChanged:(NSNotification *)notification {
-    NSToolbarItem       *itemAccounts, *itemEvents;
-    NSString            *imageAccounts, *imageEvents;
-    
-    itemAccounts        = [[[self window] toolbar] itemWithIdentifier:@"Accounts"];
-    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
-    itemAccounts.image  = [NSImage imageNamed:imageAccounts];
-    
-    itemEvents        = [[[self window] toolbar] itemWithIdentifier:@"Events"];
-    imageEvents       = [NSApp darkModeEnabled] ? @"Events_dark" : @"Events";
-    itemEvents.image  = [NSImage imageNamed:imageEvents];
-}
 
 
 - (void)_updateBannerToolbarItem:(NSToolbarItem *)item forConnection:(WCServerConnection *)connection {
@@ -642,10 +624,6 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)identifier willBeInsertedIntoToolbar:(BOOL)willBeInsertedIntoToolbar {
 	NSButton		*button;
-    NSString        *imageAccounts, *imageEvents;
-    
-    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
-    imageEvents       = [NSApp darkModeEnabled] ? @"Events_dark" : @"Events";
 
 	if([identifier isEqualToString:@"Banner"]) {
 		button = [[[NSButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200.0, 32.0)] autorelease];
@@ -677,7 +655,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	else if([identifier isEqualToString:@"Files"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Files", @"Files toolbar item")
-												content:[NSImage imageNamed:@"Folder"]
+												content:[NSImage imageNamed:@"FolderMainview"]
 												 target:self
 												 action:@selector(files:)];
 	}
@@ -705,7 +683,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	else if([identifier isEqualToString:@"Events"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Events", @"Events toolbar item")
-												content:[NSImage imageNamed:imageEvents]
+												content:[NSImage imageNamed:@"Events"]
 												 target:self
 												 action:@selector(events:)];
 	}
@@ -740,7 +718,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	else if([identifier isEqualToString:@"Accounts"]) {
             return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Accounts", @"Accounts toolbar item")
-												content:[NSImage imageNamed:imageAccounts]
+												content:[NSImage imageNamed:@"Accounts"]
 												 target:self
 												 action:@selector(accounts:)];
  	}
