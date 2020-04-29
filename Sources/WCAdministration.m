@@ -226,7 +226,8 @@
 	NSToolbar		*toolbar;
 	NSDictionary	*dictionary;
 	NSString		*key, *string;
-	
+    
+
 	[self _addAdministrationView:_settingsView
 							name:NSLS(@"Settings", @"Settings toolbar item")
 						   image:[NSImage imageNamed:@"Settings"]
@@ -250,13 +251,14 @@
 						   image:[NSImage imageNamed:@"Log"]
 					  identifier:@"Log"
 					  controller:_logController];
-	
-	[self _addAdministrationView:_accountsView
-							name:NSLS(@"Accounts", @"Accounts toolbar item")
-						   image:[NSImage imageNamed:@"Accounts"]
-					  identifier:@"Accounts"
-					  controller:_accountsController];
-	
+
+    [self _addAdministrationView:_accountsView
+                            name:NSLS(@"Accounts", @"Accounts toolbar item")
+                           image:[NSImage imageNamed:@"Accounts"]
+                      identifier:@"Accounts"
+                      controller:_accountsController];
+
+    
 	[self _addAdministrationView:_banlistView
 							name:NSLS(@"Banlist", @"Banlist toolbar item")
 						   image:[NSImage imageNamed:@"Banlist"]
@@ -439,6 +441,9 @@
 
 	[super serverConnectionPrivilegesDidChange:notification];
 }
+
+
+
 
 
 
@@ -650,7 +655,6 @@
 
 - (void)controllerDidUnselect {
 }
-
 
 
 #pragma mark -
