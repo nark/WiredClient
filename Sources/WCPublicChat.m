@@ -132,13 +132,16 @@ typedef enum _WCChatActivity				WCChatActivity;
 #pragma mark -
 
 - (void)appleInterfaceThemeChanged:(NSNotification *)notification {
-    NSToolbarItem       *itemAccounts;
-    NSString            *imageAccounts;
+    NSToolbarItem       *itemAccounts, *itemEvents;
+    NSString            *imageAccounts, *imageEvents;
     
     itemAccounts        = [[[self window] toolbar] itemWithIdentifier:@"Accounts"];
     imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
- 
     itemAccounts.image  = [NSImage imageNamed:imageAccounts];
+    
+    itemEvents        = [[[self window] toolbar] itemWithIdentifier:@"Events"];
+    imageEvents       = [NSApp darkModeEnabled] ? @"Events_dark" : @"Events";
+    itemEvents.image  = [NSImage imageNamed:imageEvents];
 }
 
 
@@ -639,9 +642,10 @@ typedef enum _WCChatActivity				WCChatActivity;
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)identifier willBeInsertedIntoToolbar:(BOOL)willBeInsertedIntoToolbar {
 	NSButton		*button;
-    NSString        *imageAccounts;
+    NSString        *imageAccounts, *imageEvents;
     
     imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
+    imageEvents       = [NSApp darkModeEnabled] ? @"Events_dark" : @"Events";
 
 	if([identifier isEqualToString:@"Banner"]) {
 		button = [[[NSButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200.0, 32.0)] autorelease];
@@ -701,7 +705,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	else if([identifier isEqualToString:@"Events"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Events", @"Events toolbar item")
-												content:[NSImage imageNamed:@"Events"]
+												content:[NSImage imageNamed:imageEvents]
 												 target:self
 												 action:@selector(events:)];
 	}

@@ -230,9 +230,9 @@
 	NSWindow		*window;
 	NSToolbar		*toolbar;
 	NSDictionary	*dictionary;
-	NSString		*key, *string, *imageName;
+	NSString		*key, *string, *imageAccounts;
     
-    imageName       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
+    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
     
 	[self _addAdministrationView:_settingsView
 							name:NSLS(@"Settings", @"Settings toolbar item")
@@ -260,7 +260,7 @@
 
     [self _addAdministrationView:_accountsView
                             name:NSLS(@"Accounts", @"Accounts toolbar item")
-                           image:[NSImage imageNamed:imageName]
+                           image:[NSImage imageNamed:imageAccounts]
                       identifier:@"Accounts"
                       controller:_accountsController];
 
@@ -454,13 +454,16 @@
 #pragma mark -
 
 - (void)appleInterfaceThemeChanged:(NSNotification *)notification {
-    NSToolbarItem       *item;
-    NSString            *imageName;
+    NSToolbarItem       *itemAccounts, *itemEvents;
+    NSString            *imageAccounts, *imageEvents;
     
-    item                = [[[self window] toolbar] itemWithIdentifier:@"Accounts"];
-    imageName           = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
+    itemAccounts        = [[[self window] toolbar] itemWithIdentifier:@"Accounts"];
+    imageAccounts       = [NSApp darkModeEnabled] ? @"Accounts_dark" : @"Accounts";
+    itemAccounts.image  = [NSImage imageNamed:imageAccounts];
     
-    item.image          = [NSImage imageNamed:imageName];
+    itemEvents        = [[[self window] toolbar] itemWithIdentifier:@"Events"];
+    imageEvents       = [NSApp darkModeEnabled] ? @"Events_dark" : @"Events";
+    itemEvents.image  = [NSImage imageNamed:imageEvents];
 }
 
 
