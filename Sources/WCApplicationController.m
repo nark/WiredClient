@@ -792,11 +792,7 @@ static WCApplicationController		*sharedController;
 	
 	extension = [filename pathExtension];
 	
-	if([extension isEqualToString:@"WiredTheme"])
-		return [[WCPreferences preferences] importThemeFromFile:filename];
-    else if([extension isEqualToString:@"WiredTemplate"])
-		return [[WCPreferences preferences] importTemplateFromFile:filename];
-	else if([extension isEqualToString:@"WiredBookmarks"])
+    if([extension isEqualToString:@"WiredBookmarks"])
 		return [[WCPreferences preferences] importBookmarksFromFile:filename];
 	else if([extension isEqualToString:@"WiredTrackerBookmarks"])
 		return [[WCPreferences preferences] importTrackerBookmarksFromFile:filename];

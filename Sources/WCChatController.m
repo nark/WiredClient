@@ -321,7 +321,8 @@ typedef enum _WCChatFormat					WCChatFormat;
                  nick,          @"nick",
                  mutableOutput, @"message", nil];
     
-    NSLog(@"jsonProxy : %@", jsonProxy);
+    
+    //NSLog(@"jsonProxy : %@", jsonProxy);
     
     [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
         [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];

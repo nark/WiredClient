@@ -145,7 +145,6 @@
 		4CE153271800D665004DA093 /* MMTabBarView.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CE153291800D665004DA093 /* WiredNetworking.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CE1532A1800D665004DA093 /* WiredAppKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		4CEFF6BE180C3FA600AD7AD9 /* WCThemesPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFF6BD180C3FA600AD7AD9 /* WCThemesPreferences.m */; };
 		4CEFF6D2180C3FF700AD7AD9 /* WCPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */; };
 		4CF094DB1559D8C1005D77BB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF094D91559D8C1005D77BB /* InfoPlist.strings */; };
 		4CF094E51559D9AA005D77BB /* Neo.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -536,8 +535,6 @@
 		4CD7B71E18157B9D00FA3846 /* WCBadgedTableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCBadgedTableCellView.m; sourceTree = "<group>"; };
 		4CDD88CC15F76F8000283005 /* wiredclientrnote.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = wiredclientrnote.html; sourceTree = "<group>"; };
 		4CE1533E1800D94A004DA093 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = vendor/Growl.framework; sourceTree = "<group>"; };
-		4CEFF6BC180C3FA600AD7AD9 /* WCThemesPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCThemesPreferences.h; path = Sources/WCThemesPreferences.h; sourceTree = "<group>"; };
-		4CEFF6BD180C3FA600AD7AD9 /* WCThemesPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCThemesPreferences.m; path = Sources/WCThemesPreferences.m; sourceTree = "<group>"; };
 		4CEFF6D0180C3FF700AD7AD9 /* WCPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCPreferencesController.h; path = Sources/WCPreferencesController.h; sourceTree = "<group>"; };
 		4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCPreferencesController.m; path = Sources/WCPreferencesController.m; sourceTree = "<group>"; };
 		4CF094BD1559D67D005D77BB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -1304,8 +1301,6 @@
 				A5A335E9071C484700A16E9A /* WCKeychain.h */,
 				A5DC7EC1057AAEAD00736BBF /* WCPreferences.h */,
 				A5DC7EC2057AAEAD00736BBF /* WCPreferences.m */,
-				4CEFF6BC180C3FA600AD7AD9 /* WCThemesPreferences.h */,
-				4CEFF6BD180C3FA600AD7AD9 /* WCThemesPreferences.m */,
 				4CEFF6D0180C3FF700AD7AD9 /* WCPreferencesController.h */,
 				4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */,
 				A5DC7FC9057AB0F200736BBF /* WCSettings.m */,
@@ -1874,7 +1869,6 @@
 				A5F802980D8E378300A84685 /* WCMonitorCell.m in Sources */,
 				A5AAD1480D86F15C0072FFA1 /* WCMonitorController.m in Sources */,
 				A5DC7ECA057AAEAD00736BBF /* WCPreferences.m in Sources */,
-				4CEFF6BE180C3FA600AD7AD9 /* WCThemesPreferences.m in Sources */,
 				A5DC7F0A057AAF6C00736BBF /* WCPrivateChat.m in Sources */,
 				A541A7830F115AC500D1EE94 /* WCPrivateChatController.m in Sources */,
 				A55C7C0D0F2E500A006E8568 /* WCPrivateChatInvitation.m in Sources */,
@@ -2344,7 +2338,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 57;
 				DEVELOPMENT_TEAM = 7KTXA5Y36K;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2598,7 +2592,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 57;
 				DEVELOPMENT_TEAM = 7KTXA5Y36K;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2700,7 +2694,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
 				CODE_SIGN_IDENTITY = "-";
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 57;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
