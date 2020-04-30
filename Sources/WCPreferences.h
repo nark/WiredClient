@@ -66,21 +66,6 @@ extern NSString * const								WCIconDidChangeNotification;
     
     IBOutlet NSMatrix								*_threadsSplitViewMatrix;
     
-    IBOutlet NSWindow                               *_themesWindow;
-    IBOutlet NSWindow                               *_addThemeWindow;
-    IBOutlet NSWindow                               *_manageThemesWindow;
-    IBOutlet NSTextField                            *_addThemeNameTextField;
-    IBOutlet NSPopUpButton							*_themesPopUpButton;
-	IBOutlet NSButton								*_addThemeButton;
-	IBOutlet NSButton								*_deleteThemeButton;
-	IBOutlet NSButton								*_selectThemeButton;
-    IBOutlet NSButton                               *_customizeThemesButton;
-	
-	IBOutlet NSPopUpButton							*_themesTemplatesPopUpButton;
-	IBOutlet NSWindow								*_themesTemplatesWindow;
-	IBOutlet NSTableView							*_themesTemplatesTableView;
-	IBOutlet NSTableView							*_themesTableView;
-    
 	IBOutlet NSTextField							*_themesChatFontTextField;
 	IBOutlet NSButton								*_themesChatFontButton;
 	IBOutlet NSColorWell							*_themesChatTextColorWell;
@@ -152,13 +137,10 @@ extern NSString * const								WCIconDidChangeNotification;
     
     IBOutlet NSTextField                            *_networkConnectionTimeoutTextField;
     IBOutlet NSTextField                            *_networkReadTimeoutTextField;
-    IBOutlet NSPopUpButton                          *_networkCipherPopUpButton;
     IBOutlet NSButton                               *_networkCompressionButton;
     
 	IBOutlet NSView									*_bookmarksExportView;
-    
-    IBOutlet WCThemesPreferences                    *_themesPreferences;
-    
+        
 	WITemplateBundleManager							*_privateTemplateManager;
 	WITemplateBundleManager							*_publicTemplateManager;
 	
@@ -168,7 +150,6 @@ extern NSString * const								WCIconDidChangeNotification;
 
 + (WCPreferences *)preferences;
 
-- (BOOL)importThemeFromFile:(NSString *)path;
 - (BOOL)importTemplateFromFile:(NSString *)path;
 - (BOOL)importBookmarksFromFile:(NSString *)path;
 - (BOOL)importTrackerBookmarksFromFile:(NSString *)path;
@@ -176,17 +157,6 @@ extern NSString * const								WCIconDidChangeNotification;
 
 - (IBAction)changePreferences:(id)sender;
 
-- (IBAction)customizeTheme:(id)sender;
-- (IBAction)closeTheme:(id)sender;
-- (IBAction)addTheme:(id)sender;
-- (IBAction)cancelAddTheme:(id)sender;
-- (IBAction)okAddTheme:(id)sender;
-- (IBAction)editTheme:(id)sender;
-- (IBAction)deleteTheme:(id)sender;
-- (IBAction)duplicateTheme:(id)sender;
-- (IBAction)exportTheme:(id)sender;
-- (IBAction)importTheme:(id)sender;
-- (IBAction)selectTheme:(id)sender;
 - (IBAction)changeTheme:(id)sender;
 - (IBAction)changeThemeFont:(id)sender;
 

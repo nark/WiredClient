@@ -27,7 +27,6 @@
  */
 
 #import "WCApplicationController.h"
-#import "WCThemesPreferences.h"
 #import "WCChatHistory.h"
 #import "WCKeychain.h"
 #import "WCPreferences.h"
@@ -61,21 +60,12 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (void)_bookmarkDidChange:(NSDictionary *)bookmark;
 
-- (void)_reloadThemes;
 - (void)_reloadTheme;
-
-- (void)_reloadTemplates;
-- (void)_reloadTemplatesForMenu:(NSMenu *)menu;
-
 - (void)_reloadChatLogsFolder;
-
 - (void)_reloadEvents;
 - (void)_reloadEvent;
 - (void)_updateEventControls;
 - (void)_reloadDownloadFolder;
-
-- (NSArray *)_themeNames;
-- (void)_changeSelectedThemeToTheme:(NSDictionary *)theme;
 
 - (void)_savePasswordForBookmark:(NSArray *)arguments;
 - (void)_savePasswordForTrackerBookmark:(NSArray *)arguments;
@@ -86,19 +76,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 @implementation WCPreferences(Private)
 
 - (void)_validate {
-    
-	NSDictionary		*theme;
-	NSInteger			row;
-	
-	row = [self _selectedThemeRow];
-	
-	if(row < 0) {
-		[_deleteThemeButton setEnabled:NO];
-	} else {
-		theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
-		
-		[_deleteThemeButton setEnabled:![theme objectForKey:WCThemesBuiltinName]];
-	}
 	[_deleteHighlightButton setEnabled:([_highlightsTableView selectedRow] >= 0)];
 	[_deleteIgnoreButton setEnabled:([_ignoresTableView selectedRow] >= 0)];
 }
@@ -118,13 +95,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 #pragma mark -
 
 - (void)_updateTheme:(NSMutableDictionary *)theme {
-//  [theme setObject:WIStringFromColor([_themesChatTextColorWell color]) forKey:WCThemesChatTextColor];
-//  [theme setObject:WIStringFromColor([_themesChatBackgroundColorWell color]) forKey:WCThemesChatBackgroundColor];
-//  [theme setObject:WIStringFromColor([_themesMessagesTextColorWell color]) forKey:WCThemesMessagesTextColor];
-//  [theme setObject:WIStringFromColor([_themesMessagesBackgroundColorWell color]) forKey:WCThemesMessagesBackgroundColor];
-//  [theme setObject:WIStringFromColor([_themesBoardsTextColorWell color]) forKey:WCThemesBoardsTextColor];
-//  [theme setObject:WIStringFromColor([_themesBoardsBackgroundColorWell color]) forKey:WCThemesBoardsBackgroundColor];
-  
   [theme setObject:WIStringFromColor([_themesChatEventsColorWell color]) forKey:WCThemesChatEventsColor];
   [theme setObject:WIStringFromColor([_themesChatTimestampEveryLineColorWell color]) forKey:WCThemesChatTimestampEveryLineColor];
   [theme setObject:WIStringFromColor([_themesChatURLsColorWell color]) forKey:WCThemesChatURLsColor];
@@ -145,9 +115,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
   [theme setBool:[_themesMonitorAlternateRowsButton state] forKey:WCThemesMonitorAlternateRows];
 }
 
-- (NSInteger)_selectedThemeRow {
-    return [_themesPopUpButton indexOfItem:[_themesPopUpButton selectedItem]];
-}
 
 - (NSDictionary *)_selectedTheme {
     NSString        *identifier;
@@ -160,135 +127,48 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 }
 
 
-- (void)_reloadThemes {
-	NSEnumerator	*enumerator;
-	NSDictionary	*theme;
-	NSMenuItem		*item;
-    
-    [_themesPopUpButton removeAllItems];
-	
-	enumerator = [[[WCSettings settings] objectForKey:WCThemes] objectEnumerator];
-	
-	while((theme = [enumerator nextObject])) {
-		item = [NSMenuItem itemWithTitle:[theme objectForKey:WCThemesName]];
-		[item setRepresentedObject:[theme objectForKey:WCThemesIdentifier]];
-		[item setImage:[self imageForTheme:theme size:NSMakeSize(16.0, 12.0)]];
-		[item setAction:@selector(selectTheme:)];
-        [item setTarget:self];
-        
-        [_themesPopUpButton addItem:item];
-    }
-    
-    [_themesPopUpButton selectItemWithRepresentedObject:[[WCSettings settings] objectForKey:WCTheme]];
-    [_themesPopUpButton addItem:[NSMenuItem separatorItem]];
-    
-    [[_themesPopUpButton menu] addItemWithTitle:NSLS(@"Add New Theme...", @"Add Theme Menu Item Title")
-                                         action:@selector(addTheme:)
-                                  keyEquivalent:@""];
-    
-    [[_themesPopUpButton menu] addItemWithTitle:NSLS(@"Edit Themes...", @"Edit Themes Menu Item Title")
-                                         action:@selector(editTheme:)
-                                  keyEquivalent:@""];
-    
-    [_themesTableView reloadData];
-}
-
 
 - (void)_reloadTheme {
 	NSDictionary	*theme;
-	NSInteger		row;
-	
-	row = [[_themesPopUpButton menu] indexOfItem:[_themesPopUpButton selectedItem]];
-	
-	if(row >= 0 && (NSUInteger) row < [[[WCSettings settings] objectForKey:WCThemes] count]) {
-		theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
+
+    theme = [[WCSettings settings] themeWithName:@"Wired"];
 		
-		[_themesChatFontTextField setStringValue:[WIFontFromString([theme objectForKey:WCThemesChatFont]) displayNameWithSize]];
-		[_themesChatTextColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatTextColor])];
-		[_themesChatBackgroundColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatBackgroundColor])];
-		[_themesChatEventsColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatEventsColor])];
-		[_themesChatTimestampEveryLineColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatTimestampEveryLineColor])];
-		[_themesChatURLsColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatURLsColor])];
+    [_themesChatFontTextField setStringValue:[WIFontFromString([theme objectForKey:WCThemesChatFont]) displayNameWithSize]];
+    [_themesChatTextColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatTextColor])];
+    [_themesChatBackgroundColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatBackgroundColor])];
+    [_themesChatEventsColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatEventsColor])];
+    [_themesChatTimestampEveryLineColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatTimestampEveryLineColor])];
+    [_themesChatURLsColorWell setColor:WIColorFromString([theme objectForKey:WCThemesChatURLsColor])];
 
-		[_themesMessagesFontTextField setStringValue:[WIFontFromString([theme objectForKey:WCThemesMessagesFont]) displayNameWithSize]];
-		[_themesMessagesTextColorWell setColor:WIColorFromString([theme objectForKey:WCThemesMessagesTextColor])];
-		[_themesMessagesBackgroundColorWell setColor:WIColorFromString([theme objectForKey:WCThemesMessagesBackgroundColor])];
+    [_themesMessagesFontTextField setStringValue:[WIFontFromString([theme objectForKey:WCThemesMessagesFont]) displayNameWithSize]];
+    [_themesMessagesTextColorWell setColor:WIColorFromString([theme objectForKey:WCThemesMessagesTextColor])];
+    [_themesMessagesBackgroundColorWell setColor:WIColorFromString([theme objectForKey:WCThemesMessagesBackgroundColor])];
 
-		[_themesBoardsFontTextField setStringValue:[WIFontFromString([theme objectForKey:WCThemesBoardsFont]) displayNameWithSize]];
-		[_themesBoardsTextColorWell setColor:WIColorFromString([theme objectForKey:WCThemesBoardsTextColor])];
-		[_themesBoardsBackgroundColorWell setColor:WIColorFromString([theme objectForKey:WCThemesBoardsBackgroundColor])];
+    [_themesBoardsFontTextField setStringValue:[WIFontFromString([theme objectForKey:WCThemesBoardsFont]) displayNameWithSize]];
+    [_themesBoardsTextColorWell setColor:WIColorFromString([theme objectForKey:WCThemesBoardsTextColor])];
+    [_themesBoardsBackgroundColorWell setColor:WIColorFromString([theme objectForKey:WCThemesBoardsBackgroundColor])];
 
-		[_themesShowSmileysButton setState:[theme boolForKey:WCThemesShowSmileys]];
+    [_themesShowSmileysButton setState:[theme boolForKey:WCThemesShowSmileys]];
 
-		[_themesChatTimestampEveryLineButton setState:[theme boolForKey:WCThemesChatTimestampEveryLine]];
-		
-		[_themesUserListIconSizeMatrix selectCellWithTag:[theme integerForKey:WCThemesUserListIconSize]];
-		[_themesUserListAlternateRowsButton setState:[theme boolForKey:WCThemesUserListAlternateRows]];
-		
-		[_themesFileListIconSizeMatrix selectCellWithTag:[theme integerForKey:WCThemesFileListIconSize]];
-		[_themesFileListAlternateRowsButton setState:[theme boolForKey:WCThemesFileListAlternateRows]];
-		
-		[_themesTransferListShowProgressBarButton setState:[theme boolForKey:WCThemesTransferListShowProgressBar]];
-		[_themesTransferListAlternateRowsButton setState:[theme boolForKey:WCThemesTransferListAlternateRows]];
-		
-		[_themesTrackerListAlternateRowsButton setState:[theme boolForKey:WCThemesTrackerListAlternateRows]];
-		
-		[_themesMonitorIconSizeMatrix selectCellWithTag:[theme integerForKey:WCThemesMonitorIconSize]];
-		[_themesMonitorAlternateRowsButton setState:[theme boolForKey:WCThemesMonitorAlternateRows]];
-		
-		[self _reloadTemplates];
-	}
-}
-
-
-
-
-
-- (void)_reloadTemplates {	
-	[self _reloadTemplatesForMenu:[_themesTemplatesPopUpButton menu]];
-}
-
-
-
-- (void)_reloadTemplatesForMenu:(NSMenu *)menu {
-	NSMutableArray				*templates;
-	NSMenuItem					*newItem;
-	NSString					*bundleName;
-	NSDictionary				*theme;
-	
-	if([self _selectedThemeRow] == -1)
-		return;
-	
-	theme			= [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]];
-	templates		= [NSMutableArray arrayWithArray:[_privateTemplateManager templates]];
-	
-	[templates addObjectsFromArray:[_publicTemplateManager templates]];
-	[menu removeAllItems];
-	
-	for(WITemplateBundle *template in templates) {
-		
-		bundleName	= [template templateName];
-		newItem		= [menu addItemWithTitle:bundleName
-								   action:@selector(selectThemeTemplate:) 
-							keyEquivalent:@""];
-		
-		[newItem setTarget:self];
-		[newItem setRepresentedObject:template];
-		
-		if([[theme objectForKey:WCThemesTemplate] isEqualTo:[template bundleIdentifier]]) {
-			[newItem setState:NSOnState];
-			[_themesTemplatesPopUpButton selectItemWithRepresentedObject:template];
-		} else
-			[newItem setState:NSOffState];
-	}
-	
-	[menu addItem:[NSMenuItem separatorItem]];
+    [_themesChatTimestampEveryLineButton setState:[theme boolForKey:WCThemesChatTimestampEveryLine]];
     
-    // NSLS(@"Add New Theme...", @"Add Theme Menu Item Title")
+    [_themesUserListIconSizeMatrix selectCellWithTag:[theme integerForKey:WCThemesUserListIconSize]];
+    [_themesUserListAlternateRowsButton setState:[theme boolForKey:WCThemesUserListAlternateRows]];
     
-	[menu addItemWithTitle:NSLS(@"Add New Template...", @"Add Template Menu Item Title") action:@selector(addThemeTemplate:) keyEquivalent:@""];
-	[menu addItemWithTitle:NSLS(@"Manage Templates...", @"Add Templates Menu Item Title") action:@selector(manageThemeTemplates:) keyEquivalent:@""];
+    [_themesFileListIconSizeMatrix selectCellWithTag:[theme integerForKey:WCThemesFileListIconSize]];
+    [_themesFileListAlternateRowsButton setState:[theme boolForKey:WCThemesFileListAlternateRows]];
+    
+    [_themesTransferListShowProgressBarButton setState:[theme boolForKey:WCThemesTransferListShowProgressBar]];
+    [_themesTransferListAlternateRowsButton setState:[theme boolForKey:WCThemesTransferListAlternateRows]];
+    
+    [_themesTrackerListAlternateRowsButton setState:[theme boolForKey:WCThemesTrackerListAlternateRows]];
+    
+    [_themesMonitorIconSizeMatrix selectCellWithTag:[theme integerForKey:WCThemesMonitorIconSize]];
+    [_themesMonitorAlternateRowsButton setState:[theme boolForKey:WCThemesMonitorAlternateRows]];
 }
+
+
+
 
 
 
@@ -478,55 +358,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 #pragma mark -
 
-- (NSArray *)_themeNames {
-	NSEnumerator		*enumerator;
-	NSDictionary		*theme;
-	NSMutableArray		*array;
-	
-	array			= [NSMutableArray array];
-	enumerator		= [[[WCSettings settings] objectForKey:WCThemes] objectEnumerator];
-	
-	while((theme = [enumerator nextObject]))
-		[array addObject:[theme objectForKey:WCThemesName]];
-	
-	return array;
-}
-
-
-
-- (void)_changeSelectedThemeToTheme:(NSDictionary *)theme {
-    [[WCSettings settings] replaceObjectAtIndex:0 withObject:theme inArrayForKey:WCThemes];
-    
-    [self _reloadTheme];
-    [self _reloadThemes];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
-}
-
-
-- (void)_changeBuiltinThemePanelDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	NSMutableDictionary		*newTheme;
-	NSDictionary			*theme = contextInfo;
-	
-	if(returnCode == NSAlertDefaultReturn) {
-		newTheme = [[theme mutableCopy] autorelease];
-		[newTheme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
-					 forKey:WCThemesName];
-		[newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-		[newTheme removeObjectForKey:WCThemesBuiltinName];
-		
-		[[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
-		
-		[self _reloadThemes];
-	}
-	
-	[theme release];
-}
-
-
-
-#pragma mark -
-
 - (void)_savePasswordForBookmark:(NSArray *)arguments {
 	NSDictionary		*oldBookmark = [arguments objectAtIndex:0];
 	NSDictionary		*bookmark = [arguments objectAtIndex:1];
@@ -586,11 +417,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	_publicTemplateManager	= [[WITemplateBundleManager templateManagerForPath:[WCApplicationSupportPath stringByStandardizingPath] isPrivate:NO] retain];
 	
 	[self window];
-
-    [[NSNotificationCenter defaultCenter]
-        addObserver:self
-           selector:@selector(themesDidChange:)
-               name:WCThemesDidChangeNotification];
     
 	[[NSNotificationCenter defaultCenter]
 		addObserver:self
@@ -667,9 +493,9 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_highlightsTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	[_ignoresTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	
-	[self _reloadThemes];
+	//[self _reloadThemes];
 	[self _reloadTheme];
-	[self _reloadTemplates];
+	//[self _reloadTemplates];
 	[self _reloadChatLogsFolder];
 	[self _reloadEvents];
 	[self _reloadEvent];
@@ -708,17 +534,11 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     
     [_networkConnectionTimeoutTextField setStringValue:[NSSWF:@"%d", [[WCSettings settings] intForKey:WCNetworkConnectionTimeout]]];
     [_networkReadTimeoutTextField setStringValue:[NSSWF:@"%d", [[WCSettings settings] intForKey:WCNetworkReadTimeout]]];
-    [_networkCipherPopUpButton selectItemWithTag:[[WCSettings settings] integerForKey:WCNetworkEncryptionCipher]];
     [_networkCompressionButton setState:[[WCSettings settings] boolForKey:WCNetworkCompressionEnabled]];
     
 	[self _validate];
 	
 	[super windowDidLoad];
-}
-
-
-- (void)themesDidChange:(NSNotification *)notification {
-    [self _reloadThemes];
 }
 
 
@@ -792,40 +612,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 #pragma mark -
-
-- (BOOL)importThemeFromFile:(NSString *)path {
-	NSMutableDictionary		*theme;
-	
-	[self showWindow:self];
-	[self selectPreferenceView:_themesView];
-	
-	theme = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-	
-	if(!theme || ![theme objectForKey:WCThemesName])
-		return NO;
-	
-	[theme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-	
-	[[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-	
-	[self _reloadThemes];
-	
-	return YES;
-}
-
-
-
-- (BOOL)importTemplateFromFile:(NSString *)path {
-    BOOL result;
-        
-    result = [_publicTemplateManager addTemplateAtPath:path];
-    
-    if(result) [self _reloadTheme];
-    
-    return result;
-}
-
-
 
 - (BOOL)importBookmarksFromFile:(NSString *)path {
 	NSEnumerator			*enumerator;
@@ -916,55 +702,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 }
 
 
-
-
-
-#pragma mark -
-
-- (NSImage *)imageForTheme:(NSDictionary *)theme size:(NSSize)size {
-	NSMutableDictionary		*attributes;
-	NSBezierPath			*path;
-	NSImage					*image;
-	NSSize					largeSize;
-	
-	largeSize	= NSMakeSize(64.0, 48.0);
-	image		= [[NSImage alloc] initWithSize:largeSize];
-	
-	[image lockFocus];
-	
-	path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(1.0, 1.0, largeSize.width - 2.0, largeSize.height - 2.0) cornerRadius:4.0];
-	
-	[WIColorFromString([theme objectForKey:WCThemesChatBackgroundColor]) set];
-	[path fill];
-    
-	[[NSColor lightGrayColor] set];
-	[path setLineWidth:2.0];
-	[path stroke];
-	
-	attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                  [NSFont fontWithName:[WIFontFromString([theme objectForKey:WCThemesChatFont]) fontName] size:12.0],
-                  NSFontAttributeName,
-                  WIColorFromString([theme objectForKey:WCThemesChatTextColor]),
-                  NSForegroundColorAttributeName,
-                  NULL];
-    
-	[@"hello," drawAtPoint:NSMakePoint(8.0, largeSize.height - 19.0) withAttributes:attributes];
-	[@"world!" drawAtPoint:NSMakePoint(8.0, largeSize.height - 31.0) withAttributes:attributes];
-	
-	[attributes setObject:WIColorFromString([theme objectForKey:WCThemesChatEventsColor]) forKey:NSForegroundColorAttributeName];
-	
-	[@"<< ! >>" drawAtPoint:NSMakePoint(8.0, largeSize.height - 43.0) withAttributes:attributes];
-    
-	[image unlockFocus];
-	
-	//[image setScalesWhenResized:YES];
-	[image setSize:size];
-	
-	return [image autorelease];
-}
-
-
-
 #pragma mark -
 
 - (IBAction)changePreferences:(id)sender {
@@ -1033,7 +770,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 - (IBAction)changeNetwork:(id)sender {
     [[WCSettings settings] setInteger:[_networkConnectionTimeoutTextField integerValue] forKey:WCNetworkConnectionTimeout];
     [[WCSettings settings] setInteger:[_networkReadTimeoutTextField integerValue] forKey:WCNetworkReadTimeout];
-    [[WCSettings settings] setInteger:[_networkCipherPopUpButton selectedTag] forKey:WCNetworkEncryptionCipher];
     [[WCSettings settings] setBool:[_networkCompressionButton state] forKey:WCNetworkCompressionEnabled];
     
     NSAlert *alert = [[NSAlert alloc] init];
@@ -1049,297 +785,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 #pragma mark -
-
-- (IBAction)customizeTheme:(id)sender {
-    [NSApp beginSheet:_themesWindow
-       modalForWindow:[self window]
-        modalDelegate:self
-       didEndSelector:nil
-          contextInfo:nil];
-    
-//    NSDictionary            *theme;
-//    NSAlert                 *alert;
-//    
-//    theme   = [self _selectedTheme];
-//    
-//    if([theme objectForKey:WCThemesBuiltinName]) {
-//		alert = [[NSAlert alloc] init];
-//		[alert setMessageText:[NSSWF:
-//                               NSLS(@"You cannot edit the built-in theme \u201c%@\u201d", @"Duplicate builtin theme dialog title (theme)"),
-//                               [theme objectForKey:WCThemesName]]];
-//		[alert setInformativeText:NSLS(@"Make a copy of it to edit it.", @"Duplicate builtin theme dialog description")];
-//		[alert addButtonWithTitle:NSLS(@"Duplicate", @"Duplicate builtin theme dialog button title")];
-//		[alert addButtonWithTitle:NSLS(@"Cancel", @"Duplicate builtin theme button title")];
-//        
-//        [alert beginSheetModalForWindow:[self window]
-//                          modalDelegate:self
-//                         didEndSelector:@selector(customizeBuiltInAlertDidEnd:returnCode:contextInfo:)
-//                            contextInfo:theme];
-//
-//        
-//        [alert release];
-//	} else {
-//        [NSApp beginSheet:_themesWindow
-//           modalForWindow:[self window]
-//            modalDelegate:self
-//           didEndSelector:nil
-//              contextInfo:nil];
-//    }
-}
-
-/*
-- (void)customizeBuiltInAlertDidEnd:(NSAlert *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	NSMutableDictionary		*newTheme;
-    NSString                *newName;
-	NSDictionary			*theme = contextInfo;
-    
-    [NSApp endSheet:[sheet window]];
-	[[sheet window] orderOut:self];
-    
-	if(returnCode == NSAlertDefaultReturn) {
-        newName = [WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName]
-                                               existingNames:[self _themeNames]];
-        
-        newTheme = [[theme mutableCopy] autorelease];
-        [newTheme setObject:newName forKey:WCThemesName];
-        [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-        [newTheme removeObjectForKey:WCThemesBuiltinName];
-        
-        [[WCSettings settings] addObject:newTheme toArrayForKey:WCThemes];
-        [self _reloadThemes];
-        
-        [_themesPopUpButton selectItemWithTitle:newName];
-        [[WCSettings settings] setObject:[newTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
-        
-        [self _reloadTheme];
-        
-        [NSApp beginSheet:_themesWindow
-           modalForWindow:[self window]
-            modalDelegate:self
-           didEndSelector:nil
-              contextInfo:nil];
-
-    }
-}
-*/
-
-- (IBAction)closeTheme:(id)sender {
-    if([_themesWindow isVisible]) {
-        [NSApp endSheet:_themesWindow];
-        [_themesWindow orderOut:self];
-    }
-}
-
-
-- (IBAction)addTheme:(id)sender {
-    NSDictionary            *theme;
-    NSString                *name;
-    
-    [self _reloadThemes];
-    
-    theme   = [self _selectedTheme];
-    
-    if(!theme)
-        return;
-    
-    name    = [WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName]
-                                           existingNames:[self _themeNames]];
-    
-    [_addThemeNameTextField setStringValue:name];
-    
-    [NSApp beginSheet:_addThemeWindow
-       modalForWindow:self.window
-        modalDelegate:self
-       didEndSelector:nil
-          contextInfo:nil];
-}
-
-
-- (IBAction)cancelAddTheme:(id)sender {
-    [NSApp endSheet:_addThemeWindow];
-    [_addThemeWindow orderOut:sender];
-    
-    [_addThemeNameTextField setStringValue:@""];
-}
-
-
-- (IBAction)okAddTheme:(id)sender {
-    NSMutableDictionary		*theme;
-    NSString                *name;
-    NSInteger				row;
-    
-    name = [_addThemeNameTextField stringValue];
-    
-    if([name length] > 0 && ![[self _themeNames] containsObject:name]) {
-        [NSApp endSheet:_addThemeWindow];
-        [_addThemeWindow orderOut:sender];
-        
-        row = [self _selectedThemeRow];
-        
-        if(row < 0)
-            return;
-        
-        theme   = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] mutableCopy] autorelease];
-        [theme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-        [theme removeObjectForKey:WCThemesBuiltinName];
-        [theme setObject:name forKey:WCThemesName];
-        
-        [[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:WCThemesDidChangeNotification
-                                                            object:theme];
-    }
-}
-
-
-- (IBAction)editTheme:(id)sender {
-    [self _reloadThemes];
-    
-    [_themesPreferences open:sender];
-}
-
-
-- (IBAction)deleteTheme:(id)sender {
-	NSAlert			*alert;
-	NSString		*name;
-	NSInteger		row;
-	
-	row = [self _selectedThemeRow];
-	
-	if(row < 0)
-		return;
-	
-	name = [[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] objectForKey:WCThemesName];
-	
-	alert = [[NSAlert alloc] init];
-	[alert setMessageText:[NSSWF:NSLS(@"Are you sure you want to delete \u201c%@\u201d?", @"Delete theme dialog title (theme)"), name]];
-	[alert setInformativeText:NSLS(@"This cannot be undone.", @"Delete theme dialog description")];
-	[alert addButtonWithTitle:NSLS(@"Delete", @"Delete theme dialog button title")];
-	[alert addButtonWithTitle:NSLS(@"Cancel", @"Delete theme button title")];
-	[alert beginSheetModalForWindow:[self window]
-					  modalDelegate:self
-					 didEndSelector:@selector(deleteThemeSheetDidEnd:returnCode:contextInfo:)
-						contextInfo:[[NSNumber alloc] initWithInteger:row]];
-	[alert release];
-}
-
-
-
-- (void)deleteThemeSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	NSNumber		*row = contextInfo;
-	NSString		*identifier;
-
-	if(returnCode == NSAlertDefaultReturn) {
-		identifier = [[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[row unsignedIntegerValue]]
-			objectForKey:WCThemesIdentifier];
-		
-		if([[[WCSettings settings] objectForKey:WCTheme] isEqualToString:identifier]) {
-			identifier = [[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:0] objectForKey:WCThemesIdentifier];
-			
-			[[WCSettings settings] setObject:identifier forKey:WCTheme];
-		}
-		
-		[[WCSettings settings] removeObjectAtIndex:[row unsignedIntegerValue] fromArrayForKey:WCThemes];
-
-		[self _reloadThemes];
-		[self _reloadTheme];
-	}
-	
-	[row release];
-}
-
-
-
-- (IBAction)duplicateTheme:(id)sender {
-	NSMutableDictionary		*theme;
-	NSInteger				row;
-	
-	row = [self _selectedThemeRow];
-	
-	if(row < 0)
-		return;
-	
-	theme = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] mutableCopy] autorelease];
-	
-	[theme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-	[theme removeObjectForKey:WCThemesBuiltinName];
-	[theme setObject:[WCApplicationController copiedNameForName:[theme objectForKey:WCThemesName] existingNames:[self _themeNames]]
-			  forKey:WCThemesName];
-	
-	[[WCSettings settings] addObject:theme toArrayForKey:WCThemes];
-	
-	[self _reloadThemes];
-}
-
-
-
-- (IBAction)exportTheme:(id)sender {
-	__block NSSavePanel				*savePanel;
-	__block NSMutableDictionary		*theme;
-	NSInteger                       row;
-	
-	row = [self _selectedThemeRow];
-	
-	if(row < 0)
-		return;
-	
-	theme = [[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row] mutableCopy];
-	[theme removeObjectForKey:WCThemesIdentifier];
-	[theme removeObjectForKey:WCThemesBuiltinName];
-
-	savePanel = [NSSavePanel savePanel];
-	[savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredTheme"]];
-	[savePanel setCanSelectHiddenExtension:YES];
-    [savePanel setNameFieldStringValue:[[theme objectForKey:WCThemesName] stringByAppendingPathExtension:@"WiredTheme"]];
-    
-    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {        
-        if(result == NSModalResponseOK)
-            [theme writeToURL:[savePanel URL] atomically:YES];
-        
-        [theme release];
-    }];
-}
-
-
-
-- (IBAction)importTheme:(id)sender {
-	__block NSOpenPanel     *openPanel;
-	
-	openPanel = [NSOpenPanel openPanel];
-	[openPanel setCanChooseFiles:YES];
-	[openPanel setCanChooseDirectories:NO];
-    [openPanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredTheme"]];
-    
-    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSModalResponseOK)
-            [self importThemeFromFile:[[openPanel URL] path]];
-    }];
-}
-
-
-
-
-
-- (IBAction)selectTheme:(id)sender {
-	NSDictionary		*theme;
-	NSInteger			row;
-	
-	row = [[_themesPopUpButton menu] indexOfItem:[_themesPopUpButton selectedItem]];
-	   
-	if(row < 0 || [[[WCSettings settings] objectForKey:WCThemes] count] < (NSUInteger)row)
-		return;
-	
-	theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:row];
-	
-	[[WCSettings settings] setObject:[theme objectForKey:WCThemesIdentifier] forKey:WCTheme];
-	
-    [self _reloadTemplates];
-    
-	[[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
-}
-
-
-
 
 - (IBAction)changeTheme:(id)sender {
     NSMutableDictionary     *theme;
@@ -1430,116 +875,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     
     [[NSNotificationCenter defaultCenter] postNotificationName:WCThemeDidChangeNotification object:theme];
 }
-
-
-
-
-
-#pragma mark - 
-
-- (IBAction)selectThemeTemplate:(id)sender {	
-	id						value;
-	NSMutableDictionary		*theme;
-	
-	value = [[sender representedObject] bundleIdentifier];
-	
-	if(value && [value isKindOfClass:[NSString class]]) {
-		theme = [[[[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]] mutableCopy] autorelease];
-
-		[theme setValue:value forKey:WCThemesTemplate];
-		
-		[self _changeSelectedThemeToTheme:theme];
-	}
-}
-
-
-
-- (IBAction)addThemeTemplate:(id)sender {
-	__block NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-	[openPanel setAllowsMultipleSelection:NO];
-    [openPanel setAllowedFileTypes:[NSArray arrayWithObject:@"WiredTemplate"]];
-	
-	if([_themesTemplatesWindow isVisible])
-		[self closeManageThemeTemplates:sender];
-    
-    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if(result == NSModalResponseOK) {
-            [_publicTemplateManager addTemplateAtPath:[[openPanel URL] path]];
-        }
-        
-        [self _reloadTheme];
-    }];
-}
-
-
-
-
-
-
-- (IBAction)manageThemeTemplates:(id)sender {
-	[_themesTemplatesTableView reloadData];
-	
-	[NSApp beginSheet:_themesTemplatesWindow
-	   modalForWindow:[self window]
-		modalDelegate:self
-	   didEndSelector:nil
-		  contextInfo:nil];
-}
-
-
-
-- (IBAction)closeManageThemeTemplates:(id)sender {
-	[NSApp endSheet:_themesTemplatesWindow];
-	[_themesTemplatesWindow orderOut:sender];
-	
-	[self _reloadTheme];
-}
-
-
-
-- (IBAction)deleteThemeTemplate:(id)sender {
-	WITemplateBundle		*selectedTemplate;
-	NSAlert	*alert = [[[NSAlert alloc] init] autorelease];
-	BOOL					inUse;
-	
-	if([_themesTemplatesTableView selectedRow] != -1) {
-		
-		inUse				= NO;
-		selectedTemplate	= [[_publicTemplateManager templates] objectAtIndex:[_themesTemplatesTableView selectedRow]];
-		
-		for(NSDictionary *theme in [[WCSettings settings] objectForKey:WCThemes]) {			
-			if([[selectedTemplate bundleIdentifier] isEqualToString:[theme objectForKey:WCThemesTemplate]]) {
-				inUse = YES;
-				continue;
-			}
-		}
-
-		if(!inUse) {
-			alert	 = [NSAlert alertWithMessageText:@"Deleting Template"
-									 defaultButton:@"Delete"
-								   alternateButton:@"Cancel"
-									   otherButton:nil
-						 informativeTextWithFormat:@"You will delete %@ template. This operation is not cancelable. Press Delete button to continue or Cancel to abort.", [selectedTemplate templateName]];
-			
-			if([alert runModal] == NSAlertDefaultReturn)
-				if([_publicTemplateManager removeTemplate:selectedTemplate]) {
-					[_themesTemplatesTableView reloadData];
-					[self _reloadTheme];
-				}
-			
-			
-		} else {
-			alert	 = [NSAlert alertWithMessageText:@"Cannot Delete Used Template"
-									 defaultButton:@"OK"
-								   alternateButton:nil
-									   otherButton:nil
-						 informativeTextWithFormat:@"The template %@ you want to delete is currently used by some themes. You must be sure that this template is not used before deleting it.", [selectedTemplate templateName]];
-		
-			[alert runModal];
-		}
-	}
-}
-
 
 
 
@@ -1861,7 +1196,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[[WCSettings settings] setObject:events forKey:WCEvents];
 	
 	[self _updateEventControls];
-	
+    	
 	if(sender == _eventsSoundsPopUpButton || (sender == _eventsPlaySoundButton && [sender state] == NSOnState))
 		[NSSound playSoundNamed:[_eventsSoundsPopUpButton titleOfSelectedItem]];
 }
@@ -1964,8 +1299,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		return [[[WCSettings settings] objectForKey:WCHighlights] count];
 	else if(tableView == _ignoresTableView)
 		return [[[WCSettings settings] objectForKey:WCIgnores] count];
-	else if (tableView == _themesTemplatesTableView)
-		return [[_publicTemplateManager templates] count];
 
 	return 0;
 }
@@ -1989,12 +1322,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 		if(column == _ignoresNickTableColumn)
 			return [dictionary objectForKey:WCIgnoresNick];
 	}
-	else if (tableView == _themesTemplatesTableView) {
-		if([[column identifier] isEqualToString:@"Name"])
-			return [[[_publicTemplateManager templates] objectAtIndex:row] templateName];
-		else if([[column identifier] isEqualToString:@"Version"])
-			return [[[_publicTemplateManager templates] objectAtIndex:row] templateVersion];
-	}
 
 	return NULL;
 }
@@ -2002,9 +1329,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 - (BOOL)tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	if(tableView == _themesTemplatesTableView)
-		return NO;
-	
 	return YES;
 }
 

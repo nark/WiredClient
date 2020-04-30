@@ -30,7 +30,7 @@
 #import "WCConsole.h"
 #import "WCServerConnection.h"
 
-#define WCConsoleMaxLength						1048576
+#define WCConsoleMaxLength	1048576
 
 @interface WCConsole(Private)
 
@@ -91,12 +91,13 @@
 	CGFloat				position;
 
 	if(!font)
-		font = [[NSFont fontWithName:@"Monaco" size:9.0] retain];
+		font = [[NSFont fontWithName:@"Menlo" size:11.0] retain];   //
 
 	attributes = [NSDictionary dictionaryWithObjectsAndKeys:
 		color,		NSForegroundColorAttributeName,
 		font,		NSFontAttributeName,
 		NULL];
+    
 	attributedString = [NSAttributedString attributedStringWithString:string attributes:attributes];
 
 	position = [[_consoleScrollView verticalScroller] floatValue];
@@ -138,38 +139,38 @@
 #pragma mark -
 
 - (void)linkConnectionReceivedMessage:(NSNotification *)notification {
-	[self _log:[[notification object] description] color:[NSColor blueColor]];
+	[self _log:[[notification object] description] color:[NSColor systemBlueColor]];    //
 }
 
 
 
 - (void)linkConnectionReceivedErrorMessage:(NSNotification *)notification {
-	[self _log:[[notification object] description] color:[NSColor redColor]];
+	[self _log:[[notification object] description] color:[NSColor systemRedColor]];     //
 }
 
 
 
 - (void)linkConnectionReceivedInvalidMessage:(NSNotification *)notification {
-	[self _log:[[notification object] description] color:[NSColor redColor]];
-	[self _log:[[[notification userInfo] objectForKey:@"WCError"] localizedDescription] color:[NSColor redColor]];
+	[self _log:[[notification object] description] color:[NSColor systemRedColor]];     //
+	[self _log:[[[notification userInfo] objectForKey:@"WCError"] localizedDescription] color:[NSColor systemRedColor]];    //
 }
 
 
 
 - (void)linkConnectionSentMessage:(NSNotification *)notification {
-	[self _log:[[notification object] description] color:[NSColor blackColor]];
+	[self _log:[[notification object] description] color:[NSColor controlTextColor]];   //
 }
 
 
 
 - (void)exceptionHandlerReceivedBacktrace:(NSNotification *)notification {
-	[self _log:[notification object] color:[NSColor redColor]];
+	[self _log:[notification object] color:[NSColor systemRedColor]];       //
 }
 
 
 
 - (void)exceptionHandlerReceivedException:(NSNotification *)notification {
-	[self _log:[[notification object] description] color:[NSColor redColor]];
+	[self _log:[[notification object] description] color:[NSColor systemRedColor]]; //
 }
 
 
@@ -181,7 +182,7 @@
 	
 	va_start(ap, format);
 
-	[self _log:[NSString stringWithFormat:format arguments:ap] color:[NSColor redColor]];
+	[self _log:[NSString stringWithFormat:format arguments:ap] color:[NSColor systemRedColor]]; //
 	
 	va_end(ap);
 }
