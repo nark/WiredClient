@@ -97,6 +97,7 @@
 		4C22073D17DE36B300F1FBBA /* _WDPrivateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22072D17DE36B300F1FBBA /* _WDPrivateMessage.m */; };
 		4C2602621FE096B7007E5A6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C2602611FE096B7007E5A6C /* Assets.xcassets */; };
 		4C3A410A15F5672400C9B136 /* WCApplicationMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3A410915F5672400C9B136 /* WCApplicationMenuController.m */; };
+		4C4218FC245F1000008AEFD2 /* NSImage+Data.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4218FB245F1000008AEFD2 /* NSImage+Data.m */; };
 		4C4FDE8917799A8B00FADB95 /* WCServerBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDE8817799A8B00FADB95 /* WCServerBookmarkController.m */; };
 		4C4FDEB21779B8EB00FADB95 /* WCTrackerBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDEB11779B8EB00FADB95 /* WCTrackerBookmarkController.m */; };
 		4C4FDEC4177A4B2400FADB95 /* WCBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDEC3177A4B2400FADB95 /* WCBookmarkController.m */; };
@@ -123,6 +124,8 @@
 		4C82441B17DF73610065CEEE /* WCToolbarGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82441A17DF73610065CEEE /* WCToolbarGradientView.m */; };
 		4C82442D17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */; };
 		4C82443717DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */; };
+		4C858F5F245D68B700791CE2 /* WCMessageTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C858F5E245D68B700791CE2 /* WCMessageTableCellView.m */; };
+		4C858F62245DA05900791CE2 /* WCDynamicTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C858F61245DA05900791CE2 /* WCDynamicTextField.m */; };
 		4C97DE3415630D8A00D88C11 /* WCWindowGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */; };
 		4C97DE421564632900D88C11 /* WCChatTopicView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE411564632900D88C11 /* WCChatTopicView.m */; };
 		4C97DE4515658A9C00D88C11 /* WCChatInputTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE4415658A9B00D88C11 /* WCChatInputTextView.m */; };
@@ -442,6 +445,8 @@
 		4C2602611FE096B7007E5A6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C3A410815F5672400C9B136 /* WCApplicationMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCApplicationMenuController.h; path = Sources/WCApplicationMenuController.h; sourceTree = "<group>"; };
 		4C3A410915F5672400C9B136 /* WCApplicationMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCApplicationMenuController.m; path = Sources/WCApplicationMenuController.m; sourceTree = "<group>"; };
+		4C4218FA245F1000008AEFD2 /* NSImage+Data.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+Data.h"; sourceTree = "<group>"; };
+		4C4218FB245F1000008AEFD2 /* NSImage+Data.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Data.m"; sourceTree = "<group>"; };
 		4C4D1D821777B8DB005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4C4D1D831777B8DB005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Preferences.xib; sourceTree = "<group>"; };
 		4C4D1D841777B8DC005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Connect.xib; sourceTree = "<group>"; };
@@ -507,6 +512,10 @@
 		4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Fetch.m"; sourceTree = "<group>"; };
 		4C82443517DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBJsonWriter+WCJsonWriter.h"; sourceTree = "<group>"; };
 		4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBJsonWriter+WCJsonWriter.m"; sourceTree = "<group>"; };
+		4C858F5D245D68B700791CE2 /* WCMessageTableCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WCMessageTableCellView.h; path = Sources/WCMessageTableCellView.h; sourceTree = "<group>"; };
+		4C858F5E245D68B700791CE2 /* WCMessageTableCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WCMessageTableCellView.m; path = Sources/WCMessageTableCellView.m; sourceTree = "<group>"; };
+		4C858F60245DA05900791CE2 /* WCDynamicTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WCDynamicTextField.h; path = Sources/WCDynamicTextField.h; sourceTree = "<group>"; };
+		4C858F61245DA05900791CE2 /* WCDynamicTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WCDynamicTextField.m; path = Sources/WCDynamicTextField.m; sourceTree = "<group>"; };
 		4C97DE3215630D8A00D88C11 /* WCWindowGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCWindowGradientView.h; sourceTree = "<group>"; };
 		4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCWindowGradientView.m; sourceTree = "<group>"; };
 		4C97DE401564632900D88C11 /* WCChatTopicView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCChatTopicView.h; sourceTree = "<group>"; };
@@ -956,6 +965,8 @@
 				4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */,
 				4C82443517DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.h */,
 				4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */,
+				4C4218FA245F1000008AEFD2 /* NSImage+Data.h */,
+				4C4218FB245F1000008AEFD2 /* NSImage+Data.m */,
 			);
 			name = Additions;
 			path = Sources;
@@ -1175,6 +1186,10 @@
 				775F624A10A74B8500A876A8 /* WCConversationController.m */,
 				778E8613096D27B500258FE6 /* WCMessagesWindow.h */,
 				778E8614096D27B500258FE6 /* WCMessagesWindow.m */,
+				4C858F5D245D68B700791CE2 /* WCMessageTableCellView.h */,
+				4C858F5E245D68B700791CE2 /* WCMessageTableCellView.m */,
+				4C858F60245DA05900791CE2 /* WCDynamicTextField.h */,
+				4C858F61245DA05900791CE2 /* WCDynamicTextField.m */,
 				4C0A7CA417E8ED6600E08DBA /* Depreciated */,
 			);
 			name = Messages;
@@ -1893,6 +1908,7 @@
 				A5492D150D8EA6A4002D37D7 /* WCTrackerConnection.m in Sources */,
 				A5DC7FAD057AB0A600736BBF /* WCTransfer.m in Sources */,
 				A5DC7F8D057AB05F00736BBF /* WCTransferCell.m in Sources */,
+				4C858F62245DA05900791CE2 /* WCDynamicTextField.m in Sources */,
 				A5D8DBB00D707E2E001E2CE8 /* WCTransferConnection.m in Sources */,
 				A5DC7EE8057AAF2900736BBF /* WCTransfers.m in Sources */,
 				A5DC7FAB057AB0A600736BBF /* WCUser.m in Sources */,
@@ -1905,6 +1921,7 @@
 				4C97DE4515658A9C00D88C11 /* WCChatInputTextView.m in Sources */,
 				4CFDCBE815695FDA00DA17A6 /* WCChatHistory.m in Sources */,
 				4C7C088615ED66F7009D9F0E /* WCTrackerServerInfo.m in Sources */,
+				4C4218FC245F1000008AEFD2 /* NSImage+Data.m in Sources */,
 				4C3A410A15F5672400C9B136 /* WCApplicationMenuController.m in Sources */,
 				4C6D6E23176C9E5E0043677E /* main.m in Sources */,
 				4C6D6E3B176CA5C60043677E /* WCTabBarView.m in Sources */,
@@ -1927,6 +1944,7 @@
 				4C22073917DE36B300F1FBBA /* _WDBroadcastMessage.m in Sources */,
 				4C22073A17DE36B300F1FBBA /* _WDMessagesConversation.m in Sources */,
 				4C22073B17DE36B300F1FBBA /* _WDConversation.m in Sources */,
+				4C858F5F245D68B700791CE2 /* WCMessageTableCellView.m in Sources */,
 				4C22073C17DE36B300F1FBBA /* _WDMessage.m in Sources */,
 				4C22073D17DE36B300F1FBBA /* _WDPrivateMessage.m in Sources */,
 				4C82440117DE389F0065CEEE /* WiredClient.xcdatamodeld in Sources */,
@@ -2342,7 +2360,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_TEAM = 7KTXA5Y36K;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2371,7 +2389,7 @@
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClient";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClient";
@@ -2606,7 +2624,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_TEAM = 7KTXA5Y36K;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2634,7 +2652,7 @@
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClientDebug";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClientDebug";
@@ -2708,7 +2726,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
 				CODE_SIGN_IDENTITY = "-";
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 60;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2716,7 +2734,7 @@
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_NAME = "Wired Client";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"/**";
 				VERSIONING_SYSTEM = "apple-generic";

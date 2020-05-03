@@ -16,12 +16,12 @@ static NSDictionary * s_cheatCodesToUnicode = nil;
 + (void)initializeEmojiCheatCodes
 {
     NSDictionary *forwardMap = @{
-                                 @"😄": @":smile:",
-                                 @"😆": @[@":laughing:", @":D"],
+                                 @"😄": @[@":smile:", @":D", @":-D"],
+                                 @"😆": @[@":laughing:", @"><"],
                                  @"😊": @":blush:",
-                                 @"😃": @[@":smiley:", @":)", @":-)", @"grgrr47"], // this is a test
-                                 @"☺": @":relaxed:",
-                                 @"😏": @":smirk:",
+                                 @"😃": @[@":smiley:"], // this is a test
+                                 @"🙂": @[@":relaxed:", @":-)", @":)"],
+                                 @"😏": @[@":smirk:"],
                                  @"😞": @[@":disappointed:", @":("],
                                  @"😍": @":heart_eyes:",
                                  @"😘": @":kissing_heart:",
@@ -31,12 +31,12 @@ static NSDictionary * s_cheatCodesToUnicode = nil;
                                  @"😌": @":satisfied:",
                                  @"😁": @":grin:",
                                  @"😉": @[@":wink:", @";)", @";-)"],
-                                 @"😜": @[@":wink2:", @":P"],
+                                 @"😜": @[@":wink2:", @";P"],
                                  @"😝": @":stuck_out_tongue_closed_eyes:",
                                  @"😀": @":grinning:",
                                  @"😗": @":kissing:",
                                  @"😙": @":kissing_smiling_eyes:",
-                                 @"😛": @":stuck_out_tongue:",
+                                 @"😛": @[@":stuck_out_tongue:", @":P", @":-P"],
                                  @"😴": @":sleeping:",
                                  @"😟": @":worried:",
                                  @"😦": @":frowning:",
@@ -876,7 +876,7 @@ static NSDictionary * s_cheatCodesToUnicode = nil;
     //if ([self rangeOfString:@":"].location != NSNotFound) {
         __block NSMutableString *newText = [NSMutableString stringWithString:self];
         [s_cheatCodesToUnicode enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *stop) {
-            [newText replaceOccurrencesOfString:key withString:obj options:NSLiteralSearch range:NSMakeRange(0, newText.length)];
+            [newText replaceOccurrencesOfString:key withString:obj options:NSCaseInsensitiveSearch range:NSMakeRange(0, newText.length)];
         }];
         return newText;
     //}
@@ -894,7 +894,7 @@ static NSDictionary * s_cheatCodesToUnicode = nil;
         __block NSMutableString *newText = [NSMutableString stringWithString:self];
         [s_unicodeToCheatCodes enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             NSString *string = ([obj isKindOfClass:[NSArray class]] ? [obj firstObject] : obj);
-            [newText replaceOccurrencesOfString:key withString:string options:NSLiteralSearch range:NSMakeRange(0, newText.length)];
+            [newText replaceOccurrencesOfString:key withString:string options:NSCaseInsensitiveSearch range:NSMakeRange(0, newText.length)];
         }];
         return newText;
     }

@@ -38,10 +38,115 @@
 #import "WCTransfers.h"
 #import "WDWiredModel.h"
 #import "WCDatabaseController.h"
+#import "WCMessageTableCellView.h"
 
-#import "SBJsonWriter+WCJsonWriter.h"
 #import "NSManagedObjectContext+Fetch.h"
+#import "NSString+Emoji.h"
+#import "NSImage+Data.h"
+#import "NSDate_TimeAgo/NSDate+TimeAgo.h"
 
+
+
+@interface WCConversationController (Private)
+- (void)_configureCell:(WCMessageTableCellView *)cell forRow:(NSInteger)row;
+@end
+
+
+
+@implementation WCConversationController (Private)
+
+- (void)_configureCell:(WCMessageTableCellView *)cell forRow:(NSInteger)row {
+    NSSortDescriptor        *descriptor;
+    WDMessage               *message;
+    
+    descriptor      = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES];
+    message         = [[[[self conversation] messages] sortedArrayUsingDescriptors:@[descriptor]] objectAtIndex:row];
+    
+    if (message != nil) {
+        cell.nickTextField.stringValue = [message nick];
+        cell.serverNameTextField.stringValue = [[self conversation] serverName];
+        cell.timeTextField.stringValue = [message.date timeAgoWithLimit:(3600*24*30) dateFormatter:[[WCApplicationController sharedController] dateFormatter]];
+        cell.iconImageView.image = [[message user] icon];
+        
+        if(![[message messageString] hasPrefix:@"<img src='data:image/png;base64,"]) {
+            NSAttributedString *attrString = [self _attributedStringWithClickableURLs:[[message messageString] stringByReplacingEmojiCheatCodesWithUnicode]];
+            cell.messageTestField.attributedStringValue = attrString;
+            cell.messageTestField.font = [self font];
+            cell.messageTestField.allowsEditingTextAttributes = YES;
+            
+        } else {
+            NSArray *comps = [[message messageString] componentsSeparatedByString:@"base64,"];
+            NSString *base64String = [[comps lastObject] substringToIndex:[[comps lastObject] length] - 3];
+            
+            NSTextAttachment *attachment = [[[NSTextAttachment alloc] init] autorelease];
+            attachment.image = [NSImage imageWithData:[NSData dataWithBase64EncodedString:base64String]];
+            
+            NSAttributedString *attrString = [NSAttributedString attributedStringWithAttachment:attachment];
+
+            cell.messageTestField.attributedStringValue = attrString;
+        }
+        
+        if (message.directionValue == WDMessageFrom) {
+            cell.iconImageView.image = [[self conversation] userIcon];
+        } else {
+            cell.iconImageView.image = [NSImage imageWithData:
+                                        [NSData dataWithBase64EncodedString:[[WCSettings settings] objectForKey:WCIcon]]];
+        }
+    }
+}
+
+
+
+- (void)_sendLocalImage:(NSURL *)url {
+    NSString            *html;
+    NSString            *base64ImageString;
+    NSData              *imageData;
+    
+    imageData = [NSData dataWithContentsOfURL:url];
+    base64ImageString = [imageData base64EncodedString];
+    
+    html = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64ImageString];
+    
+    if(html && [html length] > 0) {
+         [[WCMessages messages] sendMessage:html toUser:self.conversation.user];
+    }
+}
+
+
+- (NSAttributedString *)_attributedStringWithClickableURLs:(NSString *)text {
+    NSMutableAttributedString        *string;
+    NSRange                           range;
+    
+    string = [NSMutableAttributedString attributedStringWithString:text];
+    
+    [string addAttribute:NSFontAttributeName value:[self font] range:NSMakeRange(0, text.length-1)];
+    
+    range = [text rangeOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString URLRegex]]
+                       options:RKLCaseless | RKLMultiline
+                       capture:0];
+    if (range.location != NSNotFound) {
+        [string addAttribute:NSLinkAttributeName value:[text substringWithRange:range] range:range];
+    }
+    
+    range = [text rangeOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString schemelessURLRegex]]
+                       options:RKLCaseless | RKLMultiline
+                       capture:0];
+    if (range.location != NSNotFound) {
+        [string addAttribute:NSLinkAttributeName value:[text substringWithRange:range] range:range];
+    }
+    
+    range = [text rangeOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString mailtoURLRegex]]
+                       options:RKLCaseless | RKLMultiline
+                       capture:0];
+    if (range.location != NSNotFound) {
+        [string addAttribute:NSLinkAttributeName value:[text substringWithRange:range] range:range];
+    }
+    
+    return string;
+}
+
+
+@end
 
 
 
@@ -51,16 +156,16 @@
 	self = [super init];
 	
     _conversation = nil;
-    
-    [[NSDistributedNotificationCenter defaultCenter]
-    addObserver:self
-    selector:@selector(appleInterfaceThemeChanged:)
-    name:@"AppleInterfaceThemeChangedNotification"
-    object: nil];
 	
 	return self;
 }
 
+
+
+- (void)awakeFromNib {
+    [_conversationTableView registerForDraggedTypes:@[NSFilenamesPboardType]];
+    [_conversationTableView setDraggingDestinationFeedbackStyle:NSTableViewDraggingDestinationFeedbackStyleNone];
+}
 
 
 - (void)dealloc {
@@ -76,27 +181,6 @@
 }
 
 
-- (void)awakeFromNib {
-	[_conversationWebView setUIDelegate:(id)self];
-    [_conversationWebView setFrameLoadDelegate:(id)self];
-	[_conversationWebView setResourceLoadDelegate:(id)self];
-	[_conversationWebView setPolicyDelegate:(id)self];
-    [_conversationWebView registerForDraggedTypes:@[NSFilenamesPboardType]];
-    
-    [self reloadData];
-}
-
-
-
-
-
-#pragma mark -
-
-- (void)appleInterfaceThemeChanged:(NSNotification *) notification {
-    [self reloadTemplate];
-}
-
-
 
 
 #pragma mark -
@@ -106,8 +190,8 @@
 	[_conversation release];
     
 	_conversation	= conversation;
-    
-    [self reloadTemplate];
+        
+    [self reloadData];
 }
 
 - (WDConversation *)conversation {
@@ -193,15 +277,37 @@
 
 #pragma mark -
 
-- (WebView *)conversationWebView {
-	return _conversationWebView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return [[_conversation messages] count];
 }
 
-- (NSString *)HTMLString {
-    return [[[NSString alloc] initWithData:[[[_conversationWebView mainFrame] dataSource] data] 
-                                  encoding:NSUTF8StringEncoding] autorelease];
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    WCMessageTableCellView  *cell;
+    
+    cell = [tableView makeViewWithIdentifier:@"WCMessageTableCellView" owner:self];
+    
+    [self _configureCell:cell forRow:row];
+        
+    return cell;
 }
 
+
+
+#pragma mark -
+
+- (void)appendMessage:(WDMessage *)message {
+    NSInteger lastRow = [_conversationTableView numberOfRows] - 1;
+    NSIndexSet *lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
+        
+    [_conversationTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:lastRow]
+                                  withAnimation:NSTableViewAnimationEffectFade];
+    
+    [_conversationTableView scrollToBottomAnimated];
+    
+    lastRow = [_conversationTableView numberOfRows] - 1;
+    lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
+    [_conversationTableView reloadDataForRowIndexes:lastRowIndexSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];    
+}
 
 
 
@@ -209,11 +315,31 @@
 
 #pragma mark -
 
-- (void)appendMessage:(WDMessage *)message {
-    [_conversationWebView stringByEvaluatingJavaScriptFromString:
-            [NSSWF:@"printMessage(%@);", [[SBJson4Writer writer] stringWithObject:message]]];
+- (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation {
+    NSLog(@"acceptDrop");
+    NSArray *draggedFilenames = [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType];
+    NSString *filepath = [draggedFilenames firstObject];
+    NSImage *image = [NSImage imageWithContentsOfFile:filepath];
+    
+    if (!image) return NO;
+    
+    NSURL *url = [NSURL fileURLWithPath:filepath];
+    
+    [self _sendLocalImage:url];
+    
+    return YES;
 }
 
+
+- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation {
+    NSArray *draggedFilenames = [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType];
+    
+    if (![NSImage isImageAtPath:[draggedFilenames firstObject]]) {
+        return NSDragOperationNone;
+    }
+    
+    return NSDragOperationCopy;
+}
 
 
 
@@ -221,302 +347,54 @@
 #pragma mark -
 
 - (void)reloadData {
-    NSURL                       *url;
-    WITemplateBundle            *template;
+    [_conversationTableView reloadData];
     
-    template        = [WITemplateBundle templateWithPath:_templatePath];
+    [_conversationTableView performSelector:@selector(scrollToBottomAnimated) afterDelay:0.1];
     
-    if(template) {
-        url = [NSURL fileURLWithPath: [template pathForResource:@"messages"
-                                                         ofType:@"html"
-                                                    inDirectory:@"htdocs"]];
-        
-        [[_conversationWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
-    }
+    //    NSLog(@"reloadData %lu", (unsigned long)[self hash]);
+    //    NSArray *syms = [NSThread  callStackSymbols];
+    //    if ([syms count] > 1) {
+    //        NSLog(@"<%@ %p> %@ - caller: %@ ", [self class], self, NSStringFromSelector(_cmd),[syms objectAtIndex:1]);
+    //    } else {
+    //         NSLog(@"<%@ %p> %@", [self class], self, NSStringFromSelector(_cmd));
+    //    }
+    //
+    //
 }
-
 
 - (void)reloadTemplate {
-	WITemplateBundle			*template;
-	
-	template  = [WITemplateBundle templateWithPath:_templatePath];
-
-	// reload CSS in the main thread
-	[template setCSSValue:[_font fontName]
-              toAttribute:WITemplateAttributesFontName
-                   ofType:WITemplateTypeMessages];
+    [_conversationTableView setNeedsDisplay];
     
-	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]]
-              toAttribute:WITemplateAttributesFontSize
-                   ofType:WITemplateTypeMessages];
-    
-    [template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_URLTextColor HTMLValue]]
-              toAttribute:WITemplateAttributesURLTextColor
-                   ofType:WITemplateTypeMessages];
-    
-	[template setCSSValue:[NSApp darkModeEnabled] ? @"gainsboro" : @"dimgray"
-              toAttribute:WITemplateAttributesFontColor
-                   ofType:WITemplateTypeMessages];
-    
-	[template setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
-              toAttribute:WITemplateAttributesBackgroundColor
-                   ofType:WITemplateTypeMessages];
-    
-    [template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
-                    toAttribute:@"<? headerbackground ?>"
-                         ofType:WITemplateTypeMessages];
-	
-	[template saveChangesForType:WITemplateTypeMessages];
-	
-	[_conversationWebView reloadStylesheetWithID:@"wc-stylesheet"
-									withTemplate:template
-											type:WITemplateTypeMessages];
-}
-
-
-
-
-
-
-#pragma mark -
-
-- (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame {
-    WITemplateBundle    *template;
-    NSURL               *jqueryURL, *functionsURL, *mainURL;
- 
-    template        = [WITemplateBundle templateWithPath:_templatePath];
-    
-    if(!template) {
-        NSLog(@"Error: Template not found. (%@)", _templatePath);
-        return;
-    }
-    
-    jqueryURL       = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
-    functionsURL    = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
-    mainURL         = [NSURL fileURLWithPath:[template pathForResource:@"messages" ofType:@"js" inDirectory:@"htdocs/js"]];
-    
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[jqueryURL path]] ||
-       ![[NSFileManager defaultManager] fileExistsAtPath:[functionsURL path]] ||
-       ![[NSFileManager defaultManager] fileExistsAtPath:[mainURL path]])
-    {
-        NSLog(@"Error: Invalid template. Missing script. (%@)", _templatePath);
-        return;
-    }
-
-    [[_conversationWebView windowScriptObject] setValue:self forKey:@"Controller"];
-        
-    [_conversationWebView appendScriptAtURL:jqueryURL];
-    [_conversationWebView appendScriptAtURL:functionsURL];
-    [_conversationWebView appendScriptAtURL:mainURL];
-        
-    [_conversationWebView scrollToBottom];
-}
-
-
-
-- (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)action request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id <WebPolicyDecisionListener>)listener {
-    WDConversation      *conversation;
-    NSString			*path;
-    NSURL               *url;
-	WIURL				*wiredURL;
-	WCFile				*file;
-    NSData              *fileData;
-    NSImage             *droppedImage;
-	BOOL				handled     = NO;
-	BOOL                isDirectory = NO;
-    
-    conversation        = [self conversation];
-    
-	if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeLinkClicked) {
-		[listener ignore];
-        
-        url         = [action objectForKey:WebActionOriginalURLKey];
-		wiredURL    = [WIURL URLWithURL:url];
-        
-        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;
-		
-		if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
-			if([[wiredURL host] length] == 0) {
-				if([conversation connection] && [[conversation connection] isConnected]) {
-					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-					
-					if(isDirectory) {
-                        [WCFiles filesWithConnection:[conversation connection]
-                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[conversation connection]]
-                                          selectFile:[WCFile fileWithDirectory:path connection:[conversation connection]]];
-                        
-					} else {
-                        file = [WCFile fileWithFile:path connection:[conversation connection]];
-                        [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file] 
-                                                      toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
-					}
-				}
-				
-				handled = YES;
-			}
-		}
-		
-		if(!handled)
-			[[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
-	
-    } else {
-        url = [action objectForKey:WebActionOriginalURLKey];
-        
-        if (![[url pathExtension] isEqualToString:@"html"]) {
-            [listener ignore];
-            
-            fileData        = [NSData dataWithContentsOfURL:url];
-            droppedImage    = [NSImage imageWithData:fileData];
-            
-            if (droppedImage) {
-                [self _sendLocalImage:url];
-            }
-        }
-        
-        [listener use];
-    }
-}
-
-
-
-- (NSArray *)webView:(WebView *)webView contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
-#ifdef WCConfigurationRelease
-    return NULL;
-#else
-    return defaultMenuItems;
-#endif
-}
-
-- (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
-    // useless but required
-}
-
-- (NSUInteger)webView:(WebView *)webView
-dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
-    return WebDragDestinationActionLoad;
-}
-    
-    
-- (void)_sendLocalImage:(NSURL *)url {
-    NSString            *html;
-    NSString            *base64ImageString;
-    NSData              *imageData;
-    
-    imageData = [NSData dataWithContentsOfURL:url];
-    base64ImageString = [imageData base64EncodedString];
-    
-    html = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64ImageString];
-    
-    if(html && [html length] > 0) {
-         [[WCMessages messages] sendMessage:html toUser:self.conversation.user];
-    }
-}
-
-
-#pragma mark -
-
-+ (NSString *)webScriptNameForSelector:(SEL)selector
-{
-    NSString *name;
-    
-    if (selector == @selector(loadScriptWithName:))
-        name = @"loadScriptWithName";
-    if (selector == @selector(JSONObjectsUntilDate:withLimit:))
-        name = @"JSONObjectsUntilDateWithLimit";
-    if (selector == @selector(lastMessageDate))
-        name = @"lastMessageDate";
-    
-    return name;
-}
-
-
-+ (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
-{
-    if (selector == @selector(loadScriptWithName:)) return NO;
-    if (selector == @selector(JSONObjectsUntilDate:withLimit:)) return NO;
-    if (selector == @selector(lastMessageDate)) return NO;
-    return YES;
-}
-
-
-
-
-
-#pragma mark -
-
-- (BOOL)loadScriptWithName:(NSString *)name {
-    WITemplateBundle        *template;
-    NSURL                   *scriptURL;
-    
-    template    = [WITemplateBundle templateWithPath:_templatePath];
-    scriptURL   = [NSURL fileURLWithPath:[template pathForResource:name ofType:@"js" inDirectory:@"htdocs/js"]];
-    
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[scriptURL path]])
-        return NO;
-    
-    [_conversationWebView appendScriptAtURL:scriptURL];
-    
-    return YES;
-}
-
-
-- (NSString *)lastMessageDate {
-    NSDateFormatter     *dateFormatter;
-    
-    dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian]];
-    
-    return [dateFormatter stringFromDate:[_conversation date]];
-}
-
-
-- (NSString *)JSONObjectsUntilDate:(NSString *)dateString withLimit:(NSUInteger)limit {
-    NSPredicate         *predicate;
-    NSSortDescriptor    *descriptor;
-    NSDate              *date;
-    NSDateFormatter     *dateFormatter;
-    NSString            *jsonString;
-    NSArray             *sortedMessages;
-    NSCalendar          *calendar;
-    
-    calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    
-    dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setCalendar:calendar];
-    
-    if(dateString != nil) {
-        date = [dateFormatter dateFromString:dateString];    
-    } else {
-        date = [_conversation date];
-    }
-    
-    if(!date) {
-        [dateFormatter release];
-        [calendar release];
-        return nil;
-    }
-    
-    predicate       = [NSPredicate predicateWithFormat:@"(conversation == %@) && (date <= %@)", _conversation, date];
-    descriptor      = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
-    sortedMessages  = [[WCDatabaseController context] fetchEntitiesNammed:@"Message"
-                                                            withPredicate:predicate
-                                                               descriptor:descriptor
-                                                                    limit:limit
-                                                                    error:nil];
-    
-    jsonString      = [[SBJson4Writer writer] stringWithObject:sortedMessages];
-    
-    [descriptor release];
-    [dateFormatter release];
-    [calendar release];
-    
-    //NSLog(@"jsonString: %@", jsonString);
-    
-    return jsonString;
+//	WITemplateBundle			*template;
+//
+//	template  = [WITemplateBundle templateWithPath:_templatePath];
+//
+//	// reload CSS in the main thread
+//	[template setCSSValue:[_font fontName]
+//              toAttribute:WITemplateAttributesFontName
+//                   ofType:WITemplateTypeMessages];
+//
+//	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]]
+//              toAttribute:WITemplateAttributesFontSize
+//                   ofType:WITemplateTypeMessages];
+//
+//    [template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_URLTextColor HTMLValue]]
+//              toAttribute:WITemplateAttributesURLTextColor
+//                   ofType:WITemplateTypeMessages];
+//
+//	[template setCSSValue:[NSApp darkModeEnabled] ? @"gainsboro" : @"dimgray"
+//              toAttribute:WITemplateAttributesFontColor
+//                   ofType:WITemplateTypeMessages];
+//
+//	[template setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
+//              toAttribute:WITemplateAttributesBackgroundColor
+//                   ofType:WITemplateTypeMessages];
+//
+//    [template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
+//                    toAttribute:@"<? headerbackground ?>"
+//                         ofType:WITemplateTypeMessages];
+//
+//	[template saveChangesForType:WITemplateTypeMessages];
 }
 
 @end

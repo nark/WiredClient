@@ -324,7 +324,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[[WCStats stats] addUnsignedInt:1 forKey:WCStatsMessagesSent];
 	
 	[_conversationController appendMessage:message];
-	
+    
 	[_messageTextField setStringValue:@""];
 }
 
@@ -1003,8 +1003,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     [_conversationsOutlineView setTarget:self];
     [_conversationsOutlineView setDeleteAction:@selector(deleteConversation:)];
     
-    [_messagesView setTranslatesAutoresizingMaskIntoConstraints:YES];
-    [_messageTextField setTranslatesAutoresizingMaskIntoConstraints:YES];
+    //[_messagesView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    //[_messageTextField setTranslatesAutoresizingMaskIntoConstraints:YES];
     
 	[self _themeDidChange];
     [self _sortConversations];
@@ -1162,7 +1162,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	user = [notification object];
 	
 	[self _revalidateConversationsWithUser:user];
-	
+	    
 	if([[self _selectedConversation] user] == user)
 		[_conversationController reloadData];
     

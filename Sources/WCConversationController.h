@@ -30,8 +30,8 @@
 
 @class WDConversation, WDMessage;
 
-@interface WCConversationController : WIObject <WCWebDataSource> {
-	IBOutlet WebView					*_conversationWebView;
+@interface WCConversationController : WIObject <NSTableViewDelegate, NSTableViewDataSource> {
+    IBOutlet NSTableView                *_conversationTableView;
 	
     WDConversation                      *_conversation;
 	NSString							*_templatePath;
@@ -63,8 +63,5 @@
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;
-
-- (WebView *)conversationWebView;
-- (NSString *)HTMLString;
 
 @end
