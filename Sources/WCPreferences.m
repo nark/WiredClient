@@ -804,7 +804,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	NSDictionary		*theme;
 	NSFontManager		*fontManager;
 	
-	theme			= [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]];
+	theme			= [[WCSettings settings] themeWithName:@"Wired"];
 	fontManager		= [NSFontManager sharedFontManager];
     
     [fontManager setTarget:self];
