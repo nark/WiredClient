@@ -573,7 +573,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	[_serversOutlineView setAutosaveName:@"Resources"];
 	[_serversOutlineView setAutosaveTableColumns:YES];
     [_serversOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:WCBookmarkPboardType, WCTrackerBookmarkPboardType, nil]];
-	
+    
 	[self _reloadServers];
 	
 	[_serversOutlineView expandItem:_bonjour];

@@ -26,11 +26,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "WCBoardPostCellView.h"
+
 @class WCBoardThread, WCBoardPost, WCBoard;
 
-@interface WCBoardThreadController : NSViewController {
-	IBOutlet WebView					*_threadWebView;
-	
+@interface WCBoardThreadController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, WCBoardPostCellViewDelegate> {
+	IBOutlet NSTableView                *_threadTableView;
+    
 	WCBoard								*_board;
 	WCBoardThread						*_thread;
 	
@@ -42,7 +44,6 @@
 	NSString							*_postTemplate;
 
 	NSString							*_fileLinkBase64String;
-	NSString							*_unreadPostBase64String;
 	NSString							*_defaultIconBase64String;
 	
 	NSMutableDictionary					*_smileyBase64Strings;
@@ -57,6 +58,8 @@
 	
 	WCBoardPost							*_selectPost;
 	NSRect								_previousVisibleRect;
+    
+    BOOL                                _scrollEndReached;
 }
 
 - (void)setBoard:(WCBoard *)board;
@@ -80,8 +83,8 @@
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;
 
-- (WebView *)threadWebView;
-- (NSString *)HTMLString;
+//- (WebView *)threadWebView;
+//- (NSString *)HTMLString;
 
 - (void)reloadData;
 - (void)reloadDataAndScrollToCurrentPosition;

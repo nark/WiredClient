@@ -39,22 +39,22 @@
                     <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="322" customClass="WCSourceSplitView">
                         <rect key="frame" x="0.0" y="0.0" width="685" height="434"/>
                         <subviews>
-                            <customView fixedFrame="YES" id="323">
+                            <customView id="323">
                                 <rect key="frame" x="0.0" y="0.0" width="171" height="434"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <scrollView autoresizesSubviews="NO" fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="47" horizontalPageScroll="10" verticalLineScroll="47" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100">
-                                        <rect key="frame" x="0.0" y="32" width="171" height="381"/>
+                                    <scrollView autoresizesSubviews="NO" fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100">
+                                        <rect key="frame" x="0.0" y="48" width="171" height="365"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="wf0-3A-FFO">
-                                            <rect key="frame" x="0.0" y="0.0" width="171" height="381"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="171" height="365"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="47" rowSizeStyle="automatic" viewBased="YES" outlineTableColumn="98" id="97" customClass="WIOutlineView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="171" height="381"/>
+                                                <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="47" rowSizeStyle="automatic" viewBased="YES" outlineTableColumn="98" id="97" customClass="WIOutlineView">
+                                                    <rect key="frame" x="0.0" y="0.0" width="171" height="365"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <size key="intercellSpacing" width="3" height="0.0"/>
-                                                    <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <size key="intercellSpacing" width="2" height="3"/>
+                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
                                                         <tableColumn identifier="Conversations" editable="NO" width="168" minWidth="16" maxWidth="1000" id="98">
@@ -70,7 +70,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="ConversationCell" id="397" customClass="WCConversationCellView">
-                                                                    <rect key="frame" x="1" y="0.0" width="168" height="47"/>
+                                                                    <rect key="frame" x="1" y="1" width="168" height="47"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="411">
@@ -158,43 +158,6 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="319" customClass="WCSourceImageView">
-                                        <rect key="frame" x="157" y="10" width="8" height="12"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="SplitSizer" id="320"/>
-                                        <connections>
-                                            <outlet property="_splitView" destination="322" id="327"/>
-                                        </connections>
-                                    </imageView>
-                                    <popUpButton focusRingType="none" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="338">
-                                        <rect key="frame" x="0.0" y="7" width="39" height="19"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" focusRingType="none" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="339">
-                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                            <menu key="menu" title="OtherViews" id="340">
-                                                <items>
-                                                    <menuItem state="on" image="NSActionTemplate" hidden="YES" id="341"/>
-                                                </items>
-                                                <connections>
-                                                    <outlet property="delegate" destination="-2" id="349"/>
-                                                </connections>
-                                            </menu>
-                                        </popUpButtonCell>
-                                    </popUpButton>
-                                    <searchField autoresizesSubviews="NO" wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="372">
-                                        <rect key="frame" x="48" y="4" width="104" height="22"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" sendsWholeSearchString="YES" id="373">
-                                            <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </searchFieldCell>
-                                        <connections>
-                                            <action selector="conversationsSearch:" target="-2" id="444"/>
-                                            <outlet property="delegate" destination="-2" id="375"/>
-                                        </connections>
-                                    </searchField>
                                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="378" customClass="WCToolbarGradientView">
                                         <rect key="frame" x="0.0" y="413" width="171" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -233,7 +196,62 @@
                                             </button>
                                         </subviews>
                                     </customView>
+                                    <box boxType="custom" borderType="none" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="gCh-sh-aUe">
+                                        <rect key="frame" x="0.0" y="0.0" width="171" height="49"/>
+                                        <view key="contentView" id="7eM-WM-sAy">
+                                            <rect key="frame" x="0.0" y="0.0" width="171" height="49"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="319" customClass="WCSourceImageView">
+                                                    <rect key="frame" x="158" y="19" width="8" height="12"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="SplitSizer" id="320"/>
+                                                    <connections>
+                                                        <outlet property="_splitView" destination="322" id="327"/>
+                                                    </connections>
+                                                </imageView>
+                                                <popUpButton focusRingType="none" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="338">
+                                                    <rect key="frame" x="1" y="16" width="39" height="19"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" focusRingType="none" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="339">
+                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                        <menu key="menu" title="OtherViews" id="340">
+                                                            <items>
+                                                                <menuItem state="on" image="NSActionTemplate" hidden="YES" id="341"/>
+                                                            </items>
+                                                            <connections>
+                                                                <outlet property="delegate" destination="-2" id="349"/>
+                                                            </connections>
+                                                        </menu>
+                                                    </popUpButtonCell>
+                                                </popUpButton>
+                                                <searchField autoresizesSubviews="NO" wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="372">
+                                                    <rect key="frame" x="49" y="13" width="104" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" sendsWholeSearchString="YES" id="373">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </searchFieldCell>
+                                                    <connections>
+                                                        <action selector="conversationsSearch:" target="-2" id="444"/>
+                                                        <outlet property="delegate" destination="-2" id="375"/>
+                                                    </connections>
+                                                </searchField>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="49" id="b8G-cP-8xO"/>
+                                        </constraints>
+                                        <color key="fillColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </box>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="gCh-sh-aUe" firstAttribute="leading" secondItem="323" secondAttribute="leading" id="2pB-CC-d7R"/>
+                                    <constraint firstAttribute="bottom" secondItem="gCh-sh-aUe" secondAttribute="bottom" id="CCZ-ER-gRx"/>
+                                    <constraint firstAttribute="trailing" secondItem="gCh-sh-aUe" secondAttribute="trailing" id="aTr-vt-WjJ"/>
+                                </constraints>
                             </customView>
                             <customView id="324">
                                 <rect key="frame" x="172" y="0.0" width="513" height="434"/>

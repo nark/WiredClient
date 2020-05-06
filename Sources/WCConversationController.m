@@ -274,6 +274,28 @@
 
 
 
+#pragma mark -
+
+- (void)appendMessage:(WDMessage *)message {
+    NSInteger lastRow = [_conversationTableView numberOfRows] - 1;
+    NSIndexSet *lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
+        
+    [_conversationTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:lastRow]
+                                  withAnimation:NSTableViewAnimationEffectFade];
+    
+    [_conversationTableView scrollToBottomAnimated];
+    
+    lastRow = [_conversationTableView numberOfRows] - 1;
+    lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
+    [_conversationTableView reloadDataForRowIndexes:lastRowIndexSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+}
+
+
+
+
+
+
+
 
 #pragma mark -
 
@@ -292,31 +314,9 @@
 }
 
 
-
-#pragma mark -
-
-- (void)appendMessage:(WDMessage *)message {
-    NSInteger lastRow = [_conversationTableView numberOfRows] - 1;
-    NSIndexSet *lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
-        
-    [_conversationTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:lastRow]
-                                  withAnimation:NSTableViewAnimationEffectFade];
-    
-    [_conversationTableView scrollToBottomAnimated];
-    
-    lastRow = [_conversationTableView numberOfRows] - 1;
-    lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
-    [_conversationTableView reloadDataForRowIndexes:lastRowIndexSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];    
-}
-
-
-
-
-
 #pragma mark -
 
 - (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation {
-    NSLog(@"acceptDrop");
     NSArray *draggedFilenames = [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType];
     NSString *filepath = [draggedFilenames firstObject];
     NSImage *image = [NSImage imageWithContentsOfFile:filepath];
@@ -350,51 +350,10 @@
     [_conversationTableView reloadData];
     
     [_conversationTableView performSelector:@selector(scrollToBottomAnimated) afterDelay:0.1];
-    
-    //    NSLog(@"reloadData %lu", (unsigned long)[self hash]);
-    //    NSArray *syms = [NSThread  callStackSymbols];
-    //    if ([syms count] > 1) {
-    //        NSLog(@"<%@ %p> %@ - caller: %@ ", [self class], self, NSStringFromSelector(_cmd),[syms objectAtIndex:1]);
-    //    } else {
-    //         NSLog(@"<%@ %p> %@", [self class], self, NSStringFromSelector(_cmd));
-    //    }
-    //
-    //
 }
 
 - (void)reloadTemplate {
     [_conversationTableView setNeedsDisplay];
-    
-//	WITemplateBundle			*template;
-//
-//	template  = [WITemplateBundle templateWithPath:_templatePath];
-//
-//	// reload CSS in the main thread
-//	[template setCSSValue:[_font fontName]
-//              toAttribute:WITemplateAttributesFontName
-//                   ofType:WITemplateTypeMessages];
-//
-//	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]]
-//              toAttribute:WITemplateAttributesFontSize
-//                   ofType:WITemplateTypeMessages];
-//
-//    [template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_URLTextColor HTMLValue]]
-//              toAttribute:WITemplateAttributesURLTextColor
-//                   ofType:WITemplateTypeMessages];
-//
-//	[template setCSSValue:[NSApp darkModeEnabled] ? @"gainsboro" : @"dimgray"
-//              toAttribute:WITemplateAttributesFontColor
-//                   ofType:WITemplateTypeMessages];
-//
-//	[template setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
-//              toAttribute:WITemplateAttributesBackgroundColor
-//                   ofType:WITemplateTypeMessages];
-//
-//    [template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
-//                    toAttribute:@"<? headerbackground ?>"
-//                         ofType:WITemplateTypeMessages];
-//
-//	[template saveChangesForType:WITemplateTypeMessages];
 }
 
 @end

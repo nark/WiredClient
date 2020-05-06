@@ -98,6 +98,7 @@
 		4C2602621FE096B7007E5A6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C2602611FE096B7007E5A6C /* Assets.xcassets */; };
 		4C3A410A15F5672400C9B136 /* WCApplicationMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3A410915F5672400C9B136 /* WCApplicationMenuController.m */; };
 		4C4218FC245F1000008AEFD2 /* NSImage+Data.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4218FB245F1000008AEFD2 /* NSImage+Data.m */; };
+		4C421905245F3370008AEFD2 /* WCChatTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C421901245F3370008AEFD2 /* WCChatTableCellView.m */; };
 		4C4FDE8917799A8B00FADB95 /* WCServerBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDE8817799A8B00FADB95 /* WCServerBookmarkController.m */; };
 		4C4FDEB21779B8EB00FADB95 /* WCTrackerBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDEB11779B8EB00FADB95 /* WCTrackerBookmarkController.m */; };
 		4C4FDEC4177A4B2400FADB95 /* WCBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDEC3177A4B2400FADB95 /* WCBookmarkController.m */; };
@@ -119,6 +120,7 @@
 		4C6D6E3C176CA5C60043677E /* WCTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D6E3A176CA5C60043677E /* WCTabBarItem.m */; };
 		4C76213717E2FE4800A2EDA9 /* WCEncryptionTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76213617E2FE4800A2EDA9 /* WCEncryptionTransformer.m */; };
 		4C76214017E3049B00A2EDA9 /* WCStringEncryptionTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76213F17E3049B00A2EDA9 /* WCStringEncryptionTransformer.m */; };
+		4C782BC62460A5EF00970844 /* WCBoardPostCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C782BC52460A5EF00970844 /* WCBoardPostCellView.m */; };
 		4C7C088615ED66F7009D9F0E /* WCTrackerServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C088515ED66F7009D9F0E /* WCTrackerServerInfo.m */; };
 		4C82440117DE389F0065CEEE /* WiredClient.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C8243FF17DE389F0065CEEE /* WiredClient.xcdatamodeld */; };
 		4C82441B17DF73610065CEEE /* WCToolbarGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82441A17DF73610065CEEE /* WCToolbarGradientView.m */; };
@@ -447,6 +449,8 @@
 		4C3A410915F5672400C9B136 /* WCApplicationMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCApplicationMenuController.m; path = Sources/WCApplicationMenuController.m; sourceTree = "<group>"; };
 		4C4218FA245F1000008AEFD2 /* NSImage+Data.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+Data.h"; sourceTree = "<group>"; };
 		4C4218FB245F1000008AEFD2 /* NSImage+Data.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Data.m"; sourceTree = "<group>"; };
+		4C421901245F3370008AEFD2 /* WCChatTableCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCChatTableCellView.m; sourceTree = "<group>"; };
+		4C421904245F3370008AEFD2 /* WCChatTableCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCChatTableCellView.h; sourceTree = "<group>"; };
 		4C4D1D821777B8DB005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4C4D1D831777B8DB005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Preferences.xib; sourceTree = "<group>"; };
 		4C4D1D841777B8DC005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Connect.xib; sourceTree = "<group>"; };
@@ -503,6 +507,8 @@
 		4C76213617E2FE4800A2EDA9 /* WCEncryptionTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCEncryptionTransformer.m; path = Sources/WCEncryptionTransformer.m; sourceTree = "<group>"; };
 		4C76213E17E3049B00A2EDA9 /* WCStringEncryptionTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCStringEncryptionTransformer.h; path = Sources/WCStringEncryptionTransformer.h; sourceTree = "<group>"; };
 		4C76213F17E3049B00A2EDA9 /* WCStringEncryptionTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCStringEncryptionTransformer.m; path = Sources/WCStringEncryptionTransformer.m; sourceTree = "<group>"; };
+		4C782BC42460A5EF00970844 /* WCBoardPostCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WCBoardPostCellView.h; path = Sources/WCBoardPostCellView.h; sourceTree = "<group>"; };
+		4C782BC52460A5EF00970844 /* WCBoardPostCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WCBoardPostCellView.m; path = Sources/WCBoardPostCellView.m; sourceTree = "<group>"; };
 		4C7C088415ED66F7009D9F0E /* WCTrackerServerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCTrackerServerInfo.h; path = Sources/WCTrackerServerInfo.h; sourceTree = "<group>"; };
 		4C7C088515ED66F7009D9F0E /* WCTrackerServerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCTrackerServerInfo.m; path = Sources/WCTrackerServerInfo.m; sourceTree = "<group>"; };
 		4C82440017DE389F0065CEEE /* WiredClient.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WiredClient.xcdatamodel; sourceTree = "<group>"; };
@@ -1114,12 +1120,14 @@
 				773FEF121084CE2F002AF8DF /* WCBoardsButtonCell.h */,
 				777790B010617FE200248834 /* WCBoardsTextView.m */,
 				777790AF10617FE200248834 /* WCBoardsTextView.h */,
-				775F68A310A7583800A876A8 /* WCBoardThreadController.m */,
 				775F68A210A7583800A876A8 /* WCBoardThreadController.h */,
+				775F68A310A7583800A876A8 /* WCBoardThreadController.m */,
 				4CD51D59181556CC002ADC1C /* WCThreadWindow.h */,
 				4CD51D5A181556CC002ADC1C /* WCThreadWindow.m */,
 				77BB1C980F28C20E00A402B7 /* WCBoardsWindow.h */,
 				77BB1C990F28C20E00A402B7 /* WCBoardsWindow.m */,
+				4C782BC42460A5EF00970844 /* WCBoardPostCellView.h */,
+				4C782BC52460A5EF00970844 /* WCBoardPostCellView.m */,
 			);
 			name = Boards;
 			sourceTree = "<group>";
@@ -1172,6 +1180,8 @@
 				4C4FDE8817799A8B00FADB95 /* WCServerBookmarkController.m */,
 				4C4FDEB01779B8EB00FADB95 /* WCTrackerBookmarkController.h */,
 				4C4FDEB11779B8EB00FADB95 /* WCTrackerBookmarkController.m */,
+				4C421904245F3370008AEFD2 /* WCChatTableCellView.h */,
+				4C421901245F3370008AEFD2 /* WCChatTableCellView.m */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -1360,8 +1370,8 @@
 				A52B1C3E06C407190033D317 /* Preferences */,
 				A57D22F707D0C444002C306E /* Connection */,
 				A52B1C1206C4033B0033D317 /* Chat */,
-				A52B1C2C06C404580033D317 /* Files */,
 				A52B1C1306C403760033D317 /* Messages */,
+				A52B1C2C06C404580033D317 /* Files */,
 				77CED3990EC068D600123164 /* Boards */,
 				A52B1C3306C4056F0033D317 /* Transfers */,
 				A5AAD1280D86EA8B0072FFA1 /* Administration */,
@@ -1874,6 +1884,7 @@
 				A5DC7FA4057AB0A600736BBF /* WCFile.m in Sources */,
 				A5DC7F0C057AAF6C00736BBF /* WCFileInfo.m in Sources */,
 				A5DC7F0E057AAF6C00736BBF /* WCFiles.m in Sources */,
+				4C421905245F3370008AEFD2 /* WCChatTableCellView.m in Sources */,
 				77E36EEE0F82414F0065329A /* WCFilesSourceOutlineView.m in Sources */,
 				A5929D5F0F8153D300680E4D /* WCFilesWindow.m in Sources */,
 				A51B4FE50F4222AF00EAB0E1 /* WCFilterButtonCell.m in Sources */,
@@ -1900,6 +1911,7 @@
 				A52B301C05E6F0A300C651A4 /* WCServerInfo.m in Sources */,
 				A5DC7FD1057AB0F200736BBF /* WCSettings.m in Sources */,
 				A5AAD14E0D86F1A10072FFA1 /* WCSettingsController.m in Sources */,
+				4C782BC62460A5EF00970844 /* WCBoardPostCellView.m in Sources */,
 				A5F7F95E0F1D2588007BF4FD /* WCSourceBackgroundView.m in Sources */,
 				A5F7F9F90F1D52DB007BF4FD /* WCSourceImageView.m in Sources */,
 				A5F7F8D30F1D16EE007BF4FD /* WCSourceSplitView.m in Sources */,
@@ -2360,7 +2372,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 60;
+				CURRENT_PROJECT_VERSION = 84;
 				DEVELOPMENT_TEAM = 7KTXA5Y36K;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2624,7 +2636,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 60;
+				CURRENT_PROJECT_VERSION = 84;
 				DEVELOPMENT_TEAM = 7KTXA5Y36K;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2726,7 +2738,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
 				CODE_SIGN_IDENTITY = "-";
-				CURRENT_PROJECT_VERSION = 60;
+				CURRENT_PROJECT_VERSION = 84;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

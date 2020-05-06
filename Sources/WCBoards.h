@@ -26,13 +26,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "WCWebDataSource.h"
-
 extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 
 @class WCBoardThreadController, WCErrorQueue, WCSourceSplitView, WCBoard, WCSmartBoard, WCBoardThread;
 
-@interface WCBoards : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, WCWebDataSource> {
+@interface WCBoards : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate> {
 	IBOutlet WCSourceSplitView						*_boardsSplitView;
     IBOutlet NSImageView                            *_boardsSplitViewImageView;
 	IBOutlet NSView									*_boardsView;
@@ -173,5 +171,9 @@ extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 - (void)wiredBoardGetThreadsReply:(WIP7Message *)message;
 - (void)wiredBoardSubscribeBoardsReply:(WIP7Message *)message;
 
+- (void)replyToThread;
+- (void)replyToPostWithID:(NSString *)postID selectedText:(NSString *)selectedText;
+- (void)editPostWithID:(NSString *)postID;
+- (void)deletePostWithID:(NSString *)postID;
 
 @end

@@ -43,7 +43,7 @@ extern NSString * const WCUserPboardType;
 
 @class SBJson4Writer, LNWebView, LNScrollView, WCChatTextView, WCChatWindow, WCServerConnection, WCErrorQueue, WCTopic, WCUser;
 
-@interface WCChatController : WIObject <NSMenuDelegate> {
+@interface WCChatController : WIObject <NSMenuDelegate, NSTableViewDelegate, NSTableViewDataSource> {
 	IBOutlet WISplitView							*_userListSplitView;
     IBOutlet NSImageView                            *_splitResizeView;
     
@@ -53,12 +53,12 @@ extern NSString * const WCUserPboardType;
 	IBOutlet WISplitView							*_chatSplitView;
 	IBOutlet NSScrollView							*_chatOutputScrollView;
 	IBOutlet LNScrollView							*_chatInputScrollView;
-	//IBOutlet NSTextView								*_chatInputTextView;
     IBOutlet NSTextField							*_chatInputTextField;
 	IBOutlet NSMenu									*_chatSmileysMenu;
     IBOutlet NSButton                               *_showEmoticonsButtons;
 	
-	IBOutlet WebView								*_chatOutputWebView;
+	//IBOutlet WebView								*_chatOutputWebView;
+    IBOutlet NSTableView                            *_chatTableView;
 
 	IBOutlet NSView									*_userListView;
 	IBOutlet NSButton								*_privateMessageButton;
@@ -88,6 +88,8 @@ extern NSString * const WCUserPboardType;
 	
 	WCErrorQueue									*_errorQueue;
     SBJson4Writer                                   *_jsonWriter;
+    
+    NSMutableArray                                  *_messages;
 
 	NSMutableArray									*_commandHistory;
 	NSUInteger										_currentCommand;
