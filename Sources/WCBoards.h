@@ -30,7 +30,7 @@ extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 
 @class WCBoardThreadController, WCErrorQueue, WCSourceSplitView, WCBoard, WCSmartBoard, WCBoardThread;
 
-@interface WCBoards : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate> {
+@interface WCBoards : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, NSTextViewDelegate> {
 	IBOutlet WCSourceSplitView						*_boardsSplitView;
     IBOutlet NSImageView                            *_boardsSplitViewImageView;
 	IBOutlet NSView									*_boardsView;
@@ -80,6 +80,7 @@ extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 	IBOutlet NSPopUpButton							*_postLocationPopUpButton;
 	IBOutlet NSTextField							*_subjectTextField;
 	IBOutlet NSTextView								*_postTextView;
+    IBOutlet NSTextView                             *_postPreviewTextView;
 	IBOutlet NSButton								*_postButton;
 	
 	IBOutlet NSPanel								*_smartBoardPanel;

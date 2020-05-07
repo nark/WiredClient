@@ -86,6 +86,8 @@
 //- (WebView *)threadWebView;
 //- (NSString *)HTMLString;
 
+- (NSAttributedString *)attributedStringForText:(NSString *)text;
+
 - (void)reloadData;
 - (void)reloadDataAndScrollToCurrentPosition;
 - (void)reloadDataAndSelectPost:(WCBoardPost *)selectPost;

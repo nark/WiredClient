@@ -106,6 +106,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (void)_applyHTMLToMutableString:(NSMutableString *)text;
+- (void)_updatePostPreviewTextView;
 
 @end
 
@@ -1201,6 +1202,15 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 #pragma mark -
+
+- (void)_updatePostPreviewTextView {
+    NSAttributedString *attrString = [_threadController attributedStringForText:[_postTextView string]];
+    
+    if(!attrString)
+        attrString = [_postTextView attributedString];
+    
+    [_postPreviewTextView setAttributedString:attrString];
+}
 
 
 - (void)_applyHTMLToMutableString:(NSMutableString *)text {
@@ -2560,6 +2570,13 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 }
 
 
+- (void)textDidChange:(NSNotification *)notification {
+    if([notification object] == _postTextView) {
+        [self _updatePostPreviewTextView];
+    }
+}
+
+
 
 #pragma mark -
 
@@ -2794,6 +2811,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	[_subjectTextField setStringValue:[thread subject]];
 	[_postTextView setTypingAttributes:[NSDictionary dictionary]];
 	[_postTextView setString:@""];
+    [_postPreviewTextView setString:@""];
     [_postTextView setTextColor:[NSColor controlTextColor]];
 	[_postButton setTitle:NSLS(@"Reply", @"Reply post button title")];
 	
@@ -2911,6 +2929,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	[_postTextView setAttributedString:[NSAttributedString attributedStringWithString:(post == NULL) ? [thread text] : [post text]]];
 	[_postTextView setTextColor:[NSColor controlTextColor]];
     [_postButton setTitle:NSLS(@"Edit", @"Edit post button title")];
+    
+    [self _updatePostPreviewTextView];
 	
 	[_postPanel makeFirstResponder:_postTextView];
     
@@ -3414,6 +3434,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	[_subjectTextField setEnabled:YES];
 	[_subjectTextField setStringValue:@""];
 	[_postTextView setString:@""];
+    [_postPreviewTextView setString:@""];
     [_postTextView setTextColor:[NSColor controlTextColor]];
 	[_postButton setTitle:NSLS(@"Create", @"New thread button title")];
 	

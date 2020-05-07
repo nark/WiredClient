@@ -1174,7 +1174,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
     [[_topicTextField cell] setBackgroundStyle:NSBackgroundStyleRaised];
     
-    [_chatTableView registerForDraggedTypes:@[NSFilenamesPboardType]];
+    [_chatTableView registerForDraggedTypes:@[NSFilenamesPboardType, NSPasteboardTypeString]];
     [_chatTableView setDraggingDestinationFeedbackStyle:NSTableViewDraggingDestinationFeedbackStyleNone];
 	
     theme       = [[WCSettings settings] themeWithName:@"Wired"];

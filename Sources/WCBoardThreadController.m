@@ -69,21 +69,6 @@
                          withString:@"<pre>$1</pre>"
                             options:RKLCaseless | RKLDotAll];
     
-//    while([text replaceOccurrencesOfRegex:@"<pre>(.*?)\\[+(.*?)</pre>"
-//                               withString:@"<pre>$1&#91;$2</pre>"
-//                                  options:RKLCaseless | RKLDotAll] > 0)
-//        ;
-//
-//    while([text replaceOccurrencesOfRegex:@"<pre>(.*?)\\]+(.*?)</pre>"
-//                               withString:@"<pre>$1&#93;$2</pre>"
-//                                  options:RKLCaseless | RKLDotAll] > 0)
-//        ;
-//
-//    while([text replaceOccurrencesOfRegex:@"<pre>(.*?)<br />\n(.*?)</pre>"
-//                               withString:@"<pre>$1$2</pre>"
-//                                  options:RKLCaseless | RKLDotAll] > 0)
-        ;
-    
     [text replaceOccurrencesOfRegex:@"\\[b\\](.+?)\\[/b\\]"
                          withString:@"<b>$1</b>"
                             options:RKLCaseless | RKLDotAll];
@@ -135,7 +120,7 @@
                          withString:@"<a href=\"mailto:$1\">$1</a>"
                             options:RKLCaseless];
     [text replaceOccurrencesOfRegex:@"\\[img](.+?)\\[/img\\]"
-                         withString:@"<p><img src=\"$1\" alt=\"\" style=\"height:auto\" /></p>"
+                         withString:@"<img src=\"$1\" alt=\"\" style=\"height:auto\" />&nbsp;"
                             options:RKLCaseless];
     
     [text replaceOccurrencesOfRegex:@"\\[quote=(.+?)\\](.+?)\\[/quote\\]"
@@ -180,7 +165,7 @@
     WCBoardPost         *post;
     NSString            *formattedDate;
     NSImage             *iconImage;
-    NSString            *string, *icon, *editDate, *postDate, *postID;
+    NSString            *icon, *editDate, *postDate, *postID;
     NSAttributedString  *text;
     WCAccount           *account;
     WIDateFormatter     *dateFormatter;
@@ -192,8 +177,7 @@
     if (post) {
         dateFormatter       = [[WCApplicationController sharedController] dateFormatter];
         
-        string              = [[[post text] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
-        text                = [self _attributedStringForPostText:string];
+        text                = [self attributedStringForText:[post text]];
         icon                = (NSString*)(([post icon] && sizeof([post icon]) > 0) ? [post icon] : _defaultIconBase64String);
         account             = [(WCServerConnection *)[_board connection] account];
         postDate            = [dateFormatter stringFromDate:[post postDate]];
@@ -236,16 +220,17 @@
         cell.heightConstraint.constant = [text size].height;
         
         [text enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
-            if (![value isKindOfClass:[NSTextAttachment class]]) {
+            if (![value isKindOfClass:[NSTextAttachment class]])
                return;
-            }
+            
             NSTextAttachment *attachment = (NSTextAttachment*)value;
             CGRect bounds = attachment.bounds;
-            // modify bounds
             attachment.bounds = bounds;
-
-            cell.heightConstraint.constant = bounds.size.height;
+                            
+            cell.heightConstraint.constant = [text size].height ;
         }];
+        
+       // [cell.messageTextField sizeToFit];
     }
 }
 
@@ -323,6 +308,14 @@
     }
 }
 
+
+# pragma mark -
+
+- (NSAttributedString *)attributedStringForText:(NSString *)text {
+    //NSString * string = [[text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
+    
+    return [self _attributedStringForPostText:text];
+}
 
 
 #pragma mark -
