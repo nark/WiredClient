@@ -580,7 +580,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 - (BOOL)_isUnreadThread:(WCBoardThread *)thread {
     if([thread latestReplyID]){
 		return ![_readIDs containsObject:[thread latestReplyID]];
-    }else if([thread threadID]) {
+    } else if([thread threadID]) {
 		return ![_readIDs containsObject:[thread threadID]];
     }
 	return NO;
@@ -655,27 +655,60 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	
 	board		= [self _selectedBoard];
 	thread		= [self _selectedThread];
+    
+    [self _reloadThread:thread];
     		
-	if(thread) {
-		if(![thread isLoaded]) {
-			[thread removeAllPosts];
-			
-			message = [WIP7Message messageWithName:@"wired.board.get_thread" spec:WCP7Spec];
-			[message setUUID:[thread threadID] forName:@"wired.board.thread"];
-			[[thread connection] sendMessage:message fromObserver:self selector:@selector(wiredBoardGetThreadReply:)];
-		}
+//	if(thread) {
+//		if(![thread isLoaded]) {
+//			[thread removeAllPosts];
+//
+//			message = [WIP7Message messageWithName:@"wired.board.get_thread" spec:WCP7Spec];
+//			[message setUUID:[thread threadID] forName:@"wired.board.thread"];
+//			[[thread connection] sendMessage:message fromObserver:self selector:@selector(wiredBoardGetThreadReply:)];
+//		}
+//
+//        [_threadController setBoard:board];
+//		[_threadController setThread:thread];
+//
+//		if([thread isLoaded])
+//			[_threadController reloadData];
+//	}
+//	else {
+//		[_threadController setBoard:NULL];
+//		[_threadController setThread:NULL];
+//		[_threadController reloadData];
+//	}
+}
+
+
+- (void)_reloadThread:(WCBoardThread *)thread {
+    WIP7Message            *message;
+    WCBoard                *board;
+    
+    board = [_boardsByThreadID objectForKey:[thread threadID]];
+            
+    if(thread) {
+        if(![thread isLoaded]) {
+            [thread removeAllPosts];
+            
+            message = [WIP7Message messageWithName:@"wired.board.get_thread" spec:WCP7Spec];
+            [message setUUID:[thread threadID] forName:@"wired.board.thread"];
+            [[thread connection] sendMessage:message fromObserver:self selector:@selector(wiredBoardGetThreadReply:)];
+        }
         
         [_threadController setBoard:board];
-		[_threadController setThread:thread];
-        		
-		if([thread isLoaded])
-			[_threadController reloadData];
-	}
-	else {
-		[_threadController setBoard:NULL];
-		[_threadController setThread:NULL];
-		[_threadController reloadData];
-	}
+        [_threadController setThread:thread];
+                
+        if([thread isLoaded])
+            [_threadController reloadData];
+    }
+    else {
+        [_threadController setBoard:NULL];
+        [_threadController setThread:NULL];
+        [_threadController reloadData];
+    }
+    
+    
 }
 
 
@@ -709,7 +742,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
                                                  columnIndexes:columIndexes];
         }
     }
-    [self _saveReadIDs];
+    //[self _saveReadIDs];
 }
 
 
@@ -783,6 +816,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         }
 		
     }
+    
+    //[self _saveReadIDs];
 }
 
 
@@ -798,6 +833,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		[self _markBoard:eachBoard asUnread:unread];
         [self _markThreads:[eachBoard threads] asUnread:unread];
 	}
+    
+    //[self _saveReadIDs];
 }
 
 
@@ -1556,23 +1593,23 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	NSMutableSet		*readIDs;
 	WCBoardThread		*thread;
 	WCBoardPost			*post;
-	
+
 	thread = [self _selectedThread];
-	
-	if(thread) {
+
+	if(thread && thread == [_threadController thread]) {
 		readIDs			= [NSMutableSet set];
 		enumerator		= [[thread posts] objectEnumerator];
-		
+
 		while((post = [enumerator nextObject])) {
 			[post setUnread:NO];
-			
+
 			[readIDs addObject:[post postID]];
 		}
-		
+
 		[thread setUnread:NO];
-        
+
         [self _reloadThreads:@[thread]];
-		
+
 		if([readIDs count] > 0)
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCBoardsDidChangeUnreadCountNotification object:readIDs];
 	}
@@ -1810,15 +1847,16 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     WCBoard         *parent;
     NSArray         *threads;
 	NSSet		    *readIDs;
-    	
+    
     threads = nil;
 
     if([[notification object] isKindOfClass:[NSSet class]]) {
         readIDs = [notification object];
-        
+
         if(readIDs)
             [_readIDs addObjectsFromArray:[readIDs allObjects]];
     }
+    
     if([[notification object] isKindOfClass:[NSArray class]]) {
         threads = (NSArray *)[notification object];
         [self _reloadThreads:threads];
@@ -1830,20 +1868,27 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     if([[notification object] isKindOfClass:[WCBoardThread class]]) {
         thread = [notification object];
         parent = [_boards boardForPath:[thread board]];
-        
+
         if (parent)
             [self _reloadBoard:parent];
-        
+
         threads = @[thread];
-        
+
         [self _reloadThreads:threads];
     }
-    
+
     [self _reloadBoard:[self selectedBoard]];
     [self _reloadFilters];
 
     // not the most efficient, but it is needed when a thread is unread in multiple boards (smart boards)
-    [_boardsOutlineView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [_boardsOutlineView numberOfRows] -1)] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    [_threadsVerticalTableView reloadDataForRowIndexes:[_threadsVerticalTableView selectedRowIndexes] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    [_threadsHorizontalTableView reloadDataForRowIndexes:[_threadsHorizontalTableView selectedRowIndexes] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    
+    if ([_boardsOutlineView numberOfRows] > 0) {
+        [_boardsOutlineView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [_boardsOutlineView numberOfRows] -1)] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    }
+    
+    [self _saveReadIDs];
 }
 
 
@@ -1956,7 +2001,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCBoard					*board;
 	WCBoardThread			*thread;
 	WCBoardPost				*post;
-		
+	    
 	connection = [message contextInfo];
 	
 	if([[message name] isEqualToString:@"wired.board.thread"]) {
@@ -1973,23 +2018,31 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		threadID	= [message UUIDForName:@"wired.board.thread"];
 		board		= [_boardsByThreadID objectForKey:threadID];
 		thread		= [board threadWithID:threadID];
-		
+        		
 		if(thread) {
 			post = [WCBoardPost postWithMessage:message connection:connection];
-			
-			[post setUnread:![_readIDs containsObject:[post postID]]];
-						
+                        			            
+            if (![thread firstLoad]) {
+                [post setUnread:![_readIDs containsObject:[post postID]]];
+            } else {
+                [post setUnread:NO];
+                [_readIDs addObject:[post postID]];
+            }
+            
 			[thread addPost:post];
 		}
 	}
 	else if([[message name] isEqualToString:@"wired.board.post_list.done"]) {
-				
 		threadID	= [message UUIDForName:@"wired.board.thread"];
 		board		= [_boardsByThreadID objectForKey:threadID];
 		thread		= [board threadWithID:threadID];
 
 		if(thread) {
 			[thread setLoaded:YES];
+            
+            if ([thread firstLoad]) {
+                [thread setFirstLoaded:NO];
+            }
 			
 			if(thread == [_threadController thread]) {
 				[_threadController reloadDataAndScrollToCurrentPosition];
@@ -2285,13 +2338,13 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		[thread setLatestReplyDate:[message dateForName:@"wired.board.latest_reply_date"]];
 		[thread setNumberOfReplies:replies];
         
-		[_readIDs removeObject:[thread threadID]];
+		//[_readIDs removeObject:[thread threadID]];
         
 		[thread setUnread:[self _isUnreadThread:thread]];
 		[thread setLoaded:NO];
-		
-		if([[self window] isKeyWindow] && thread == [_threadController thread])
-			[self _reloadThread];
+                		
+		//if(thread == [_threadController thread])
+        [self _reloadThread:thread];
         
         for(WCThreadWindow *controller in [WCThreadWindow threadWindows]) {
             if(thread == [controller thread]) {
@@ -3824,39 +3877,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 
-//- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
-//	NSDictionary	*attributes;
-//	NSString		*label;
-//	NSUInteger		count;
-//	
-//	if(tableColumn == _boardTableColumn) {
-//		label = [item name];
-//		
-//		if([item isRootBoard]) {
-//			attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-//				[NSColor colorWithCalibratedRed:96.0 / 255.0 green:110.0 / 255.0 blue:128.0 / 255.0 alpha:1.0],
-//					NSForegroundColorAttributeName,
-//				[NSFont boldSystemFontOfSize:11.0],
-//					NSFontAttributeName,
-//				NULL];
-//			
-//			return [NSAttributedString attributedStringWithString:[label uppercaseString] attributes:attributes];
-//		} else {
-//			return label;
-//		}
-//	}
-//	else if(tableColumn == _unreadBoardTableColumn) {
-//		count = [item numberOfUnreadThreadsForConnection:NULL includeChildBoards:![item isExpanded]];
-//		
-//		return [NSImage imageWithPillForCount:count
-//							   inActiveWindow:([NSApp keyWindow] == [self window])
-//								onSelectedRow:([_boardsOutlineView rowForItem:item] == [_boardsOutlineView selectedRow])];
-//	}
-//	
-//	return NULL;
-//}
-
-
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
     WCBadgedTableCellView       *view;
     NSFont                      *font;
@@ -3866,7 +3886,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     view    = nil;
     count   = [item numberOfUnreadThreadsForConnection:NULL includeChildBoards:![item isExpanded]];
     unread  = (count > 0);
-    
+        
     if([item isRootBoard]) {
         view = [outlineView makeViewWithIdentifier:@"HeaderCell" owner:outlineView];
         
@@ -3894,7 +3914,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         [view.button setHidden:!unread];
     }
     else if([item isKindOfClass:[WCBoard class]]) {
-        view    = [outlineView makeViewWithIdentifier:@"DataCell" owner:outlineView];
+        view = [outlineView makeViewWithIdentifier:@"DataCell" owner:outlineView];
         font = [view.textField.font fontByAddingTrait:(unread ? NSBoldFontMask : NSUnboldFontMask)];
 
         view.imageView.image            = [NSImage imageNamed:@"Board"];
@@ -4222,24 +4242,22 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
     readIDs     = [NSMutableSet set];
     thread      = [self _selectedThread];
-    
+
     if(thread) {
         [thread setUnread:NO];
+
         [readIDs addObject:[thread threadID]];
-        
+
         for(WCBoardPost *post in [thread posts]) {
             [post setUnread:NO];
+
             [readIDs addObject:[post postID]];
         }
-                                
+
         [[NSNotificationCenter defaultCenter] postNotificationName:WCBoardsDidChangeUnreadCountNotification
                                                             object:readIDs];
     }
-    
-    [_threadsVerticalTableView reloadDataForRowIndexes:[_threadsVerticalTableView selectedRowIndexes] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-    
-    [_threadsHorizontalTableView reloadDataForRowIndexes:[_threadsHorizontalTableView selectedRowIndexes] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-    
+
 	[self _reloadThread];
 	[self _validate];
 }

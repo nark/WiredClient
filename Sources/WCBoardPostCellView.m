@@ -55,6 +55,7 @@
 
 - (void)mouseEntered:(NSEvent *)theEvent {
     [self setButtonsHidden:NO];
+    [self.unreadImageView setHidden:YES];
     
 }
 

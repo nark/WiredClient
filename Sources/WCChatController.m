@@ -2608,6 +2608,7 @@ typedef enum _WCChatFormat					WCChatFormat;
     
     NSDictionary            *theme;
     WCUser                  *user;
+    NSColor                 *timestampColor;
     
     if(tableView == _userListTableView) {
         WCUserTableCellView     *cellView;
@@ -2699,10 +2700,21 @@ typedef enum _WCChatFormat					WCChatFormat;
         } else {
             WCChatTableCellView *cell = [tableView makeViewWithIdentifier:@"WCChatTableCellView" owner:tableView];
                     
+            theme = [self _currentTheme];
+            
             if(message) {
                 cell.nickTextField.stringValue = [message valueForKey:@"nick"];
                 cell.messageTextField.stringValue = [message valueForKey:@"message"];
                 cell.iconImageView.image = [message valueForKey:@"icon"];
+                
+                if([theme boolForKey:WCThemesChatTimestampEveryLine]) {
+                    timestampColor = WIColorFromString([theme objectForKey:WCThemesChatTimestampEveryLineColor]);
+                    
+                    cell.timeTextField.stringValue  = [message valueForKey:@"timestamp"];
+                    cell.timeTextField.textColor    = timestampColor;
+                } else {
+                    cell.timeTextField.stringValue = @"";
+                }
             }
             
             [cell layoutSubtreeIfNeeded];

@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) IBOutlet NSTextField *timeTextField;
 @property (nonatomic, retain) IBOutlet NSTextField *messageTextField;
 @property (nonatomic, retain) IBOutlet NSImageView *iconImageView;
+@property (nonatomic, retain) IBOutlet NSImageView *unreadImageView;
 
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *heightConstraint;
 

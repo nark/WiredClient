@@ -203,6 +203,7 @@
         [cell.messageTextField setAttributedStringValue:text];
         
         [cell.iconImageView setImage:iconImage];
+        [cell.unreadImageView setHidden:![post isUnread]];
         
         [cell.replyButton setEnabled:!replyDisabled];
         [cell.quoteButton setEnabled:!quoteDisabled];

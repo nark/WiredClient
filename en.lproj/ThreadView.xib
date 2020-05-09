@@ -84,7 +84,7 @@
                                                             <constraint firstAttribute="height" constant="14" id="ohk-53-QTr"/>
                                                         </constraints>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Time" usesSingleLineMode="YES" id="WCX-f9-iGe">
-                                                            <font key="font" metaFont="label" size="11"/>
+                                                            <font key="font" metaFont="message" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -96,7 +96,7 @@
                                                         </constraints>
                                                     </box>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mHR-l2-Nap">
-                                                        <rect key="frame" x="452" y="70" width="53" height="16"/>
+                                                        <rect key="frame" x="432" y="70" width="53" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="15" id="QyN-Wr-izu"/>
                                                         </constraints>
@@ -109,7 +109,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vym-Xg-odB">
-                                                        <rect key="frame" x="399" y="70" width="42" height="16"/>
+                                                        <rect key="frame" x="379" y="70" width="42" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="15" id="bDR-ZU-5T0"/>
                                                         </constraints>
@@ -122,7 +122,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RrI-sO-N2R">
-                                                        <rect key="frame" x="335" y="70" width="51" height="16"/>
+                                                        <rect key="frame" x="315" y="70" width="51" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="15" id="e0X-pR-p6f"/>
                                                         </constraints>
@@ -135,7 +135,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jCs-r6-Sge">
-                                                        <rect key="frame" x="277" y="70" width="49" height="16"/>
+                                                        <rect key="frame" x="257" y="70" width="49" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="15" id="oy1-CF-yCi"/>
                                                         </constraints>
@@ -147,6 +147,14 @@
                                                             <action selector="replyPost:" target="NX9-oo-dix" id="sxx-OG-SDM"/>
                                                         </connections>
                                                     </button>
+                                                    <imageView translatesAutoresizingMaskIntoConstraints="NO" id="koF-jr-zvz">
+                                                        <rect key="frame" x="495" y="74" width="9" height="9"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="9" id="3h1-ug-7JJ"/>
+                                                            <constraint firstAttribute="width" constant="9" id="ZZ4-36-wVy"/>
+                                                        </constraints>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="UnreadPost" id="SdS-mJ-7IE"/>
+                                                    </imageView>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="Cwe-Js-KEd" firstAttribute="top" secondItem="NX9-oo-dix" secondAttribute="top" constant="11" id="5OX-oV-cZ3"/>
@@ -159,6 +167,7 @@
                                                     <constraint firstItem="j4F-lX-dOz" firstAttribute="top" secondItem="6NY-zh-lrc" secondAttribute="bottom" constant="8" id="UL6-rW-dGd"/>
                                                     <constraint firstItem="atB-QQ-A7N" firstAttribute="top" secondItem="Cwe-Js-KEd" secondAttribute="bottom" constant="1" id="Zen-dV-9Ek"/>
                                                     <constraint firstAttribute="trailing" secondItem="Nm1-XB-HFG" secondAttribute="trailing" constant="10" id="Zjh-kI-P1B"/>
+                                                    <constraint firstItem="koF-jr-zvz" firstAttribute="top" secondItem="NX9-oo-dix" secondAttribute="top" constant="22" id="bfv-HU-ntS"/>
                                                     <constraint firstItem="vym-Xg-odB" firstAttribute="top" secondItem="NX9-oo-dix" secondAttribute="top" constant="19" id="bn2-2U-DwP"/>
                                                     <constraint firstItem="jCs-r6-Sge" firstAttribute="top" secondItem="NX9-oo-dix" secondAttribute="top" constant="19" id="eZX-5a-cOD"/>
                                                     <constraint firstItem="Nm1-XB-HFG" firstAttribute="top" secondItem="NX9-oo-dix" secondAttribute="top" constant="59" id="jKm-l2-br5"/>
@@ -166,11 +175,12 @@
                                                     <constraint firstAttribute="bottom" secondItem="Nm1-XB-HFG" secondAttribute="bottom" constant="21" id="oNJ-h6-ewC"/>
                                                     <constraint firstItem="vym-Xg-odB" firstAttribute="leading" secondItem="RrI-sO-N2R" secondAttribute="trailing" constant="15" id="ovu-sf-qlq"/>
                                                     <constraint firstItem="6NY-zh-lrc" firstAttribute="top" secondItem="NX9-oo-dix" secondAttribute="top" constant="10" id="rZy-AL-DpU"/>
+                                                    <constraint firstAttribute="trailing" secondItem="koF-jr-zvz" secondAttribute="trailing" constant="10" id="sMr-Ke-TT5"/>
                                                     <constraint firstItem="6NY-zh-lrc" firstAttribute="leading" secondItem="NX9-oo-dix" secondAttribute="leading" constant="9" id="slS-rV-vuE"/>
                                                     <constraint firstItem="Nm1-XB-HFG" firstAttribute="leading" secondItem="NX9-oo-dix" secondAttribute="leading" constant="9" id="tpk-IU-dVV"/>
                                                     <constraint firstAttribute="trailing" secondItem="j4F-lX-dOz" secondAttribute="trailing" constant="10" id="wt2-30-e1d"/>
                                                     <constraint firstItem="mHR-l2-Nap" firstAttribute="leading" secondItem="vym-Xg-odB" secondAttribute="trailing" constant="13" id="xyX-uO-s4T"/>
-                                                    <constraint firstAttribute="trailing" secondItem="mHR-l2-Nap" secondAttribute="trailing" constant="10" id="ybJ-6v-uFY"/>
+                                                    <constraint firstAttribute="trailing" secondItem="mHR-l2-Nap" secondAttribute="trailing" constant="30" id="ybJ-6v-uFY"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="deleteButton" destination="mHR-l2-Nap" id="Gbg-H9-6Ks"/>
@@ -182,6 +192,7 @@
                                                     <outlet property="quoteButton" destination="RrI-sO-N2R" id="3qa-ey-3rT"/>
                                                     <outlet property="replyButton" destination="jCs-r6-Sge" id="Vwa-H7-oEm"/>
                                                     <outlet property="timeTextField" destination="atB-QQ-A7N" id="5O9-Tr-27E"/>
+                                                    <outlet property="unreadImageView" destination="koF-jr-zvz" id="N8T-0A-Oz5"/>
                                                 </connections>
                                             </tableCellView>
                                         </prototypeCellViews>
@@ -214,6 +225,7 @@
         </customView>
     </objects>
     <resources>
+        <image name="UnreadPost" width="9" height="9"/>
         <image name="WiredClient" width="512" height="512"/>
     </resources>
 </document>

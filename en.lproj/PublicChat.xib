@@ -215,12 +215,26 @@
                                                                         </constraints>
                                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="WiredClient" id="P1i-UX-Odm"/>
                                                                     </imageView>
+                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fgO-rW-8X0">
+                                                                        <rect key="frame" x="265" y="36" width="153" height="14"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="14" id="AoI-dF-SGy"/>
+                                                                            <constraint firstAttribute="width" constant="149" id="NMM-pK-EsY"/>
+                                                                        </constraints>
+                                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" id="Z8n-wy-A1D">
+                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
                                                                 </subviews>
                                                                 <constraints>
                                                                     <constraint firstItem="f5T-g8-sNZ" firstAttribute="top" secondItem="VAt-uu-0HA" secondAttribute="top" constant="10" id="8QD-66-IML"/>
+                                                                    <constraint firstItem="fgO-rW-8X0" firstAttribute="top" secondItem="VAt-uu-0HA" secondAttribute="top" constant="5" id="Bi8-Tw-1SJ"/>
                                                                     <constraint firstItem="uMC-cs-2WY" firstAttribute="top" secondItem="VAt-uu-0HA" secondAttribute="top" constant="24" id="IrK-Wi-AvQ"/>
                                                                     <constraint firstItem="uMC-cs-2WY" firstAttribute="leading" secondItem="VAt-uu-0HA" secondAttribute="leading" constant="43" id="NOl-cu-yCM"/>
                                                                     <constraint firstAttribute="bottom" secondItem="uMC-cs-2WY" secondAttribute="bottom" constant="8" id="VzT-hR-v2r"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="fgO-rW-8X0" secondAttribute="trailing" constant="14" id="cKH-tW-wN0"/>
                                                                     <constraint firstAttribute="trailing" secondItem="uMC-cs-2WY" secondAttribute="trailing" constant="14" id="kxY-hj-7vn"/>
                                                                     <constraint firstItem="f5T-g8-sNZ" firstAttribute="leading" secondItem="VAt-uu-0HA" secondAttribute="leading" constant="3" id="oA7-8e-jiI"/>
                                                                 </constraints>
@@ -228,6 +242,7 @@
                                                                     <outlet property="iconImageView" destination="f5T-g8-sNZ" id="IHd-4Q-GNJ"/>
                                                                     <outlet property="messageTextField" destination="uMC-cs-2WY" id="Ry3-27-8p2"/>
                                                                     <outlet property="nickTextField" destination="NMo-mz-XLM" id="vc6-6e-z5i"/>
+                                                                    <outlet property="timeTextField" destination="fgO-rW-8X0" id="QJu-vi-Neb"/>
                                                                 </connections>
                                                             </tableCellView>
                                                             <tableCellView identifier="WCChatMeTableCellView" id="h02-DC-TI5" customClass="WCChatTableCellView">
