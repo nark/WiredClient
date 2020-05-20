@@ -74,7 +74,7 @@
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;
 
-//- (WebView *)threadWebView;
+- (NSTableView *)threadTableView;
 //- (NSString *)HTMLString;
 
 - (NSAttributedString *)attributedStringForText:(NSString *)text;

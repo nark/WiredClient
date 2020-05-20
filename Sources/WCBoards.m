@@ -762,16 +762,16 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (void)_reselectThread:(WCBoardThread *)thread {
-    
 	NSUInteger index = 0;
+    
 	index = [self _indexOfThread:thread];
-
+    
 	if(index != NSNotFound) {
-		[_threadsHorizontalTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-		[_threadsVerticalTableView scrollRowToVisible:index];
-        
+		[_threadsHorizontalTableView scrollRowToVisible:index];
         [_threadsHorizontalTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-		[_threadsVerticalTableView scrollRowToVisible:index];
+		
+        [_threadsVerticalTableView scrollRowToVisible:index];
+        [_threadsVerticalTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
 	} else {
 		[_threadsHorizontalTableView deselectAll:self];
         [_threadsVerticalTableView deselectAll:self];
@@ -2755,72 +2755,86 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 }
 
 - (BOOL)showNextUnreadThread {
-//	WCBoardThread	*thread;
-//	NSRect			rect;
-//
-//	if([[[self window] firstResponder] isKindOfClass:[NSTextView class]])
-//		return NO;
-//
-//	rect = [[[[[[_threadController threadWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
-//	rect.origin.y += 0.9 * rect.size.height;
-//
-//	if([[[[[_threadController threadWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
-//		return YES;
-//
-//	thread = [_boards nextUnreadThreadStartingAtBoard:[self _selectedBoard]
-//											   thread:[self _selectedThread]
-//									forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
-//
-//	if(!thread) {
-//		thread = [_boards nextUnreadThreadStartingAtBoard:NULL
-//												   thread:NULL
-//										forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
-//	}
-//
-//	if(thread) {
-//		[[self window] makeFirstResponder:_threadsHorizontalTableView];
-//
-//		[self _selectThread:thread];
-//
-//		return YES;
-//	}
-//
+	WCBoardThread	*thread;
+	NSRect			rect;
+    NSInteger       orientation;
+    
+	if([[[self window] firstResponder] isKindOfClass:[NSTextView class]])
+		return NO;
+
+	rect = [[[_threadController threadTableView] enclosingScrollView] documentVisibleRect];
+	rect.origin.y += 0.9 * rect.size.height;
+
+	if([[[_threadController threadTableView] enclosingScrollView] scrollRectToVisible:rect])
+		return YES;
+
+	thread = [_boards nextUnreadThreadStartingAtBoard:[self _selectedBoard]
+											   thread:[self _selectedThread]
+									forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
+
+	if(!thread) {
+		thread = [_boards nextUnreadThreadStartingAtBoard:NULL
+												   thread:NULL
+										forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
+	}
+    
+	if(thread) {
+        orientation = [[WCSettings settings] intForKey:WCThreadsSplitViewOrientation];
+        
+        if(orientation == WCThreadsSplitViewOrientationHorizontal) {
+            [[self window] makeFirstResponder:_threadsHorizontalTableView];
+        } else {
+            [[self window] makeFirstResponder:_threadsVerticalTableView];
+        }
+        
+		[self _selectThread:thread];
+
+		return YES;
+	}
+
 	return NO;
 }
 
 
 
 - (BOOL)showPreviousUnreadThread {
-//	WCBoardThread	*thread;
-//	NSRect			rect;
-//
-//	if([[[self window] firstResponder] isKindOfClass:[NSTextView class]])
-//		return NO;
-//
-//	rect = [[[[[[_threadController threadWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
-//	rect.origin.y -= 0.9 * rect.size.height;
-//
-//	if([[[[[_threadController threadWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
-//		return YES;
-//
-//	thread = [_boards previousUnreadThreadStartingAtBoard:[self _selectedBoard]
-//												   thread:[self _selectedThread]
-//										forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
-//
-//	if(!thread) {
-//		thread = [_boards previousUnreadThreadStartingAtBoard:NULL
-//													   thread:NULL
-//											forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
-//	}
-//
-//	if(thread) {
-//		[[self window] makeFirstResponder:_threadsHorizontalTableView];
-//
-//		[self _selectThread:thread];
-//
-//		return YES;
-//	}
-//
+	WCBoardThread	*thread;
+	NSRect			rect;
+    NSInteger       orientation;
+    
+	if([[[self window] firstResponder] isKindOfClass:[NSTextView class]])
+		return NO;
+
+	rect = [[[_threadController threadTableView] enclosingScrollView] documentVisibleRect];
+	rect.origin.y -= 0.9 * rect.size.height;
+
+	if([[[_threadController threadTableView] enclosingScrollView] scrollRectToVisible:rect])
+		return YES;
+
+	thread = [_boards previousUnreadThreadStartingAtBoard:[self _selectedBoard]
+												   thread:[self _selectedThread]
+										forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
+
+	if(!thread) {
+		thread = [_boards previousUnreadThreadStartingAtBoard:NULL
+													   thread:NULL
+											forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
+	}
+
+	if(thread) {
+		orientation = [[WCSettings settings] intForKey:WCThreadsSplitViewOrientation];
+        
+        if(orientation == WCThreadsSplitViewOrientationHorizontal) {
+            [[self window] makeFirstResponder:_threadsHorizontalTableView];
+        } else {
+            [[self window] makeFirstResponder:_threadsVerticalTableView];
+        }
+
+		[self _selectThread:thread];
+
+		return YES;
+	}
+
 	return NO;
 }
 

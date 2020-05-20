@@ -116,7 +116,7 @@ static NSArray *_systemSounds;
 
 - (void)_update {
 	if([[WCSettings settings] boolForKey:WCConfirmDisconnect])
-		[_disconnectMenuItem setTitle:NSLS(@"Disconnect\u2026", @"Disconnect menu item")];
+		[_disconnectMenuItem setTitle:NSLS(@"Disconnect…", @"Disconnect menu item")];
 	else
 		[_disconnectMenuItem setTitle:NSLS(@"Disconnect", @"Disconnect menu item")];
 	

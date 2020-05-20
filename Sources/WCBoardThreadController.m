@@ -476,6 +476,9 @@
 	return _backgroundColor;
 }
 
+- (NSTableView *)threadTableView {
+    return _threadTableView;
+}
 
 #pragma mark -
 
