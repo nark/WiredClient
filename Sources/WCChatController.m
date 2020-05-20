@@ -439,13 +439,13 @@ typedef enum _WCChatFormat					WCChatFormat;
     } else {
           iTunes    = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
     }
-    
-	if([iTunes isRunning] && [iTunes currentTrack]) {
+        
+	if([iTunes isRunning] && [iTunes currentTrack] && [iTunes playerState] != iTunesEPlSStopped) {
 		name		= [[iTunes currentTrack] name];
 		artist		= [[iTunes currentTrack] artist];
 		album		= [[iTunes currentTrack] album];
 		
-        if(!name || [name length] <= 0)
+        if(!name || [name length] <= 0 )
 			name	= NSLS(@"Unknow Track", @"Unknow Track");
 		
 		if(!artist || [artist length] <= 0)

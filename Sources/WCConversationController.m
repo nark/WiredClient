@@ -286,6 +286,8 @@
     lastRow = [_conversationTableView numberOfRows] - 1;
     lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
     [_conversationTableView reloadDataForRowIndexes:lastRowIndexSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    
+    [_conversationTableView scrollToBottomAnimated];
 }
 
 
