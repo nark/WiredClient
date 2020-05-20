@@ -37,18 +37,12 @@
 	WCBoardThread						*_thread;
 	
 	NSOperationQueue					*_loadingQueue;
-	
-	NSMutableString						*_headerTemplate;
-	NSString							*_footerTemplate;
-	NSString							*_replyTemplate;
-	NSString							*_postTemplate;
 
 	NSString							*_fileLinkBase64String;
 	NSString							*_defaultIconBase64String;
 	
 	NSMutableDictionary					*_smileyBase64Strings;
 	
-	NSString							*_templatePath;
 	NSFont								*_font;
 	NSColor								*_textColor;
 	NSColor								*_backgroundColor;
@@ -67,9 +61,6 @@
 
 - (void)setThread:(WCBoardThread *)thread;
 - (WCBoardThread *)thread;
-
-- (void)setTemplatePath:(NSString *)path;
-- (NSString *)templatePath;
 
 - (void)setFont:(NSFont *)font;
 - (NSFont *)font;
@@ -92,6 +83,6 @@
 - (void)reloadDataAndScrollToCurrentPosition;
 - (void)reloadDataAndSelectPost:(WCBoardPost *)selectPost;
 
-- (void)reloadTemplate;
+- (void)reloadView;
 
 @end

@@ -146,6 +146,8 @@ extern NSString * const WCUserPboardType;
 
 - (NSView *)view;
 - (WebView *)webView;
+- (NSArray *)messages;
+
 - (void)awakeInWindow:(NSWindow *)window;
 - (void)loadWindowProperties;
 - (void)saveWindowProperties;

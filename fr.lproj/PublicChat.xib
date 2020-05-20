@@ -106,18 +106,18 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="316">
-                                                <rect key="frame" x="27" y="9" width="42" height="17"/>
+                                                <rect key="frame" x="27" y="9" width="44" height="17"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="17" id="7SE-dA-pdD"/>
                                                 </constraints>
-                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Topic:" id="317">
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Sujet :" id="317">
                                                     <font key="font" metaFont="systemMedium" size="13"/>
                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                                                 </textFieldCell>
                                             </textField>
                                             <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="318">
-                                                <rect key="frame" x="76" y="9" width="339" height="17"/>
+                                                <rect key="frame" x="78" y="9" width="337" height="17"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="17" id="y12-o4-0Pc"/>
                                                 </constraints>
@@ -215,9 +215,23 @@
                                                                         </constraints>
                                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="WiredClient" id="P1i-UX-Odm"/>
                                                                     </imageView>
+                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fgO-rW-8X0">
+                                                                        <rect key="frame" x="265" y="36" width="153" height="14"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="14" id="AoI-dF-SGy"/>
+                                                                            <constraint firstAttribute="width" constant="149" id="NMM-pK-EsY"/>
+                                                                        </constraints>
+                                                                        <textFieldCell key="cell" controlSize="small" alignment="right" id="Z8n-wy-A1D">
+                                                                            <font key="font" metaFont="message" size="11"/>
+                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
                                                                 </subviews>
                                                                 <constraints>
                                                                     <constraint firstItem="f5T-g8-sNZ" firstAttribute="top" secondItem="VAt-uu-0HA" secondAttribute="top" constant="10" id="8QD-66-IML"/>
+                                                                    <constraint firstItem="fgO-rW-8X0" firstAttribute="top" secondItem="VAt-uu-0HA" secondAttribute="top" constant="5" id="Bi8-Tw-1SJ"/>
+                                                                    <constraint firstItem="fgO-rW-8X0" firstAttribute="trailing" secondItem="uMC-cs-2WY" secondAttribute="trailing" id="CTi-RB-aXD"/>
                                                                     <constraint firstItem="uMC-cs-2WY" firstAttribute="top" secondItem="VAt-uu-0HA" secondAttribute="top" constant="24" id="IrK-Wi-AvQ"/>
                                                                     <constraint firstItem="uMC-cs-2WY" firstAttribute="leading" secondItem="VAt-uu-0HA" secondAttribute="leading" constant="43" id="NOl-cu-yCM"/>
                                                                     <constraint firstAttribute="bottom" secondItem="uMC-cs-2WY" secondAttribute="bottom" constant="8" id="VzT-hR-v2r"/>
@@ -228,6 +242,7 @@
                                                                     <outlet property="iconImageView" destination="f5T-g8-sNZ" id="IHd-4Q-GNJ"/>
                                                                     <outlet property="messageTextField" destination="uMC-cs-2WY" id="Ry3-27-8p2"/>
                                                                     <outlet property="nickTextField" destination="NMo-mz-XLM" id="vc6-6e-z5i"/>
+                                                                    <outlet property="timeTextField" destination="fgO-rW-8X0" id="QJu-vi-Neb"/>
                                                                 </connections>
                                                             </tableCellView>
                                                             <tableCellView identifier="WCChatMeTableCellView" id="h02-DC-TI5" customClass="WCChatTableCellView">
@@ -506,39 +521,39 @@
                                                     <menu key="menu" title="OtherViews" id="215">
                                                         <items>
                                                             <menuItem state="on" image="NSActionTemplate" hidden="YES" id="216"/>
-                                                            <menuItem title="Send Private Message..." id="217">
+                                                            <menuItem title="Envoyer un message privé…" id="217">
                                                                 <connections>
                                                                     <action selector="sendPrivateMessage:" target="-2" id="231"/>
                                                                 </connections>
                                                             </menuItem>
-                                                            <menuItem title="Start Private Chat" id="218">
+                                                            <menuItem title="Inviter à un chat privé" id="218">
                                                                 <connections>
                                                                     <action selector="startPrivateChat:" target="-2" id="232"/>
                                                                 </connections>
                                                             </menuItem>
-                                                            <menuItem title="Get Info" id="219">
+                                                            <menuItem title="Lire les informations" id="219">
                                                                 <connections>
                                                                     <action selector="getInfo:" target="-2" id="233"/>
                                                                 </connections>
                                                             </menuItem>
-                                                            <menuItem title="Edit Account..." id="220">
+                                                            <menuItem title="Modifier le compte…" id="220">
                                                                 <connections>
                                                                     <action selector="editAccount:" target="-2" id="234"/>
                                                                 </connections>
                                                             </menuItem>
                                                             <menuItem isSeparatorItem="YES" id="221"/>
-                                                            <menuItem title="Ignore" id="223">
+                                                            <menuItem title="Ignorer" id="223">
                                                                 <connections>
                                                                     <action selector="ignore:" target="-2" id="235"/>
                                                                 </connections>
                                                             </menuItem>
                                                             <menuItem isSeparatorItem="YES" id="224"/>
-                                                            <menuItem title="Kick..." id="225">
+                                                            <menuItem title="Virer…" id="225">
                                                                 <connections>
                                                                     <action selector="kick:" target="-2" id="236"/>
                                                                 </connections>
                                                             </menuItem>
-                                                            <menuItem title="Ban.." id="226">
+                                                            <menuItem title="Bannir… " id="226">
                                                                 <connections>
                                                                     <action selector="ban:" target="-2" id="237"/>
                                                                 </connections>
@@ -552,7 +567,7 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="SplitSizer" id="182"/>
                                             </imageView>
-                                            <button toolTip="Benutzerinfo holen" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="227">
+                                            <button toolTip="Lire les informations" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="227">
                                                 <rect key="frame" x="32" y="3" width="22" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="UserInfo" imagePosition="only" alignment="center" enabled="NO" imageScaling="proportionallyDown" inset="2" id="228">
@@ -563,7 +578,7 @@
                                                     <action selector="getInfo:" target="-2" id="229"/>
                                                 </connections>
                                             </button>
-                                            <button toolTip="Sende eine private Nachricht" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="343">
+                                            <button toolTip="Envoyer un message privé" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="343">
                                                 <rect key="frame" x="66" y="3" width="24" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="PrivateMessage" imagePosition="only" alignment="center" enabled="NO" imageScaling="proportionallyDown" inset="2" id="344">
@@ -574,7 +589,7 @@
                                                     <action selector="sendPrivateMessage:" target="-2" id="353"/>
                                                 </connections>
                                             </button>
-                                            <button toolTip="Beginne einen privaten Chat" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="346">
+                                            <button toolTip="Inviter à un chat privé" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="346">
                                                 <rect key="frame" x="102" y="4" width="24" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="PrivateChat" imagePosition="only" alignment="center" enabled="NO" imageScaling="proportionallyDown" inset="2" id="347">
@@ -710,20 +725,6 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="101">
-                        <rect key="frame" x="192" y="12" width="82" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="106">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                        </buttonCell>
-                        <connections>
-                            <action selector="cancelSheet:" target="-2" id="152"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100">
                         <rect key="frame" x="274" y="12" width="84" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -739,14 +740,28 @@ DQ
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="99">
-                        <rect key="frame" x="17" y="141" width="65" height="17"/>
+                        <rect key="frame" x="17" y="141" width="240" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Set Topic:" id="108">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Définir le sujet :" id="108">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="101">
+                        <rect key="frame" x="187" y="12" width="87" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="106">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancelSheet:" target="-2" id="152"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="-1447" y="-636"/>
@@ -764,7 +779,7 @@ DQ
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="90">
                         <rect key="frame" x="17" y="90" width="289" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Disconnect Message:" id="97">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Message de déconnection :" id="97">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -780,9 +795,9 @@ DQ
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="91">
-                        <rect key="frame" x="200" y="12" width="109" height="32"/>
+                        <rect key="frame" x="191" y="13" width="118" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Disconnect" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="96">
+                        <buttonCell key="cell" type="push" title="Déconnecter" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="96">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -794,9 +809,9 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="92">
-                        <rect key="frame" x="109" y="12" width="82" height="32"/>
+                        <rect key="frame" x="104" y="13" width="87" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="95">
+                        <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="95">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -824,7 +839,7 @@ Gw
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="74">
                         <rect key="frame" x="17" y="118" width="289" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Disconnect Message:" id="75">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Message de déconnection :" id="75">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -840,9 +855,9 @@ Gw
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="70">
-                        <rect key="frame" x="226" y="12" width="84" height="32"/>
+                        <rect key="frame" x="225" y="13" width="84" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Ban" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="87">
+                        <buttonCell key="cell" type="push" title="Bannir" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="87">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -853,10 +868,38 @@ DQ
                             <action selector="submitSheet:" target="-2" id="154"/>
                         </connections>
                     </button>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="72">
+                        <rect key="frame" x="18" y="62" width="55" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Expire :" id="77">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="71">
+                        <rect key="frame" x="74" y="56" width="146" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="Dans 30 minutes" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1800" inset="2" selectedItem="85" id="78">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <menu key="menu" id="79">
+                                <items>
+                                    <menuItem title="Jamais" id="80"/>
+                                    <menuItem title="Dans 10 minutes" tag="600" id="81"/>
+                                    <menuItem title="Dans 20 minutes" tag="1200" id="82"/>
+                                    <menuItem title="Dans 30 minutes" state="on" tag="1800" id="85"/>
+                                    <menuItem title="Dans 1 heure" tag="3600" id="83"/>
+                                    <menuItem title="Dans 2 heure" tag="7200" id="84"/>
+                                    <menuItem title="Dans 1 jour" tag="86400" id="86"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                    </popUpButton>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="69">
-                        <rect key="frame" x="142" y="12" width="84" height="32"/>
+                        <rect key="frame" x="136" y="13" width="87" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="88">
+                        <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="88">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -867,34 +910,6 @@ Gw
                             <action selector="cancelSheet:" target="-2" id="155"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="72">
-                        <rect key="frame" x="18" y="62" width="55" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Expires:" id="77">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="71">
-                        <rect key="frame" x="74" y="56" width="146" height="26"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="In 30 Minutes" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1800" inset="2" selectedItem="85" id="78">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <menu key="menu" id="79">
-                                <items>
-                                    <menuItem title="Never" id="80"/>
-                                    <menuItem title="In 10 Minutes" tag="600" id="81"/>
-                                    <menuItem title="In 20 Minutes" tag="1200" id="82"/>
-                                    <menuItem title="In 30 Minutes" state="on" tag="1800" id="85"/>
-                                    <menuItem title="In 1 Hour" tag="3600" id="83"/>
-                                    <menuItem title="In 2 Hours" tag="7200" id="84"/>
-                                    <menuItem title="In 1 Day" tag="86400" id="86"/>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                    </popUpButton>
                 </subviews>
             </view>
             <point key="canvasLocation" x="-237" y="279"/>
@@ -902,16 +917,16 @@ Gw
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="158" userLabel="Password Panel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="376" width="452" height="134"/>
+            <rect key="contentRect" x="196" y="376" width="578" height="134"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="159">
-                <rect key="frame" x="0.0" y="0.0" width="452" height="134"/>
+                <rect key="frame" x="0.0" y="0.0" width="578" height="134"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="162">
-                        <rect key="frame" x="342" y="12" width="96" height="32"/>
+                        <rect key="frame" x="468" y="12" width="96" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Change" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="171">
+                        <buttonCell key="cell" type="push" title="Modifier" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="171">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -922,22 +937,8 @@ DQ
                             <action selector="submitPasswordSheet:" target="-2" id="179"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="161">
-                        <rect key="frame" x="246" y="12" width="96" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="172">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                        </buttonCell>
-                        <connections>
-                            <action selector="cancelSheet:" target="-2" id="178"/>
-                        </connections>
-                    </button>
                     <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="166">
-                        <rect key="frame" x="121" y="92" width="311" height="22"/>
+                        <rect key="frame" x="196" y="92" width="362" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <secureTextFieldCell key="cell" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="167">
                             <font key="font" metaFont="system"/>
@@ -949,7 +950,7 @@ Gw
                         </secureTextFieldCell>
                     </secureTextField>
                     <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="164">
-                        <rect key="frame" x="121" y="60" width="311" height="22"/>
+                        <rect key="frame" x="196" y="60" width="362" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <secureTextFieldCell key="cell" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="169">
                             <font key="font" metaFont="system"/>
@@ -961,44 +962,58 @@ Gw
                         </secureTextFieldCell>
                     </secureTextField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="165">
-                        <rect key="frame" x="19" y="94" width="97" height="17"/>
+                        <rect key="frame" x="18" y="94" width="172" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="New Password:" id="168">
+                        <textFieldCell key="cell" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Nouveau mot de passe :" id="168">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="163">
-                        <rect key="frame" x="73" y="62" width="43" height="17"/>
+                        <rect key="frame" x="18" y="63" width="172" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Verify:" id="170">
+                        <textFieldCell key="cell" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Confirmer le mot de passe :" id="170">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="160">
-                        <rect key="frame" x="17" y="22" width="207" height="14"/>
+                        <rect key="frame" x="17" y="22" width="220" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Password Mismatch" id="173">
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Les mots de passe ne correspondent pas" id="173">
                             <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" white="0.49596774999999999" alpha="1" colorSpace="calibratedWhite"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="161">
+                        <rect key="frame" x="372" y="13" width="96" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="172">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancelSheet:" target="-2" id="178"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-238" y="521"/>
+            <point key="canvasLocation" x="-301" y="521"/>
         </window>
         <customView id="326" userLabel="Save Panel">
             <rect key="frame" x="0.0" y="0.0" width="423" height="47"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="328">
-                    <rect key="frame" x="73" y="21" width="76" height="17"/>
+                    <rect key="frame" x="32" y="21" width="117" height="17"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="File Format:" id="337">
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Format de fichier :" id="337">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1023,7 +1038,7 @@ Gw
                     </connections>
                 </popUpButton>
             </subviews>
-            <point key="canvasLocation" x="345" y="554"/>
+            <point key="canvasLocation" x="344.5" y="553.5"/>
         </customView>
     </objects>
     <resources>

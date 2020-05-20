@@ -318,14 +318,10 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 - (void)_themeDidChange {    
 	NSDictionary		*theme;
-	NSString			*templatePath;
-	WITemplateBundle    *templateBundle;
     NSColor             *textColor, *URLTextColor, *backgroundColor;
     NSFont              *font;
     
 	theme				= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-	templatePath		= [templateBundle bundlePath];
         
     font                = WIFontFromString([theme objectForKey:WCThemesBoardsFont]);
     textColor           = [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
@@ -338,9 +334,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     [_threadController setTextColor:textColor];
     [_threadController setURLTextColor:URLTextColor];
 	[_threadController setBackgroundColor:backgroundColor];
-	[_threadController setTemplatePath:templatePath];
     
-	[_threadController reloadTemplate];
+	[_threadController reloadView];
 }
 
 
@@ -2044,7 +2039,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
                 [thread setFirstLoaded:NO];
             }
 			
-			if(thread == [_threadController thread]) {
+			if(thread == [_threadController thread] && [self _selectedThread]) {
 				[_threadController reloadDataAndScrollToCurrentPosition];
 			}
 		}
@@ -2339,7 +2334,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		[thread setNumberOfReplies:replies];
         
 		//[_readIDs removeObject:[thread threadID]];
-        
 		[thread setUnread:[self _isUnreadThread:thread]];
 		[thread setLoaded:NO];
                 		

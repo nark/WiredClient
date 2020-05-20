@@ -114,7 +114,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (NSColor *)_highlightColorForChat:(NSString *)chat;
 
 - (NSDictionary *)_currentTheme;
-- (void)_loadTheme:(NSDictionary *)theme withTemplate:(WITemplateBundle *)template;
+- (void)_loadTheme:(NSDictionary *)theme;
 
 @end
 
@@ -306,12 +306,23 @@ typedef enum _WCChatFormat					WCChatFormat;
     if ([chatString hasPrefix:@"<img src='data:image/png;base64,"]) {
         NSArray *comps = [chatString componentsSeparatedByString:@"base64,"];
         NSString *base64String = [[comps lastObject] substringToIndex:[[comps lastObject] length] - 3];
+        NSImage *image = [NSImage imageWithData:[NSData dataWithBase64EncodedString:base64String]];
         
-        NSTextAttachment *attachment = [[[NSTextAttachment alloc] init] autorelease];
-        attachment.image = [NSImage imageWithData:[NSData dataWithBase64EncodedString:base64String]];
-        
+        id <NSTextAttachmentCell> cell = [[[NSTextAttachmentCell alloc] initImageCell:image] autorelease];
+
+        NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithData:nil ofType:nil] autorelease];
+        [attachment setAttachmentCell:cell];
+
         NSAttributedString *attrString = [NSAttributedString attributedStringWithAttachment:attachment];
         mutableOutput = [[[NSMutableAttributedString alloc] initWithAttributedString:attrString] autorelease];
+    }
+    else if ([chatString hasPrefix:@"<img src='http"]) {
+        NSData *imageData = [chatString dataUsingEncoding:NSUTF8StringEncoding];
+        NSAttributedString *imageString = [[NSAttributedString alloc] initWithHTML:imageData documentAttributes:nil];
+        
+        if (imageString) {
+            mutableOutput = [[[NSMutableAttributedString alloc] initWithAttributedString:imageString] autorelease];
+        }
     } else {
         if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
             chatString  = [chat stringByReplacingEmojiCheatCodesWithUnicode];
@@ -392,22 +403,16 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)_appendRow {
-    [_chatTableView beginUpdates];
+    //[_chatTableView beginUpdates];
     
-    NSInteger lastRow = [_chatTableView numberOfRows] == 0 ? 0 : [_chatTableView numberOfRows] - 1;
+    NSInteger lastRow = [_messages count] == 0 ? 0 : [_messages count] - 1;
     NSIndexSet *lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
         
-    [_chatTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:lastRow]
+    [_chatTableView insertRowsAtIndexes:lastRowIndexSet
                                   withAnimation:NSTableViewAnimationSlideUp];
-    
-    lastRow = [_chatTableView numberOfRows] - 1;
-    lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
-    [_chatTableView reloadDataForRowIndexes:lastRowIndexSet columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-    
-    [_chatTableView endUpdates];
-    
-    [NSAnimationContext cancelPreviousPerformRequestsWithTarget:self];
-    
+
+    //[_chatTableView endUpdates];
+        
     [_chatTableView scrollToBottomAnimated];
 }
 
@@ -468,11 +473,38 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (void)_sendImage:(NSURL *)url {
 	NSString		*html;
 	WIP7Message		*message;
+    NSImage         *image;
+    NSString        *base64;
+    NSData          *imageData;
+    CGFloat         newHeight;
     
-	if([[url scheme] containsSubstring:@"http"]) {
-		html = [NSSWF:@"<a class='chat-media-frame' href='%@'><img src='%@' alt='' /></a>", [url absoluteString], [url absoluteString]];
-	} else {
-		html = nil;
+	if([[url scheme] hasPrefix:@"http"]) {
+        html = [NSSWF:@"<img src='%@'/>", [url absoluteString]];
+        
+//        imageData   = [NSData dataWithContentsOfURL:url];
+//        image       = [NSImage imageWithData:imageData];
+//
+//        if(image) {
+//            if (image.size.width > 350) {
+//                newHeight = 350 / image.size.width * image.size.height;
+//                image = [image scaledImageWithSize:NSMakeSize(350, newHeight)];
+//            }
+//
+//            base64  = [[image TIFFRepresentation] base64EncodedString];
+//            html    = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64];
+//        }
+	} else if ([url scheme] == nil && [[url absoluteString] hasPrefix:@"/"]) {
+        image = [NSImage imageWithContentsOfFile:[url absoluteString]];
+        
+        if(image) {
+            if (image.size.width > 350) {
+                newHeight = 350 / image.size.width * image.size.height;
+                image = [image scaledImageWithSize:NSMakeSize(350, newHeight)];
+            }
+            
+            base64  = [[image TIFFRepresentation] base64EncodedString];
+            html    = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64];
+        }
 	}
     
 	if(html && [html length] > 0) {
@@ -489,11 +521,13 @@ typedef enum _WCChatFormat					WCChatFormat;
     NSString            *html;
     NSString            *base64ImageString;
     NSData              *imageData;
+    CGFloat             newHeight;
     
     image = [NSImage imageWithData:[NSData dataWithContentsOfURL:url]];
     
     if (image.size.width > 350) {
-        image = [image imageByScalingProportionallyToSize:NSMakeSize(350, 1)];
+        newHeight = 350 / image.size.width * image.size.height;
+        image = [image scaledImageWithSize:NSMakeSize(350, newHeight)];
     }
     
     imageData = [image TIFFRepresentation];
@@ -906,11 +940,7 @@ typedef enum _WCChatFormat					WCChatFormat;
             [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]]);
 }
 
-- (void)_loadTheme:(NSDictionary *)theme withTemplate:(WITemplateBundle *)template {
-    NSString			*htmlPath;
-
-	htmlPath	= [template htmlPathForType:WITemplateTypeChat];
-    
+- (void)_loadTheme:(NSDictionary *)theme {
     [self themeDidChange:theme];
 }
 
@@ -1155,7 +1185,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)awakeFromNib {
 	NSDictionary		*theme;
-	WITemplateBundle	*template;
 	
 	[_userListTableView setTarget:self];
 	[_userListTableView setDoubleAction:@selector(sendPrivateMessage:)];
@@ -1177,10 +1206,9 @@ typedef enum _WCChatFormat					WCChatFormat;
     [_chatTableView registerForDraggedTypes:@[NSFilenamesPboardType, NSPasteboardTypeString]];
     [_chatTableView setDraggingDestinationFeedbackStyle:NSTableViewDraggingDestinationFeedbackStyleNone];
 	
-    theme       = [[WCSettings settings] themeWithName:@"Wired"];
-    template    = [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+    theme = [[WCSettings settings] themeWithName:@"Wired"];
     
-    [self _loadTheme:theme withTemplate:template];
+    [self _loadTheme:theme];
     
     if([[WCSettings settings] boolForKey:WCHideUserList])
         [self hideUserList:self];
@@ -1204,7 +1232,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)themeDidChange:(NSDictionary *)theme {
-	WITemplateBundle		*templateBundle;
 	NSColor					*textColor, *backgroundColor, *timestampColor, *eventColor, *urlColor;
 	NSFont					*font;
 	BOOL					reload = NO;
@@ -1257,6 +1284,12 @@ typedef enum _WCChatFormat					WCChatFormat;
 		
 		reload = YES;
 	}
+    
+    if([theme boolForKey:WCThemesChatSeparateEveryLine]) {
+        [_chatTableView setGridStyleMask:NSTableViewDashedHorizontalGridLineMask];
+    } else {
+        [_chatTableView setGridStyleMask:NSTableViewGridNone];
+    }
     
     if([[theme objectForKey:WCThemesUserListAlternateRows] boolValue]) {
         [_userListTableView setUsesAlternatingRowBackgroundColors:YES];
@@ -2044,6 +2077,11 @@ typedef enum _WCChatFormat					WCChatFormat;
 }
 
 
+- (NSArray *)messages {
+    return _messages;
+}
+
+
 - (void)awakeInWindow:(NSWindow *)window {
 	[_errorQueue release];
 	_errorQueue = [[WCErrorQueue alloc] initWithWindow:window];
@@ -2445,143 +2483,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-//
-//#pragma mark -
-//
-//- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
-//    WITemplateBundle    *template;
-//    NSURL               *jqueryURL, *functionsURL, *mainURL;
-//    NSDictionary		*theme;
-//
-//	theme		= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-//	template	= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-//
-//    if(!template) {
-//        NSLog(@"Error: Template not found. (%@)", _chatTemplate);
-//        return;
-//    }
-//
-//    jqueryURL       = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
-//    functionsURL    = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
-//    mainURL         = [NSURL fileURLWithPath:[template pathForResource:@"chat" ofType:@"js" inDirectory:@"htdocs/js"]];
-//
-//    if(![[NSFileManager defaultManager] fileExistsAtPath:[jqueryURL path]] ||
-//       ![[NSFileManager defaultManager] fileExistsAtPath:[functionsURL path]] ||
-//       ![[NSFileManager defaultManager] fileExistsAtPath:[mainURL path]])
-//    {
-//        NSLog(@"Error: Invalid template. Missing script. (%@)", _chatTemplate);
-//        return;
-//    }
-//
-//    [[_chatOutputWebView windowScriptObject] setValue:self forKey:@"Controller"];
-//
-//    [_chatOutputWebView appendScriptAtURL:jqueryURL];
-//    [_chatOutputWebView appendScriptAtURL:functionsURL];
-//    [_chatOutputWebView appendScriptAtURL:mainURL];
-//
-//    [_chatOutputWebView scrollToBottom];
-//}
-//
-//
-//- (NSArray *)webView:(WebView *)webView contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
-//#ifdef WCConfigurationRelease
-//    return NULL;
-//#else
-//    return defaultMenuItems;
-//#endif
-//}
-//
-//
-//-(NSURLRequest *)webView:(WebView *)sender
-//                resource:(id)identifier
-//         willSendRequest:(NSURLRequest *)request
-//        redirectResponse:(NSURLResponse *)redirectResponse
-//          fromDataSource:(WebDataSource *)dataSource
-//{
-//    if ([request cachePolicy] != NSURLRequestReloadIgnoringCacheData)
-//    {
-//        return [NSURLRequest requestWithURL:[request URL]
-//                                cachePolicy:NSURLRequestReloadIgnoringCacheData
-//                            timeoutInterval:[request timeoutInterval]];
-//    } else {
-//        return request;
-//    }
-//}
-//
-//- (void)webView:(WebView *)webView
-//decidePolicyForNavigationAction:(NSDictionary *)action
-//        request:(NSURLRequest *)request
-//          frame:(WebFrame *)frame
-//decisionListener:(id <WebPolicyDecisionListener>)listener
-//{
-//	NSString			*path;
-//    NSURL               *url;
-//	WIURL				*wiredURL;
-//	WCFile				*file;
-//    NSData              *fileData;
-//    NSImage             *droppedImage;
-//	BOOL				handled     = NO;
-//	BOOL                isDirectory = NO;
-//
-//    if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeLinkClicked) {
-//        [listener ignore];
-//
-//        url         = [action objectForKey:WebActionOriginalURLKey];
-//		wiredURL    = [WIURL URLWithURL:url];
-//
-//        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;
-//
-//		if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
-//			if([[wiredURL host] length] == 0) {
-//				if([self connection] && [[self connection] isConnected]) {
-//					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//
-//					if(isDirectory) {
-//                        [WCFiles filesWithConnection:[self connection]
-//                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[self connection]]
-//                                          selectFile:[WCFile fileWithDirectory:path connection:[self connection]]];
-//
-//					} else {
-//                        file = [WCFile fileWithFile:path connection:[self connection]];
-//                        [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file]
-//                                                      toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
-//					}
-//				}
-//
-//				handled = YES;
-//			}
-//		}
-//
-//		if(!handled)
-//			[[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
-//
-//    } else {
-//        url = [action objectForKey:WebActionOriginalURLKey];
-//
-//        if (![[url pathExtension] isEqualToString:@"html"]) {
-//            [listener ignore];
-//
-//            fileData        = [NSData dataWithContentsOfURL:url];
-//            droppedImage    = [NSImage imageWithData:fileData];
-//
-//            if (droppedImage) {
-//                [self _sendLocalImage:url];
-//            }
-//        }
-//
-//        [listener use];
-//    }
-//}
-//
-//- (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
-//    // useless but required
-//}
-//
-//- (NSUInteger)webView:(WebView *)webView
-//dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
-//    return WebDragDestinationActionLoad;
-//}
-//
 
 #pragma mark -
 

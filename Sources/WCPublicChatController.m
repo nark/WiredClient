@@ -349,7 +349,7 @@
 	user		= [self userWithUserID:[[self connection] userID]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![self chatIsEmpty])
-		[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] addHistoryForWebView:[self webView] 
+        [[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] addHistoryForMessages:[self messages]
 													withConnectionName:[[self connection] name]
 															  identity:[user nick]];
 	

@@ -416,18 +416,6 @@
 
 
 
-- (void)setTemplatePath:(NSString *)path {
-	[path retain];
-	[_templatePath release];
-	
-	_templatePath = path;
-}
-
-
-- (NSString *)templatePath {
-	return _templatePath;
-}
-
 
 
 - (void)setFont:(NSFont *)font {
@@ -488,33 +476,11 @@
 	return _backgroundColor;
 }
 
-//
-//
-//#pragma mark -
-//
-//- (WebView *)threadWebView {
-//	return _threadWebView;
-//}
-//
-//
-//
-//- (NSString *)HTMLString {
-//	return [[[NSString alloc] initWithData:[[[_threadWebView mainFrame] dataSource] data]
-//                                  encoding:NSUTF8StringEncoding] autorelease];
-//}
-//
-
 
 #pragma mark -
 
 - (void)reloadData {
     _scrollEndReached = NO;
-    
-//    [_threadTableView noteNumberOfRowsChanged];
-//    [_threadTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [_threadTableView numberOfRows]-1)]
-//                                columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-//
-//    [_threadTableView setNeedsLayout:YES];
 
     [_threadTableView reloadData];
     [_threadTableView setNeedsLayout:YES];
@@ -554,9 +520,9 @@
 
 
 #pragma mark -
-#pragma mark Reload CSS Template
+#pragma mark Reload
 
-- (void)reloadTemplate {
+- (void)reloadView {
     [_threadTableView reloadData];
 }
 

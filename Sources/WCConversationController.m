@@ -74,12 +74,22 @@
             cell.messageTestField.font = [self font];
             cell.messageTestField.allowsEditingTextAttributes = YES;
             
+        } else if ([[message messageString] hasPrefix:@"<img src='http"]) {
+            NSData *imageData = [[message messageString] dataUsingEncoding:NSUTF8StringEncoding];
+            NSAttributedString *imageString = [[NSAttributedString alloc] initWithHTML:imageData documentAttributes:nil];
+            
+            if (imageString) {
+                cell.messageTestField.attributedStringValue = imageString;
+            }
         } else {
             NSArray *comps = [[message messageString] componentsSeparatedByString:@"base64,"];
             NSString *base64String = [[comps lastObject] substringToIndex:[[comps lastObject] length] - 3];
+            NSImage *image = [NSImage imageWithData:[NSData dataWithBase64EncodedString:base64String]];
             
-            NSTextAttachment *attachment = [[[NSTextAttachment alloc] init] autorelease];
-            attachment.image = [NSImage imageWithData:[NSData dataWithBase64EncodedString:base64String]];
+            id <NSTextAttachmentCell> attachmentCell = [[[NSTextAttachmentCell alloc] initImageCell:image] autorelease];
+
+            NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithData:nil ofType:nil] autorelease];
+            [attachment setAttachmentCell:attachmentCell];
             
             NSAttributedString *attrString = [NSAttributedString attributedStringWithAttachment:attachment];
 
@@ -200,18 +210,6 @@
 
 
 
-- (void)setTemplatePath:(NSString *)path {
-	[path retain];
-	[_templatePath release];
-	
-	_templatePath = path;
-}
-
-
-- (NSString *)templatePath {
-	return _templatePath;
-}
-
 
 
 - (void)setFont:(NSFont *)font {
@@ -277,7 +275,7 @@
 #pragma mark -
 
 - (void)appendMessage:(WDMessage *)message {
-    NSInteger lastRow = [_conversationTableView numberOfRows] - 1;
+    NSInteger lastRow = [[[self conversation] messages] count] == 0 ? 0 : [[[self conversation] messages] count] - 1;
     NSIndexSet *lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
         
     [_conversationTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:lastRow]
@@ -352,7 +350,7 @@
     [_conversationTableView performSelector:@selector(scrollToBottomAnimated) afterDelay:0.1];
 }
 
-- (void)reloadTemplate {
+- (void)reloadView {
     [_conversationTableView setNeedsDisplay];
 }
 

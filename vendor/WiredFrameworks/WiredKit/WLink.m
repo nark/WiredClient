@@ -236,7 +236,7 @@
 		if([_socket connectWithTimeout:10.0 error:&error]) {
 			_p7Socket = [[WIP7Socket alloc] initWithSocket:_socket spec:_spec];
 
-			if([_p7Socket connectWithOptions:WIP7EncryptionRSA_AES256_SHA1 | WIP7ChecksumSHA1 | WIP7CompressionDeflate
+			if([_p7Socket connectWithOptions:WIP7EncryptionRSA_AES256_SHA256 | WIP7ChecksumSHA256 | WIP7CompressionDeflate
 							   serialization:WIP7Binary
 									username:[_url user]
 									password:[[_url password] SHA1]

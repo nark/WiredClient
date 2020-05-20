@@ -91,7 +91,6 @@ NSString * const WCThemes								= @"WCThemes";
 NSString * const WCThemesName							= @"WCThemesName";
 NSString * const WCThemesBuiltinName					= @"WCThemesBuiltinName";
 NSString * const WCThemesIdentifier						= @"WCThemesIdentifier";
-NSString * const WCThemesTemplate						= @"WCThemesTemplate";
 NSString * const WCThemesShowSmileys					= @"WCThemesShowSmileys";
 NSString * const WCThemesChatFont						= @"WCThemesChatFont";
 NSString * const WCThemesChatTextColor					= @"WCThemesChatTextColor";
@@ -100,6 +99,7 @@ NSString * const WCThemesChatEventsColor				= @"WCThemesChatEventsColor";
 NSString * const WCThemesChatURLsColor					= @"WCThemesChatURLsColor";
 NSString * const WCThemesChatTimestampEveryLineColor	= @"WCThemesChatTimestampEveryLineColor";
 NSString * const WCThemesChatTimestampEveryLine			= @"WCThemesChatTimestampEveryLine";
+NSString * const WCThemesChatSeparateEveryLine          = @"WCThemesChatSeparateEveryLine";
 NSString * const WCThemesMessagesFont					= @"WCThemesMessagesFont";
 NSString * const WCThemesMessagesTextColor				= @"WCThemesMessagesTextColor";
 NSString * const WCThemesMessagesBackgroundColor		= @"WCThemesMessagesBackgroundColor";
@@ -218,327 +218,6 @@ static NSString *defaultThemeIdentifier;
 
 
 - (void)_upgrade {
-//
-//    NSEnumerator            *enumerator, *keyEnumerator;
-//    NSDictionary            *defaults, *defaultTheme;
-//    NSArray                    *themes, *bookmarks;
-//    NSMutableArray            *newThemes, *newBookmarks;
-//    NSDictionary            *theme, *builtinTheme, *bookmark;
-//    NSMutableDictionary        *newTheme, *newBookmark;
-//    NSString                *key, *password, *identifier, *builtinName;
-//
-//    defaults        = [self defaults];
-//    defaultTheme    = [[defaults objectForKey:WCThemes] objectAtIndex:0];
-//
-//    /* Convert old font/color settings to theme */
-//    if([[self objectForKey:WCThemes] isEqualToArray:[NSArray arrayWithObject:defaultTheme]]) {
-//        newTheme = [[defaultTheme mutableCopy] autorelease];
-//
-//        if([self objectForKey:_WCChatURLsColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCChatURLsColor]])
-//                         forKey:WCThemesChatURLsColor];
-//        }
-//
-//        if([self objectForKey:_WCChatTextColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCChatTextColor]])
-//                         forKey:WCThemesChatTextColor];
-//        }
-//
-//        if([self objectForKey:_WCChatBackgroundColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCChatBackgroundColor]])
-//                         forKey:WCThemesChatBackgroundColor];
-//        }
-//
-//        if([self objectForKey:_WCChatEventsColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCChatEventsColor]])
-//                         forKey:WCThemesChatEventsColor];
-//        }
-//
-//        if([self objectForKey:_WCChatFont]) {
-//            [newTheme setObject:WIStringFromFont([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCChatFont]])
-//                         forKey:WCThemesChatFont];
-//        }
-//
-//        if([self objectForKey:_WCTimestampEveryLine]) {
-//            [newTheme setObject:[self objectForKey:_WCTimestampEveryLine]
-//                         forKey:WCThemesChatTimestampEveryLine];
-//        }
-//
-//        if([self objectForKey:_WCTimestampEveryLineColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCTimestampEveryLineColor]])
-//                         forKey:WCThemesChatTimestampEveryLineColor];
-//        }
-//
-//        if([self objectForKey:_WCMessagesTextColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCMessagesTextColor]])
-//                         forKey:WCThemesMessagesTextColor];
-//        }
-//
-//        if([self objectForKey:_WCMessagesBackgroundColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCMessagesBackgroundColor]])
-//                         forKey:WCThemesMessagesBackgroundColor];
-//        }
-//
-//        if([self objectForKey:_WCMessagesFont]) {
-//            [newTheme setObject:WIStringFromFont([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCMessagesFont]])
-//                         forKey:WCThemesMessagesFont];
-//        }
-//
-//        if([self objectForKey:_WCNewsTextColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCNewsTextColor]])
-//                         forKey:WCThemesBoardsTextColor];
-//        }
-//
-//        if([self objectForKey:_WCNewsBackgroundColor]) {
-//            [newTheme setObject:WIStringFromColor([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCNewsBackgroundColor]])
-//                         forKey:WCThemesBoardsBackgroundColor];
-//        }
-//
-//        if([self objectForKey:_WCNewsFont]) {
-//            [newTheme setObject:WIStringFromFont([NSUnarchiver unarchiveObjectWithData:[self objectForKey:_WCNewsFont]])
-//                         forKey:WCThemesBoardsFont];
-//        }
-//
-//        if([self objectForKey:_WCFilesAlternateRows]) {
-//            [newTheme setObject:[self objectForKey:_WCFilesAlternateRows]
-//                         forKey:WCThemesFileListAlternateRows];
-//        }
-//
-//        if([self objectForKey:_WCTransfersShowProgressBar]) {
-//            [newTheme setObject:[self objectForKey:_WCTransfersShowProgressBar]
-//                         forKey:WCThemesTransferListShowProgressBar];
-//        }
-//
-//        if([self objectForKey:_WCTransfersAlternateRows]) {
-//            [newTheme setObject:[self objectForKey:_WCTransfersAlternateRows]
-//                         forKey:WCThemesTransferListAlternateRows];
-//        }
-//
-//        if([self objectForKey:_WCTrackersAlternateRows]) {
-//            [newTheme setObject:[self objectForKey:_WCTrackersAlternateRows]
-//                         forKey:WCThemesTrackerListAlternateRows];
-//        }
-//
-//        if([self objectForKey:_WCShowSmileys]) {
-//            [newTheme setObject:[self objectForKey:_WCShowSmileys]
-//                         forKey:WCThemesShowSmileys];
-//        }
-//
-//        if(![newTheme isEqualToDictionary:defaultTheme]) {
-//            [newTheme setObject:@"Wired Client 1.x" forKey:WCThemesName];
-//            [newTheme setObject:[NSString UUIDString] forKey:WCThemesIdentifier];
-//
-//            [self addObject:newTheme toArrayForKey:WCThemes];
-//        }
-//
-//        /*
-//        [self removeObjectForKey:_WCChatTextColor];
-//        [self removeObjectForKey:_WCChatBackgroundColor];
-//        [self removeObjectForKey:_WCChatEventsColor];
-//        [self removeObjectForKey:_WCChatURLsColor];
-//        [self removeObjectForKey:_WCChatFont];
-//        [self removeObjectForKey:_WCChatUserListAlternateRows];
-//        [self removeObjectForKey:_WCChatUserListIconSize];
-//        [self removeObjectForKey:_WCTimestampEveryLineColor];
-//        [self removeObjectForKey:_WCMessagesTextColor];
-//        [self removeObjectForKey:_WCMessagesBackgroundColor];
-//        [self removeObjectForKey:_WCMessagesFont];
-//        [self removeObjectForKey:_WCMessagesListAlternateRows];
-//        [self removeObjectForKey:_WCNewsTextColor];
-//        [self removeObjectForKey:_WCNewsBackgroundColor];
-//        [self removeObjectForKey:_WCNewsFont];
-//        [self removeObjectForKey:_WCFilesAlternateRows];
-//        [self removeObjectForKey:_WCTransfersShowProgressBar];
-//        [self removeObjectForKey:_WCTransfersAlternateRows];
-//        [self removeObjectForKey:_WCTrackersAlternateRows];
-//        [self removeObjectForKey:_WCShowSmileys];
-//        */
-//    }
-//
-//    /* Convert themes */
-//    builtinName        = NULL;
-//    identifier        = [self objectForKey:WCTheme];
-//    themes            = [self objectForKey:WCThemes];
-//    newThemes        = [NSMutableArray array];
-//    enumerator        = [themes objectEnumerator];
-//
-//    while((theme = [enumerator nextObject])) {
-//        if([theme objectForKey:WCThemesBuiltinName]) {
-//            if([[theme objectForKey:WCThemesIdentifier] isEqualToString:identifier])
-//                builtinName = [theme objectForKey:WCThemesBuiltinName];
-//        } else {
-//            newTheme        = [[theme mutableCopy] autorelease];
-//            keyEnumerator    = [defaultTheme keyEnumerator];
-//
-//            while((key = [keyEnumerator nextObject])) {
-//                if(![key isEqualToString:WCThemesBuiltinName]) {
-//                    if(![newTheme objectForKey:key])
-//                        [newTheme setObject:[defaultTheme objectForKey:key] forKey:key];
-//                }
-//            }
-//
-//            [newThemes addObject:newTheme];
-//        }
-//    }
-//
-//    /* Add all default themes */
-//    enumerator = [[defaults objectForKey:WCThemes] reverseObjectEnumerator];
-//
-//    while((builtinTheme = [enumerator nextObject])) {
-//        if([newThemes count] > 0)
-//            [newThemes insertObject:builtinTheme atIndex:0];
-//        else
-//            [newThemes addObject:builtinTheme];
-//
-//        if(builtinName && [[builtinTheme objectForKey:WCThemesBuiltinName] isEqualToString:builtinName])
-//            [self setObject:[builtinTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
-//    }
-//
-//    [self setObject:newThemes forKey:WCThemes];
-//
-//    /* Convert bookmarks */
-//    bookmarks        = [self objectForKey:WCBookmarks];
-//    newBookmarks    = [NSMutableArray array];
-//    enumerator        = [bookmarks objectEnumerator];
-//
-//    while((bookmark = [enumerator nextObject])) {
-//        newBookmark = [[bookmark mutableCopy] autorelease];
-//
-//        if(![newBookmark objectForKey:WCBookmarksIdentifier])
-//            [newBookmark setObject:[NSString UUIDString] forKey:WCBookmarksIdentifier];
-//
-//        if(![newBookmark objectForKey:WCBookmarksNick])
-//            [newBookmark setObject:@"" forKey:WCBookmarksNick];
-//
-//        if(![newBookmark objectForKey:WCBookmarksStatus])
-//            [newBookmark setObject:@"" forKey:WCBookmarksStatus];
-//
-//        password = [newBookmark objectForKey:WCBookmarksPassword];
-//
-//        if(password) {
-//            if([password length] > 0)
-//                [[WCKeychain keychain] setPassword:password forBookmark:newBookmark];
-//
-//            [newBookmark removeObjectForKey:WCBookmarksPassword];
-//        }
-//
-//        [newBookmarks addObject:newBookmark];
-//    }
-//
-//    [self setObject:newBookmarks forKey:WCBookmarks];
-//
-//    /* Convert tracker bookmarks */
-//    bookmarks        = [self objectForKey:WCTrackerBookmarks];
-//    newBookmarks    = [NSMutableArray array];
-//    enumerator        = [bookmarks objectEnumerator];
-//
-//    while((bookmark = [enumerator nextObject])) {
-//        newBookmark = [[bookmark mutableCopy] autorelease];
-//
-//        if(![newBookmark objectForKey:WCTrackerBookmarksIdentifier])
-//            [newBookmark setObject:[NSString UUIDString] forKey:WCTrackerBookmarksIdentifier];
-//
-//        if(![newBookmark objectForKey:WCTrackerBookmarksLogin])
-//            [newBookmark setObject:@"" forKey:WCTrackerBookmarksLogin];
-//
-//        [newBookmarks addObject:newBookmark];
-//    }
-//
-//    /* Check download folder */
-//    if(![[NSFileManager defaultManager] directoryExistsAtPath:[self objectForKey:WCDownloadFolder]])
-//        [self setObject:[@"~/Desktop" stringByExpandingTildeInPath] forKey:WCDownloadFolder];
-//
-//    [self setObject:newBookmarks forKey:WCTrackerBookmarks];
-//
-//
-//    /* Upgrade to 2.0b54+ */
-//    if(![self objectForKey:WCNetworkConnectionTimeout])
-//        [self setObject:[NSNumber numberWithInteger:30] forKey:WCNetworkConnectionTimeout];
-//
-//    if(![self objectForKey:WCNetworkReadTimeout])
-//        [self setObject:[NSNumber numberWithInteger:10] forKey:WCNetworkReadTimeout];
-//
-//    if(![self objectForKey:WCNetworkEncryptionCipher])
-//        [self setObject:[NSNumber numberWithInteger:2] forKey:WCNetworkEncryptionCipher];
-//
-//    if(![self objectForKey:WCNetworkCompressionEnabled])
-//        [self setObject:[NSNumber numberWithBool:YES] forKey:WCNetworkCompressionEnabled];
-//
-//
-//    /* Update from 2.0 (243) to 2.0 (244): add WCEventsChatSent */
-//    BOOL chatSentEventFound = NO;
-//    NSArray *events = [self objectForKey:WCEvents];
-//
-//    for(NSDictionary *event in events) {
-//        if([[event objectForKey:@"WCEventsEvent"] integerValue] == WCEventsChatSent) {
-//            chatSentEventFound = YES;
-//            continue;
-//        }
-//    }
-//    if(!chatSentEventFound) {
-//        id event = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:WCEventsChatSent], WCEventsEvent, NULL];
-//        [self addObject:event toArrayForKey:@"WCEvents"];
-//    }
-//
-//
-//    /* Update from 2.0 (244) to 2.0 (245 - webkit): add template in theme */
-//    NSArray *allThemes  = [self objectForKey:WCThemes];
-//    NSInteger index     = 0;
-//    BOOL neoThemeFound  = NO;
-//
-//    // add the neo theme if needed
-//    for(NSDictionary *theme in allThemes) {
-//        if([[theme objectForKey:WCThemesName] isEqualToString:@"Neo"]) {
-//            neoThemeFound = YES;
-//            continue;
-//        }
-//    }
-//
-//    if(!neoThemeFound) {
-//        NSDictionary *neoTheme;
-//
-//        neoTheme = [self _defaultLightTheme];
-//
-//        [self addObject:neoTheme toArrayForKey:WCThemes];
-//        [self setString:[neoTheme objectForKey:WCThemesIdentifier] forKey:WCTheme];
-//    }
-//
-//    // add templates if needed
-//    allThemes = [self objectForKey:WCThemes];
-//
-//    for(NSDictionary *theme in allThemes) {
-//        if(![theme objectForKey:WCThemesTemplate]) {
-//            NSDictionary *newTheme = [theme mutableCopy];
-//
-////            if([[newTheme objectForKey:WCThemesName] isEqualToString:@"Basic"])
-////                [newTheme setValue:@"fr.read-write.Basic" forKey:WCThemesTemplate];
-////
-////            else if([[newTheme objectForKey:WCThemesName] isEqualToString:@"Hacker"])
-////                [newTheme setValue:@"fr.read-write.Hacker" forKey:WCThemesTemplate];
-////
-////            else
-//
-//            if([[newTheme objectForKey:WCThemesName] isEqualToString:@"Neo"])
-//                [newTheme setValue:@"fr.read-write.Neo" forKey:WCThemesTemplate];
-//
-//            [self replaceObjectAtIndex:index withObject:newTheme inArrayForKey:WCThemes];
-//
-//            [newTheme release];
-//        }
-//        index++;
-//    }
-//
-//    /* Update from 2.0 (259) to 2.0 (260 - servers sidebar) */
-//    if(![self objectForKey:WCHideServerList])
-//        [self setObject:[NSNumber numberWithBool:NO] forKey:WCHideServerList];
-//
-//    if(![self objectForKey:WCHideUserList])
-//        [self setObject:[NSNumber numberWithBool:NO] forKey:WCHideUserList];
-//
-//    /* Update from 2.0 (263) to 2.0 (264 - application menu) */
-//    if(![self objectForKey:WCApplicationMenuEnabled])
-//        [self setObject:[NSNumber numberWithBool:NO] forKey:WCApplicationMenuEnabled];
-    
     NSLog(@"Upgrade settings...");
     
     if (![self boolForKey:@"WCMigratedTo_2_5__32"]) {
@@ -583,7 +262,6 @@ static NSString *defaultThemeIdentifier;
                   NSLS(@"Wired", @"Theme"),                                            WCThemesName,
                   @"Wired",                                                            WCThemesBuiltinName,
                   defaultThemeIdentifier,                                                WCThemesIdentifier,
-                  @"fr.read-write.Neo",                                            WCThemesTemplate,
                   WIStringFromFont([NSFont userFixedPitchFontOfSize:11.0]),            WCThemesChatFont,
                   WIStringFromColor([NSColor darkGrayColor]),                            WCThemesChatTextColor,
                   WIStringFromColor([NSColor whiteColor]),                            WCThemesChatBackgroundColor,
@@ -598,6 +276,7 @@ static NSString *defaultThemeIdentifier;
                   WIStringFromColor([NSColor whiteColor]),                            WCThemesBoardsBackgroundColor,
                   [NSNumber numberWithBool:YES],                                        WCThemesShowSmileys,
                   [NSNumber numberWithBool:YES],                                        WCThemesChatTimestampEveryLine,
+                  [NSNumber numberWithBool:NO],                                        WCThemesChatSeparateEveryLine,
                   [NSNumber numberWithInteger:WCThemesUserListIconSizeLarge],        WCThemesUserListIconSize,
                   [NSNumber numberWithBool:YES],                                        WCThemesUserListAlternateRows,
                   [NSNumber numberWithBool:YES],                                        WCThemesFileListAlternateRows,
@@ -964,29 +643,6 @@ static NSString *defaultThemeIdentifier;
     }
     
     return NULL;
-}
-
-
-
-#pragma mark -
-
-- (WITemplateBundle *)templateBundleWithIdentifier:(NSString *)identifier {
-	WITemplateBundle	*bundle;
-		
-	WITemplateBundleManager *privateTemplateManager	= [WITemplateBundleManager templateManagerForPath:[[NSBundle mainBundle] resourcePath]];
-	WITemplateBundleManager *publicTemplateManager	= [WITemplateBundleManager templateManagerForPath:[WCApplicationSupportPath stringByStandardizingPath] isPrivate:NO];
-	
-	bundle = [privateTemplateManager templateWithIdentifier:identifier];
-	
-	if(bundle)
-		return bundle;
-	
-	bundle = [publicTemplateManager templateWithIdentifier:identifier];
-	
-	if(bundle)
-		return bundle;
-		
-	return nil;
 }
 
 
