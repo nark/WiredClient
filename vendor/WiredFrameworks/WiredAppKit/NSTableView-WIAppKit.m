@@ -51,4 +51,15 @@
 	return ([[NSApp currentEvent] type] == NSLeftMouseUp && [self clickedRow] == -1);
 }
 
+
+- (void)scrollToBottomAnimated {
+    NSInteger numberOfRows = [self numberOfRows];
+
+    if (numberOfRows > 0)
+        [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context){
+            context.allowsImplicitAnimation = YES;
+            [self scrollRowToVisible:numberOfRows - 1];
+        } completionHandler:NULL];
+}
+
 @end

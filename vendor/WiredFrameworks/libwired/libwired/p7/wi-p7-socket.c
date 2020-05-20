@@ -661,6 +661,10 @@ static wi_boolean_t _wi_p7_socket_connect_handshake(wi_p7_socket_t *p7_socket, w
 		if(wi_p7_message_get_enum_for_name(p7_message, &flag, WI_STR("p7.handshake.checksum")))
 			p7_socket->options |= _WI_P7_CHECKSUM_ENUM_TO_OPTIONS(flag);
 	}
+    
+    if(WI_P7_DEPRECATED_ENCRYPTION_CIPHER(p7_socket->options)) {
+        wi_log_warn(WI_STR("Connected using deprecated cipher: %d"), _WI_P7_ENCRYPTION_OPTIONS_TO_ENUM(p7_socket->options));
+    }
 	
 	if(!wi_p7_message_get_bool_for_name(p7_message, &p7_socket->remote_compatibility_check, WI_STR("p7.handshake.compatibility_check")))
 		p7_socket->remote_compatibility_check = false;
@@ -777,6 +781,10 @@ static wi_boolean_t _wi_p7_socket_accept_handshake(wi_p7_socket_t *p7_socket, wi
     
     if(!wi_p7_message_set_string_for_name(p7_message, wi_p7_spec_version(p7_socket->spec), WI_STR("p7.handshake.protocol.version")))
         return false;
+    
+    if(WI_P7_DEPRECATED_ENCRYPTION_CIPHER(p7_socket->options)) {
+        wi_log_warn(WI_STR("Connected using deprecated cipher: %d"), _WI_P7_ENCRYPTION_OPTIONS_TO_ENUM(p7_socket->options));
+    }
     
     if(p7_socket->serialization == WI_P7_BINARY) {
         if(WI_P7_COMPRESSION_ENABLED(p7_socket->options)) {

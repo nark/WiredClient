@@ -79,7 +79,8 @@
 
 - (BOOL)connectWithTimeout:(NSTimeInterval)timeout error:(WCError **)error {
 	WIAddress		*address;
-	
+    NSInteger       cipher;
+    
 	address = [WIAddress addressWithString:[[self URL] host] error:error];
 	
 	if(!address)
@@ -92,10 +93,13 @@
 	
 	if(![_socket connectWithTimeout:timeout error:error])
 		return NO;
+    
+    if([[WCSettings settings] objectForKey:WCNetworkEncryptionCipher])
+        cipher = [[[WCSettings settings] objectForKey:WCNetworkEncryptionCipher] integerValue];
 
 	_p7Socket = [[WIP7Socket alloc] initWithSocket:_socket spec:WCP7Spec];
 	
-	if(![_p7Socket connectWithOptions:WIP7EncryptionRSA_AES256_SHA256 | WIP7ChecksumSHA256
+    if(![_p7Socket connectWithOptions:(WIP7CompressionDeflate | (1 << (cipher + 1)) | WIP7ChecksumSHA256)
 						serialization:WIP7Binary
 							 username:[[self URL] user]
 							 password:[[[self URL] password] SHA1]
@@ -105,6 +109,70 @@
 	}
 
 	return YES;
+}
+
+
+- (BOOL)connectWithTimeout:(NSTimeInterval)timeout bookmark:(NSDictionary *)bookmark error:(WCError **)error {
+    WIAddress        *address;
+    NSInteger       cipher;
+    NSUInteger      options = 0;
+    
+    address = [WIAddress addressWithString:[[self URL] host] error:error];
+    
+    if(!address)
+        return NO;
+    
+    [address setPort:[[self URL] port]];
+
+    _socket = [[WISocket alloc] initWithAddress:address type:WISocketTCP];
+    [_socket setInteractive:YES];
+    
+    if(![_socket connectWithTimeout:timeout error:error])
+        return NO;
+    
+    
+    if([[WCSettings settings] objectForKey:WCNetworkEncryptionCipher])
+        cipher = [[[WCSettings settings] objectForKey:WCNetworkEncryptionCipher] integerValue];
+
+    if(bookmark && [bookmark objectForKey:WCBookmarksEncryptionCipher])
+        cipher = [[bookmark objectForKey:WCBookmarksEncryptionCipher] integerValue];
+    
+    _p7Socket = [[WIP7Socket alloc] initWithSocket:_socket spec:WCP7Spec];
+    
+    options = WIP7CompressionDeflate | (1 << (cipher +1));
+    
+    if      (options | WIP7EncryptionRSA_AES128_SHA1 ||
+             options | WIP7EncryptionRSA_AES192_SHA1 ||
+             options | WIP7EncryptionRSA_AES256_SHA1 ||
+             options | WIP7EncryptionRSA_BF128_SHA1  ||
+             options | WIP7EncryptionRSA_3DES192_SHA1) {
+        options = options | WIP7ChecksumSHA1;
+        
+    } else if(options | WIP7EncryptionRSA_AES128_SHA256 ||
+              options | WIP7EncryptionRSA_AES192_SHA256 ||
+              options | WIP7EncryptionRSA_AES256_SHA256 ||
+              options | WIP7EncryptionRSA_BF128_SHA256  ||
+              options | WIP7EncryptionRSA_3DES192_SHA256) {
+        options = options | WIP7ChecksumSHA256;
+        
+    } else if(options | WIP7EncryptionRSA_AES128_SHA512 ||
+              options | WIP7EncryptionRSA_AES192_SHA512 ||
+              options | WIP7EncryptionRSA_AES256_SHA512 ||
+              options | WIP7EncryptionRSA_BF128_SHA512  ||
+              options | WIP7EncryptionRSA_3DES192_SHA512) {
+        options = options | WIP7ChecksumSHA512;
+    }
+    
+    if(![_p7Socket connectWithOptions:options
+                        serialization:WIP7Binary
+                             username:[[self URL] user]
+                             password:[[[self URL] password] SHA1]
+                              timeout:timeout
+                                error:error]) {
+        return NO;
+    }
+
+    return YES;
 }
 
 

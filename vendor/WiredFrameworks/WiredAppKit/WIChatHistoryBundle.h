@@ -17,6 +17,7 @@ extern NSString * const WIChatHistoryBundleAddedNotification;
 + (id)historyBundleWithPath:(NSString *)path;
 
 - (void)addHistoryForWebView:(WebView *)webview withConnectionName:(NSString *)name identity:(NSString *)identity;
+- (void)addHistoryForMessages:(NSArray *)messages withConnectionName:(NSString *)name identity:(NSString *)identity;
 - (void)reloadData;
 - (void)clearHistory;
 

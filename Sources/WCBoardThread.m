@@ -39,11 +39,20 @@
 
 @implementation WCBoardThread(Private)
 
+- (id)initWithConnection:(WCServerConnection *)connection {
+    self = [super initWithConnection:connection];
+    
+    _firstLoad = YES;
+    
+    return self;
+}
+
+
 - (id)_initWithMessage:(WIP7Message *)message connection:(WCServerConnection *)connection {
 	WIP7UInt32		replies;
 	WIP7Bool		ownThread;
 	
-	self = [super initWithConnection:connection];
+	self = [self initWithConnection:connection];
     	
 	_goToLatestReplyButton = [[NSButton alloc] init];
 	[_goToLatestReplyButton setButtonType:NSMomentaryLightButton];
@@ -281,6 +290,19 @@
 
 - (BOOL)isLoaded {
 	return _loaded;
+}
+
+
+
+
+- (void)setFirstLoaded:(BOOL)firstLoad {
+    _firstLoad = firstLoad;
+}
+
+
+
+- (BOOL)firstLoad {
+    return _firstLoad;
 }
 
 

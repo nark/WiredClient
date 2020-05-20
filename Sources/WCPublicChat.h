@@ -29,7 +29,7 @@
 @class WCPublicChatController, WCServerConnection;
 @class WCErrorQueue, WCServerContainer, WCServerBonjour, WCServerBookmarks;
 @class WCServerBookmarkController, WCTrackerBookmarkController;
-@class WCTabBarView;
+@class WCTabBarView, WISourceListColoredView;
 
 @interface WCPublicChat : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSNetServiceBrowserDelegate, NSNetServiceDelegate, NSMenuDelegate, NSSplitViewDelegate> {
 	IBOutlet NSTabView                      *_chatTabView;
@@ -41,6 +41,7 @@
     IBOutlet NSProgressIndicator            *_progressIndicator;
     IBOutlet NSSegmentedControl             *_viewsSegmentedControl;
 	IBOutlet NSMenu                         *_serversOutlineMenu;
+    IBOutlet WISourceListColoredView        *_sourceListColoredView;
     
     IBOutlet WCServerBookmarkController     *_serverBookmarkController;
     IBOutlet WCTrackerBookmarkController    *_trackerBookmarkController;

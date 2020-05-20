@@ -194,24 +194,17 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	NSDictionary				*theme;
 	NSFont						*font;
 	NSColor						*textColor, *backgroundColor, *URLTextColor;
-	NSString					*templatePath;
-	WITemplateBundle            *templateBundle;
     
 	theme						= [[[self _selectedConversation] connection] theme];
 	
 	if(!theme)
 		theme					= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-    
-	templateBundle				= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-    
+        
 	font						= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
     URLTextColor                = WIColorFromString([theme objectForKey:WCThemesChatURLsColor]);
 	textColor					= [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
 	backgroundColor				= [NSApp darkModeEnabled] ? [NSColor darkGrayColor] : [NSColor whiteColor];
-	templatePath				= [templateBundle bundlePath];
-    
-    
-	[_conversationController setTemplatePath:templatePath];
+        
 	[_conversationController setFont:font];
 	[_conversationController setTextColor:textColor];
     [_conversationController setURLTextColor:URLTextColor];
@@ -220,7 +213,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[_messageTextField setFont:font];
     [_broadcastTextView setFont:font];
 
-	[_conversationController reloadTemplate];
+	[_conversationController reloadView];
     [_conversationController reloadData];
 }
 
@@ -324,7 +317,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[[WCStats stats] addUnsignedInt:1 forKey:WCStatsMessagesSent];
 	
 	[_conversationController appendMessage:message];
-	
+    
 	[_messageTextField setStringValue:@""];
 }
 
@@ -1003,8 +996,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     [_conversationsOutlineView setTarget:self];
     [_conversationsOutlineView setDeleteAction:@selector(deleteConversation:)];
     
-    [_messagesView setTranslatesAutoresizingMaskIntoConstraints:YES];
-    [_messageTextField setTranslatesAutoresizingMaskIntoConstraints:YES];
+    //[_messagesView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    //[_messageTextField setTranslatesAutoresizingMaskIntoConstraints:YES];
     
 	[self _themeDidChange];
     [self _sortConversations];
@@ -1032,7 +1025,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         }
 	}
     
-    [_conversationController reloadTemplate];
+    [_conversationController reloadView];
 }
 
 
@@ -1162,7 +1155,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	user = [notification object];
 	
 	[self _revalidateConversationsWithUser:user];
-	
+	    
 	if([[self _selectedConversation] user] == user)
 		[_conversationController reloadData];
     

@@ -37,49 +37,202 @@
 #import "WCFile.h"
 #import "WCFiles.h"
 #import "WCTransfers.h"
-
+#import "WCBoardPostCellView.h"
+#import "NSDate_TimeAgo/NSDate+TimeAgo.h"
 
 
 @interface WCBoardThreadController(Private)
 
-
-- (void)_reloadDataAndScrollToCurrentPosition:(BOOL)scrollToCurrentPosition selectPost:(WCBoardPost *)selectPost;
-
-- (void)_setTitle:(NSString *)title;
+- (void)_configureCell:(WCBoardPostCellView *)cell forRow:(NSInteger)row;
+- (NSAttributedString *)_attributedStringForPostText:(NSString *)text;
 
 @end
 
 
 
-
-
 @implementation WCBoardThreadController(Private)
 
-- (void)_reloadDataAndScrollToCurrentPosition:(BOOL)scrollToCurrentPosition selectPost:(WCBoardPost *)selectPost {
-    NSURL                       *url;
-    NSDictionary                *theme;
-    WITemplateBundle            *template;
+- (void)_applyHTMLToMutableString:(NSMutableString *)text {
+    NSString                        *substring;
+    NSRange                         range;
     
-    // get theme and template
-    theme			= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-	template		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+    [WCChatController applyHTMLTagsForSmileysToMutableString:text];
     
-    // load the webView
-    if(template) {
-        url = [NSURL fileURLWithPath: [template pathForResource:@"boards"
-                                                         ofType:@"html"
-                                                    inDirectory:@"htdocs"]];
+    [text replaceOccurrencesOfString:@"&" withString:@"&#38;"];
+    [text replaceOccurrencesOfString:@"<" withString:@"&#60;"];
+    [text replaceOccurrencesOfString:@">" withString:@"&#62;"];
+    [text replaceOccurrencesOfString:@"\"" withString:@"&#34;"];
+    [text replaceOccurrencesOfString:@"\'" withString:@"&#39;"];
+    [text replaceOccurrencesOfString:@"\n" withString:@"<br />"];
+    
+    [text replaceOccurrencesOfRegex:@"\\[code\\](.+?)\\[/code\\]"
+                         withString:@"<pre>$1</pre>"
+                            options:RKLCaseless | RKLDotAll];
+    
+    [text replaceOccurrencesOfRegex:@"\\[b\\](.+?)\\[/b\\]"
+                         withString:@"<b>$1</b>"
+                            options:RKLCaseless | RKLDotAll];
+    [text replaceOccurrencesOfRegex:@"\\[u\\](.+?)\\[/u\\]"
+                         withString:@"<u>$1</u>"
+                            options:RKLCaseless | RKLDotAll];
+    [text replaceOccurrencesOfRegex:@"\\[i\\](.+?)\\[/i\\]"
+                         withString:@"<i>$1</i>"
+                            options:RKLCaseless | RKLDotAll];
+    [text replaceOccurrencesOfRegex:@"\\[color=(.+?)\\](.+?)\\[/color\\]"
+                         withString:@"<span style=\"color: $1\">$2</span>"
+                            options:RKLCaseless | RKLDotAll];
+    [text replaceOccurrencesOfRegex:@"\\[center\\](.+?)\\[/center\\]"
+                         withString:@"<div class=\"center\">$1</div>"
+                            options:RKLCaseless | RKLDotAll];
+    
+    /* Do this in a custom loop to avoid corrupted strings when using $1 multiple times */
+    do {
+        range = [text rangeOfRegex:@"\\[url]wiredp7://(/.+?)\\[/url\\]" options:RKLCaseless capture:0];
         
-        [[_threadWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
-    }
+        if(range.location != NSNotFound) {
+            substring = [text substringWithRange:[text rangeOfRegex:@"\\[url]wiredp7://(/.+?)\\[/url\\]" options:RKLCaseless capture:1]];
+            
+            [text replaceCharactersInRange:range withString:
+             [NSSWF:@"<img src=\"data:image/tiff;base64,%@\" /> <a href=\"wiredp7://%@\">%@</a>",
+              _fileLinkBase64String, substring, substring]];
+        }
+    } while(range.location != NSNotFound);
     
-    [self reloadTemplate];
+    [text replaceOccurrencesOfRegex:@"\\[url=(.+?)\\](.+?)\\[/url\\]"
+                         withString:@"<a href=\"$1\">$2</a>"
+                            options:RKLCaseless];
+    
+    /* Do this in a custom loop to avoid corrupted strings when using $1 multiple times */
+    do {
+        range = [text rangeOfRegex:@"\\[url](.+?)\\[/url\\]" options:RKLCaseless capture:0];
+        
+        if(range.location != NSNotFound) {
+            substring = [text substringWithRange:[text rangeOfRegex:@"\\[url](.+?)\\[/url\\]" options:RKLCaseless capture:1]];
+            
+            [text replaceCharactersInRange:range withString:[NSSWF:@"<a href=\"%@\">%@</a>", substring, substring]];
+        }
+    } while(range.location != NSNotFound);
+    
+    [text replaceOccurrencesOfRegex:@"\\[email=(.+?)\\](.+?)\\[/email\\]"
+                         withString:@"<a href=\"mailto:$1\">$2</a>"
+                            options:RKLCaseless];
+    [text replaceOccurrencesOfRegex:@"\\[email](.+?)\\[/email\\]"
+                         withString:@"<a href=\"mailto:$1\">$1</a>"
+                            options:RKLCaseless];
+    [text replaceOccurrencesOfRegex:@"\\[img](.+?)\\[/img\\]"
+                         withString:@"<img src=\"$1\" alt=\"\" style=\"height:auto\" />&nbsp;"
+                            options:RKLCaseless];
+    
+    [text replaceOccurrencesOfRegex:@"\\[quote=(.+?)\\](.+?)\\[/quote\\]"
+                         withString:[NSSWF:@"<blockquote><b>%@</b><br />$2</blockquote>", NSLS(@"$1 wrote:", @"Board quote (nick)")]
+                            options:RKLCaseless | RKLDotAll];
+    
+    [text replaceOccurrencesOfRegex:@"\\[quote\\](.+?)\\[/quote\\]"
+                         withString:@"<blockquote>$1</blockquote>"
+                            options:RKLCaseless | RKLDotAll];
 }
 
 
+- (NSString *)_CSS {
+    return [NSSWF:@"html { color: %@; font-family: %@, Helvetica; font-size: %lupx; } img { height: auto; } br { margin-bottom: 30px; } pre { font-family: monospace; } blockquote { background: lightyellow; color: black; pre { background: lightgray; } }",
+            [NSSWF:@"#%.6lx", (unsigned long)[[NSColor controlTextColor] HTMLValue]],
+            [[self font] fontName],
+            (NSInteger)[[self font] pointSize]];
+}
 
-- (void)_setTitle:(NSString *)title {
-	[_threadWebView stringByEvaluatingJavaScriptFromString:[NSSWF:@"document.title='%@'", title]];
+
+- (NSAttributedString *)_attributedStringForPostText:(NSString *)text {
+    NSString                *htmlBody;
+    NSMutableString         *string;
+    NSData                  *htmlData;
+    NSAttributedString      *attrString;
+    NSDictionary            *options;
+    
+    string = [NSMutableString stringWithString:text];
+    
+    [self _applyHTMLToMutableString:string];
+    
+    htmlBody        = [NSSWF:@"<html><head><style>%@</style></head>%@</html>", [self _CSS], [string stringByAppendingString:@"\n"]];
+    htmlData        = [htmlBody dataUsingEncoding:NSUnicodeStringEncoding];
+    options         = @{NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)};
+    attrString      = [[NSAttributedString alloc] initWithHTML:htmlData options:options documentAttributes:nil];
+    
+    return [attrString autorelease];
+}
+
+
+- (void)_configureCell:(WCBoardPostCellView *)cell forRow:(NSInteger)row {
+    WCBoardPost         *post;
+    NSString            *formattedDate;
+    NSImage             *iconImage;
+    NSString            *icon, *editDate, *postDate, *postID;
+    NSAttributedString  *text;
+    WCAccount           *account;
+    WIDateFormatter     *dateFormatter;
+    BOOL                own, writable, replyDisabled, quoteDisabled, editDisabled, deleteDisabled, smart;
+    NSArray             *posts = [@[_thread] arrayByAddingObjectsFromArray:[_thread posts]];
+    
+    post = [posts objectAtIndex:row];
+    
+    if (post) {
+        dateFormatter       = [[WCApplicationController sharedController] dateFormatter];
+        
+        text                = [self attributedStringForText:[post text]];
+        icon                = (NSString*)(([post icon] && sizeof([post icon]) > 0) ? [post icon] : _defaultIconBase64String);
+        account             = [(WCServerConnection *)[_board connection] account];
+        postDate            = [dateFormatter stringFromDate:[post postDate]];
+        editDate            = ([post editDate] ? [dateFormatter stringFromDate:[post editDate]] : @"");
+        
+        postID              = ([post isKindOfClass:[WCBoardPost class]] ? [post postID] : [(WCBoardThread *)post threadID]);
+        own                 = ([post isKindOfClass:[WCBoardPost class]] ? [post isOwnPost] : [(WCBoardThread *)post isOwnThread]);
+        writable            = [_board isWritable];
+        smart               = ([[[WCBoards boards] selectedBoard] isKindOfClass:[WCSmartBoard class]]);
+        
+        quoteDisabled       = !(([account boardAddPosts] && writable) || smart);
+        editDisabled        = !((([account boardEditAllThreadsAndPosts] || ([account boardEditOwnThreadsAndPosts] && own)) && writable) || smart);
+        deleteDisabled      = !((([account boardDeleteAllThreadsAndPosts] || ([account boardDeleteOwnThreadsAndPosts] && own)) && writable) || smart);
+        replyDisabled       = !([account boardAddPosts] && writable);
+        
+        formattedDate       = (editDate.length > 0 ? [NSSWF:@"%@ - Edited on %@", postDate, editDate] : [NSSWF:@"%@", postDate]);
+        iconImage           = [NSImage imageWithData:[NSData dataWithBase64EncodedString:icon]];
+        
+        [cell.nickTextField setStringValue:[post nick]];
+        [cell.timeTextField setStringValue:formattedDate];
+        
+        [cell.messageTextField setMaximumNumberOfLines:0];
+        [cell.messageTextField setAttributedStringValue:text];
+        
+        [cell.iconImageView setImage:iconImage];
+        [cell.unreadImageView setHidden:![post isUnread]];
+        
+        [cell.replyButton setEnabled:!replyDisabled];
+        [cell.quoteButton setEnabled:!quoteDisabled];
+        [cell.editButton setEnabled:!editDisabled];
+        [cell.deleteButton setEnabled:!deleteDisabled];
+        
+        [cell.quoteButton setTitle:NSLS(@"Quote", @"Quote post button title")];
+        [cell.editButton setTitle:NSLS(@"Edit", @"Edit post button title")];
+        [cell.deleteButton setTitle:NSLS(@"Delete", @"Delete post button title")];
+        [cell.replyButton setTitle:NSLS(@"Post Reply", @"Post reply button title")];
+        
+        [cell setObjectValue:post];
+        [cell setDelegate:self];
+        
+        cell.heightConstraint.constant = [text size].height;
+        
+        [text enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+            if (![value isKindOfClass:[NSTextAttachment class]])
+               return;
+            
+            NSTextAttachment *attachment = (NSTextAttachment*)value;
+            CGRect bounds = attachment.bounds;
+            attachment.bounds = bounds;
+                            
+            cell.heightConstraint.constant = [text size].height ;
+        }];
+        
+       // [cell.messageTextField sizeToFit];
+    }
 }
 
 
@@ -103,17 +256,8 @@
 	[_dateFormatter setNaturalLanguageStyle:WIDateFormatterCapitalizedNaturalLanguageStyle];
 	
 	_fileLinkBase64String		= [[[[NSImage imageNamed:@"FileLink"] TIFFRepresentation] base64EncodedString] retain];
-	_unreadPostBase64String		= [[[[NSImage imageNamed:@"UnreadPost"] TIFFRepresentation] base64EncodedString] retain];
 	_defaultIconBase64String	= [[[[NSImage imageNamed:@"DefaultIcon"] TIFFRepresentation] base64EncodedString] retain];
-	
-	_smileyBase64Strings		= [[NSMutableDictionary alloc] init];
-    
-    [[NSDistributedNotificationCenter defaultCenter]
-    addObserver:self
-    selector:@selector(appleInterfaceThemeChanged:)
-    name:@"AppleInterfaceThemeChangedNotification"
-    object: nil];
-	
+
 	return self;
 }
 
@@ -125,7 +269,6 @@
 	[_loadingQueue release];
 	
 	[_fileLinkBase64String release];
-	[_unreadPostBase64String release];
 	[_defaultIconBase64String release];
 	
 	[_font release];
@@ -143,127 +286,96 @@
 
 
 
-- (void)awakeFromNib {    
-	[_threadWebView setUIDelegate:(id)self];
-    [_threadWebView setFrameLoadDelegate:(id)self];
-	[_threadWebView setResourceLoadDelegate:(id)self];
-	[_threadWebView setPolicyDelegate:(id)self];
+- (void)awakeFromNib {
+    _scrollEndReached = NO;
     
-    [self reloadData];
+    id clipView = [[_threadTableView enclosingScrollView] contentView];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(myBoundsChangeNotificationHandler:)
+                                                 name:NSViewBoundsDidChangeNotification
+                                               object:clipView];
 }
 
+
+- (void)myBoundsChangeNotificationHandler:(NSNotification *)aNotification {
+    if ([aNotification object] == [[_threadTableView enclosingScrollView] contentView]) {
+        NSClipView *clipView = [[_threadTableView enclosingScrollView] contentView];
+        CGFloat currentPosition = [clipView bounds].origin.y + [clipView bounds].size.height;
+        CGFloat tableViewHeight = [_threadTableView bounds].size.height;
+
+        if (currentPosition > tableViewHeight) {
+            _scrollEndReached = YES;
+        }
+    }
+}
+
+
+# pragma mark -
+
+- (NSAttributedString *)attributedStringForText:(NSString *)text {
+    //NSString * string = [[text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
+    
+    return [self _attributedStringForPostText:text];
+}
+
+
+#pragma mark -
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return _thread ? [[_thread posts] count] + 1 : 0;
+}
+
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+    WCBoardPostCellView  *cell;
+    
+    cell = [tableView makeViewWithIdentifier:@"WCBoardPostCellView" owner:self];
+    
+    [self _configureCell:cell forRow:row];
+            
+    return cell;
+}
 
 
 
 #pragma mark -
 
-- (void)webView:(WebView *)webView didFinishLoadForFrame:(WebFrame *)frame {
-    WITemplateBundle    *template;
-    NSURL               *jqueryURL, *functionsURL, *mainURL;
-    
-    template        = [WITemplateBundle templateWithPath:_templatePath];
-    
-    
-    if(!template) {
-        NSLog(@"Error: Template not found. (%@)", _templatePath);
-        return;
-    }
-    
-    jqueryURL       = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
-    functionsURL    = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
-    mainURL         = [NSURL fileURLWithPath:[template pathForResource:@"boards" ofType:@"js" inDirectory:@"htdocs/js"]];
-    
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[jqueryURL path]] ||
-       ![[NSFileManager defaultManager] fileExistsAtPath:[functionsURL path]] ||
-       ![[NSFileManager defaultManager] fileExistsAtPath:[mainURL path]])
-    {
-        NSLog(@"Error: Invalid template. Missing script. (%@)", _templatePath);
-        return;
-    }
-    
-    [_threadWebView appendScriptAtURL:jqueryURL];
-    [_threadWebView appendScriptAtURL:functionsURL];
-    [_threadWebView appendScriptAtURL:mainURL];
+- (void)postCell:(WCBoardPostCellView *)cell replyButtonClicked:(NSButton *)sender {
+    [[WCBoards boards] replyToThread];
 }
 
-
-
-- (void)webView:(WebView *)webView didClearWindowObject:(WebScriptObject *)windowObject forFrame:(WebFrame *)frame {
-    [[_threadWebView windowScriptObject] setValue:[WCBoards boards] forKey:@"Controller"];
-}
-
-
-
-- (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)action request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id <WebPolicyDecisionListener>)listener {
-	NSString			*path;
-    NSURL               *url;
-	WIURL				*wiredURL;
-	WCFile				*file;
-	BOOL				handled     = NO;
-	BOOL                isDirectory = NO;
+- (void)postCell:(WCBoardPostCellView *)cell quoteButtonClicked:(NSButton *)sender {
+    WCBoardPost     *post;
+    NSString        *selectedText;
     
-	if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeOther) {
-		[listener use];
-	} else {
-		[listener ignore];
-		
-        url         = [action objectForKey:WebActionOriginalURLKey];
-		wiredURL    = [WIURL URLWithURL:url];
+    post = (WCBoardPost *)[cell objectValue];
+    
+    selectedText = [[[cell messageTextField] stringValue] substringWithRange:[[[cell messageTextField] currentEditor] selectedRange]];
         
-        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;
-		
-		if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
-			if([[wiredURL host] length] == 0) {
-				if([[_thread connection] isConnected]) {
-					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-					
-					if(isDirectory) {
-                        [WCFiles filesWithConnection:[_thread connection]
-                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[_thread connection]]
-                                          selectFile:[WCFile fileWithDirectory:path connection:[_thread connection]]];
-                        
-					} else {
-                        file = [WCFile fileWithFile:path connection:[_thread connection]];
-                        [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file] 
-                                                      toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
-					}
-				}
-				
-				handled = YES;
-			}
-		}
-		
-		if(!handled)
-			[[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
-	}
+    if(post)
+        [[WCBoards boards] replyToPostWithID:[post postID] selectedText:selectedText];
 }
 
-
-
-- (NSArray *)webView:(WebView *)webView contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
-#ifdef WCConfigurationRelease
-    return NULL;
-#else
-    return defaultMenuItems;
-#endif
+- (void)postCell:(WCBoardPostCellView *)cell editButtonClicked:(NSButton *)sender {
+    WCBoardPost *post;
+    
+    if ([[cell objectValue] isKindOfClass:[WCBoardPost class]]) {
+        post = (WCBoardPost *)[cell objectValue];
+        
+        if(post)
+            [[WCBoards boards] editPostWithID:[post postID]];
+    } else {
+        [[WCBoards boards] editPostWithID:[_thread threadID]];
+    }
 }
 
-
-- (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
-    // useless but required
+- (void)postCell:(WCBoardPostCellView *)cell deleteButtonClicked:(NSButton *)sender {
+        WCBoardPost *post;
+    
+    post = (WCBoardPost *)[cell objectValue];
+    
+    if(post)
+        [[WCBoards boards] deletePostWithID:[post postID]];
 }
-
-
-
-
-
-
-#pragma mark -
-
-- (void)appleInterfaceThemeChanged:(NSNotification *) notification {
-    [self reloadTemplate];
-}
-
 
 
 
@@ -303,18 +415,6 @@
 }
 
 
-
-- (void)setTemplatePath:(NSString *)path {
-	[path retain];
-	[_templatePath release];
-	
-	_templatePath = path;
-}
-
-
-- (NSString *)templatePath {
-	return _templatePath;
-}
 
 
 
@@ -377,81 +477,53 @@
 }
 
 
-
-#pragma mark -
-
-- (WebView *)threadWebView {
-	return _threadWebView;
-}
-
-
-
-- (NSString *)HTMLString {
-	return [[[NSString alloc] initWithData:[[[_threadWebView mainFrame] dataSource] data] 
-                                  encoding:NSUTF8StringEncoding] autorelease];
-}
-
-
-
 #pragma mark -
 
 - (void)reloadData {
-    [self _reloadDataAndScrollToCurrentPosition:YES selectPost:NULL];
+    _scrollEndReached = NO;
+
+    [_threadTableView reloadData];
+    [_threadTableView setNeedsLayout:YES];
+    [_threadTableView layoutSubtreeIfNeeded];
+    
+    if([_threadTableView numberOfRows] > 1)
+        [_threadTableView performSelector:@selector(scrollToBottomAnimated) afterDelay:0.2];
+        
 }
 
 
 
 - (void)reloadDataAndScrollToCurrentPosition {
-    [self _reloadDataAndScrollToCurrentPosition:YES selectPost:NULL];
+    [self reloadData];
 }
 
 
 
 - (void)reloadDataAndSelectPost:(WCBoardPost *)selectPost {
+    [self reloadData];
+    
+//    [_threadTableView noteNumberOfRowsChanged];
+//
+//    if([_threadTableView numberOfRows] > 1)
+//        [_threadTableView performSelector:@selector(scrollToBottomAnimated) afterDelay:0.2];
+    
 //    NSArray *syms = [NSThread  callStackSymbols];
 //    if ([syms count] > 1) {
 //        NSLog(@"<%@ %p> %@ - caller: %@ ", [self class], self, NSStringFromSelector(_cmd),[syms objectAtIndex:1]);
 //    } else {
 //        NSLog(@"<%@ %p> %@", [self class], self, NSStringFromSelector(_cmd));
 //    }
-    [self _reloadDataAndScrollToCurrentPosition:NO selectPost:selectPost];
+//    [self _reloadDataAndScrollToCurrentPosition:NO selectPost:selectPost];
 }
 
 
 
 
 #pragma mark -
-#pragma mark Reload CSS Template
+#pragma mark Reload
 
-- (void)reloadTemplate {
-	WITemplateBundle	*template;
-	
-	template			= [WITemplateBundle templateWithPath:_templatePath];
-	
-	[template setCSSValue:[_font fontName] toAttribute:WITemplateAttributesFontName ofType:WITemplateTypeBoards];
-	[template setCSSValue:[NSSWF:@"%.0fpx", [_font pointSize]] toAttribute:WITemplateAttributesFontSize ofType:WITemplateTypeBoards];
-        
-    [template setCSSValue:[NSSWF:@"#%.6x", (unsigned int)[_URLTextColor HTMLValue]]
-              toAttribute:WITemplateAttributesURLTextColor
-                   ofType:WITemplateTypeBoards];
-    
-	[template setCSSValue:[NSApp darkModeEnabled] ? @"gainsboro" : @"dimgray"
-              toAttribute:WITemplateAttributesFontColor
-                   ofType:WITemplateTypeBoards];
-    
-	[template setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
-              toAttribute:WITemplateAttributesBackgroundColor
-                   ofType:WITemplateTypeBoards];
-    
-    [template setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
-              toAttribute:@"<? headerbackground ?>"
-                   ofType:WITemplateTypeBoards];
-    
-	[template saveChangesForType:WITemplateTypeBoards];
-	
-	[_threadWebView reloadStylesheetWithID:@"wc-stylesheet"
-							  withTemplate:template
-									  type:WITemplateTypeBoards];
+- (void)reloadView {
+    [_threadTableView reloadData];
 }
 
 
