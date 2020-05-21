@@ -652,27 +652,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	thread		= [self _selectedThread];
     
     [self _reloadThread:thread];
-    		
-//	if(thread) {
-//		if(![thread isLoaded]) {
-//			[thread removeAllPosts];
-//
-//			message = [WIP7Message messageWithName:@"wired.board.get_thread" spec:WCP7Spec];
-//			[message setUUID:[thread threadID] forName:@"wired.board.thread"];
-//			[[thread connection] sendMessage:message fromObserver:self selector:@selector(wiredBoardGetThreadReply:)];
-//		}
-//
-//        [_threadController setBoard:board];
-//		[_threadController setThread:thread];
-//
-//		if([thread isLoaded])
-//			[_threadController reloadData];
-//	}
-//	else {
-//		[_threadController setBoard:NULL];
-//		[_threadController setThread:NULL];
-//		[_threadController reloadData];
-//	}
 }
 
 
