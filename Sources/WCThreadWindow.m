@@ -91,16 +91,12 @@ static NSMutableArray *_WCThreadWindowControllers;
 
 - (void)windowDidLoad {
     NSDictionary		*theme;
-	NSString			*templatePath, *title;
-	NSBundle			*templateBundle;
+	NSString			*title;
 	
 	theme				= [[_board connection] theme];
-	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-	templatePath		= [templateBundle bundlePath];
     
     [_threadController setBoard:_board];
     [_threadController setThread:_thread];
-    [_threadController setTemplatePath:templatePath];
     
     [_threadController reloadData];
     

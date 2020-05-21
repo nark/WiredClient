@@ -273,6 +273,7 @@
 - (NSImage *)imageByScalingProportionallyToSize:(NSSize)newSize {
     NSSize aspectSize = NSZeroSize;
     NSImage *sourceImage = self;
+    
     [sourceImage setScalesWhenResized:YES];
     
     CGFloat ratio = newSize.width / self.size.width;

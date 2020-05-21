@@ -45,6 +45,7 @@
 
 - (void)awakeFromNib {
 	[_userListTableView registerForDraggedTypes:[NSArray arrayWithObject:WCUserPboardType]];
+    [_chatTableView registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
     
 	[super awakeFromNib];
 }
@@ -162,28 +163,35 @@
 #pragma mark -
 
 - (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
-	if(row >= 0)
-		[tableView setDropRow:-1 dropOperation:NSTableViewDropOn];
+    if (tableView == _userListTableView) {
+        if(row >= 0)
+            [tableView setDropRow:-1 dropOperation:NSTableViewDropOn];
 
-	return NSDragOperationGeneric;
+        return NSDragOperationGeneric;
+    }
+    return [super tableView:tableView validateDrop:info proposedRow:row proposedDropOperation:operation];
 }
 
 
 
 - (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation {
-	NSPasteboard		*pasteboard;
-	WIP7Message			*message;
-	NSUInteger			userID;
+    if (tableView == _userListTableView) {
+        NSPasteboard		*pasteboard;
+        WIP7Message			*message;
+        NSUInteger			userID;
 
-	pasteboard	= [info draggingPasteboard];
-	userID		= [[pasteboard stringForType:WCUserPboardType] integerValue];
+        pasteboard	= [info draggingPasteboard];
+        userID		= [[pasteboard stringForType:WCUserPboardType] integerValue];
 
-	message = [WIP7Message messageWithName:@"wired.chat.invite_user" spec:WCP7Spec];
-	[message setUInt32:[self chatID] forName:@"wired.chat.id"];
-	[message setUInt32:userID forName:@"wired.user.id"];
-	[[self connection] sendMessage:message];
-	
-	return YES;
+        message = [WIP7Message messageWithName:@"wired.chat.invite_user" spec:WCP7Spec];
+        [message setUInt32:[self chatID] forName:@"wired.chat.id"];
+        [message setUInt32:userID forName:@"wired.user.id"];
+        [[self connection] sendMessage:message];
+        
+        return YES;
+    }
+
+    return [super tableView:tableView acceptDrop:info row:row dropOperation:operation];
 }
 
 
@@ -196,7 +204,7 @@
 	user = [self userWithUserID:[[self connection] userID]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![self chatIsEmpty])
-		[[[[WCApplicationController sharedController] logController] privateChatHistoryBundle] addHistoryForWebView:[self webView] 
+		[[[[WCApplicationController sharedController] logController] privateChatHistoryBundle] addHistoryForMessages:[self messages]
                 withConnectionName:[[self connection] name]
                     identity:[user nick]];
 	

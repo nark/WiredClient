@@ -106,7 +106,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (void)_applyHTMLToMutableString:(NSMutableString *)text;
-- (NSDictionary *)_JSONProxyForPost:(id)post;
+- (void)_updatePostPreviewTextView;
 
 @end
 
@@ -318,14 +318,10 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 - (void)_themeDidChange {    
 	NSDictionary		*theme;
-	NSString			*templatePath;
-	WITemplateBundle    *templateBundle;
     NSColor             *textColor, *URLTextColor, *backgroundColor;
     NSFont              *font;
     
 	theme				= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-	templateBundle		= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
-	templatePath		= [templateBundle bundlePath];
         
     font                = WIFontFromString([theme objectForKey:WCThemesBoardsFont]);
     textColor           = [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
@@ -338,9 +334,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     [_threadController setTextColor:textColor];
     [_threadController setURLTextColor:URLTextColor];
 	[_threadController setBackgroundColor:backgroundColor];
-	[_threadController setTemplatePath:templatePath];
     
-	[_threadController reloadTemplate];
+	[_threadController reloadView];
 }
 
 
@@ -580,7 +575,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 - (BOOL)_isUnreadThread:(WCBoardThread *)thread {
     if([thread latestReplyID]){
 		return ![_readIDs containsObject:[thread latestReplyID]];
-    }else if([thread threadID]) {
+    } else if([thread threadID]) {
 		return ![_readIDs containsObject:[thread threadID]];
     }
 	return NO;
@@ -655,27 +650,39 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	
 	board		= [self _selectedBoard];
 	thread		= [self _selectedThread];
-    		
-	if(thread) {
-		if(![thread isLoaded]) {
-			[thread removeAllPosts];
-			
-			message = [WIP7Message messageWithName:@"wired.board.get_thread" spec:WCP7Spec];
-			[message setUUID:[thread threadID] forName:@"wired.board.thread"];
-			[[thread connection] sendMessage:message fromObserver:self selector:@selector(wiredBoardGetThreadReply:)];
-		}
+    
+    [self _reloadThread:thread];
+}
+
+
+- (void)_reloadThread:(WCBoardThread *)thread {
+    WIP7Message            *message;
+    WCBoard                *board;
+    
+    board = [_boardsByThreadID objectForKey:[thread threadID]];
+            
+    if(thread) {
+        if(![thread isLoaded]) {
+            [thread removeAllPosts];
+            
+            message = [WIP7Message messageWithName:@"wired.board.get_thread" spec:WCP7Spec];
+            [message setUUID:[thread threadID] forName:@"wired.board.thread"];
+            [[thread connection] sendMessage:message fromObserver:self selector:@selector(wiredBoardGetThreadReply:)];
+        }
         
         [_threadController setBoard:board];
-		[_threadController setThread:thread];
-        		
-		if([thread isLoaded])
-			[_threadController reloadData];
-	}
-	else {
-		[_threadController setBoard:NULL];
-		[_threadController setThread:NULL];
-		[_threadController reloadData];
-	}
+        [_threadController setThread:thread];
+                
+        if([thread isLoaded])
+            [_threadController reloadData];
+    }
+    else {
+        [_threadController setBoard:NULL];
+        [_threadController setThread:NULL];
+        [_threadController reloadData];
+    }
+    
+    
 }
 
 
@@ -709,7 +716,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
                                                  columnIndexes:columIndexes];
         }
     }
-    [self _saveReadIDs];
+    //[self _saveReadIDs];
 }
 
 
@@ -734,16 +741,16 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (void)_reselectThread:(WCBoardThread *)thread {
-    
 	NSUInteger index = 0;
+    
 	index = [self _indexOfThread:thread];
-
+    
 	if(index != NSNotFound) {
-		[_threadsHorizontalTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-		[_threadsVerticalTableView scrollRowToVisible:index];
-        
+		[_threadsHorizontalTableView scrollRowToVisible:index];
         [_threadsHorizontalTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
-		[_threadsVerticalTableView scrollRowToVisible:index];
+		
+        [_threadsVerticalTableView scrollRowToVisible:index];
+        [_threadsVerticalTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
 	} else {
 		[_threadsHorizontalTableView deselectAll:self];
         [_threadsVerticalTableView deselectAll:self];
@@ -783,6 +790,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         }
 		
     }
+    
+    //[self _saveReadIDs];
 }
 
 
@@ -798,6 +807,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		[self _markBoard:eachBoard asUnread:unread];
         [self _markThreads:[eachBoard threads] asUnread:unread];
 	}
+    
+    //[self _saveReadIDs];
 }
 
 
@@ -1203,6 +1214,15 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 #pragma mark -
 
+- (void)_updatePostPreviewTextView {
+    NSAttributedString *attrString = [_threadController attributedStringForText:[_postTextView string]];
+    
+    if(!attrString)
+        attrString = [_postTextView attributedString];
+    
+    [_postPreviewTextView setAttributedString:attrString];
+}
+
 
 - (void)_applyHTMLToMutableString:(NSMutableString *)text {
     NSString                    *substring;
@@ -1300,57 +1320,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 }
 
 
-
-- (NSDictionary *)_JSONProxyForPost:(id)post {
-    NSString            *string, *icon, *editDate, *postID;
-    NSMutableString     *text;
-    WCBoardThread       *thread;
-    WCBoard             *board;
-    WCAccount           *account;
-    WIDateFormatter     *dateFormatter;
-    BOOL                own, writable, replyDisabled, quoteDisabled, editDisabled, deleteDisabled, smart;
-    
-    thread              = [self _selectedThread];
-    board               = [_boardsByThreadID objectForKey:[thread threadID]];
-    dateFormatter       = [[WCApplicationController sharedController] dateFormatter];
-    
-    string              = [[[post text] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
-    text                = [NSMutableString stringWithString:string];
-    icon                = (NSString*)(([post icon] && sizeof([post icon]) > 0) ? [post icon] : _defaultIconBase64String);
-    account             = [(WCServerConnection *)[board connection] account];
-    editDate            = ([post editDate] ? [dateFormatter stringFromDate:[post editDate]] : @"");
-    
-    postID              = ([post isKindOfClass:[WCBoardPost class]] ? [post postID] : [post threadID]);
-    own                 = ([post isKindOfClass:[WCBoardPost class]] ? [post isOwnPost] : [post isOwnThread]);
-    writable            = [board isWritable];
-    smart               = ([[[WCBoards boards] selectedBoard] isKindOfClass:[WCSmartBoard class]]);
-    
-    quoteDisabled       = !(([account boardAddPosts] && writable) || smart);
-    editDisabled        = !((([account boardEditAllThreadsAndPosts] || ([account boardEditOwnThreadsAndPosts] && own)) && writable) || smart);
-    deleteDisabled      = !((([account boardDeleteAllThreadsAndPosts] || ([account boardDeleteOwnThreadsAndPosts] && own)) && writable) || smart);
-    replyDisabled       = !([account boardAddPosts] && writable);
-    
-    [self _applyHTMLToMutableString:text];
-    
-    return @{ @"postID":                postID,
-              @"fromString":            NSLS(@"From:", @"Post header"),
-              @"from":                  [post nick],
-              @"postDateString":        NSLS(@"Post Date:", @"Post header"),
-              @"postDate":              [dateFormatter stringFromDate:[post postDate]],
-              @"editDateString":        NSLS(@"Edit Date:", @"Post header"),
-              @"editDate":              editDate,
-              @"unread":                [post isUnread] ? @"true" : @"false",
-              @"icon":                  icon,
-              @"postContent":           text,
-              @"replyDisabled":         replyDisabled ? @"true" : @"false",
-              @"quoteDisabled":         quoteDisabled ? @"true" : @"false",
-              @"editDisabled":          deleteDisabled ? @"true" : @"false",
-              @"deleteDisabled":        deleteDisabled ? @"true" : @"false",
-              @"quoteButtonString":     NSLS(@"Quote", @"Quote post button title"),
-              @"editButtonString":      NSLS(@"Edit", @"Edit post button title"),
-              @"deleteButtonString":    NSLS(@"Delete", @"Delete post button title"),
-              @"replyButtonString":     NSLS(@"Post Reply", @"Post reply button title") };
-}
 
 
 
@@ -1598,23 +1567,23 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	NSMutableSet		*readIDs;
 	WCBoardThread		*thread;
 	WCBoardPost			*post;
-	
+
 	thread = [self _selectedThread];
-	
-	if(thread) {
+
+	if(thread && thread == [_threadController thread]) {
 		readIDs			= [NSMutableSet set];
 		enumerator		= [[thread posts] objectEnumerator];
-		
+
 		while((post = [enumerator nextObject])) {
 			[post setUnread:NO];
-			
+
 			[readIDs addObject:[post postID]];
 		}
-		
+
 		[thread setUnread:NO];
-        
+
         [self _reloadThreads:@[thread]];
-		
+
 		if([readIDs count] > 0)
 			[[NSNotificationCenter defaultCenter] postNotificationName:WCBoardsDidChangeUnreadCountNotification object:readIDs];
 	}
@@ -1852,15 +1821,16 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     WCBoard         *parent;
     NSArray         *threads;
 	NSSet		    *readIDs;
-    	
+    
     threads = nil;
 
     if([[notification object] isKindOfClass:[NSSet class]]) {
         readIDs = [notification object];
-        
+
         if(readIDs)
             [_readIDs addObjectsFromArray:[readIDs allObjects]];
     }
+    
     if([[notification object] isKindOfClass:[NSArray class]]) {
         threads = (NSArray *)[notification object];
         [self _reloadThreads:threads];
@@ -1872,16 +1842,27 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     if([[notification object] isKindOfClass:[WCBoardThread class]]) {
         thread = [notification object];
         parent = [_boards boardForPath:[thread board]];
-        
+
         if (parent)
             [self _reloadBoard:parent];
-        
+
         threads = @[thread];
+
         [self _reloadThreads:threads];
     }
-    
+
     [self _reloadBoard:[self selectedBoard]];
     [self _reloadFilters];
+
+    // not the most efficient, but it is needed when a thread is unread in multiple boards (smart boards)
+    [_threadsVerticalTableView reloadDataForRowIndexes:[_threadsVerticalTableView selectedRowIndexes] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    [_threadsHorizontalTableView reloadDataForRowIndexes:[_threadsHorizontalTableView selectedRowIndexes] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    
+    if ([_boardsOutlineView numberOfRows] > 0) {
+        [_boardsOutlineView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [_boardsOutlineView numberOfRows] -1)] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    }
+    
+    [self _saveReadIDs];
 }
 
 
@@ -1994,7 +1975,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	WCBoard					*board;
 	WCBoardThread			*thread;
 	WCBoardPost				*post;
-		
+	    
 	connection = [message contextInfo];
 	
 	if([[message name] isEqualToString:@"wired.board.thread"]) {
@@ -2011,25 +1992,33 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		threadID	= [message UUIDForName:@"wired.board.thread"];
 		board		= [_boardsByThreadID objectForKey:threadID];
 		thread		= [board threadWithID:threadID];
-		
+        		
 		if(thread) {
 			post = [WCBoardPost postWithMessage:message connection:connection];
-			
-			[post setUnread:![_readIDs containsObject:[post postID]]];
-						
+                        			            
+            if (![thread firstLoad]) {
+                [post setUnread:![_readIDs containsObject:[post postID]]];
+            } else {
+                [post setUnread:NO];
+                [_readIDs addObject:[post postID]];
+            }
+            
 			[thread addPost:post];
 		}
 	}
 	else if([[message name] isEqualToString:@"wired.board.post_list.done"]) {
-				
 		threadID	= [message UUIDForName:@"wired.board.thread"];
 		board		= [_boardsByThreadID objectForKey:threadID];
 		thread		= [board threadWithID:threadID];
 
 		if(thread) {
 			[thread setLoaded:YES];
+            
+            if ([thread firstLoad]) {
+                [thread setFirstLoaded:NO];
+            }
 			
-			if(thread == [_threadController thread]) {
+			if(thread == [_threadController thread] && [self _selectedThread]) {
 				[_threadController reloadDataAndScrollToCurrentPosition];
 			}
 		}
@@ -2323,13 +2312,12 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 		[thread setLatestReplyDate:[message dateForName:@"wired.board.latest_reply_date"]];
 		[thread setNumberOfReplies:replies];
         
-		[_readIDs removeObject:[thread threadID]];
-        
+		//[_readIDs removeObject:[thread threadID]];
 		[thread setUnread:[self _isUnreadThread:thread]];
 		[thread setLoaded:NO];
-		
-		if([[self window] isKeyWindow] && thread == [_threadController thread])
-			[self _reloadThread];
+                		
+		//if(thread == [_threadController thread])
+        [self _reloadThread:thread];
         
         for(WCThreadWindow *controller in [WCThreadWindow threadWindows]) {
             if(thread == [controller thread]) {
@@ -2608,6 +2596,13 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 }
 
 
+- (void)textDidChange:(NSNotification *)notification {
+    if([notification object] == _postTextView) {
+        [self _updatePostPreviewTextView];
+    }
+}
+
+
 
 #pragma mark -
 
@@ -2741,34 +2736,41 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 - (BOOL)showNextUnreadThread {
 	WCBoardThread	*thread;
 	NSRect			rect;
-	
+    NSInteger       orientation;
+    
 	if([[[self window] firstResponder] isKindOfClass:[NSTextView class]])
 		return NO;
 
-	rect = [[[[[[_threadController threadWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
+	rect = [[[_threadController threadTableView] enclosingScrollView] documentVisibleRect];
 	rect.origin.y += 0.9 * rect.size.height;
-	
-	if([[[[[_threadController threadWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
+
+	if([[[_threadController threadTableView] enclosingScrollView] scrollRectToVisible:rect])
 		return YES;
-	
+
 	thread = [_boards nextUnreadThreadStartingAtBoard:[self _selectedBoard]
 											   thread:[self _selectedThread]
 									forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
-	
+
 	if(!thread) {
 		thread = [_boards nextUnreadThreadStartingAtBoard:NULL
 												   thread:NULL
 										forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
 	}
-	
+    
 	if(thread) {
-		[[self window] makeFirstResponder:_threadsHorizontalTableView];
-		
+        orientation = [[WCSettings settings] intForKey:WCThreadsSplitViewOrientation];
+        
+        if(orientation == WCThreadsSplitViewOrientationHorizontal) {
+            [[self window] makeFirstResponder:_threadsHorizontalTableView];
+        } else {
+            [[self window] makeFirstResponder:_threadsVerticalTableView];
+        }
+        
 		[self _selectThread:thread];
-		
+
 		return YES;
 	}
-	
+
 	return NO;
 }
 
@@ -2777,20 +2779,21 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 - (BOOL)showPreviousUnreadThread {
 	WCBoardThread	*thread;
 	NSRect			rect;
-	
+    NSInteger       orientation;
+    
 	if([[[self window] firstResponder] isKindOfClass:[NSTextView class]])
 		return NO;
 
-	rect = [[[[[[_threadController threadWebView] mainFrame] frameView] documentView] enclosingScrollView] documentVisibleRect];
+	rect = [[[_threadController threadTableView] enclosingScrollView] documentVisibleRect];
 	rect.origin.y -= 0.9 * rect.size.height;
-	
-	if([[[[[_threadController threadWebView] mainFrame] frameView] documentView] scrollRectToVisible:rect])
+
+	if([[[_threadController threadTableView] enclosingScrollView] scrollRectToVisible:rect])
 		return YES;
-	
+
 	thread = [_boards previousUnreadThreadStartingAtBoard:[self _selectedBoard]
 												   thread:[self _selectedThread]
 										forwardsInThreads:([_threadsHorizontalTableView sortOrder] == WISortAscending)];
-	
+
 	if(!thread) {
 		thread = [_boards previousUnreadThreadStartingAtBoard:NULL
 													   thread:NULL
@@ -2798,13 +2801,19 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	}
 
 	if(thread) {
-		[[self window] makeFirstResponder:_threadsHorizontalTableView];
-		
+		orientation = [[WCSettings settings] intForKey:WCThreadsSplitViewOrientation];
+        
+        if(orientation == WCThreadsSplitViewOrientationHorizontal) {
+            [[self window] makeFirstResponder:_threadsHorizontalTableView];
+        } else {
+            [[self window] makeFirstResponder:_threadsVerticalTableView];
+        }
+
 		[self _selectThread:thread];
-		
+
 		return YES;
 	}
-	
+
 	return NO;
 }
 
@@ -2842,6 +2851,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	[_subjectTextField setStringValue:[thread subject]];
 	[_postTextView setTypingAttributes:[NSDictionary dictionary]];
 	[_postTextView setString:@""];
+    [_postPreviewTextView setString:@""];
     [_postTextView setTextColor:[NSColor controlTextColor]];
 	[_postButton setTitle:NSLS(@"Reply", @"Reply post button title")];
 	
@@ -2861,8 +2871,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 
-- (void)replyToPostWithID:(NSString *)postID {
-    
+- (void)replyToPostWithID:(NSString *)postID selectedText:(NSString *)selectedText {
     NSString					*text;
 	WCBoard						*board;
 	WCBoardThread				*thread;
@@ -2879,11 +2888,9 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     
 	if(!post)
 		return;
-	
-	document = [[[[_threadController threadWebView] mainFrame] frameView] documentView];
-	
-	if([document conformsToProtocol:@protocol(WebDocumentText)])
-		text = [(NSView <WebDocumentText> *) document selectedString];
+		
+	if(selectedText && [selectedText length] > 0)
+        text = selectedText;
 	else
 		text = @"";
 	
@@ -2962,6 +2969,8 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	[_postTextView setAttributedString:[NSAttributedString attributedStringWithString:(post == NULL) ? [thread text] : [post text]]];
 	[_postTextView setTextColor:[NSColor controlTextColor]];
     [_postButton setTitle:NSLS(@"Edit", @"Edit post button title")];
+    
+    [self _updatePostPreviewTextView];
 	
 	[_postPanel makeFirstResponder:_postTextView];
     
@@ -2969,6 +2978,10 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         window = [NSApp keyWindow];
     else
         window = [self window];
+    
+//    [window beginSheet:_postPanel completionHandler:^(NSModalResponse returnCode) {
+//        
+//    }];
     
     [NSApp beginSheet:_postPanel
 	   modalForWindow:window
@@ -3461,6 +3474,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	[_subjectTextField setEnabled:YES];
 	[_subjectTextField setStringValue:@""];
 	[_postTextView setString:@""];
+    [_postPreviewTextView setString:@""];
     [_postTextView setTextColor:[NSColor controlTextColor]];
 	[_postButton setTitle:NSLS(@"Create", @"New thread button title")];
 	
@@ -3850,39 +3864,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 
-//- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
-//	NSDictionary	*attributes;
-//	NSString		*label;
-//	NSUInteger		count;
-//	
-//	if(tableColumn == _boardTableColumn) {
-//		label = [item name];
-//		
-//		if([item isRootBoard]) {
-//			attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-//				[NSColor colorWithCalibratedRed:96.0 / 255.0 green:110.0 / 255.0 blue:128.0 / 255.0 alpha:1.0],
-//					NSForegroundColorAttributeName,
-//				[NSFont boldSystemFontOfSize:11.0],
-//					NSFontAttributeName,
-//				NULL];
-//			
-//			return [NSAttributedString attributedStringWithString:[label uppercaseString] attributes:attributes];
-//		} else {
-//			return label;
-//		}
-//	}
-//	else if(tableColumn == _unreadBoardTableColumn) {
-//		count = [item numberOfUnreadThreadsForConnection:NULL includeChildBoards:![item isExpanded]];
-//		
-//		return [NSImage imageWithPillForCount:count
-//							   inActiveWindow:([NSApp keyWindow] == [self window])
-//								onSelectedRow:([_boardsOutlineView rowForItem:item] == [_boardsOutlineView selectedRow])];
-//	}
-//	
-//	return NULL;
-//}
-
-
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
     WCBadgedTableCellView       *view;
     NSFont                      *font;
@@ -3892,7 +3873,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
     view    = nil;
     count   = [item numberOfUnreadThreadsForConnection:NULL includeChildBoards:![item isExpanded]];
     unread  = (count > 0);
-    
+        
     if([item isRootBoard]) {
         view = [outlineView makeViewWithIdentifier:@"HeaderCell" owner:outlineView];
         
@@ -3920,7 +3901,7 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
         [view.button setHidden:!unread];
     }
     else if([item isKindOfClass:[WCBoard class]]) {
-        view    = [outlineView makeViewWithIdentifier:@"DataCell" owner:outlineView];
+        view = [outlineView makeViewWithIdentifier:@"DataCell" owner:outlineView];
         font = [view.textField.font fontByAddingTrait:(unread ? NSBoldFontMask : NSUnboldFontMask)];
 
         view.imageView.image            = [NSImage imageNamed:@"Board"];
@@ -4161,59 +4142,6 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	return [[self _selectedBoard] numberOfThreads];
 }
 
-
-
-//- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-//	NSButton			*button;
-//	WCBoardThread		*thread;
-//	
-//	thread = [self _threadAtIndex:row];
-//	
-//    if(tableView == _threadsHorizontalTableView) {
-//        if(tableColumn == _unreadThreadTableColumn)
-//            return [thread isUnread] ? [NSImage imageNamed:@"UnreadThread"] : NULL;
-//        if(tableColumn == _subjectTableColumn)
-//            return [thread subject];
-//        else if(tableColumn == _nickTableColumn)
-//            return [thread nick];
-//        else if(tableColumn == _repliesTableColumn)
-//            return [NSNumber numberWithUnsignedInteger:[thread numberOfReplies]];
-//        else if(tableColumn == _threadTimeTableColumn)
-//            return [_dateFormatter stringFromDate:[thread postDate]];
-//        else if(tableColumn == _postTimeTableColumn) {
-//            if([thread latestReplyDate]) {
-//                button = [thread goToLatestReplyButton];
-//                
-//                [button setTarget:self];
-//                [button setAction:@selector(goToLatestReply:)];
-//                [button setTag:row];
-//                
-//                return [NSDictionary dictionaryWithObjectsAndKeys:
-//                        [_dateFormatter stringFromDate:[thread latestReplyDate]],
-//                        WCBoardsButtonCellValueKey,
-//                        button,
-//                        WCBoardsButtonCellButtonKey,
-//                        NULL];
-//            } else {
-//                button = [thread goToLatestReplyButton];
-//                
-//                [button setTarget:self];
-//                [button setAction:@selector(goToLatestReply:)];
-//                [button setTag:row];
-//                
-//                return [NSDictionary dictionaryWithObjectsAndKeys:
-//                        [_dateFormatter stringFromDate:[thread postDate]],
-//                        WCBoardsButtonCellValueKey,
-//                        button,
-//                        WCBoardsButtonCellButtonKey,
-//                        NULL];
-//            }
-//        }
-//    }
-//	
-//	return NULL;
-//}
-
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     WCThreadTableCellView       *view;
     WCBoardThread               *thread;
@@ -4296,6 +4224,27 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification {
+    NSMutableSet            *readIDs;
+    WCBoardThread           *thread;
+
+    readIDs     = [NSMutableSet set];
+    thread      = [self _selectedThread];
+
+    if(thread) {
+        [thread setUnread:NO];
+
+        [readIDs addObject:[thread threadID]];
+
+        for(WCBoardPost *post in [thread posts]) {
+            [post setUnread:NO];
+
+            [readIDs addObject:[post postID]];
+        }
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:WCBoardsDidChangeUnreadCountNotification
+                                                            object:readIDs];
+    }
+
 	[self _reloadThread];
 	[self _validate];
 }
@@ -4329,158 +4278,5 @@ NSString * const WCBoardsDidChangeUnreadCountNotification	= @"WCBoardsDidChangeU
 	
 	return YES;
 }
-
-
-
-
-
-
-
-
-#pragma mark -
-#pragma mark WebKit Obj-C/Javascript Selectors
-
-//+ (NSString *)webScriptNameForSelector:(SEL)selector
-//{
-//    NSString *name;
-//    
-//    if (selector == @selector(loadScriptWithName:))
-//        name = @"loadScriptWithName";
-//    if (selector == @selector(JSONObjects))
-//        name = @"JSONObjects";
-//    if (selector == @selector(JSONObjectsUntilDate:withLimit:))
-//        name = @"JSONObjectsUntilDateWithLimit";
-//    if (selector == @selector(lastMessageDate))
-//        name = @"lastMessageDate";
-//    
-//    return name;
-//}
-
-- (NSString *)lastMessageDate {
-    NSDateFormatter *dateFormatter;
-    
-    dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian]];
-    
-    return [dateFormatter stringFromDate:[[self _selectedThread] latestReplyDate]];
-}
-
-+ (BOOL)isSelectorExcludedFromWebScript:(SEL)selector {
-	if(selector == @selector(replyToThread) ||
-	   selector == @selector(replyToPostWithID:) ||
-	   selector == @selector(deletePostWithID:) ||
-	   selector == @selector(editPostWithID:) ||
-       selector == @selector(loadScriptWithName:) ||
-       selector == @selector(JSONObjectsUntilDate:withLimit:) ||
-       selector == @selector(lastMessageDate) ||
-       selector == @selector(JSONObjects))
-		return NO;
-    
-	return YES;
-}
-
-
-
-#pragma mark -
-#pragma mark WCWebDataSource Methods
-
-- (BOOL)loadScriptWithName:(NSString *)name {
-    WITemplateBundle        *template;
-    NSURL                   *scriptURL;
-    
-    template    = [WITemplateBundle templateWithPath:[_threadController templatePath]];
-    scriptURL   = [NSURL fileURLWithPath:[template pathForResource:name ofType:@"js" inDirectory:@"htdocs/js"]];
-    
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[scriptURL path]])
-        return NO;
-    
-    [[_threadController threadWebView] appendScriptAtURL:scriptURL];
-    
-    return YES;
-}
-
-- (NSString *)JSONObjects {
-    NSMutableSet            *readIDs;
-    WCBoardThread           *thread;
-    NSMutableArray          *posts;
-    NSString                *jsonString;
-    
-    jsonString  = nil;
-    readIDs     = [NSMutableSet set];
-    posts       = [NSMutableArray array];
-    thread      = [self _selectedThread];
-    
-    if(thread) {
-        [thread setUnread:NO];
-        [readIDs addObject:[thread threadID]];
-        [posts addObject:[self _JSONProxyForPost:thread]];
-        
-        for(WCBoardPost *post in [thread posts]) {
-            [post setUnread:NO];
-            [readIDs addObject:[post postID]];
-            [posts addObject:[self _JSONProxyForPost:post]];
-        }
-                
-        jsonString = [[SBJson4Writer writer] stringWithObject:posts];
-        
-        [thread setLoaded:YES];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:WCBoardsDidChangeUnreadCountNotification
-                                                            object:readIDs];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:WCBoardsDidChangeUnreadCountNotification
-                                                            object:thread];
-    }
-    
-    return jsonString;
-}
-
-- (NSString *)JSONObjectsUntilDate:(NSString *)dateString withLimit:(NSUInteger)limit {
-//    NSPredicate         *predicate;
-//    NSSortDescriptor    *descriptor;
-//    NSDate              *date;
-//    NSDateFormatter     *dateFormatter;
-      NSString            *jsonString = nil;
-//    NSArray             *sortedMessages;
-//    NSCalendar          *calendar;
-//    
-    //    calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    //
-    //    dateFormatter = [[NSDateFormatter alloc] init];
-    //    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    //    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    //    [dateFormatter setCalendar:calendar];
-    //
-    //    if(dateString != nil) {
-    //        date = [dateFormatter dateFromString:dateString];
-    //    } else {
-    //        date = [_thread latestReplyDate];
-    //    }
-    //
-    //    if(!date) {
-    //        return nil;
-    //    }
-    //
-    //    predicate       = [NSPredicate predicateWithFormat:@"(conversation == %@) && (date <= %@)", _conversation, date];
-    //    descriptor      = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
-    //    sortedMessages  = [[WCDatabaseController context] fetchEntitiesNammed:@"Message"
-    //                                                            withPredicate:predicate
-    //                                                               descriptor:descriptor
-    //                                                                    limit:limit
-    //                                                                    error:nil];
-    //
-    //    jsonString      = [[SBJsonWriter writer] stringWithObject:sortedMessages];
-    //
-    //    [descriptor release];
-    //    [dateFormatter release];
-    //    [calendar release];
-    //    
-    //    //NSLog(@"jsonString: %@", jsonString);
-    
-    return jsonString;
-}
-
 
 @end
