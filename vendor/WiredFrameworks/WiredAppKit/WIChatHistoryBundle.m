@@ -130,6 +130,7 @@ NSString * const WIChatHistoryBundleAddedNotification	= @"WIChatHistoryBundleAdd
 #pragma mark -
 
 - (void)addHistoryForWebView:(WebView *)webview withConnectionName:(NSString *)name identity:(NSString *)identity {
+	
 	NSString			*folderPath, *archivePath;
 	NSFileManager		*fileManager;
 	NSError				*error;
@@ -156,36 +157,6 @@ NSString * const WIChatHistoryBundleAddedNotification	= @"WIChatHistoryBundleAdd
 														object:self];
 	
 }
-
-
-- (void)addHistoryForMessages:(NSArray *)messages withConnectionName:(NSString *)name identity:(NSString *)identity {
-    NSString            *folderPath, *archivePath;
-    NSFileManager       *fileManager;
-    NSError             *error;
-        
-    fileManager         = [NSFileManager defaultManager];
-    folderPath          = [self _pathOfFolderWithName:name];
-    
-    
-    if(!folderPath || ![fileManager fileExistsAtPath:folderPath]) {
-        folderPath    = [[self resourcePath] stringByAppendingPathComponent:name];
-            
-        [fileManager createDirectoryAtPath:folderPath
-               withIntermediateDirectories:YES
-                                attributes:nil
-                                     error:&error];
-    }
-        
-    archivePath = [folderPath stringByAppendingPathComponent:[NSSWF:@"%@-%@-%d.plist", identity, name, (int)[[NSDate date] timeIntervalSince1970]]];
-    
-    [NSKeyedArchiver archiveRootObject:messages toFile:archivePath];
-        
-    [self _reloadArchivesInFolderWithName:name];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:WIChatHistoryBundleAddedNotification
-                                                        object:self];
-}
-
 
 
 - (void)clearHistory {

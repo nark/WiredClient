@@ -216,7 +216,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	user			= [chatController userWithUserID:[[chatController connection] userID]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![chatController chatIsEmpty])
-		[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] addHistoryForMessages:[chatController messages]
+		[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] addHistoryForWebView:[chatController webView]
                                                                                                 withConnectionName:[[chatController connection] name]
                                                                                                           identity:[user nick]];
 	
@@ -573,7 +573,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	[_serversOutlineView setAutosaveName:@"Resources"];
 	[_serversOutlineView setAutosaveTableColumns:YES];
     [_serversOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:WCBookmarkPboardType, WCTrackerBookmarkPboardType, nil]];
-    
+	
 	[self _reloadServers];
 	
 	[_serversOutlineView expandItem:_bonjour];
@@ -1959,7 +1959,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 		if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![chatController chatIsEmpty]) {
             bundle      = [[[WCApplicationController sharedController] logController] publicChatHistoryBundle];
             
-            [bundle addHistoryForMessages:[chatController messages]
+            [bundle addHistoryForWebView:[chatController webView]
                       withConnectionName:[[chatController connection] name]
                                 identity:[user nick]];
         }

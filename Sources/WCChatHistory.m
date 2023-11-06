@@ -51,62 +51,28 @@
 	NSInteger	selectedRow;
 	WebArchive	*archive;
 	NSString	*archivePath;
-    NSData      *data;
-    
+	
 	if(!_selectedArchives) {
 		[[_detailWebView mainFrame] loadHTMLString:@"" baseURL:[NSURL URLWithString:@"about:blank"]];
 		return;
 	}
 	
 	selectedRow = [_detailsTableView selectedRow];
-    	
+	
 	if(selectedRow == -1) {
 		[[_detailWebView mainFrame] loadHTMLString:@"" baseURL:[NSURL URLWithString:@"about:blank"]];
 		return;
 	}
 	
-	archivePath = [_filteredArchives objectAtIndex:selectedRow];
-    data = [NSData dataWithContentsOfFile:archivePath];
-        
-    if ([[archivePath pathExtension] isEqualToString:@"webarchive"]) {
-        archive = [[WebArchive alloc] initWithData:data];
-        
-        if(archive)
-            [[_detailWebView mainFrame] loadArchive:archive];
-        else
-            [[_detailWebView mainFrame] loadHTMLString:@"" baseURL:[NSURL URLWithString:@"about:blank"]];
-        
-        [archive release];
-    }
-    else if ([[archivePath pathExtension] isEqualToString:@"plist"]) {
-        NSMutableAttributedString *attrString = [NSMutableAttributedString attributedString];
-        NSArray *messages = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        
-        for(NSDictionary *message in messages) {
-            NSMutableAttributedString *line = [NSMutableAttributedString attributedString];
-            
-            NSString *nick = [message valueForKey:@"nick"];
-            NSAttributedString *messageString = [message valueForKey:@"message"];
-            NSString *timestamp = [message valueForKey:@"timestamp"];
-            
-            [line appendAttributedString:[NSAttributedString attributedStringWithString:timestamp]];
-            [line appendAttributedString:[NSAttributedString attributedStringWithString:@" - "]];
-            [line appendAttributedString:[NSAttributedString attributedStringWithString:nick]];
-            [line appendAttributedString:[NSAttributedString attributedStringWithString:@": "]];
-            [line appendAttributedString:messageString];
-            [line appendAttributedString:[NSAttributedString attributedStringWithString:@"\n"]];
-            
-            [attrString appendAttributedString:line];
-        }
-        
-        NSDictionary *documentAttributes = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType};
-        NSData *htmlData = [attrString dataFromRange:NSMakeRange(0, attrString.length) documentAttributes:documentAttributes error:NULL];
-        NSString *htmlString = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
-        
-        [[_detailWebView mainFrame] loadHTMLString:htmlString baseURL:nil];
-    }
-    
+	archivePath = [_selectedArchives objectAtIndex:selectedRow];
+	archive		= [[WebArchive alloc] initWithData:[NSData dataWithContentsOfFile:archivePath]];
 	
+	if(archive)
+		[[_detailWebView mainFrame] loadArchive:archive];
+	else
+		[[_detailWebView mainFrame] loadHTMLString:@"" baseURL:[NSURL URLWithString:@"about:blank"]];
+	
+	[archive release];
 }
 
 
@@ -184,10 +150,7 @@
 	[super windowDidLoad];
 	
 	[self _expandAllGroups];
-    
-//    [_detailsTableView setDefaultSortOrder:WISortAscending];
-//    [_detailsTableView setHighlightedTableColumn:[[_detailsTableView tableColumns] lastObject] sortOrder:WISortAscending];
-    
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(chatHistoryBundleAddedNotification:) 
 												 name:WIChatHistoryBundleAddedNotification 
@@ -216,6 +179,7 @@
 
 
 - (void)clearAlertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+
 	if(returnCode == NSModalResponseOK) {
 		[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] clearHistory];
 		[[[[WCApplicationController sharedController] logController] privateChatHistoryBundle] clearHistory];
@@ -414,9 +378,8 @@
 		_selectedArchives = [[self _selectedArtivesForFolderPath:item] retain];
 		
 		[_filteredArchives addObjectsFromArray:_selectedArchives];
-
+		
 		[_detailsTableView reloadData];
-        
 		[self _reloadWebView];
 		
 		return;

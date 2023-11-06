@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -56,6 +56,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2AA363112AF956B100D684DB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 2AA363102AF956B100D684DB /* Sparkle */; };
 		4C049D4517F8C8A70072C4DE /* WCUserTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C049D4417F8C8A70072C4DE /* WCUserTableCellView.m */; };
 		4C0667AE15DED4B400E8D810 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4C0667A615DED4B400E8D810 /* Credits.rtf */; };
 		4C0667AF15DED4B400E8D810 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C0667A815DED4B400E8D810 /* InfoPlist.strings */; };
@@ -77,6 +78,7 @@
 		4C06680215DED6D400E8D810 /* History.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C06680015DED6D400E8D810 /* History.xib */; };
 		4C06680515DED6E400E8D810 /* Console.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C06680315DED6E400E8D810 /* Console.xib */; };
 		4C06680815DED6EF00E8D810 /* Error.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C06680615DED6EF00E8D810 /* Error.xib */; };
+		4C16068C181494BB00373611 /* htdocs in Resources */ = {isa = PBXBuildFile; fileRef = 4C160683181494A800373611 /* htdocs */; };
 		4C22070C17DE369500F1FBBA /* WCDatabaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22070A17DE369500F1FBBA /* WCDatabaseController.m */; };
 		4C22072E17DE36B300F1FBBA /* WDConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22070E17DE36B300F1FBBA /* WDConversation.m */; };
 		4C22072F17DE36B300F1FBBA /* WDArchivesConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22071017DE36B300F1FBBA /* WDArchivesConversation.m */; };
@@ -96,13 +98,10 @@
 		4C22073D17DE36B300F1FBBA /* _WDPrivateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22072D17DE36B300F1FBBA /* _WDPrivateMessage.m */; };
 		4C2602621FE096B7007E5A6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C2602611FE096B7007E5A6C /* Assets.xcassets */; };
 		4C3A410A15F5672400C9B136 /* WCApplicationMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3A410915F5672400C9B136 /* WCApplicationMenuController.m */; };
-		4C4218FC245F1000008AEFD2 /* NSImage+Data.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4218FB245F1000008AEFD2 /* NSImage+Data.m */; };
-		4C421905245F3370008AEFD2 /* WCChatTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C421901245F3370008AEFD2 /* WCChatTableCellView.m */; };
 		4C4FDE8917799A8B00FADB95 /* WCServerBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDE8817799A8B00FADB95 /* WCServerBookmarkController.m */; };
 		4C4FDEB21779B8EB00FADB95 /* WCTrackerBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDEB11779B8EB00FADB95 /* WCTrackerBookmarkController.m */; };
 		4C4FDEC4177A4B2400FADB95 /* WCBookmarkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FDEC3177A4B2400FADB95 /* WCBookmarkController.m */; };
 		4C57B644154E185700C9BAA5 /* WCConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C57B643154E185700C9BAA5 /* WCConnection.m */; };
-		4C5BB6BB244624390089D6D2 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BB6BA244624390089D6D2 /* dsa_pub.pem */; };
 		4C5D66681FE3C93000552E9E /* WiredServer.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4C5D66571FE3C92F00552E9E /* WiredServer.icns */; };
 		4C5D66691FE3C93000552E9E /* WiredTemplate.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4C5D66621FE3C92F00552E9E /* WiredTemplate.icns */; };
 		4C5D666A1FE3C93000552E9E /* WiredBookmarks.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4C5D66631FE3C92F00552E9E /* WiredBookmarks.icns */; };
@@ -119,14 +118,11 @@
 		4C6D6E3C176CA5C60043677E /* WCTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D6E3A176CA5C60043677E /* WCTabBarItem.m */; };
 		4C76213717E2FE4800A2EDA9 /* WCEncryptionTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76213617E2FE4800A2EDA9 /* WCEncryptionTransformer.m */; };
 		4C76214017E3049B00A2EDA9 /* WCStringEncryptionTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76213F17E3049B00A2EDA9 /* WCStringEncryptionTransformer.m */; };
-		4C782BC62460A5EF00970844 /* WCBoardPostCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C782BC52460A5EF00970844 /* WCBoardPostCellView.m */; };
 		4C7C088615ED66F7009D9F0E /* WCTrackerServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C088515ED66F7009D9F0E /* WCTrackerServerInfo.m */; };
 		4C82440117DE389F0065CEEE /* WiredClient.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C8243FF17DE389F0065CEEE /* WiredClient.xcdatamodeld */; };
 		4C82441B17DF73610065CEEE /* WCToolbarGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82441A17DF73610065CEEE /* WCToolbarGradientView.m */; };
 		4C82442D17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */; };
 		4C82443717DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */; };
-		4C858F5F245D68B700791CE2 /* WCMessageTableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C858F5E245D68B700791CE2 /* WCMessageTableCellView.m */; };
-		4C858F62245DA05900791CE2 /* WCDynamicTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C858F61245DA05900791CE2 /* WCDynamicTextField.m */; };
 		4C97DE3415630D8A00D88C11 /* WCWindowGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */; };
 		4C97DE421564632900D88C11 /* WCChatTopicView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE411564632900D88C11 /* WCChatTopicView.m */; };
 		4C97DE4515658A9C00D88C11 /* WCChatInputTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE4415658A9B00D88C11 /* WCChatInputTextView.m */; };
@@ -150,6 +146,8 @@
 		4CE153291800D665004DA093 /* WiredNetworking.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CE1532A1800D665004DA093 /* WiredAppKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CEFF6D2180C3FF700AD7AD9 /* WCPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */; };
+		4CF094DB1559D8C1005D77BB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF094D91559D8C1005D77BB /* InfoPlist.strings */; };
+		4CF094E51559D9AA005D77BB /* Neo.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CFDCBE815695FDA00DA17A6 /* WCChatHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDCBE715695FDA00DA17A6 /* WCChatHistory.m */; };
 		77096732107EBB1A005F357B /* WCEventsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77096731107EBB1A005F357B /* WCEventsController.m */; };
 		771E6D510755F506000F9195 /* WCConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 771E6D4F0755F506000F9195 /* WCConversation.m */; };
@@ -317,6 +315,13 @@
 			remoteGlobalIDString = 4C417301147EDF1000DC0A9A;
 			remoteInfo = WiredAppKit;
 		};
+		4CF094E31559D9A3005D77BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CF094D31559D8C1005D77BB;
+			remoteInfo = Bubbles;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -326,6 +331,7 @@
 			dstPath = Templates;
 			dstSubfolderSpec = 7;
 			files = (
+				4CF094E51559D9AA005D77BB /* Neo.WiredTemplate in Copy Templates */,
 			);
 			name = "Copy Templates";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +374,7 @@
 		4C016F161778CD5F00D6D2B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/History.xib; sourceTree = "<group>"; };
 		4C016F171778CD5F00D6D2B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/Console.xib; sourceTree = "<group>"; };
 		4C016F181778CD5F00D6D2B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/Error.xib; sourceTree = "<group>"; };
+		4C016F1A1778CD5F00D6D2B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C016F1C1778CD5F00D6D2B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/Credits.rtf; sourceTree = "<group>"; };
 		4C016F1D1778CD5F00D6D2B3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C016F1E1778CD5F00D6D2B3 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -395,6 +402,7 @@
 		4C06680415DED6E400E8D810 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Console.xib; sourceTree = "<group>"; };
 		4C06680715DED6EF00E8D810 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Error.xib; sourceTree = "<group>"; };
 		4C0B22FB176C95A600B2BF34 /* WiredFrameworks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WiredFrameworks.xcodeproj; path = vendor/WiredFrameworks/WiredFrameworks.xcodeproj; sourceTree = "<group>"; };
+		4C160683181494A800373611 /* htdocs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = htdocs; sourceTree = "<group>"; };
 		4C2206FB17DCE70000F1FBBA /* WCWebDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCWebDataSource.h; sourceTree = "<group>"; };
 		4C22070917DE369500F1FBBA /* WCDatabaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCDatabaseController.h; path = Sources/WCDatabaseController.h; sourceTree = "<group>"; };
 		4C22070A17DE369500F1FBBA /* WCDatabaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCDatabaseController.m; path = Sources/WCDatabaseController.m; sourceTree = "<group>"; };
@@ -434,10 +442,6 @@
 		4C2602611FE096B7007E5A6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4C3A410815F5672400C9B136 /* WCApplicationMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCApplicationMenuController.h; path = Sources/WCApplicationMenuController.h; sourceTree = "<group>"; };
 		4C3A410915F5672400C9B136 /* WCApplicationMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCApplicationMenuController.m; path = Sources/WCApplicationMenuController.m; sourceTree = "<group>"; };
-		4C4218FA245F1000008AEFD2 /* NSImage+Data.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+Data.h"; sourceTree = "<group>"; };
-		4C4218FB245F1000008AEFD2 /* NSImage+Data.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Data.m"; sourceTree = "<group>"; };
-		4C421901245F3370008AEFD2 /* WCChatTableCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCChatTableCellView.m; sourceTree = "<group>"; };
-		4C421904245F3370008AEFD2 /* WCChatTableCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCChatTableCellView.h; sourceTree = "<group>"; };
 		4C4D1D821777B8DB005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4C4D1D831777B8DB005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Preferences.xib; sourceTree = "<group>"; };
 		4C4D1D841777B8DC005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Connect.xib; sourceTree = "<group>"; };
@@ -456,6 +460,7 @@
 		4C4D1D941777B8DC005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/History.xib; sourceTree = "<group>"; };
 		4C4D1D951777B8DC005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Console.xib; sourceTree = "<group>"; };
 		4C4D1D961777B8DD005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Error.xib; sourceTree = "<group>"; };
+		4C4D1D981777B8DD005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C4D1D9A1777B8DD005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
 		4C4D1D9B1777B8DD005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C4D1D9C1777B8DD005304D8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -493,8 +498,6 @@
 		4C76213617E2FE4800A2EDA9 /* WCEncryptionTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCEncryptionTransformer.m; path = Sources/WCEncryptionTransformer.m; sourceTree = "<group>"; };
 		4C76213E17E3049B00A2EDA9 /* WCStringEncryptionTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCStringEncryptionTransformer.h; path = Sources/WCStringEncryptionTransformer.h; sourceTree = "<group>"; };
 		4C76213F17E3049B00A2EDA9 /* WCStringEncryptionTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCStringEncryptionTransformer.m; path = Sources/WCStringEncryptionTransformer.m; sourceTree = "<group>"; };
-		4C782BC42460A5EF00970844 /* WCBoardPostCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WCBoardPostCellView.h; path = Sources/WCBoardPostCellView.h; sourceTree = "<group>"; };
-		4C782BC52460A5EF00970844 /* WCBoardPostCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WCBoardPostCellView.m; path = Sources/WCBoardPostCellView.m; sourceTree = "<group>"; };
 		4C7C088415ED66F7009D9F0E /* WCTrackerServerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCTrackerServerInfo.h; path = Sources/WCTrackerServerInfo.h; sourceTree = "<group>"; };
 		4C7C088515ED66F7009D9F0E /* WCTrackerServerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCTrackerServerInfo.m; path = Sources/WCTrackerServerInfo.m; sourceTree = "<group>"; };
 		4C82440017DE389F0065CEEE /* WiredClient.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WiredClient.xcdatamodel; sourceTree = "<group>"; };
@@ -504,10 +507,6 @@
 		4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Fetch.m"; sourceTree = "<group>"; };
 		4C82443517DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBJsonWriter+WCJsonWriter.h"; sourceTree = "<group>"; };
 		4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBJsonWriter+WCJsonWriter.m"; sourceTree = "<group>"; };
-		4C858F5D245D68B700791CE2 /* WCMessageTableCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WCMessageTableCellView.h; path = Sources/WCMessageTableCellView.h; sourceTree = "<group>"; };
-		4C858F5E245D68B700791CE2 /* WCMessageTableCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WCMessageTableCellView.m; path = Sources/WCMessageTableCellView.m; sourceTree = "<group>"; };
-		4C858F60245DA05900791CE2 /* WCDynamicTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WCDynamicTextField.h; path = Sources/WCDynamicTextField.h; sourceTree = "<group>"; };
-		4C858F61245DA05900791CE2 /* WCDynamicTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WCDynamicTextField.m; path = Sources/WCDynamicTextField.m; sourceTree = "<group>"; };
 		4C97DE3215630D8A00D88C11 /* WCWindowGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCWindowGradientView.h; sourceTree = "<group>"; };
 		4C97DE3315630D8A00D88C11 /* WCWindowGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCWindowGradientView.m; sourceTree = "<group>"; };
 		4C97DE401564632900D88C11 /* WCChatTopicView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCChatTopicView.h; sourceTree = "<group>"; };
@@ -539,6 +538,9 @@
 		4CEFF6D0180C3FF700AD7AD9 /* WCPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCPreferencesController.h; path = Sources/WCPreferencesController.h; sourceTree = "<group>"; };
 		4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCPreferencesController.m; path = Sources/WCPreferencesController.m; sourceTree = "<group>"; };
 		4CF094BD1559D67D005D77BB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Neo.WiredTemplate; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CF094D81559D8C1005D77BB /* Neo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Neo-Info.plist"; sourceTree = "<group>"; };
+		4CF094DA1559D8C1005D77BB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CFCEB47181E7AA300D5FF71 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/ThreadView.xib; sourceTree = "<group>"; };
 		4CFCEB4F181E7AA600D5FF71 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/ThreadView.xib; sourceTree = "<group>"; };
 		4CFCEB53181E7AAD00D5FF71 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/ThreadWindow.xib; sourceTree = "<group>"; };
@@ -700,6 +702,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4CF094D11559D8C1005D77BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072E0486CEB800E47090 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -716,6 +725,7 @@
 				4C6853051FDF38700077FD54 /* SBJson4.framework in Frameworks */,
 				A509AD1205F7FBFF00E6AE2D /* Carbon.framework in Frameworks */,
 				A5D4F28006D75DA4002A33D0 /* ExceptionHandling.framework in Frameworks */,
+				2AA363112AF956B100D684DB /* Sparkle in Frameworks */,
 				A5A3400707216D8900A16E9A /* Security.framework in Frameworks */,
 				777D36C50987E125005B5EC1 /* WebKit.framework in Frameworks */,
 				4C67D559156ADE230057D15A /* ScriptingBridge.framework in Frameworks */,
@@ -752,6 +762,7 @@
 			isa = PBXGroup;
 			children = (
 				A58411B9070C2279001A1AA2 /* Wired Client.app */,
+				4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */,
 			);
 			name = Products;
 			path = ../../../../../../../../Downloads/WiredClient;
@@ -946,8 +957,6 @@
 				4C82442C17DFB3EA0065CEEE /* NSManagedObjectContext+Fetch.m */,
 				4C82443517DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.h */,
 				4C82443617DFC83E0065CEEE /* SBJsonWriter+WCJsonWriter.m */,
-				4C4218FA245F1000008AEFD2 /* NSImage+Data.h */,
-				4C4218FB245F1000008AEFD2 /* NSImage+Data.m */,
 			);
 			name = Additions;
 			path = Sources;
@@ -981,6 +990,33 @@
 				4CE1530F1800D5E7004DA093 /* ChatHistory-default.WiredHistory */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4CF094B51559D669005D77BB /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				4CF094D61559D8C1005D77BB /* Neo */,
+			);
+			name = Templates;
+			sourceTree = "<group>";
+		};
+		4CF094D61559D8C1005D77BB /* Neo */ = {
+			isa = PBXGroup;
+			children = (
+				4C160683181494A800373611 /* htdocs */,
+				4CF094D71559D8C1005D77BB /* Supporting Files */,
+			);
+			name = Neo;
+			path = Templates/Neo;
+			sourceTree = "<group>";
+		};
+		4CF094D71559D8C1005D77BB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CF094D81559D8C1005D77BB /* Neo-Info.plist */,
+				4CF094D91559D8C1005D77BB /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		4CFDCBE215695DA600DA17A6 /* History */ = {
@@ -1068,14 +1104,12 @@
 				773FEF121084CE2F002AF8DF /* WCBoardsButtonCell.h */,
 				777790B010617FE200248834 /* WCBoardsTextView.m */,
 				777790AF10617FE200248834 /* WCBoardsTextView.h */,
-				775F68A210A7583800A876A8 /* WCBoardThreadController.h */,
 				775F68A310A7583800A876A8 /* WCBoardThreadController.m */,
+				775F68A210A7583800A876A8 /* WCBoardThreadController.h */,
 				4CD51D59181556CC002ADC1C /* WCThreadWindow.h */,
 				4CD51D5A181556CC002ADC1C /* WCThreadWindow.m */,
 				77BB1C980F28C20E00A402B7 /* WCBoardsWindow.h */,
 				77BB1C990F28C20E00A402B7 /* WCBoardsWindow.m */,
-				4C782BC42460A5EF00970844 /* WCBoardPostCellView.h */,
-				4C782BC52460A5EF00970844 /* WCBoardPostCellView.m */,
 			);
 			name = Boards;
 			sourceTree = "<group>";
@@ -1128,8 +1162,6 @@
 				4C4FDE8817799A8B00FADB95 /* WCServerBookmarkController.m */,
 				4C4FDEB01779B8EB00FADB95 /* WCTrackerBookmarkController.h */,
 				4C4FDEB11779B8EB00FADB95 /* WCTrackerBookmarkController.m */,
-				4C421904245F3370008AEFD2 /* WCChatTableCellView.h */,
-				4C421901245F3370008AEFD2 /* WCChatTableCellView.m */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -1144,10 +1176,6 @@
 				775F624A10A74B8500A876A8 /* WCConversationController.m */,
 				778E8613096D27B500258FE6 /* WCMessagesWindow.h */,
 				778E8614096D27B500258FE6 /* WCMessagesWindow.m */,
-				4C858F5D245D68B700791CE2 /* WCMessageTableCellView.h */,
-				4C858F5E245D68B700791CE2 /* WCMessageTableCellView.m */,
-				4C858F60245DA05900791CE2 /* WCDynamicTextField.h */,
-				4C858F61245DA05900791CE2 /* WCDynamicTextField.m */,
 				4C0A7CA417E8ED6600E08DBA /* Depreciated */,
 			);
 			name = Messages;
@@ -1295,6 +1323,7 @@
 			children = (
 				4C5BB6B9244618050089D6D2 /* Wired Client.entitlements */,
 				A5E8BABF08748D6D0010F2A4 /* Config */,
+				4CF094B51559D669005D77BB /* Templates */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 			);
 			name = "Wired Client";
@@ -1317,8 +1346,8 @@
 				A52B1C3E06C407190033D317 /* Preferences */,
 				A57D22F707D0C444002C306E /* Connection */,
 				A52B1C1206C4033B0033D317 /* Chat */,
-				A52B1C1306C403760033D317 /* Messages */,
 				A52B1C2C06C404580033D317 /* Files */,
+				A52B1C1306C403760033D317 /* Messages */,
 				77CED3990EC068D600123164 /* Boards */,
 				A52B1C3306C4056F0033D317 /* Transfers */,
 				A5AAD1280D86EA8B0072FFA1 /* Administration */,
@@ -1437,6 +1466,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4CF094D31559D8C1005D77BB /* Neo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF094DD1559D8C1005D77BB /* Build configuration list for PBXNativeTarget "Neo" */;
+			buildPhases = (
+				4CF094D01559D8C1005D77BB /* Sources */,
+				4CF094D11559D8C1005D77BB /* Frameworks */,
+				4CF094D21559D8C1005D77BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Neo;
+			productName = Bubbles;
+			productReference = 4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */;
+			productType = "com.apple.product-type.bundle";
+		};
 		8D1107260486CEB800E47090 /* Wired Client */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A5E8BAA908748D3B0010F2A4 /* Build configuration list for PBXNativeTarget "Wired Client" */;
@@ -1459,8 +1505,12 @@
 				4CE153151800D639004DA093 /* PBXTargetDependency */,
 				4CE1531B1800D639004DA093 /* PBXTargetDependency */,
 				4CE1531D1800D639004DA093 /* PBXTargetDependency */,
+				4CF094E41559D9A3005D77BB /* PBXTargetDependency */,
 			);
 			name = "Wired Client";
+			packageProductDependencies = (
+				2AA363102AF956B100D684DB /* Sparkle */,
+			);
 			productInstallPath = "$(HOME)/Applications";
 			productName = "Wired Client";
 			productReference = A58411B9070C2279001A1AA2 /* Wired Client.app */;
@@ -1475,7 +1525,6 @@
 				LastUpgradeCheck = 1010;
 				TargetAttributes = {
 					8D1107260486CEB800E47090 = {
-						DevelopmentTeam = 7KTXA5Y36K;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -1491,6 +1540,9 @@
 				Base,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* WiredClient */;
+			packageReferences = (
+				2AA3630F2AF956B100D684DB /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -1506,6 +1558,7 @@
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Wired Client */,
+				4CF094D31559D8C1005D77BB /* Neo */,
 				4CDBF1EA14BC4CAF007142D3 /* Wired Client (Distribute) */,
 				4C06678415DEC69800E8D810 /* Wired Client (Distribute Debug) */,
 				77F05B800751E75A004F4E0E /* Localize Nibs */,
@@ -1560,6 +1613,15 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4CF094D21559D8C1005D77BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF094DB1559D8C1005D77BB /* InfoPlist.strings in Resources */,
+				4C16068C181494BB00373611 /* htdocs in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D1107290486CEB800E47090 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1594,7 +1656,6 @@
 				4C0667F015DED67800E8D810 /* Files.xib in Resources */,
 				4C0667F615DED69900E8D810 /* Boards.xib in Resources */,
 				4C0667F915DED6A300E8D810 /* Transfers.xib in Resources */,
-				4C5BB6BB244624390089D6D2 /* dsa_pub.pem in Resources */,
 				4C0667FC15DED6AE00E8D810 /* Administration.xib in Resources */,
 				4C06680215DED6D400E8D810 /* History.xib in Resources */,
 				4C06680515DED6E400E8D810 /* Console.xib in Resources */,
@@ -1616,15 +1677,11 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Wired Client/Pods-Wired Client-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/NSDate+TimeAgo/NSDate_TimeAgo.framework",
 				"${BUILT_PRODUCTS_DIR}/SBJson4/SBJson4.framework",
-				"${PODS_ROOT}/Sparkle/Sparkle.framework",
-				"${PODS_ROOT}/Sparkle/Sparkle.framework.dSYM",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSDate_TimeAgo.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SBJson4.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/Sparkle.framework.dSYM",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1661,7 +1718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Type a script or drag a script file from your workspace to insert its path.\ncodesign --force --sign \"Developer ID Application: Rafael Warnault (7KTXA5Y36K)\" \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Type a script or drag a script file from your workspace to insert its path.\n#codesign --force --sign \"Developer ID Application: Rafael Warnault (7KTXA5Y36K)\" \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app\"\n";
 		};
 		4C8243FB17DE37C90065CEEE /* Generate Core Data Model */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1749,12 +1806,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "sh \"$SRCROOT/../../wired_client_localize.sh\" || exit 1\n";
+			shellScript = "sh \"$SRCROOT/../../wired_client_localize.sh\" || exit 1";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4CF094D01559D8C1005D77BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072C0486CEB800E47090 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1792,7 +1856,6 @@
 				A5DC7FA4057AB0A600736BBF /* WCFile.m in Sources */,
 				A5DC7F0C057AAF6C00736BBF /* WCFileInfo.m in Sources */,
 				A5DC7F0E057AAF6C00736BBF /* WCFiles.m in Sources */,
-				4C421905245F3370008AEFD2 /* WCChatTableCellView.m in Sources */,
 				77E36EEE0F82414F0065329A /* WCFilesSourceOutlineView.m in Sources */,
 				A5929D5F0F8153D300680E4D /* WCFilesWindow.m in Sources */,
 				A51B4FE50F4222AF00EAB0E1 /* WCFilterButtonCell.m in Sources */,
@@ -1819,7 +1882,6 @@
 				A52B301C05E6F0A300C651A4 /* WCServerInfo.m in Sources */,
 				A5DC7FD1057AB0F200736BBF /* WCSettings.m in Sources */,
 				A5AAD14E0D86F1A10072FFA1 /* WCSettingsController.m in Sources */,
-				4C782BC62460A5EF00970844 /* WCBoardPostCellView.m in Sources */,
 				A5F7F95E0F1D2588007BF4FD /* WCSourceBackgroundView.m in Sources */,
 				A5F7F9F90F1D52DB007BF4FD /* WCSourceImageView.m in Sources */,
 				A5F7F8D30F1D16EE007BF4FD /* WCSourceSplitView.m in Sources */,
@@ -1828,7 +1890,6 @@
 				A5492D150D8EA6A4002D37D7 /* WCTrackerConnection.m in Sources */,
 				A5DC7FAD057AB0A600736BBF /* WCTransfer.m in Sources */,
 				A5DC7F8D057AB05F00736BBF /* WCTransferCell.m in Sources */,
-				4C858F62245DA05900791CE2 /* WCDynamicTextField.m in Sources */,
 				A5D8DBB00D707E2E001E2CE8 /* WCTransferConnection.m in Sources */,
 				A5DC7EE8057AAF2900736BBF /* WCTransfers.m in Sources */,
 				A5DC7FAB057AB0A600736BBF /* WCUser.m in Sources */,
@@ -1841,7 +1902,6 @@
 				4C97DE4515658A9C00D88C11 /* WCChatInputTextView.m in Sources */,
 				4CFDCBE815695FDA00DA17A6 /* WCChatHistory.m in Sources */,
 				4C7C088615ED66F7009D9F0E /* WCTrackerServerInfo.m in Sources */,
-				4C4218FC245F1000008AEFD2 /* NSImage+Data.m in Sources */,
 				4C3A410A15F5672400C9B136 /* WCApplicationMenuController.m in Sources */,
 				4C6D6E23176C9E5E0043677E /* main.m in Sources */,
 				4C6D6E3B176CA5C60043677E /* WCTabBarView.m in Sources */,
@@ -1864,7 +1924,6 @@
 				4C22073917DE36B300F1FBBA /* _WDBroadcastMessage.m in Sources */,
 				4C22073A17DE36B300F1FBBA /* _WDMessagesConversation.m in Sources */,
 				4C22073B17DE36B300F1FBBA /* _WDConversation.m in Sources */,
-				4C858F5F245D68B700791CE2 /* WCMessageTableCellView.m in Sources */,
 				4C22073C17DE36B300F1FBBA /* _WDMessage.m in Sources */,
 				4C22073D17DE36B300F1FBBA /* _WDPrivateMessage.m in Sources */,
 				4C82440117DE389F0065CEEE /* WiredClient.xcdatamodeld in Sources */,
@@ -1911,6 +1970,11 @@
 			isa = PBXTargetDependency;
 			name = WiredAppKit;
 			targetProxy = 4CE1531C1800D639004DA093 /* PBXContainerItemProxy */;
+		};
+		4CF094E41559D9A3005D77BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CF094D31559D8C1005D77BB /* Neo */;
+			targetProxy = 4CF094E31559D9A3005D77BB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2165,6 +2229,16 @@
 			name = ThreadWindow.xib;
 			sourceTree = "<group>";
 		};
+		4CF094D91559D8C1005D77BB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CF094DA1559D8C1005D77BB /* en */,
+				4C4D1D981777B8DD005304D8 /* fr */,
+				4C016F1A1778CD5F00D6D2B3 /* de */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -2262,12 +2336,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 94;
-				DEVELOPMENT_TEAM = 7KTXA5Y36K;
-				ENABLE_HARDENED_RUNTIME = YES;
+				CURRENT_PROJECT_VERSION = 58;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -2288,13 +2363,17 @@
 					"\"$(BUILD_ROOT)/../Intermediates.noindex/ArchiveIntermediates/Wired Client/BuildProductsPath/Release\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MARKETING_VERSION = 2.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClient";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClient";
@@ -2303,6 +2382,38 @@
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"/**";
 				VERSIONING_SYSTEM = "apple-generic";
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4C9C2554243F78F4005F214C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Neo/Neo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Templates/Neo/Neo-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = WiredTemplate;
 			};
 			name = Release;
 		};
@@ -2371,6 +2482,64 @@
 			};
 			name = Test;
 		};
+		4CF094DE1559D8C1005D77BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Neo/Neo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Templates/Neo/Neo-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = WiredTemplate;
+			};
+			name = Debug;
+		};
+		4CF094DF1559D8C1005D77BB /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Neo/Neo-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Templates/Neo/Neo-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = WiredTemplate;
+			};
+			name = Test;
+		};
 		A5DB47BA098BBAB50073564C /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2433,12 +2602,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 94;
-				DEVELOPMENT_TEAM = 7KTXA5Y36K;
-				ENABLE_HARDENED_RUNTIME = YES;
+				CURRENT_PROJECT_VERSION = 58;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -2458,13 +2628,17 @@
 					"\"$(SRCROOT)/../\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/vendor/WiredFrameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MARKETING_VERSION = 2.5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.WiredClientDebug";
 				PRODUCT_IDENTIFIER = "fr.read-write.WiredClientDebug";
@@ -2538,15 +2712,18 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
 				CODE_SIGN_IDENTITY = "-";
-				CURRENT_PROJECT_VERSION = 94;
-				ENABLE_HARDENED_RUNTIME = YES;
+				CURRENT_PROJECT_VERSION = 58;
+				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/Sparkle",
 				);
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_NAME = "Wired Client";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"/**";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2586,6 +2763,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		4CF094DD1559D8C1005D77BB /* Build configuration list for PBXNativeTarget "Neo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF094DE1559D8C1005D77BB /* Debug */,
+				4C9C2554243F78F4005F214C /* Release */,
+				4CF094DF1559D8C1005D77BB /* Test */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		A5E8BAA908748D3B0010F2A4 /* Build configuration list for PBXNativeTarget "Wired Client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2617,6 +2804,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2AA3630F2AF956B100D684DB /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2AA363102AF956B100D684DB /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AA3630F2AF956B100D684DB /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		4C8243FF17DE389F0065CEEE /* WiredClient.xcdatamodeld */ = {

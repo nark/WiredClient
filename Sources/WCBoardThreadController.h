@@ -26,23 +26,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "WCBoardPostCellView.h"
-
 @class WCBoardThread, WCBoardPost, WCBoard;
 
-@interface WCBoardThreadController : NSViewController <NSTableViewDelegate, NSTableViewDataSource, WCBoardPostCellViewDelegate> {
-	IBOutlet NSTableView                *_threadTableView;
-    
+@interface WCBoardThreadController : NSViewController {
+	IBOutlet WebView					*_threadWebView;
+	
 	WCBoard								*_board;
 	WCBoardThread						*_thread;
 	
 	NSOperationQueue					*_loadingQueue;
+	
+	NSMutableString						*_headerTemplate;
+	NSString							*_footerTemplate;
+	NSString							*_replyTemplate;
+	NSString							*_postTemplate;
 
 	NSString							*_fileLinkBase64String;
+	NSString							*_unreadPostBase64String;
 	NSString							*_defaultIconBase64String;
 	
 	NSMutableDictionary					*_smileyBase64Strings;
 	
+	NSString							*_templatePath;
 	NSFont								*_font;
 	NSColor								*_textColor;
 	NSColor								*_backgroundColor;
@@ -52,8 +57,6 @@
 	
 	WCBoardPost							*_selectPost;
 	NSRect								_previousVisibleRect;
-    
-    BOOL                                _scrollEndReached;
 }
 
 - (void)setBoard:(WCBoard *)board;
@@ -61,6 +64,9 @@
 
 - (void)setThread:(WCBoardThread *)thread;
 - (WCBoardThread *)thread;
+
+- (void)setTemplatePath:(NSString *)path;
+- (NSString *)templatePath;
 
 - (void)setFont:(NSFont *)font;
 - (NSFont *)font;
@@ -74,15 +80,13 @@
 - (void)setBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)backgroundColor;
 
-- (NSTableView *)threadTableView;
-//- (NSString *)HTMLString;
-
-- (NSAttributedString *)attributedStringForText:(NSString *)text;
+- (WebView *)threadWebView;
+- (NSString *)HTMLString;
 
 - (void)reloadData;
 - (void)reloadDataAndScrollToCurrentPosition;
 - (void)reloadDataAndSelectPost:(WCBoardPost *)selectPost;
 
-- (void)reloadView;
+- (void)reloadTemplate;
 
 @end

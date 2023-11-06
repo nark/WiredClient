@@ -1343,15 +1343,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 
 - (BOOL)_connectConnection:(WCTransferConnection *)connection forTransfer:(WCTransfer *)transfer error:(WCError **)error {
 	WIP7Message		*message;
-    
-    if([transfer bookmark]) {
-        if(![connection connectWithTimeout:30.0 bookmark:[transfer bookmark] error:error])
-            return NO;
-    } else {
-        if(![connection connectWithTimeout:30.0 error:error])
-        return NO;
-    }
-
+	
+	if(![connection connectWithTimeout:30.0 error:error])
+		return NO;
+	
 	if(![connection writeMessage:[connection clientInfoMessage] timeout:30.0 error:error] ||
 	   ![connection writeMessage:[connection setNickMessage] timeout:30.0 error:error] ||
 	   ![connection writeMessage:[connection setStatusMessage] timeout:30.0 error:error] ||

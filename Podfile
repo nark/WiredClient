@@ -1,9 +1,8 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
-platform :osx, '10.10'
+platform :osx, '10.13'
 
 target 'Wired Client' do
-    pod 'Sparkle'
     pod 'SBJson4', '~> 4.0.0'
     pod 'NSDate+TimeAgo'
     pod 'OpenSSL-Universal'
