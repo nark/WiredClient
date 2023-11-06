@@ -17,7 +17,7 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 		
 1. Get sources on GitHub:
 
-		git clone https://github.com/nark/WiredClient.git
+		git clone https://github.com/profdrluigi/WiredClient.git
 		
 2. Move into the sources directory:
 		
