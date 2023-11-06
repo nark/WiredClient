@@ -1,6 +1,6 @@
 # Wired Client Source Code
 
-This repository hosts Wired Client source code. You will find an Xcode project named "WiredClient.xcworkspace" that contains a Wired Client target ready to deploy a 10.10+ compatible application (64-bit).
+This repository hosts Wired Client source code. You will find an Xcode project named "WiredClient.xcworkspace" that contains a Wired Client target ready to deploy a 10.13+ compatible application (64-bit).
 
 ## Prerequisites
 
