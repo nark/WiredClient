@@ -119,8 +119,6 @@ static NSArray *_systemSounds;
 		[_disconnectMenuItem setTitle:NSLS(@"Disconnect\u2026", @"Disconnect menu item")];
 	else
 		[_disconnectMenuItem setTitle:NSLS(@"Disconnect", @"Disconnect menu item")];
-	
-	[_updater setAutomaticallyChecksForUpdates:[[WCSettings settings] boolForKey:WCCheckForUpdate]];
 }
 
 
@@ -701,17 +699,6 @@ static WCApplicationController		*sharedController;
 	[WIDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 	[NSNumberFormatter setDefaultFormatterBehavior:NSNumberFormatterBehavior10_4];
 
-    
-    // set the auto-update feed URL regarding to the selected configuration (Debug or Release)
-#ifdef WCConfigurationRelease
-    [_updater setFeedURL:[NSURL URLWithString:@"https://profdrluigi.github.io/WiredClient/app/appcast.xml"]];
-#else
-   [_updater setFeedURL:[NSURL URLWithString:@"https://profdrluigi.github.io/WiredClient/app/appcast.xml"]];
-#endif
-    
-     [_updater setSendsSystemProfile:YES];
-     [_updater performSelector:@selector(checkForUpdatesInBackground) afterDelay:5.0f];
-
 	path = [[NSBundle mainBundle] pathForResource:@"wired" ofType:@"xml"];
 
     // verify the P7 specification in debug mode
@@ -1177,18 +1164,6 @@ static WCApplicationController		*sharedController;
 - (WIDateFormatter *)dateFormatter {
     return _dateFormatter;
 }
-
-
-
-
-#pragma mark -
-
-- (void)checkForUpdate {
-	[_updater checkForUpdates:self];
-}
-
-
-
 
 
 #pragma mark -

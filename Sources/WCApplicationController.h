@@ -47,8 +47,6 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 	IBOutlet NSMenu							*_debugMenu;
 	IBOutlet NSMenu							*_windowMenu;
 	IBOutlet NSMenuItem						*_closeWindowMenuItem;
-	IBOutlet SUUpdater						*_updater;
-	
 	NSString								*_clientVersion;
 	NSUInteger								_unread;
 	
@@ -76,8 +74,7 @@ extern NSString * const						WCExceptionHandlerReceivedExceptionNotification;
 
 - (void)connectWithBookmark:(NSDictionary *)bookmark;
 
-// Sparkle Check for Update
-- (void)checkForUpdate;
+
 
 // Actions
 - (IBAction)about:(id)sender;
