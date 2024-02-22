@@ -1053,44 +1053,6 @@ static WCApplicationController		*sharedController;
 }
 
 
-
-
-
-
-#pragma mark -
-
-
-- (BOOL)updaterShouldPromptForPermissionToCheckForUpdates:(SUUpdater *)updater {
-	return NO;
-}
-
-
-- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile {
-    NSMutableArray *params;
-    
-    params = [NSMutableArray array];
-    
-    [params addObject: @{
-       @"key":          @"debug",
-#ifdef WCConfigurationRelease
-       @"value":        @"false"
-#else
-       @"value":        @"true"
-#endif
-    }];
-    
-    [params addObject: @{
-       @"key":          @"appShortVersion",
-       @"value":        [[[NSApp bundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"],
-    }];
-    
-    return params;
-}
-
-
-
-
-
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item {
