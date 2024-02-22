@@ -12,6 +12,8 @@ rm -r /Users/luigi/Library/Caches/Sparkle_generate_appcast/*
     ditto -c -k --sequesterRsrc --keepParent ~/Documents/Xcode/WiredClient/"Wired Client.app" ~/Documents/Xcode/WiredClient/app/wiredclient.zip
 
     /Applications/Sparkle/bin/generate_appcast ~/Documents/Xcode/WiredClient/app/
+    sed -ib "s/wiredclient.html/WiredClient.html/g" ~/Documents/Xcode/WiredClient/app/appcast.xml
+    rm ~/Documents/Xcode/WiredClient/app/appcast.xmlb
 
     #cd ~/Documents/Xcode/WiredClient
     #git add app/appcast.xml
