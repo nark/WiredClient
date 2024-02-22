@@ -122,26 +122,67 @@
 
 
 - (void)makeObjectsPerformSelector:(SEL)selector withObject:(id)object1 withObject:(id)object2 {
-	NSEnumerator	*enumerator;
-	id				object;
+    NSEnumerator *enumerator;
+    id object;
 
-	enumerator = [self objectEnumerator];
+    enumerator = [self objectEnumerator];
 
-	while((object = [enumerator nextObject]))
-		objc_msgSend(object, selector, object1, object2);
+    while ((object = [enumerator nextObject])) {
+        // Get method signature
+        NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
+        
+        // Check if method exists
+        if (methodSignature) {
+            // Create NSInvocation instance
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+            
+            // Set target and selector
+            [invocation setTarget:object];
+            [invocation setSelector:selector];
+            
+            // Set arguments
+            [invocation setArgument:&object1 atIndex:2];
+            [invocation setArgument:&object2 atIndex:3];
+            
+            // Invoke the method
+            [invocation invoke];
+        } else {
+            NSLog(@"Method %@ not found in object %@", NSStringFromSelector(selector), object);
+        }
+    }
 }
+
 
 
 
 - (void)makeObjectsPerformSelector:(SEL)selector withBool:(BOOL)value {
-	NSEnumerator	*enumerator;
-	id				object;
+    NSEnumerator *enumerator = [self objectEnumerator];
+    id object;
 
-	enumerator = [self objectEnumerator];
-
-	while((object = [enumerator nextObject]))
-		objc_msgSend(object, selector, value);
+    while ((object = [enumerator nextObject])) {
+        // Get method signature
+        NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
+        
+        // Check if method exists
+        if (methodSignature) {
+            // Create NSInvocation instance
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+            
+            // Set target and selector
+            [invocation setTarget:object];
+            [invocation setSelector:selector];
+            
+            // Set argument
+            [invocation setArgument:&value atIndex:2];
+            
+            // Invoke the method
+            [invocation invoke];
+        } else {
+            NSLog(@"Method %@ not found in object %@", NSStringFromSelector(selector), object);
+        }
+    }
 }
+
 
 
 
@@ -257,30 +298,34 @@
 @implementation NSMutableArray(WIFoundation)
 
 - (void)addObject:(id)object sortedUsingSelector:(SEL)selector {
-	IMP					method;
-	NSComparisonResult	result;
-	NSUInteger			i, count;
-
-	count = [self count];
-	
-	if(count == 0) {
-		[self addObject:object];
-	} else {
-		method = [object methodForSelector:selector];
-
-		for(i = 0; i < count; i++) {
-			result = (NSComparisonResult) method(object, selector, [self objectAtIndex:i]);
-			
-			if(result < 0) {
-				[self insertObject:object atIndex:i];
-				
-				return;
-			}
-		}
-			
-		[self addObject:object];
-	}
+    NSUInteger            i, count;
+    count = [self count];
+    
+    if(count == 0) {
+        [self addObject:object];
+    } else {
+        SEL compareSelector = @selector(compare:); // Default compare selector if none provided
+        if (![object respondsToSelector:selector]) {
+            NSLog(@"Object does not respond to provided selector, falling back to default compare:");
+            selector = compareSelector;
+        }
+        
+        for(i = 0; i < count; i++) {
+            id objAtIndex = [self objectAtIndex:i];
+            NSComparisonResult result = ((NSComparisonResult (*)(id, SEL, id))[object methodForSelector:selector])(object, selector, objAtIndex);
+            
+            if(result == NSOrderedAscending || result == NSOrderedSame) {
+                [self insertObject:object atIndex:i];
+                return;
+            }
+        }
+            
+        [self addObject:object];
+    }
 }
+
+
+
 
 
 
