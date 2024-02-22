@@ -14,12 +14,13 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 0. Install dependencies using [Homebrew](https://brew.sh):
 		
 		brew install mogenerator
+		brew install cocoapods
 		
-1. Get sources on GitHub:
+2. Get sources on GitHub:
 
 		git clone https://github.com/profdrluigi/WiredClient.git
 		
-2. Move into the sources directory:
+3. Move into the sources directory:
 		
 		cd WiredClient
 		
