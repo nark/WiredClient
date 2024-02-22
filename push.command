@@ -17,4 +17,3 @@ rm -r /Users/luigi/Library/Caches/Sparkle_generate_appcast/*
 
 rm -r ~/Documents/Xcode/WiredClient/"Wired Client.app"
 
-
