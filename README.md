@@ -13,8 +13,7 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 
 0. Install dependencies using [Homebrew](https://brew.sh):
 		
-		brew install mogenerator
-		brew install cocoapods
+		brew install mogenerator cocoapods
 		
 2. Get sources on GitHub:
 
