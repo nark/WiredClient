@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2AD4278A2B8931B200DF59CA /* OpenSSL in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD427892B8931B200DF59CA /* OpenSSL */; };
+		2AD427942B89325C00DF59CA /* OpenSSL in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD427932B89325C00DF59CA /* OpenSSL */; };
 		4C0F438316F1419F00735AC3 /* NSTreeController+WIAppKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0F438116F1419F00735AC3 /* NSTreeController+WIAppKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C0F438416F1419F00735AC3 /* NSTreeController+WIAppKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F438216F1419F00735AC3 /* NSTreeController+WIAppKit.m */; };
 		4C297AE61778840E002ED699 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C297AE41778840E002ED699 /* Localizable.strings */; };
@@ -953,6 +955,7 @@
 				B1F944A62191BA2600641324 /* AppKit.framework in Frameworks */,
 				B1F9448B2191B77900641324 /* Carbon.framework in Frameworks */,
 				4CE151E617FDFD62004DA093 /* WiredFoundation.framework in Frameworks */,
+				2AD427942B89325C00DF59CA /* OpenSSL in Frameworks */,
 				B1F944942191B8B900641324 /* Cocoa.framework in Frameworks */,
 				4CA9B2E01807228000FDDB3A /* wired.a in Frameworks */,
 				B130E08D2195D83400C4E225 /* libxml2.2.dylib in Frameworks */,
@@ -979,6 +982,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AD4278A2B8931B200DF59CA /* OpenSSL in Frameworks */,
 				B1F9448E2191B86900641324 /* Security.framework in Frameworks */,
 				B130E08B2195D80600C4E225 /* libxml2.2.dylib in Frameworks */,
 				B130E0892195D7F600C4E225 /* libz.1.dylib in Frameworks */,
@@ -1995,6 +1999,9 @@
 				4C417284147DC46A00DC0A9A /* PBXTargetDependency */,
 			);
 			name = WiredNetworking;
+			packageProductDependencies = (
+				2AD427932B89325C00DF59CA /* OpenSSL */,
+			);
 			productName = WiredNetworking;
 			productReference = 4C41725C147DC40900DC0A9A /* WiredNetworking.framework */;
 			productType = "com.apple.product-type.framework";
@@ -2035,6 +2042,9 @@
 			dependencies = (
 			);
 			name = "libwired-osx";
+			packageProductDependencies = (
+				2AD427892B8931B200DF59CA /* OpenSSL */,
+			);
 			productName = wired;
 			productReference = 4CBDAD14147AF94F00D0C51A /* wired.a */;
 			productType = "com.apple.product-type.library.static";
@@ -2080,6 +2090,9 @@
 				Base,
 			);
 			mainGroup = 4CBDABF1147AF52E00D0C51A;
+			packageReferences = (
+				2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */,
+			);
 			productRefGroup = 4CBDABFD147AF52E00D0C51A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2987,6 +3000,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzyzanowskim/OpenSSL.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.1.180;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2AD427892B8931B200DF59CA /* OpenSSL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */;
+			productName = OpenSSL;
+		};
+		2AD427932B89325C00DF59CA /* OpenSSL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */;
+			productName = OpenSSL;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		4C14ABB7181EAA4000A4435D /* Model.xcdatamodeld */ = {
