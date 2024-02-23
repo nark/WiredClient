@@ -2717,13 +2717,13 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
     NSCursor *cursor = self.resizingMouseCursor;
     [cursor set];
             
-    while ((nextEvent = [self.window nextEventMatchingMask:NSLeftMouseUpMask | NSLeftMouseDraggedMask untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
+    while ((nextEvent = [self.window nextEventMatchingMask:NSEventMaskLeftMouseUp | NSEventMaskLeftMouseDragged untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
 
         if (firstEvent == nil) {
             firstEvent = nextEvent;
         }
         
-        if (nextEvent.type == NSLeftMouseDragged) {
+        if (nextEvent.type == NSEventTypeLeftMouseDragged) {
             dragEvent = nextEvent;
 
             NSPoint currentPoint = [self convertPoint:nextEvent.locationInWindow fromView:nil];
@@ -2748,7 +2748,7 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
                 }
             }
                     
-        } else if (nextEvent.type == NSLeftMouseUp) {
+        } else if (nextEvent.type == NSEventTypeLeftMouseUp) {
             mouseUp = nextEvent;
             break;
         }

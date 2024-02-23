@@ -186,7 +186,7 @@ NSString * const WCUserCellStatusKey		= @"WCUserCellStatusKey";
 		}
 	}
 	
-	if([self controlSize] == NSSmallControlSize && [status length] > 0) {
+    if([self controlSize] == NSControlSizeSmall && [status length] > 0) {
 		[string appendAttributedString:
 			[NSAttributedString attributedStringWithString:[NSSWF:@" %@", status] attributes:_statusAttributes]];
 	}
@@ -194,7 +194,7 @@ NSString * const WCUserCellStatusKey		= @"WCUserCellStatusKey";
 	[_nickCell setAttributedStringValue:string];
 	[_nickCell drawWithFrame:rect inView:view];
 	
-	if([self controlSize] == NSRegularControlSize && [status length] > 0) {
+    if([self controlSize] == NSControlSizeRegular && [status length] > 0) {
 		rect	= NSMakeRect(frame.origin.x, frame.origin.y + offset + 19.0, frame.size.width, 14.0);
 		string	= [NSAttributedString attributedStringWithString:status attributes:_statusAttributes];
 		

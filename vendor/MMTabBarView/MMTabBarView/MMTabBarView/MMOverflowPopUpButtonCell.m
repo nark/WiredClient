@@ -87,7 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSRect theRect = [self _imageRectForBounds:frame forImage:image];
     
-    [image drawInRect:theRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:alpha respectFlipped:YES hints:nil];
+    [image drawInRect:theRect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:alpha respectFlipped:YES hints:nil];
 }
 
 - (void)drawBezelWithFrame:(NSRect)frame inView:(NSView *)controlView {

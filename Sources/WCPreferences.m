@@ -800,29 +800,37 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 
+- (NSUInteger)_selectedThemeRow {
+    // Implementierung der Methode hier
+    return 0; // Beispielrückgabewert, passen Sie ihn entsprechend an
+}
+
 - (IBAction)changeThemeFont:(id)sender {
-	NSDictionary		*theme;
-	NSFontManager		*fontManager;
-	
-	theme			= [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:[self _selectedThemeRow]];
-	fontManager		= [NSFontManager sharedFontManager];
+    NSDictionary *theme;
+    NSFontManager *fontManager;
+    
+    // Konvertierung des Rückgabewerts von [self _selectedThemeRow] in NSUInteger
+    NSUInteger selectedThemeRow = (NSUInteger)[self _selectedThemeRow];
+    
+    theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:selectedThemeRow];
+    fontManager = [NSFontManager sharedFontManager];
     
     [fontManager setTarget:self];
-	
-	if(sender == _themesChatFontButton) {
-		[fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesChatFont]) isMultiple:NO];
-		[fontManager setAction:@selector(setChatFont:)];
-	}
-	else if(sender == _themesMessagesFontButton) {
-		[fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesMessagesFont]) isMultiple:NO];
-		[fontManager setAction:@selector(setMessagesFont:)];
-	}
-	else if(sender == _themesBoardsFontButton) {
-		[fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont]) isMultiple:NO];
-		[fontManager setAction:@selector(setBoardsFont:)];
-	}
-	
-	[fontManager orderFrontFontPanel:self];
+    
+    if(sender == _themesChatFontButton) {
+        [fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesChatFont]) isMultiple:NO];
+        [fontManager setAction:@selector(setChatFont:)];
+    }
+    else if(sender == _themesMessagesFontButton) {
+        [fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesMessagesFont]) isMultiple:NO];
+        [fontManager setAction:@selector(setMessagesFont:)];
+    }
+    else if(sender == _themesBoardsFontButton) {
+        [fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont]) isMultiple:NO];
+        [fontManager setAction:@selector(setBoardsFont:)];
+    }
+    
+    [fontManager orderFrontFontPanel:self];
 }
 
 

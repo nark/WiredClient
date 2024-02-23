@@ -258,7 +258,7 @@
 
     [self _addAdministrationView:_accountsView
                             name:NSLS(@"Accounts", @"Accounts toolbar item")
-                           image:[NSImage imageNamed:@"Accounts"]
+                           image:[NSImage imageNamed:@"AccountsMainchat"]
                       identifier:@"Accounts"
                       controller:_accountsController];
 

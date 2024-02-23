@@ -60,7 +60,7 @@
 - (void)sendEvent:(NSEvent *)event {
 	BOOL	handled = NO;
 
-	if([event type] == NSKeyDown) {
+    if([event type] == NSEventTypeKeyDown) {
         if([event character] == NSF12FunctionKey && [event controlKeyModifier]) {
 			handled = [self sendAction:@selector(stats:) to:NULL from:self];
         }

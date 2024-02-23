@@ -715,10 +715,10 @@ typedef enum _WCChatActivity				WCChatActivity;
 												 target:self
 												 action:@selector(chatHistory:)];
 	}
-	else if([identifier isEqualToString:@"Accounts"]) {
+	else if([identifier isEqualToString:@"AccountsMainchat"]) {
             return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Accounts", @"Accounts toolbar item")
-												content:[NSImage imageNamed:@"Accounts"]
+												content:[NSImage imageNamed:@"AccountsMainchat"]
 												 target:self
 												 action:@selector(accounts:)];
  	}
@@ -786,7 +786,7 @@ typedef enum _WCChatActivity				WCChatActivity;
             @"Monitor",
             @"Events",
             @"Log",
-            @"Accounts",
+            @"AccountsMainchat",
             @"Banlist",
             @"Clear",
             @"Now Playing",
