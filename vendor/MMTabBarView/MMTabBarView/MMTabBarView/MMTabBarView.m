@@ -2513,7 +2513,7 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
 		NSRange range = NSMakeRange(0, contents.length);
 		[attrStr addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0] range:range];
 		NSMutableParagraphStyle *centeredParagraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
-        [centeredParagraphStyle setAlignment:NSCenterTextAlignment];
+        [centeredParagraphStyle setAlignment:NSTextAlignmentCenter];
         
 		[attrStr addAttribute:NSParagraphStyleAttributeName value:centeredParagraphStyle range:range];
 		[attrStr drawInRect:labelRect];
@@ -2550,7 +2550,7 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
 
 		if (window.showsResizeIndicator && NSIntersectsRect(self.frame, resizeWidgetFrame)) {
                 //the resize widgets are larger on metal windows
-			_resizeAreaCompensation = window.styleMask & NSTexturedBackgroundWindowMask ? 20 : 8;
+            _resizeAreaCompensation = window.styleMask & NSWindowStyleMaskTexturedBackground ? 20 : 8;
 		} else {
 			_resizeAreaCompensation = 0;
 		}

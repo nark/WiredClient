@@ -160,15 +160,15 @@ static NSArray *_systemSounds;
 		
 		if(i <= 10) {
 			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 10) ? 0 : i]];
-			[item setKeyEquivalentModifierMask:NSCommandKeyMask];
+            [item setKeyEquivalentModifierMask:NSEventModifierFlagCommand];
 		}
 		else if(i <= 20) {
 			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 20) ? 0 : i - 10]];
-			[item setKeyEquivalentModifierMask:NSCommandKeyMask | NSAlternateKeyMask];
+            [item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagOption];
 		}
 		else if(i <= 30) {
 			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 30) ? 0 : i - 20]];
-			[item setKeyEquivalentModifierMask:NSCommandKeyMask | NSShiftKeyMask];
+            [item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagShift];
 		}
 
 		[_bookmarksMenu addItem:item];
@@ -1175,7 +1175,7 @@ static WCApplicationController		*sharedController;
     credits = [[[NSMutableAttributedString alloc] initWithRTF:rtf documentAttributes:NULL] autorelease];
     
     style = [[[NSMutableParagraphStyle alloc] init] autorelease];
-    [style setAlignment:NSCenterTextAlignment];
+    [style setAlignment:NSTextAlignmentCenter];
     
     attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                   [NSFont boldSystemFontOfSize:11.0],	NSFontAttributeName,

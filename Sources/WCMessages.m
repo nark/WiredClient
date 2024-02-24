@@ -720,7 +720,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 - (void)_migrateToCoreData {
     NSData                  *data;
-	NSMutableArray			*array;
+    NSMutableArray            *array;
     
     array   = [NSMutableArray array];
     data    = [[WCSettings settings] objectForKey:WCMessageConversations];
@@ -741,27 +741,28 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
             nbMessage += [conv numberOfMessages];
         }
         
-        
-        NSAlert *alert = [NSAlert alertWithMessageText:NSLS(@"Messages Migration", @"Messages Migration Title")
-                                         defaultButton:NSLS(@"Migrate", @"Messages Migration Migrate Button")
-                                       alternateButton:NSLS(@"Erase", @"Messages Migration Erase Button")
-                                           otherButton:NSLS(@"Quit", @"Messages Migration Quit Button")
-                             informativeTextWithFormat:NSLS(@"Local storage of Messages moved to Core Data.\n\nChoose 'Migrate' in order to recover old messages. Choosing 'Erase' will erase all your messages and start on a fresh database (this cannot be undone).\n\nDepending to the number of messages (%d), the operation could take a while.", @"Messages Migration Message"), nbMessage];
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLS(@"Messages Migration", @"Messages Migration Title")];
+        [alert setInformativeText:[NSString stringWithFormat:NSLS(@"Local storage of Messages moved to Core Data.\n\nChoose 'Migrate' in order to recover old messages. Choosing 'Erase' will erase all your messages and start on a fresh database (this cannot be undone).\n\nDepending to the number of messages (%ld), the operation could take a while.", @"Messages Migration Message"), (long)nbMessage]];
+        [alert addButtonWithTitle:NSLS(@"Migrate", @"Messages Migration Migrate Button")];
+        [alert addButtonWithTitle:NSLS(@"Erase", @"Messages Migration Erase Button")];
+        [alert addButtonWithTitle:NSLS(@"Quit", @"Messages Migration Quit Button")];
         
         NSInteger result = [alert runModal];
         
-        if(result == NSAlertDefaultReturn) {
+        if(result == NSAlertFirstButtonReturn) {
             [self _migrateConversations:array];
         }
-        else if(result == NSAlertAlternateReturn) {
+        else if(result == NSAlertSecondButtonReturn) {
             [[WCSettings settings] setObject:@{} forKey:WCMessageConversations];
             [[WCSettings settings] setObject:@{} forKey:WCBroadcastConversations];
         }
-        else if(result == NSAlertOtherReturn) {
+        else if(result == NSAlertThirdButtonReturn) {
             exit(0);
         }
     }
 }
+
 
 
 - (void)_migrateConversations:(NSArray *)conversations {

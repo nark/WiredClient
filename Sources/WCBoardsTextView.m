@@ -62,29 +62,33 @@
 
 
 - (BOOL)readSelectionFromPasteboard:(NSPasteboard *)pasteboard type:(NSString *)type {
-	NSEnumerator			*enumerator;
-	NSMutableArray			*array;
-	NSArray					*sources;
-	WCFile					*file;
-	
-	if([type isEqualToString:WCFilePboardType]) {
-		array		= [NSMutableArray array];
-		sources		= [NSKeyedUnarchiver unarchiveObjectWithData:[pasteboard dataForType:type]];
-		enumerator	= [sources objectEnumerator];
-		
-		while((file = [enumerator nextObject])) {
-			[array addObject:[NSSWF:@"wiredp7://%@%@",
-				[[file path] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-				[file isFolder] ? @"/" : @""]];
-		}
-		
-		[[self window] makeFirstResponder:self];
-		[self insertText:[array componentsJoinedByString:@", "]];
-		
-		return YES;
-	}
+    NSEnumerator        *enumerator;
+    NSMutableArray        *array;
+    NSArray                    *sources;
+    WCFile                    *file;
+    
+    if([type isEqualToString:WCFilePboardType]) {
+        array        = [NSMutableArray array];
+        sources        = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteboard dataForType:type]];
+        enumerator    = [sources objectEnumerator];
+        
+        while((file = [enumerator nextObject])) {
+            NSString *escapedPath = [[file path] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
+            NSString *fileString = [NSString stringWithFormat:@"wiredp7://%@%@",
+                                    escapedPath,
+                                    [file isFolder] ? @"/" : @""];
+            [array addObject:fileString];
+        }
+        
+        [[self window] makeFirstResponder:self];
+        NSRange replacementRange = NSMakeRange([[self string] length], 0); // Appending at the end
+        [self insertText:[array componentsJoinedByString:@", "] replacementRange:replacementRange];
+        
+        return YES;
+    }
 
-	return [super readSelectionFromPasteboard:pasteboard type:type];
+    return [super readSelectionFromPasteboard:pasteboard type:type];
 }
+
 
 @end

@@ -2262,30 +2262,34 @@ typedef enum _WCChatFormat					WCChatFormat;
     if(_topic && [_topic topic]) {
         [_setTopicTextView setString:[_topic topic]];
         [_setTopicTextView setSelectedRange:NSMakeRange(0, [[_setTopicTextView string] length])];
-	}
+    }
     
-	[NSApp beginSheet:_setTopicPanel
-	   modalForWindow:[_userListSplitView window]
-		modalDelegate:self
-	   didEndSelector:@selector(setTopicSheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:NULL];
+    NSWindow *window = [_userListSplitView window];
+    
+    [window beginSheet:_setTopicPanel
+       completionHandler:^(NSModalResponse returnCode){
+           // Hier kannst du Code hinzufügen, der nach dem Blatt abgeschlossen wird.
+           // Das ist äquivalent zum "didEndSelector" in der vorherigen Methode.
+       }];
 }
+
 
 
 
 - (void)setTopicSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	WIP7Message		*message;
+    WIP7Message *message;
     
-	if(returnCode == NSAlertDefaultReturn) {
-		message = [WIP7Message messageWithName:@"wired.chat.set_topic" spec:WCP7Spec];
-		[message setUInt32:[self chatID] forName:@"wired.chat.id"];
-		[message setString:[_setTopicTextView string] forName:@"wired.chat.topic.topic"];
-		[[self connection] sendMessage:message];
-	}
-	
-	[_setTopicPanel close];
-	[_setTopicTextView setString:@""];
+    if (returnCode == NSAlertFirstButtonReturn) {
+        message = [WIP7Message messageWithName:@"wired.chat.set_topic" spec:WCP7Spec];
+        [message setUInt32:[self chatID] forName:@"wired.chat.id"];
+        [message setString:[_setTopicTextView string] forName:@"wired.chat.topic.topic"];
+        [[self connection] sendMessage:message];
+    }
+    
+    [_setTopicPanel close];
+    [_setTopicTextView setString:@""];
 }
+
 
 
 
@@ -2305,32 +2309,29 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (IBAction)kick:(id)sender {
-	[NSApp beginSheet:_kickMessagePanel
-	   modalForWindow:[_userListSplitView window]
-		modalDelegate:self
-	   didEndSelector:@selector(kickSheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:[[self selectedUser] retain]];
+    [[_userListSplitView window] beginSheet:_kickMessagePanel completionHandler:^(NSModalResponse returnCode) {
+        [self kickSheetDidEnd:_kickMessagePanel returnCode:returnCode contextInfo:[[self selectedUser] retain]];
+    }];
 }
 
+- (void)kickSheetDidEnd:(NSWindow *)sheet returnCode:(NSModalResponse)returnCode contextInfo:(void *)contextInfo {
+    WIP7Message *message;
+    WCUser *user = ( WCUser *)contextInfo;
 
+    if (returnCode == NSModalResponseOK) {
+        message = [WIP7Message messageWithName:@"wired.chat.kick_user" spec:WCP7Spec];
+        [message setUInt32:[user userID] forName:@"wired.user.id"];
+        [message setUInt32:[self chatID] forName:@"wired.chat.id"];
+        [message setString:[_kickMessageTextField stringValue] forName:@"wired.user.disconnect_message"];
+        [[self connection] sendMessage:message fromObserver:self selector:@selector(wiredChatKickUserReply:)];
+    }
 
-- (void)kickSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	WIP7Message		*message;
-	WCUser			*user = contextInfo;
-	
-	if(returnCode == NSAlertDefaultReturn) {
-		message = [WIP7Message messageWithName:@"wired.chat.kick_user" spec:WCP7Spec];
-		[message setUInt32:[user userID] forName:@"wired.user.id"];
-		[message setUInt32:[self chatID] forName:@"wired.chat.id"];
-		[message setString:[_kickMessageTextField stringValue] forName:@"wired.user.disconnect_message"];
-		[[self connection] sendMessage:message fromObserver:self selector:@selector(wiredChatKickUserReply:)];
-	}
-	
-	[user release];
-	
-	[_kickMessagePanel close];
-	[_kickMessageTextField setStringValue:@""];
+    [_kickMessagePanel close];
+    [_kickMessageTextField setStringValue:@""];
+
+    [user release]; // This line is not needed in ARC (Automatic Reference Counting) environment
 }
+
 
 
 
@@ -2523,7 +2524,7 @@ decisionListener:(id <WebPolicyDecisionListener>)listener
 		if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
 			if([[wiredURL host] length] == 0) {
 				if([self connection] && [[self connection] isConnected]) {
-					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                    path = [[wiredURL path] stringByRemovingPercentEncoding];
 					
 					if(isDirectory) {
                         [WCFiles filesWithConnection:[self connection]
@@ -2753,8 +2754,8 @@ dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
     
     if([[url absoluteString] containsSubstring:@"wired:///"] || [[url absoluteString] containsSubstring:@"wiredp7:///"]) {
         
-        path = [[url path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];      
-        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;  
+        path = [[url path] stringByRemovingPercentEncoding]; // Updated method
+        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;
         
         if(isDirectory) {
             
@@ -2765,16 +2766,17 @@ dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
         } else {
             
             file = [WCFile fileWithFile:path connection:[self connection]];
-            [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file] 
+            [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file]
                                           toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
         }
         
     } else {
-        success = [[NSWorkspace sharedWorkspace] openURL: url];   
+        success = [[NSWorkspace sharedWorkspace] openURL: url];
     }
     
     return success;
 }
+
 
 
 

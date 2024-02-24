@@ -195,48 +195,49 @@
 
 
 - (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)action request:(NSURLRequest *)request frame:(WebFrame *)frame decisionListener:(id <WebPolicyDecisionListener>)listener {
-	NSString			*path;
+    NSString            *path;
     NSURL               *url;
-	WIURL				*wiredURL;
-	WCFile				*file;
-	BOOL				handled     = NO;
-	BOOL                isDirectory = NO;
+    WIURL               *wiredURL;
+    WCFile              *file;
+    BOOL                handled     = NO;
+    BOOL                isDirectory = NO;
     
-	if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeOther) {
-		[listener use];
-	} else {
-		[listener ignore];
-		
+    if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeOther) {
+        [listener use];
+    } else {
+        [listener ignore];
+        
         url         = [action objectForKey:WebActionOriginalURLKey];
-		wiredURL    = [WIURL URLWithURL:url];
+        wiredURL    = [WIURL URLWithURL:url];
         
         isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;
-		
-		if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
-			if([[wiredURL host] length] == 0) {
-				if([[_thread connection] isConnected]) {
-					path = [[wiredURL path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-					
-					if(isDirectory) {
+        
+        if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
+            if([[wiredURL host] length] == 0) {
+                if([[_thread connection] isConnected]) {
+                    path = [[wiredURL path] stringByRemovingPercentEncoding]; // Updated method
+                    
+                    if(isDirectory) {
                         [WCFiles filesWithConnection:[_thread connection]
                                                 file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[_thread connection]]
                                           selectFile:[WCFile fileWithDirectory:path connection:[_thread connection]]];
                         
-					} else {
+                    } else {
                         file = [WCFile fileWithFile:path connection:[_thread connection]];
-                        [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file] 
+                        [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file]
                                                       toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
-					}
-				}
-				
-				handled = YES;
-			}
-		}
-		
-		if(!handled)
-			[[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
-	}
+                    }
+                }
+                
+                handled = YES;
+            }
+        }
+        
+        if(!handled)
+            [[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
+    }
 }
+
 
 
 

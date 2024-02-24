@@ -145,7 +145,7 @@
 	[_categoriesTableView registerForDraggedTypes:[NSArray arrayWithObject:WCCategoryPboardType]];
 
     comboBoxCell = [[NSComboBoxCell alloc] init];
-    [comboBoxCell setControlSize:NSSmallControlSize];
+    [comboBoxCell setControlSize:NSControlSizeSmall];
 	[comboBoxCell setFont:[NSFont smallSystemFont]];
     [comboBoxCell setUsesDataSource:NO];
 	[comboBoxCell addItemsWithObjectValues:[NSArray arrayWithObjects:

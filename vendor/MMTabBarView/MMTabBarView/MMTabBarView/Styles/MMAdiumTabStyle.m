@@ -679,7 +679,7 @@ NS_ASSUME_NONNULL_BEGIN
                 // rollover
             if (drawRollovers && button.mouseHovered) {
                 [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-                NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+                NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
             }
 
                 // stroke

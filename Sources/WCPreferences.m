@@ -1436,4 +1436,25 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	return NO;
 }
 
+- (void)addThemeTemplate:(id)sender __attribute__((ibaction)) {
+}
+
+- (void)deleteThemeTemplate:(id)sender __attribute__((ibaction)) {
+}
+
+- (NSImage *)imageForTheme:(NSDictionary *)theme size:(NSSize)size {
+}
+
+- (BOOL)importTemplateFromFile:(NSString *)path {
+}
+
+- (void)manageThemeTemplates:(id)sender __attribute__((ibaction)) {
+}
+
+- (void)selectThemeTemplate:(id)sender __attribute__((ibaction)) {
+}
+
+- (void)closeManageThemeTemplates:(id)sender __attribute__((ibaction)) {
+}
+
 @end

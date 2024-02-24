@@ -36,7 +36,7 @@
     NSTextField                     *textField;
     BOOL                            handled = NO;
 
-    if([event type] == NSKeyDown) {
+    if([event type] == NSEventTypeKeyDown) {
         if(!characterSet) {
             characterSet = [[NSMutableCharacterSet alphanumericCharacterSet] retain];
             [characterSet formUnionWithCharacterSet:[NSCharacterSet punctuationCharacterSet]];

@@ -1031,7 +1031,7 @@ typedef enum _WCAccountsAction                                        WCAccounts
         switch((WCAccountFieldType) [[setting objectForKey:WCAccountFieldTypeKey] integerValue]) {
             case WCAccountFieldTypeBoolean:
                 buttonCell = [[NSButtonCell alloc] initTextCell:@""];
-                [buttonCell setControlSize:NSSmallControlSize];
+                [buttonCell setControlSize:NSControlSizeSmall];
                 [buttonCell setButtonType:NSSwitchButton];
                 [buttonCell setAllowsMixedState:YES];
                 [setting setObject:buttonCell forKey:WCAccountsFieldCell];
@@ -1041,7 +1041,7 @@ typedef enum _WCAccountsAction                                        WCAccounts
             case WCAccountFieldTypeNumber:
             case WCAccountFieldTypeString:
                 textFieldCell = [[NSTextFieldCell alloc] initTextCell:@""];
-                [textFieldCell setControlSize:NSSmallControlSize];
+                [textFieldCell setControlSize:NSControlSizeSmall];
                 [textFieldCell setEditable:YES];
                 [textFieldCell setSelectable:YES];
                 [textFieldCell setFont:[NSFont smallSystemFont]];
@@ -1051,7 +1051,7 @@ typedef enum _WCAccountsAction                                        WCAccounts
             
             case WCAccountFieldTypeEnum:
                 _popUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
-                [_popUpButtonCell setControlSize:NSSmallControlSize];
+                [_popUpButtonCell setControlSize:NSControlSizeSmall];
                 [_popUpButtonCell setBordered:NO];
                 [_popUpButtonCell setFont:[NSFont smallSystemFont]];
                 
