@@ -374,7 +374,7 @@
 			break;
 		
 		default:
-			return [NSSWF:NSLS(@"Delete %u Items\u2026", @"Delete menu item (count)"), [bans count]];
+            return [NSSWF:NSLS(@"Delete %lu Items\u2026", @"Delete menu item (count)"), (unsigned long)[bans count]];
 			break;
 	}
 }

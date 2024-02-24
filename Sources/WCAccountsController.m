@@ -277,8 +277,8 @@ typedef enum _WCAccountsAction                                        WCAccounts
                 [_nameTextField stringValue]]];
         } else {
             [alert setMessageText:[NSSWF:
-                NSLS(@"Save changes to %u accounts?", @"Save account dialog title (count)"),
-                [_accounts count]]];
+                                   NSLS(@"Save changes to %lu accounts?", @"Save account dialog title (count)"),
+                                   (unsigned long)[_accounts count]]];
         }
         
         action      = [[dictionary objectForKey:@"WCAccountsAction"] integerValue];
@@ -501,12 +501,12 @@ typedef enum _WCAccountsAction                                        WCAccounts
                 else
                     [_loginTimeTextField setStringValue:@""];
                 
-                [_downloadsTextField setStringValue:[NSSWF:NSLS(@"%u completed, %@ transferred", @"Account transfer stats (count, transferred"),
-                    [(WCUserAccount *) account downloads],
+                [_downloadsTextField setStringValue:[NSSWF:NSLS(@"%lu completed, %@ transferred", @"Account transfer stats (count, transferred"),
+                                                     (unsigned long)[(WCUserAccount *) account downloads],
                     [_sizeFormatter stringFromSize:[(WCUserAccount *) account downloadTransferred]]]];
                 
-                [_uploadsTextField setStringValue:[NSSWF:NSLS(@"%u completed, %@ transferred", @"Account transfer stats (count, transferred"),
-                    [(WCUserAccount *) account uploads],
+                [_uploadsTextField setStringValue:[NSSWF:NSLS(@"%lu completed, %@ transferred", @"Account transfer stats (count, transferred"),
+                                                   (unsigned long)[(WCUserAccount *) account uploads],
                     [_sizeFormatter stringFromSize:[(WCUserAccount *) account uploadTransferred]]]];
             }
             else if([account isKindOfClass:[WCGroupAccount class]]) {
@@ -945,8 +945,8 @@ typedef enum _WCAccountsAction                                        WCAccounts
             [_shownAccounts addObject:account];
     }
     
-    [_statusTextField setStringValue:[NSSWF:NSLS(@"%u %@", @"Accounts (count, 'account(s)'"),
-        [_shownAccounts count],
+    [_statusTextField setStringValue:[NSSWF:NSLS(@"%lu %@", @"Accounts (count, 'account(s)'"),
+                                      (unsigned long)[_shownAccounts count],
         [_shownAccounts count] == 1
             ? NSLS(@"account", @"Account singular")
             : NSLS(@"accounts", @"Account plural")]];
@@ -1555,7 +1555,7 @@ typedef enum _WCAccountsAction                                        WCAccounts
             break;
         
         default:
-            return [NSSWF:NSLS(@"Delete %u Items\u2026", @"Delete menu item (count)"), [accounts count]];
+            return [NSSWF:NSLS(@"Delete %lu Items\u2026", @"Delete menu item (count)"), (unsigned long)[accounts count]];
             break;
     }
 }
