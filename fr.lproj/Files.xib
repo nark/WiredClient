@@ -137,7 +137,7 @@
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn identifier="Name" editable="NO" width="123" minWidth="30" maxWidth="1000" id="47">
+                                                            <tableColumn identifier="Name" editable="NO" width="94" minWidth="30" maxWidth="1000" id="47">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Nom">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -657,7 +657,7 @@ Gw
                 <button toolTip="Télécharger" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="199">
                     <rect key="frame" x="148" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="Download" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="212">
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="DownloadFiles" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="212">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -665,7 +665,7 @@ Gw
                 <button toolTip="Téléverser" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="200">
                     <rect key="frame" x="196" y="18" width="40" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="Upload" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="211">
+                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="UploadFiles" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="211">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -722,14 +722,15 @@ Gw
                     </searchFieldCell>
                 </searchField>
             </subviews>
+            <point key="canvasLocation" x="183" y="-1024"/>
         </customView>
     </objects>
     <resources>
         <image name="Back" width="9" height="9"/>
         <image name="ColumnView" width="13" height="10"/>
         <image name="DeleteFile" width="100" height="100"/>
-        <image name="Download" width="9" height="10"/>
-        <image name="FileInfo" width="512" height="512"/>
+        <image name="DownloadFiles" width="823" height="830"/>
+        <image name="FileInfo" width="823" height="830"/>
         <image name="Forward" width="9" height="9"/>
         <image name="LabelBlue" width="12" height="12"/>
         <image name="LabelGray" width="12" height="12"/>
@@ -740,9 +741,9 @@ Gw
         <image name="LabelRed" width="12" height="12"/>
         <image name="LabelYellow" width="12" height="12"/>
         <image name="ListView" width="11" height="10"/>
-        <image name="NewFolder" width="16" height="16"/>
-        <image name="QuickLook" width="19" height="11"/>
-        <image name="ReloadFiles" width="48" height="48"/>
-        <image name="Upload" width="9" height="9"/>
+        <image name="NewFolder" width="823" height="830"/>
+        <image name="QuickLook" width="823" height="830"/>
+        <image name="ReloadFiles" width="823" height="830"/>
+        <image name="UploadFiles" width="823" height="830"/>
     </resources>
 </document>

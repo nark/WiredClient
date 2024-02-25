@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,7 +34,7 @@
         <window title="Messages" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Messages" animationBehavior="default" id="86" userLabel="Messages" customClass="WCMessagesWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="424" y="263" width="608" height="433"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2056" height="1285"/>
             <value key="minSize" type="size" width="300" height="200"/>
             <view key="contentView" autoresizesSubviews="NO" id="90">
                 <rect key="frame" x="0.0" y="0.0" width="608" height="433"/>
@@ -51,20 +51,19 @@
                                     <scrollView autoresizesSubviews="NO" fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="47" horizontalPageScroll="10" verticalLineScroll="47" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100">
                                         <rect key="frame" x="0.0" y="32" width="202" height="380"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="wf0-3A-FFO">
+                                        <clipView key="contentView" drawsBackground="NO" id="wf0-3A-FFO">
                                             <rect key="frame" x="0.0" y="0.0" width="202" height="380"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="47" rowSizeStyle="automatic" viewBased="YES" outlineTableColumn="98" id="97" customClass="WIOutlineView">
                                                     <rect key="frame" x="0.0" y="0.0" width="202" height="380"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="0.0"/>
                                                     <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn identifier="Conversations" editable="NO" width="199" minWidth="16" maxWidth="1000" id="98">
+                                                        <tableColumn identifier="Conversations" editable="NO" width="170" minWidth="16" maxWidth="1000" id="98">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -76,11 +75,11 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="ConversationCell" id="397" customClass="WCConversationCellView">
-                                                                    <rect key="frame" x="1" y="0.0" width="199" height="47"/>
+                                                                    <rect key="frame" x="11" y="0.0" width="179" height="47"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="411">
-                                                                            <rect key="frame" x="45" y="25" width="117" height="17"/>
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="411">
+                                                                            <rect key="frame" x="45" y="25" width="97" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Nick" id="412">
                                                                                 <font key="font" metaFont="system"/>
@@ -99,8 +98,8 @@
                                                                                 <binding destination="397" name="value" keyPath="objectValue.userIcon" id="423"/>
                                                                             </connections>
                                                                         </imageView>
-                                                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="446">
-                                                                            <rect key="frame" x="45" y="9" width="117" height="14"/>
+                                                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="446">
+                                                                            <rect key="frame" x="45" y="9" width="97" height="14"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="2 years ago" id="447">
                                                                                 <font key="font" metaFont="smallSystem"/>
@@ -120,7 +119,7 @@
                                                                             </connections>
                                                                         </imageView>
                                                                         <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="480">
-                                                                            <rect key="frame" x="168" y="14" width="28" height="17"/>
+                                                                            <rect key="frame" x="148" y="14" width="28" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                             <buttonCell key="cell" type="roundRect" title="Unread indicator" bezelStyle="roundedRect" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="481">
                                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -188,7 +187,7 @@
                                             </menu>
                                         </popUpButtonCell>
                                     </popUpButton>
-                                    <searchField autoresizesSubviews="NO" wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="372">
+                                    <searchField autoresizesSubviews="NO" wantsLayer="YES" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="372">
                                         <rect key="frame" x="48" y="4" width="135" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" sendsWholeSearchString="YES" id="373">
@@ -218,7 +217,7 @@
                                                             </menuItem>
                                                             <menuItem isSeparatorItem="YES" id="386"/>
                                                             <menuItem title="Conversations" image="EventsMessages" tag="1" id="388"/>
-                                                            <menuItem title="Annonces" image="EventsAccounts" tag="2" id="387"/>
+                                                            <menuItem title="Annonces" image="Broadcasts" tag="2" id="387"/>
                                                         </items>
                                                     </menu>
                                                 </popUpButtonCell>
@@ -248,7 +247,7 @@
                                     <webView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="288">
                                         <rect key="frame" x="0.0" y="48" width="405" height="385"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12">
+                                        <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" javaEnabled="NO">
                                             <nil key="identifier"/>
                                         </webPreferences>
                                         <connections>
@@ -309,7 +308,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="603" y="390" width="372" height="237"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2056" height="1285"/>
             <value key="minSize" type="size" width="200" height="200"/>
             <view key="contentView" id="63">
                 <rect key="frame" x="0.0" y="0.0" width="372" height="237"/>
@@ -343,7 +342,7 @@ Gw
                             <action selector="cancelSheet:" target="-2" id="154"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="85">
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="85">
                         <rect key="frame" x="17" y="200" width="338" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Message de l'annonce :" id="203">
@@ -355,11 +354,11 @@ Gw
                     <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHd-rJ-7dR">
                         <rect key="frame" x="20" y="57" width="332" height="135"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="OKy-GB-r7g">
+                        <clipView key="contentView" drawsBackground="NO" id="OKy-GB-r7g">
                             <rect key="frame" x="1" y="1" width="315" height="133"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="ZgP-35-ovP">
+                                <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="ZgP-35-ovP">
                                     <rect key="frame" x="0.0" y="0.0" width="330" height="133"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -395,10 +394,10 @@ Gw
         </treeController>
     </objects>
     <resources>
-        <image name="EventsAccounts" width="12" height="12"/>
-        <image name="EventsMessages" width="12" height="12"/>
-        <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSQuickLookTemplate" width="19" height="12"/>
+        <image name="Broadcasts" width="16" height="16"/>
+        <image name="EventsMessages" width="16" height="16"/>
+        <image name="NSActionTemplate" width="20" height="20"/>
+        <image name="NSQuickLookTemplate" width="26" height="17"/>
         <image name="ReplyMessage" width="32" height="32"/>
         <image name="SenderImagePlaceholder" width="48" height="48"/>
         <image name="Smileys" width="100" height="100"/>
