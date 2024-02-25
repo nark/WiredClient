@@ -1531,7 +1531,7 @@ typedef enum _WCAccountsAction                                        WCAccounts
 #pragma mark -
 
 - (NSSize)minimumWindowSize {
-    return NSMakeSize(100.0, 100.0);
+    return NSMakeSize(678.0, 571.0);
 }
 
 #pragma mark -
