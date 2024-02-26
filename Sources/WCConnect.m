@@ -251,4 +251,11 @@
 	[_connection connect];
 }
 
+
+
+- (void)connectAlertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+	if(returnCode == NSAlertSecondButtonReturn)
+		[[WCApplicationController sharedController] checkForUpdate];
+}
+
 @end
