@@ -249,7 +249,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	alert = [[NSAlert alloc] init];
 	[alert setMessageText:title];
 	[alert setInformativeText:[message messageString]];
-	[alert setAlertStyle:NSInformationalAlertStyle];
+    [alert setAlertStyle:NSAlertStyleInformational];
 	[alert runNonModal];
 	[alert release];
 	

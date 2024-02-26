@@ -1752,8 +1752,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 												 target:self
 												 action:@selector(search:)];
 		
-		[item setMinSize:NSMakeSize(50.0, [_searchField frame].size.height)];
-		[item setMaxSize:NSMakeSize(250.0, [_searchField frame].size.height)];
+		//[item setMinSize:NSMakeSize(50.0, [_searchField frame].size.height)];
+		//[item setMaxSize:NSMakeSize(250.0, [_searchField frame].size.height)];
 		
 		return item;
 	}

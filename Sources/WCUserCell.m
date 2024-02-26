@@ -167,7 +167,7 @@ NSString * const WCUserCellStatusKey		= @"WCUserCellStatusKey";
 	status	= [(NSDictionary *) [self objectValue] objectForKey:WCUserCellStatusKey];
 	offset	= floor((frame.size.height - 35.0) / 2.0);
 
-	if([self controlSize] == NSRegularControlSize) {
+    if([self controlSize] == NSControlSizeRegular) {
 		if([status length] > 0)
 			rect = NSMakeRect(frame.origin.x, frame.origin.y + offset + 1.0, frame.size.width, 17.0);
 		else
