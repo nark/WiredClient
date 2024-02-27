@@ -5,7 +5,7 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 ## Prerequisites
 
 - Mac OS X 10.13+
-- Xcode 10.0+
+- Xcode 13.0+
 - Homebrew 1.8+
 - CocoaPods 1.5+
 
