@@ -630,7 +630,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="jNs-oY-ig7">
                             <rect key="frame" x="1" y="1" width="509" height="239"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="189" customClass="WCBoardsTextView">
                                     <rect key="frame" x="0.0" y="0.0" width="509" height="239"/>
@@ -1045,7 +1045,7 @@ Gw
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <clipView key="contentView" id="u7k-Ru-cmP">
                                 <rect key="frame" x="0.0" y="0.0" width="555" height="113"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" headerView="114" viewBased="YES" id="113" customClass="WITableView">
                                         <rect key="frame" x="0.0" y="0.0" width="661" height="96"/>
@@ -1256,7 +1256,7 @@ Gw
                                 <rect key="frame" x="555" y="17" width="15" height="96"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </scroller>
-                            <tableHeaderView key="headerView" id="114">
+                            <tableHeaderView key="headerView" wantsLayer="YES" id="114">
                                 <rect key="frame" x="0.0" y="0.0" width="661" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </tableHeaderView>
@@ -1315,6 +1315,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="-2" id="242"/>
             </connections>
+            <point key="canvasLocation" x="132" y="-686"/>
         </splitView>
         <splitView dividerStyle="thin" vertical="YES" id="AOA-Jt-sld" customClass="WISplitView">
             <rect key="frame" x="0.0" y="0.0" width="731" height="598"/>
