@@ -129,7 +129,7 @@
 		4C97DE4515658A9C00D88C11 /* WCChatInputTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97DE4415658A9B00D88C11 /* WCChatInputTextView.m */; };
 		4C9B2A9117E795D0007B0962 /* WCConversationCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9B2A9017E795D0007B0962 /* WCConversationCellView.m */; };
 		4C9CEB98243F2CDF00B45DEC /* WiredFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153091800D5E7004DA093 /* WiredFoundation.framework */; };
-		4C9CEB99243F2CDF00B45DEC /* WiredFoundation.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153091800D5E7004DA093 /* WiredFoundation.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4C9CEB99243F2CDF00B45DEC /* WiredFoundation.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153091800D5E7004DA093 /* WiredFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4CA9B2E11807249D00FDDB3A /* wired.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE153011800D5E7004DA093 /* wired.a */; };
 		4CD0F4C81801F940001D8E4A /* WCChatTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F4C71801F940001D8E4A /* WCChatTextFieldCell.m */; };
 		4CD0F4CE18044D82001D8E4A /* PublicChat.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CD0F4CC18044D82001D8E4A /* PublicChat.xib */; };
@@ -143,12 +143,12 @@
 		4CE1531E1800D64F004DA093 /* MMTabBarView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */; };
 		4CE153221800D64F004DA093 /* WiredAppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; };
 		4CE153241800D64F004DA093 /* WiredNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; };
-		4CE153271800D665004DA093 /* MMTabBarView.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */; };
-		4CE153291800D665004DA093 /* WiredNetworking.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; };
-		4CE1532A1800D665004DA093 /* WiredAppKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; };
+		4CE153271800D665004DA093 /* MMTabBarView.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE152EE1800D5DA004DA093 /* MMTabBarView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		4CE153291800D665004DA093 /* WiredNetworking.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530B1800D5E7004DA093 /* WiredNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		4CE1532A1800D665004DA093 /* WiredAppKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE1530D1800D5E7004DA093 /* WiredAppKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CEFF6D2180C3FF700AD7AD9 /* WCPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEFF6D1180C3FF700AD7AD9 /* WCPreferencesController.m */; };
 		4CF094DB1559D8C1005D77BB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF094D91559D8C1005D77BB /* InfoPlist.strings */; };
-		4CF094E51559D9AA005D77BB /* Neo.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */; };
+		4CF094E51559D9AA005D77BB /* Neo.WiredTemplate in Copy Templates */ = {isa = PBXBuildFile; fileRef = 4CF094D41559D8C1005D77BB /* Neo.WiredTemplate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4CFDCBE815695FDA00DA17A6 /* WCChatHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDCBE715695FDA00DA17A6 /* WCChatHistory.m */; };
 		77096732107EBB1A005F357B /* WCEventsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77096731107EBB1A005F357B /* WCEventsController.m */; };
 		771E6D510755F506000F9195 /* WCConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 771E6D4F0755F506000F9195 /* WCConversation.m */; };
@@ -2342,7 +2342,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2616,7 +2616,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2722,7 +2722,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
 				CODE_SIGN_IDENTITY = "-";
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
