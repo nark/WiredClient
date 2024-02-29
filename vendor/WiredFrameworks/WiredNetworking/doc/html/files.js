@@ -1,0 +1,26 @@
+var files =
+[
+    [ "NSNumber-WINetworking.h", null, null ],
+    [ "NSNumber-WINetworking.m", null, null ],
+    [ "NSProcessInfo-WINetworking.h", null, null ],
+    [ "NSProcessInfo-WINetworking.m", null, null ],
+    [ "NSString-WINetworking.h", null, null ],
+    [ "NSString-WINetworking.m", null, null ],
+    [ "WIAddress.h", null, null ],
+    [ "WIAddress.m", null, null ],
+    [ "WIError.h", null, null ],
+    [ "WIError.m", null, null ],
+    [ "WIP7Message.h", null, null ],
+    [ "WIP7Message.m", null, null ],
+    [ "WIP7NotificationCenter.h", null, null ],
+    [ "WIP7NotificationCenter.m", null, null ],
+    [ "WIP7Socket.h", null, null ],
+    [ "WIP7Socket.m", null, null ],
+    [ "WIP7Spec.h", null, null ],
+    [ "WIP7Spec.m", null, null ],
+    [ "WiredNetworking.h", null, null ],
+    [ "WISocket.h", null, null ],
+    [ "WISocket.m", null, null ],
+    [ "WIThread.h", null, null ],
+    [ "WIThread.m", null, null ]
+];

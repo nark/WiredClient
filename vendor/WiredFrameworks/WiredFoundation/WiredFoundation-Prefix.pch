@@ -1,0 +1,28 @@
+//
+// Prefix header for all source files of the 'WiredFoundation' target in the 'WiredFoundation' project
+//
+
+#import <Foundation/Foundation.h>
+
+// --- Libraries
+#import <mach-o/arch.h>
+#import <sys/sysctl.h>
+#import <sys/fcntl.h>
+#import <sys/xattr.h>
+#import <CommonCrypto/CommonDigest.h>
+#import <pthread.h>
+#import <unistd.h>
+
+// --- Common
+#import <WiredFoundation/WIMacros.h>
+#import <WiredFoundation/WIObject.h>
+
+// --- Macros
+#define NSLS							NSLocalizedString
+#define NSSWF							NSString stringWithFormat
+#define WIFoundationBundleIdentifier	@"fr.read-write.WiredFoundation"
+
+#define WILS(string, comment) \
+[NSBundle bundleWithIdentifier:WIFoundationBundleIdentifier] \
+? NSLocalizedStringFromTableInBundle((string), NULL, [NSBundle bundleWithIdentifier:WIFoundationBundleIdentifier], (comment)) \
+: (string)

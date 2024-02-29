@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1807" systemVersion="12A256" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Chat" representedClassName="WChat" syncable="YES">
+        <attribute name="chatID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="topic" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="topicNick" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="topicTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChatMessage" inverseName="chat" inverseEntity="ChatMessage" syncable="YES"/>
+        <relationship name="server" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Server" inverseName="publicChat" inverseEntity="Server" syncable="YES"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="chats" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="ChatMessage" representedClassName="WChatMessage" parentEntity="Message" syncable="YES">
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="chat" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="messages" inverseEntity="Chat" syncable="YES"/>
+    </entity>
+    <entity name="Conversation" representedClassName="WConversation" syncable="YES">
+        <attribute name="withNick" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PrivateMessage" inverseName="conversation" inverseEntity="PrivateMessage" syncable="YES"/>
+    </entity>
+    <entity name="Event" representedClassName="WEvent" syncable="YES">
+        <attribute name="eventDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="eventDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eventTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eventType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="server" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Server" inverseName="events" inverseEntity="Server" syncable="YES"/>
+    </entity>
+    <entity name="Message" representedClassName="WMessage" syncable="YES">
+        <attribute name="nick" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="sentDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Node" representedClassName="WNode" syncable="YES">
+        <attribute name="appBuild" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="appName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="appVersion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="arch" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="osName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="osVersion" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="PrivateMessage" representedClassName="WPrivateMessage" parentEntity="Message" syncable="YES">
+        <relationship name="conversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Conversation" inverseName="messages" inverseEntity="Conversation" syncable="YES"/>
+        <relationship name="server" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Server" inverseName="privateMessages" inverseEntity="Server" syncable="YES"/>
+    </entity>
+    <entity name="Server" representedClassName="WServer" parentEntity="Node" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="banner" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="downloads" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="downloadSpeed" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastConnectDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="login" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberOfFiles" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="preferredNick" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="preferredStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serverDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serverName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="supportRsrc" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="uploads" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="uploadSpeed" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="server" inverseEntity="Event" syncable="YES"/>
+        <relationship name="privateMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PrivateMessage" inverseName="server" inverseEntity="PrivateMessage" syncable="YES"/>
+        <relationship name="publicChat" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="server" inverseEntity="Chat" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName="WUser" parentEntity="Node" syncable="YES">
+        <attribute name="icon" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="idelTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="idle" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isLocal" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="login" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nick" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="wiredColor" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="chats" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="Chat" inverseName="users" inverseEntity="Chat" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Chat" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ChatMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Conversation" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Event" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Message" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Node" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="PrivateMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Server" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
+</model>

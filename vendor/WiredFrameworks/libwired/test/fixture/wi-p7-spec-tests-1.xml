@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p7:protocol xmlns:p7="http://www.zankasoftware.com/P7/Specification"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.zankasoftware.com/P7/Specification p7-specification.xsd"
+			 name="test"
+			 version="1.0">
+	<p7:fields>
+		<p7:field name="test.bool" type="bool" id="1000" />
+		<p7:field name="test.enum" type="enum" id="1001">
+			<p7:enum name="test.enum.1" value="1" />
+			<p7:enum name="test.enum.2" value="2" />
+			<p7:enum name="test.enum.3" value="3" />
+		</p7:field>
+		<p7:field name="test.int32" type="int32" id="1002" />
+		<p7:field name="test.uint32" type="uint32" id="1003" />
+		<p7:field name="test.int64" type="int64" id="1004" />
+		<p7:field name="test.uint64" type="uint64" id="1005" />
+		<p7:field name="test.double" type="double" id="1006" />
+		<p7:field name="test.string" type="string" id="1007" />
+		<p7:field name="test.uuid" type="uuid" id="1008" />
+		<p7:field name="test.date" type="date" id="1009" />
+		<p7:field name="test.data" type="data" id="1010" />
+		<p7:field name="test.oobdata" type="oobdata" id="1011" />
+	</p7:fields>
+
+	<p7:messages>
+		<p7:message name="test" id="1000" />
+	</p7:messages>
+</p7:protocol>
