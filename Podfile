@@ -7,6 +7,16 @@ target 'Wired Client' do
     pod 'NSDate+TimeAgo'
 end
 
+target 'WiredNetworking' do
+    project 'vendor/WiredFrameworks/WiredFrameworks.xcodeproj'
+    workspace 'vendor/WiredFrameworks/WiredFrameworks.xcworkspace'
+end
+
+target 'libwired-osx' do
+    project 'vendor/WiredFrameworks/WiredFrameworks.xcodeproj'
+    workspace 'vendor/WiredFrameworks/WiredFrameworks.xcworkspace'
+end
+
 post_install do |installer|
     installer.pods_project.targets.each do |target|
         if target.name == 'SBJson4' || target.name == 'NSDate+TimeAgo'
