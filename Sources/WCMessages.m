@@ -194,17 +194,24 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	NSDictionary				*theme;
 	NSFont						*font;
 	NSColor						*textColor, *backgroundColor, *URLTextColor;
+	NSString					*templatePath;
+	WITemplateBundle            *templateBundle;
     
 	theme						= [[[self _selectedConversation] connection] theme];
 	
 	if(!theme)
 		theme					= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-        
+    
+	templateBundle				= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+    
 	font						= WIFontFromString([theme objectForKey:WCThemesMessagesFont]);
     URLTextColor                = WIColorFromString([theme objectForKey:WCThemesChatURLsColor]);
 	textColor					= [NSApp darkModeEnabled] ? [NSColor whiteColor] : [NSColor textColor];
 	backgroundColor				= [NSApp darkModeEnabled] ? [NSColor darkGrayColor] : [NSColor whiteColor];
-        
+	templatePath				= [templateBundle bundlePath];
+    
+    
+	[_conversationController setTemplatePath:templatePath];
 	[_conversationController setFont:font];
 	[_conversationController setTextColor:textColor];
     [_conversationController setURLTextColor:URLTextColor];
@@ -213,7 +220,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[_messageTextField setFont:font];
     [_broadcastTextView setFont:font];
 
-	[_conversationController reloadView];
+	[_conversationController reloadTemplate];
     [_conversationController reloadData];
 }
 
@@ -242,7 +249,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	alert = [[NSAlert alloc] init];
 	[alert setMessageText:title];
 	[alert setInformativeText:[message messageString]];
-	[alert setAlertStyle:NSInformationalAlertStyle];
+    [alert setAlertStyle:NSAlertStyleInformational];
 	[alert runNonModal];
 	[alert release];
 	
@@ -317,7 +324,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	[[WCStats stats] addUnsignedInt:1 forKey:WCStatsMessagesSent];
 	
 	[_conversationController appendMessage:message];
-    
+	
 	[_messageTextField setStringValue:@""];
 }
 
@@ -713,7 +720,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 
 - (void)_migrateToCoreData {
     NSData                  *data;
-	NSMutableArray			*array;
+    NSMutableArray            *array;
     
     array   = [NSMutableArray array];
     data    = [[WCSettings settings] objectForKey:WCMessageConversations];
@@ -734,27 +741,28 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
             nbMessage += [conv numberOfMessages];
         }
         
-        
-        NSAlert *alert = [NSAlert alertWithMessageText:NSLS(@"Messages Migration", @"Messages Migration Title")
-                                         defaultButton:NSLS(@"Migrate", @"Messages Migration Migrate Button")
-                                       alternateButton:NSLS(@"Erase", @"Messages Migration Erase Button")
-                                           otherButton:NSLS(@"Quit", @"Messages Migration Quit Button")
-                             informativeTextWithFormat:NSLS(@"Local storage of Messages moved to Core Data.\n\nChoose 'Migrate' in order to recover old messages. Choosing 'Erase' will erase all your messages and start on a fresh database (this cannot be undone).\n\nDepending to the number of messages (%d), the operation could take a while.", @"Messages Migration Message"), nbMessage];
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLS(@"Messages Migration", @"Messages Migration Title")];
+        [alert setInformativeText:[NSString stringWithFormat:NSLS(@"Local storage of Messages moved to Core Data.\n\nChoose 'Migrate' in order to recover old messages. Choosing 'Erase' will erase all your messages and start on a fresh database (this cannot be undone).\n\nDepending to the number of messages (%ld), the operation could take a while.", @"Messages Migration Message"), (long)nbMessage]];
+        [alert addButtonWithTitle:NSLS(@"Migrate", @"Messages Migration Migrate Button")];
+        [alert addButtonWithTitle:NSLS(@"Erase", @"Messages Migration Erase Button")];
+        [alert addButtonWithTitle:NSLS(@"Quit", @"Messages Migration Quit Button")];
         
         NSInteger result = [alert runModal];
         
-        if(result == NSAlertDefaultReturn) {
+        if(result == NSAlertFirstButtonReturn) {
             [self _migrateConversations:array];
         }
-        else if(result == NSAlertAlternateReturn) {
+        else if(result == NSAlertSecondButtonReturn) {
             [[WCSettings settings] setObject:@{} forKey:WCMessageConversations];
             [[WCSettings settings] setObject:@{} forKey:WCBroadcastConversations];
         }
-        else if(result == NSAlertOtherReturn) {
+        else if(result == NSAlertThirdButtonReturn) {
             exit(0);
         }
     }
 }
+
 
 
 - (void)_migrateConversations:(NSArray *)conversations {
@@ -996,8 +1004,8 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
     [_conversationsOutlineView setTarget:self];
     [_conversationsOutlineView setDeleteAction:@selector(deleteConversation:)];
     
-    //[_messagesView setTranslatesAutoresizingMaskIntoConstraints:YES];
-    //[_messageTextField setTranslatesAutoresizingMaskIntoConstraints:YES];
+    [_messagesView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    [_messageTextField setTranslatesAutoresizingMaskIntoConstraints:YES];
     
 	[self _themeDidChange];
     [self _sortConversations];
@@ -1025,7 +1033,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
         }
 	}
     
-    [_conversationController reloadView];
+    [_conversationController reloadTemplate];
 }
 
 
@@ -1155,7 +1163,7 @@ NSString * const WCMessagesDidChangeUnreadCountNotification		= @"WCMessagesDidCh
 	user = [notification object];
 	
 	[self _revalidateConversationsWithUser:user];
-	    
+	
 	if([[self _selectedConversation] user] == user)
 		[_conversationController reloadData];
     

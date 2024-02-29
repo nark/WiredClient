@@ -46,10 +46,8 @@
 #import "WCBoard.h"
 #import "WCPublicChat.h"
 #import "WCUserTableCellView.h"
-#import "WCChatTableCellView.h"
 #import "iTunes.h"
 #import "NSString+Emoji.h"
-#import "NSImage+Data.h"
 
 #define WCPublicChatID											1
 
@@ -86,10 +84,10 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)_updatePreferences;
 - (void)_updateSaveChatForPanel:(NSSavePanel *)savePanel;
+- (void)_adjustChatInputTextFieldHeight;
 
 - (void)_setTopic:(WCTopic *)topic;
 
-- (void)_appendRow;
 - (void)_printTimestamp;
 - (void)_printTopic;
 - (void)_printUserJoin:(WCUser *)user;
@@ -101,6 +99,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (void)_printUserBanned:(WCUser *)victim expirationDate:(NSDate *)date;
 - (void)_printUserDisconnect:(WCUser *)victim message:(NSString *)message;
 - (void)_printChat:(NSString *)chat by:(WCUser *)user;
+- (void)_printActionChat:(NSString *)chat by:(WCUser *)user;
+- (void)_printHTML:(NSString *)html by:(WCUser *)user;
 
 - (void)_sendImage:(NSURL *)url;
 - (void)_sendiTunes;
@@ -114,7 +114,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (NSColor *)_highlightColorForChat:(NSString *)chat;
 
 - (NSDictionary *)_currentTheme;
-- (void)_loadTheme:(NSDictionary *)theme;
+- (void)_loadTheme:(NSDictionary *)theme withTemplate:(WITemplateBundle *)template;
 
 @end
 
@@ -140,6 +140,11 @@ typedef enum _WCChatFormat					WCChatFormat;
 		[_highlightPatterns setArray:highlightPatterns];
 		[_highlightColors setArray:highlightColors];
 	}
+	
+	WebPreferences *pref = [WebPreferences standardPreferences];
+	[pref setAllowsAnimatedImages:[[WCSettings settings] boolForKey:WCChatAnimatedImagesEnabled]];
+	[pref setAllowsAnimatedImageLooping:[[WCSettings settings] boolForKey:WCChatAnimatedImagesEnabled]];
+	[_chatOutputWebView setPreferences:pref];
 }
 
 
@@ -153,6 +158,10 @@ typedef enum _WCChatFormat					WCChatFormat;
 }
 
 
+- (void)_adjustChatInputTextFieldHeight {
+    [_chatInputTextField adjustHeightForTopView:_chatOutputWebView bottomView:[_chatInputTextField superview]];
+    [_chatOutputWebView scrollToBottom];
+}
 
 
 
@@ -284,67 +293,39 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)_printChat:(NSString *)chat by:(WCUser *)user {
-    WIChatLogController         *logController;
-    NSString                    *nick, *formattedDate, *formattedLogs, *chatString;
-    NSAttributedString          *attrString;
-	NSMutableAttributedString   *mutableOutput;
-    NSDictionary                *message;
-	BOOL                        timestamp;
-    NSFont                      *font;
-    NSDictionary                *theme;
-    
-    theme           = [[WCSettings settings] themeWithName:@"Wired"];
-    font            = WIFontFromString ([theme objectForKey:WCThemesChatFont]);
+    WIChatLogController     *logController;
+	NSString                *nick, *formattedDate, *formattedLogs;
+	NSMutableString         *mutableOutput;
+    NSDictionary            *jsonProxy;
+	BOOL                    timestamp;
+	
     chat            = [[chat componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
+	mutableOutput   = [NSMutableString stringWithString:chat];
     logController   = [[WCApplicationController sharedController] logController];
-    timestamp       = [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
-    nick            = [user nick];
-    formattedDate   = (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
-    formattedLogs   = [NSSWF:@"[%@]\t%@: %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], nick, chat];
-    chatString      = chat;
+	timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
+	nick			= [user nick];
+	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
+	formattedLogs   = [NSSWF:@"[%@]\t%@: %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], nick, chat];
     
-    if ([chatString hasPrefix:@"<img src='data:image/png;base64,"]) {
-        NSArray *comps = [chatString componentsSeparatedByString:@"base64,"];
-        NSString *base64String = [[comps lastObject] substringToIndex:[[comps lastObject] length] - 3];
-        NSImage *image = [NSImage imageWithData:[NSData dataWithBase64EncodedString:base64String]];
-        
-        id <NSTextAttachmentCell> cell = [[[NSTextAttachmentCell alloc] initImageCell:image] autorelease];
-
-        NSTextAttachment *attachment = [[[NSTextAttachment alloc] initWithData:nil ofType:nil] autorelease];
-        [attachment setAttachmentCell:cell];
-
-        NSAttributedString *attrString = [NSAttributedString attributedStringWithAttachment:attachment];
-        mutableOutput = [[[NSMutableAttributedString alloc] initWithAttributedString:attrString] autorelease];
-    }
-    else if ([chatString hasPrefix:@"<img src='http"]) {
-        NSData *imageData = [chatString dataUsingEncoding:NSUTF8StringEncoding];
-        NSAttributedString *imageString = [[NSAttributedString alloc] initWithHTML:imageData documentAttributes:nil];
-        
-        if (imageString) {
-            mutableOutput = [[[NSMutableAttributedString alloc] initWithAttributedString:imageString] autorelease];
-        }
-    } else {
-        if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
-            chatString  = [chat stringByReplacingEmojiCheatCodesWithUnicode];
-        
-        attrString  = [NSAttributedString attributedStringWithString:chatString attributes:@{
-            NSFontAttributeName: font
-        }];
-        
-        mutableOutput = [[[NSMutableAttributedString alloc] initWithAttributedString:attrString] autorelease];
-        
-        [self _applyHighlightsToMutableString:mutableOutput];
-        [self _applyClickableURLs:mutableOutput];
-    }
+    [[self class] applyHTMLEscapingToMutableString:mutableOutput];
     
-    message = [NSDictionary dictionaryWithObjectsAndKeys:
-                 [user icon],   @"icon",
+    [self _applyHTMLTagsForHighlightsToMutableString:mutableOutput];
+
+	if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
+		[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
+    
+    [[self class] applyHTMLTagsForURLToMutableString:mutableOutput];
+    
+    jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
                  formattedDate, @"timestamp",
                  nick,          @"nick",
                  mutableOutput, @"message", nil];
     
-    [_messages addObject:message];
-    [self _appendRow];
+    
+    //NSLog(@"jsonProxy : %@", jsonProxy);
+    
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+        [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
 		[logController appendChatLogAsPlainText:formattedLogs
@@ -354,47 +335,35 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)_printActionChat:(NSString *)chat by:(WCUser *)user {
-    WIChatLogController         *logController;
-	NSString                    *nick, *formattedDate, *formattedLogs, *chatString;
-    NSAttributedString          *attrString;
-    NSMutableAttributedString   *mutableOutput;
-    NSDictionary                *message;
-	BOOL                        timestamp;
-    NSFont                      *font;
-    NSDictionary                *theme;
-    
-    theme           = [[WCSettings settings] themeWithName:@"Wired"];
-    font            = WIFontFromString ([theme objectForKey:WCThemesChatFont]);
+    WIChatLogController     *logController;
+	NSString                *formattedDate, *formattedNick, *formattedLogs;
+	NSMutableString         *mutableOutput;
+    NSDictionary            *jsonProxy;
+	BOOL                    timestamp;
+	
     chat            = [[chat componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"\n"];
+    mutableOutput	= [NSMutableString stringWithString:chat];
     logController   = [[WCApplicationController sharedController] logController];
-    nick            = [user nick];
 	timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
 	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
+    formattedNick   = [NSSWF:@" *** %@", [user nick]];
 	formattedLogs   = [NSSWF:@"[%@]\t*** %@ %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], [user nick], chat];
-	chatString      = [NSSWF:@"%@ %@", nick, chat];
+	
+	//if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
+		//[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
+	
+    [self _applyHTMLTagsForHighlightsToMutableString:mutableOutput];
+    [[self class] applyHTMLTagsForURLToMutableString:mutableOutput];
     
-    if([[[self connection] theme] boolForKey:WCThemesShowSmileys])
-        chatString  = [chatString stringByReplacingEmojiCheatCodesWithUnicode];
-    
-    attrString  = [NSAttributedString attributedStringWithString:chatString attributes:@{
-        NSFontAttributeName: [font boldFont]
-    }];
-    
-    mutableOutput = [[[NSMutableAttributedString alloc] initWithAttributedString:attrString] autorelease];
-    
-    [self _applyHighlightsToMutableString:mutableOutput];
-    [self _applyClickableURLs:mutableOutput];
-    
-    message = [NSDictionary dictionaryWithObjectsAndKeys:
-                 @"true",       @"me",
-                 [user icon],   @"icon",
+    jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
+                 @"true", @"action",
                  formattedDate, @"timestamp",
-                 nick,          @"nick",
+                 formattedNick, @"nick",
                  mutableOutput, @"message", nil];
     
-    [_messages addObject:message];
-    [self _appendRow];
-    
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+        [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
+	
 	if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
 		[logController appendChatLogAsPlainText:formattedLogs forConnectionName:[[self connection] name]];
 }
@@ -402,21 +371,33 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-- (void)_appendRow {
-    //[_chatTableView beginUpdates];
+
+- (void)_printHTML:(NSString *)html by:(WCUser *)user {
+    WIChatLogController     *logController;
+	NSBundle                *template;
+	NSString                *nick, *formattedDate, *formattedLogs;
+    NSDictionary            *jsonProxy;
+	BOOL                    timestamp;
+
+    logController   = [[WCApplicationController sharedController] logController];
+    timestamp		= [[[self connection] theme] boolForKey:WCThemesChatTimestampEveryLine];
+	nick			= [user nick];
+	template		= [[WCSettings settings] templateBundleWithIdentifier:[[[self connection] theme] objectForKey:WCThemesTemplate]];
+	formattedDate	= (timestamp) ? [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]] : @"";
+	formattedLogs   = [NSSWF:@"[%@]\t*** %@ %@\n", [_timestampEveryLineDateFormatter stringFromDate:[NSDate date]], [user nick], html];
     
-    NSInteger lastRow = [_messages count] == 0 ? 0 : [_messages count] - 1;
-    NSIndexSet *lastRowIndexSet = [NSIndexSet indexSetWithIndex:lastRow];
-        
-    [_chatTableView insertRowsAtIndexes:lastRowIndexSet
-                                  withAnimation:NSTableViewAnimationSlideUp];
-
-    //[_chatTableView endUpdates];
-        
-    [_chatTableView scrollToBottomAnimated];
+    jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
+                 formattedDate, @"timestamp",
+                 nick, @"nick",
+                 html, @"message", nil];
+    
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+     [NSSWF:@"printMessage(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
+    
+    if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
+        [logController appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@: %@\n", formattedDate, nick, html]
+                              forConnectionName:[[self connection] name]];
 }
-
-
 
 
 
@@ -439,13 +420,13 @@ typedef enum _WCChatFormat					WCChatFormat;
     } else {
           iTunes    = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
     }
-        
-	if([iTunes isRunning] && [iTunes currentTrack] && [iTunes playerState] != iTunesEPlSStopped) {
+    
+	if([iTunes isRunning] && [iTunes currentTrack]) {
 		name		= [[iTunes currentTrack] name];
 		artist		= [[iTunes currentTrack] artist];
 		album		= [[iTunes currentTrack] album];
 		
-        if(!name || [name length] <= 0 )
+        if(!name || [name length] <= 0)
 			name	= NSLS(@"Unknow Track", @"Unknow Track");
 		
 		if(!artist || [artist length] <= 0)
@@ -473,38 +454,11 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (void)_sendImage:(NSURL *)url {
 	NSString		*html;
 	WIP7Message		*message;
-    NSImage         *image;
-    NSString        *base64;
-    NSData          *imageData;
-    CGFloat         newHeight;
     
-	if([[url scheme] hasPrefix:@"http"]) {
-        html = [NSSWF:@"<img src='%@'/>", [url absoluteString]];
-        
-//        imageData   = [NSData dataWithContentsOfURL:url];
-//        image       = [NSImage imageWithData:imageData];
-//
-//        if(image) {
-//            if (image.size.width > 350) {
-//                newHeight = 350 / image.size.width * image.size.height;
-//                image = [image scaledImageWithSize:NSMakeSize(350, newHeight)];
-//            }
-//
-//            base64  = [[image TIFFRepresentation] base64EncodedString];
-//            html    = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64];
-//        }
-	} else if ([url scheme] == nil && [[url absoluteString] hasPrefix:@"/"]) {
-        image = [NSImage imageWithContentsOfFile:[url absoluteString]];
-        
-        if(image) {
-            if (image.size.width > 350) {
-                newHeight = 350 / image.size.width * image.size.height;
-                image = [image scaledImageWithSize:NSMakeSize(350, newHeight)];
-            }
-            
-            base64  = [[image TIFFRepresentation] base64EncodedString];
-            html    = [NSSWF:@"<img src='data:image/png;base64, %@'/>", base64];
-        }
+	if([[url scheme] containsSubstring:@"http"]) {
+		html = [NSSWF:@"<a class='chat-media-frame' href='%@'><img src='%@' alt='' /></a>", [url absoluteString], [url absoluteString]];
+	} else {
+		html = nil;
 	}
     
 	if(html && [html length] > 0) {
@@ -521,14 +475,14 @@ typedef enum _WCChatFormat					WCChatFormat;
     NSString            *html;
     NSString            *base64ImageString;
     NSData              *imageData;
-    CGFloat             newHeight;
     
     image = [NSImage imageWithData:[NSData dataWithContentsOfURL:url]];
     
     if (image.size.width > 350) {
-        newHeight = 350 / image.size.width * image.size.height;
-        image = [image scaledImageWithSize:NSMakeSize(350, newHeight)];
+        image = [image imageByScalingProportionallyToSize:NSMakeSize(350, 1)];
     }
+
+    NSLog(@"image : %@", image);
     
     imageData = [image TIFFRepresentation];
     base64ImageString = [imageData base64EncodedString];
@@ -849,63 +803,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 
-- (void)_applyClickableURLs:(NSMutableAttributedString *)mutableString {
-    NSRange                         range;
-            
-    range = [[mutableString string] rangeOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString URLRegex]]
-                       options:RKLCaseless | RKLMultiline
-                       capture:0];
-    if (range.location != NSNotFound) {
-        [mutableString addAttribute:NSLinkAttributeName value:[[mutableString string] substringWithRange:range] range:range];
-    }
-    
-    range = [[mutableString string] rangeOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString schemelessURLRegex]]
-                       options:RKLCaseless | RKLMultiline
-                       capture:0];
-    if (range.location != NSNotFound) {
-        [mutableString addAttribute:NSLinkAttributeName value:[[mutableString string] substringWithRange:range] range:range];
-    }
-    
-    range = [[mutableString string] rangeOfRegex:[NSSWF:@"(^|\\s)(%@)(\\.|,|:|\\?|!)?(\\s|$)", [NSString mailtoURLRegex]]
-                       options:RKLCaseless | RKLMultiline
-                       capture:0];
-    if (range.location != NSNotFound) {
-        [mutableString addAttribute:NSLinkAttributeName value:[[mutableString string] substringWithRange:range] range:range];
-    }
-}
-
-
-
-
-- (void)_applyHighlightsToMutableString:(NSMutableAttributedString *)mutableString {
-    NSColor             *color;
-    NSAttributedString  *highlightString;
-    NSString            *string;
-    NSRange             range;
-    
-    color = [self _highlightColorForChat:[mutableString string]];
-    
-    if(!color)
-        return;
-    
-    for(NSString *pattern in _highlightPatterns) {
-        range = [[mutableString string] rangeOfString:pattern options:NSCaseInsensitiveSearch];
-        
-        if(range.location == NSNotFound)
-            return;
-        
-        string = [[mutableString string] substringWithRange:range];
-        
-        if(string) {
-            //highlightString = [NSSWF:@"<span style='color:%@;'>%@</span>", [NSSWF:@"#%.6lx", (unsigned long)[color HTMLValue]], string];
-            highlightString = [NSAttributedString attributedStringWithString:string
-                                                                  attributes:@{NSForegroundColorAttributeName: color}];
-            [mutableString replaceCharactersInRange:range withAttributedString:highlightString];
-        }
-    }
-}
-
-
 #pragma mark -
 
 - (NSColor *)_highlightColorForChat:(NSString *)chat {
@@ -940,7 +837,15 @@ typedef enum _WCChatFormat					WCChatFormat;
             [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]]);
 }
 
-- (void)_loadTheme:(NSDictionary *)theme {
+- (void)_loadTheme:(NSDictionary *)theme withTemplate:(WITemplateBundle *)template {
+    NSString			*htmlPath;
+
+	htmlPath	= [template htmlPathForType:WITemplateTypeChat];
+    
+	[[_chatOutputWebView preferences] setAutosaves:YES];
+
+    [[_chatOutputWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:htmlPath]]];
+    
     [self themeDidChange:theme];
 }
 
@@ -1104,7 +1009,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (id)init {
 	self = [super init];
 	
-    _messages               = [[NSMutableArray alloc] init];
 	_commandHistory			= [[NSMutableArray alloc] init];
 	_users					= [[NSMutableDictionary alloc] init];
 	_allUsers				= [[NSMutableArray alloc] init];
@@ -1157,7 +1061,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[_allUsers release];
 	[_shownUsers release];
 	
-    [_messages release];
 	[_commandHistory release];
 	
 	[_chatColor release];
@@ -1185,6 +1088,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 - (void)awakeFromNib {
 	NSDictionary		*theme;
+	WITemplateBundle	*template;
 	
 	[_userListTableView setTarget:self];
 	[_userListTableView setDoubleAction:@selector(sendPrivateMessage:)];
@@ -1201,14 +1105,18 @@ typedef enum _WCChatFormat					WCChatFormat;
 	[_topicDateFormatter setDateStyle:NSDateFormatterMediumStyle];
 	[_topicDateFormatter setNaturalLanguageStyle:WIDateFormatterCapitalizedNaturalLanguageStyle];
 	
-    [[_topicTextField cell] setBackgroundStyle:NSBackgroundStyleRaised];
-    
-    [_chatTableView registerForDraggedTypes:@[NSFilenamesPboardType, NSPasteboardTypeString]];
-    [_chatTableView setDraggingDestinationFeedbackStyle:NSTableViewDraggingDestinationFeedbackStyleNone];
+	[_chatOutputWebView setUIDelegate:(id)self];
+    [_chatOutputWebView setFrameLoadDelegate:(id)self];
+	[_chatOutputWebView setResourceLoadDelegate:(id)self];
+    [_chatOutputWebView setPolicyDelegate:(id)self];
+    [_chatOutputWebView registerForDraggedTypes:@[NSFilenamesPboardType]];
 	
-    theme = [[WCSettings settings] themeWithName:@"Wired"];
+	[[_topicTextField cell] setBackgroundStyle:NSBackgroundStyleRaised];
+	
+    theme        = [[WCSettings settings] themeWithName:@"Wired"];
+    template    = [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
     
-    [self _loadTheme:theme];
+    [self _loadTheme:theme withTemplate:template];
     
     if([[WCSettings settings] boolForKey:WCHideUserList])
         [self hideUserList:self];
@@ -1232,6 +1140,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)themeDidChange:(NSDictionary *)theme {
+	WITemplateBundle		*templateBundle;
 	NSColor					*textColor, *backgroundColor, *timestampColor, *eventColor, *urlColor;
 	NSFont					*font;
 	BOOL					reload = NO;
@@ -1250,8 +1159,9 @@ typedef enum _WCChatFormat					WCChatFormat;
 	if(font && ![[_setTopicTextView font] isEqualTo:font]) {
 		[_chatInputTextField setFont:font];
 		[_setTopicTextView setFont:font];
-//		[_chatFont release];
-//		_chatFont = [font retain];
+		
+		[_chatFont release];
+		_chatFont = [font retain];
 	}
 //	
 //	if(![[_chatInputTextView backgroundColor] isEqualTo:backgroundColor]) {
@@ -1285,12 +1195,6 @@ typedef enum _WCChatFormat					WCChatFormat;
 		reload = YES;
 	}
     
-    if([theme boolForKey:WCThemesChatSeparateEveryLine]) {
-        [_chatTableView setGridStyleMask:NSTableViewDashedHorizontalGridLineMask];
-    } else {
-        [_chatTableView setGridStyleMask:NSTableViewGridNone];
-    }
-    
     if([[theme objectForKey:WCThemesUserListAlternateRows] boolValue]) {
         [_userListTableView setUsesAlternatingRowBackgroundColors:YES];
         [_userListTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleRegular];
@@ -1316,7 +1220,52 @@ typedef enum _WCChatFormat					WCChatFormat;
         [_userListTableView reloadData];
     }
     
-    [_chatTableView reloadData];
+	// HTML/ CSS template reload
+	templateBundle  = [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+    
+	[templateBundle setCSSValue:[font fontName]
+                    toAttribute:WITemplateAttributesFontName
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"%.0fpx", [font pointSize]]
+                    toAttribute:WITemplateAttributesFontSize
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"white" : @"dimgray"
+                    toAttribute:WITemplateAttributesFontColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"#383838" : @"white"
+                    toAttribute:WITemplateAttributesBackgroundColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[timestampColor HTMLValue]]
+                    toAttribute:WITemplateAttributesTimestampColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[eventColor HTMLValue]]
+                    toAttribute:WITemplateAttributesEventColor
+                         ofType:WITemplateTypeChat];
+    
+	[templateBundle setCSSValue:[NSSWF:@"#%.6lx", (unsigned long)[urlColor HTMLValue]]
+                    toAttribute:WITemplateAttributesURLTextColor
+                         ofType:WITemplateTypeChat];
+        
+    [templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
+                    toAttribute:@"<? eventbackground ?>"
+                         ofType:WITemplateTypeChat];
+    
+    [templateBundle setCSSValue:[NSApp darkModeEnabled] ? @"dimgray" : @"gainsboro"
+                    toAttribute:@"<? sidebarbackground ?>"
+                         ofType:WITemplateTypeChat];
+	
+	[templateBundle saveChangesForType:WITemplateTypeChat];
+	
+	[_chatOutputWebView reloadStylesheetWithID:@"wc-stylesheet"
+								  withTemplate:templateBundle
+										  type:WITemplateTypeChat];
+    
+    [_chatOutputWebView scrollToBottom];
 }
 
 
@@ -1543,10 +1492,15 @@ typedef enum _WCChatFormat					WCChatFormat;
 	mutableChat = [NSMutableString stringWithString:chat];
 	color		= [self _highlightColorForChat:chat];
     
-	if([name isEqualToString:@"wired.chat.say"])
-        [self _printChat:mutableChat by:user];
-    else
-        [self _printActionChat:mutableChat by:user];
+	if([[WCSettings settings] boolForKey:WCChatEmbedHTMLInChatEnabled] && [[self class] isHTMLString:chat] ) {
+		[self _printHTML:chat by:user];
+		
+	} else {
+		if([name isEqualToString:@"wired.chat.say"])
+			[self _printChat:mutableChat by:user];
+		else
+			[self _printActionChat:mutableChat by:user];
+	}
 	
 	if(color != NULL) {
 		[[self connection] postNotificationName:WCChatHighlightedChatDidAppearNotification
@@ -1800,7 +1754,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 #pragma mark -
 
 - (void)controlTextDidChange:(NSNotification *)obj {
-
+    if([obj object] == _chatInputTextField)
+        [self _adjustChatInputTextFieldHeight];
 }
 
 
@@ -1829,7 +1784,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 	historyModifier = [[WCSettings settings] integerForKey:WCChatHistoryScrollbackModifier];
 	
 	if(selector == @selector(insertLineBreak:)) {
-    
+        [self _adjustChatInputTextFieldHeight];
+        
     } else if(selector == @selector(insertNewline:) ||
               selector == @selector(insertNewlineIgnoringFieldEditor:)) {
 		NSString		*string;
@@ -1839,6 +1795,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 		length = [string length];
         
 		if(length == 0) {
+            [self _adjustChatInputTextFieldHeight];
             return YES;
 		}
 		if(length > WCChatLimit)
@@ -1864,8 +1821,8 @@ typedef enum _WCChatFormat					WCChatFormat;
 		}
 		
 		[_chatInputTextField setStringValue:@""];
-
-        return YES;
+        [self _adjustChatInputTextFieldHeight];
+		return YES;
 	}
 	else if(selector == @selector(insertTab:)) {
 		if([[WCSettings settings] boolForKey:WCChatTabCompleteNicks]) {
@@ -2073,12 +2030,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 }
 
 - (WebView *)webView {
-	return nil;
-}
-
-
-- (NSArray *)messages {
-    return _messages;
+	return _chatOutputWebView;
 }
 
 
@@ -2215,13 +2167,12 @@ typedef enum _WCChatFormat					WCChatFormat;
 		[[self class] applyHTMLTagsForSmileysToMutableString:mutableOutput];
 
     jsonProxy = [NSDictionary dictionaryWithObjectsAndKeys:
-                 @"true",       @"event",
                  formattedDate, @"timestamp",
                  mutableOutput, @"message", nil];
     
-    [_messages addObject:jsonProxy];
-    [self _appendRow];
-    
+    [_chatOutputWebView stringByEvaluatingJavaScriptFromString:
+     [NSSWF:@"printEvent(%@);", [_jsonWriter stringWithObject:jsonProxy]]];
+	
 	if([[WCSettings settings] boolForKey:WCChatLogsPlainTextEnabled])
 		[logController appendChatLogAsPlainText:[NSSWF:@"[%@]\t%@\n", formattedDate, output]
                               forConnectionName:[[self connection] name]];
@@ -2234,13 +2185,13 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (void)clearChat {
-    [_messages removeAllObjects];
-    [_chatTableView reloadData];
+	[_chatOutputWebView clearChildrenElementsOfElementWithID:@"chat-content"];
 }
 
 
 - (BOOL)chatIsEmpty {
-    return [_messages count] == 0;
+	DOMHTMLElement *chatContentElement = (DOMHTMLElement *)[[[_chatOutputWebView mainFrame] DOMDocument] getElementById:@"chat-content"];
+    return ![chatContentElement hasChildNodes];
 }
 
 
@@ -2282,15 +2233,15 @@ typedef enum _WCChatFormat					WCChatFormat;
 	
 	[self _updateSaveChatForPanel:savePanel];
     
-//    [savePanel beginSheetModalForWindow:[_userListSplitView window] completionHandler:^(NSInteger result) {
-//        WIChatLogType			type;
-//
-//        if(result == NSModalResponseOK) {
-//            type = [_saveChatFileFormatPopUpButton indexOfSelectedItem];
-//
-//            [_chatOutputWebView exportContentToFileAtPath:[[savePanel URL] path] forType:type];
-//        }
-//    }];
+    [savePanel beginSheetModalForWindow:[_userListSplitView window] completionHandler:^(NSInteger result) {
+        WIChatLogType			type;
+        
+        if(result == NSModalResponseOK) {
+            type = [_saveChatFileFormatPopUpButton indexOfSelectedItem];
+            
+            [_chatOutputWebView exportContentToFileAtPath:[[savePanel URL] path] forType:type];
+        }
+    }];
 }
 
 
@@ -2300,7 +2251,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 	if(returnCode == NSModalResponseOK) {
 		type = [_saveChatFileFormatPopUpButton indexOfSelectedItem];
 		
-		//[_chatOutputWebView exportContentToFileAtPath:[[savePanel URL] path] forType:type];
+		[_chatOutputWebView exportContentToFileAtPath:[[savePanel URL] path] forType:type];
 	}
 }
 
@@ -2311,30 +2262,34 @@ typedef enum _WCChatFormat					WCChatFormat;
     if(_topic && [_topic topic]) {
         [_setTopicTextView setString:[_topic topic]];
         [_setTopicTextView setSelectedRange:NSMakeRange(0, [[_setTopicTextView string] length])];
-	}
+    }
     
-	[NSApp beginSheet:_setTopicPanel
-	   modalForWindow:[_userListSplitView window]
-		modalDelegate:self
-	   didEndSelector:@selector(setTopicSheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:NULL];
+    NSWindow *window = [_userListSplitView window];
+    
+    [window beginSheet:_setTopicPanel
+       completionHandler:^(NSModalResponse returnCode){
+           // Hier kannst du Code hinzufügen, der nach dem Blatt abgeschlossen wird.
+           // Das ist äquivalent zum "didEndSelector" in der vorherigen Methode.
+       }];
 }
+
 
 
 
 - (void)setTopicSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	WIP7Message		*message;
+    WIP7Message *message;
     
-	if(returnCode == NSAlertDefaultReturn) {
-		message = [WIP7Message messageWithName:@"wired.chat.set_topic" spec:WCP7Spec];
-		[message setUInt32:[self chatID] forName:@"wired.chat.id"];
-		[message setString:[_setTopicTextView string] forName:@"wired.chat.topic.topic"];
-		[[self connection] sendMessage:message];
-	}
-	
-	[_setTopicPanel close];
-	[_setTopicTextView setString:@""];
+    if (returnCode == NSAlertFirstButtonReturn) {
+        message = [WIP7Message messageWithName:@"wired.chat.set_topic" spec:WCP7Spec];
+        [message setUInt32:[self chatID] forName:@"wired.chat.id"];
+        [message setString:[_setTopicTextView string] forName:@"wired.chat.topic.topic"];
+        [[self connection] sendMessage:message];
+    }
+    
+    [_setTopicPanel close];
+    [_setTopicTextView setString:@""];
 }
+
 
 
 
@@ -2354,32 +2309,29 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (IBAction)kick:(id)sender {
-	[NSApp beginSheet:_kickMessagePanel
-	   modalForWindow:[_userListSplitView window]
-		modalDelegate:self
-	   didEndSelector:@selector(kickSheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:[[self selectedUser] retain]];
+    [[_userListSplitView window] beginSheet:_kickMessagePanel completionHandler:^(NSModalResponse returnCode) {
+        [self kickSheetDidEnd:_kickMessagePanel returnCode:returnCode contextInfo:[[self selectedUser] retain]];
+    }];
 }
 
+- (void)kickSheetDidEnd:(NSWindow *)sheet returnCode:(NSModalResponse)returnCode contextInfo:(void *)contextInfo {
+    WIP7Message *message;
+    WCUser *user = ( WCUser *)contextInfo;
 
+    if (returnCode == NSModalResponseOK) {
+        message = [WIP7Message messageWithName:@"wired.chat.kick_user" spec:WCP7Spec];
+        [message setUInt32:[user userID] forName:@"wired.user.id"];
+        [message setUInt32:[self chatID] forName:@"wired.chat.id"];
+        [message setString:[_kickMessageTextField stringValue] forName:@"wired.user.disconnect_message"];
+        [[self connection] sendMessage:message fromObserver:self selector:@selector(wiredChatKickUserReply:)];
+    }
 
-- (void)kickSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
-	WIP7Message		*message;
-	WCUser			*user = contextInfo;
-	
-	if(returnCode == NSAlertDefaultReturn) {
-		message = [WIP7Message messageWithName:@"wired.chat.kick_user" spec:WCP7Spec];
-		[message setUInt32:[user userID] forName:@"wired.user.id"];
-		[message setUInt32:[self chatID] forName:@"wired.chat.id"];
-		[message setString:[_kickMessageTextField stringValue] forName:@"wired.user.disconnect_message"];
-		[[self connection] sendMessage:message fromObserver:self selector:@selector(wiredChatKickUserReply:)];
-	}
-	
-	[user release];
-	
-	[_kickMessagePanel close];
-	[_kickMessageTextField setStringValue:@""];
+    [_kickMessagePanel close];
+    [_kickMessageTextField setStringValue:@""];
+
+    [user release]; // This line is not needed in ARC (Automatic Reference Counting) environment
 }
+
 
 
 
@@ -2486,13 +2438,145 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 #pragma mark -
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-    if (tableView == _userListTableView)
-        return [_shownUsers count];
-    else if (tableView == _chatTableView)
-        return [_messages count];
+- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
+    WITemplateBundle    *template;
+    NSURL               *jqueryURL, *functionsURL, *mainURL;
+    NSDictionary		*theme;
+
+	theme		= [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
+	template	= [[WCSettings settings] templateBundleWithIdentifier:[theme objectForKey:WCThemesTemplate]];
+        
+    if(!template) {
+        NSLog(@"Error: Template not found. (%@)", _chatTemplate);
+        return;
+    }
     
-    return 0;
+    jqueryURL       = [NSURL fileURLWithPath:[template pathForResource:@"jquery" ofType:@"js" inDirectory:@"htdocs/js"]];
+    functionsURL    = [NSURL fileURLWithPath:[template pathForResource:@"functions" ofType:@"js" inDirectory:@"htdocs/js"]];
+    mainURL         = [NSURL fileURLWithPath:[template pathForResource:@"chat" ofType:@"js" inDirectory:@"htdocs/js"]];
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[jqueryURL path]] ||
+       ![[NSFileManager defaultManager] fileExistsAtPath:[functionsURL path]] ||
+       ![[NSFileManager defaultManager] fileExistsAtPath:[mainURL path]])
+    {
+        NSLog(@"Error: Invalid template. Missing script. (%@)", _chatTemplate);
+        return;
+    }
+    
+    [[_chatOutputWebView windowScriptObject] setValue:self forKey:@"Controller"];
+    
+    [_chatOutputWebView appendScriptAtURL:jqueryURL];
+    [_chatOutputWebView appendScriptAtURL:functionsURL];
+    [_chatOutputWebView appendScriptAtURL:mainURL];
+    
+    [_chatOutputWebView scrollToBottom];
+}
+
+
+- (NSArray *)webView:(WebView *)webView contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems {
+#ifdef WCConfigurationRelease
+    return NULL;
+#else
+    return defaultMenuItems;
+#endif
+}
+
+
+-(NSURLRequest *)webView:(WebView *)sender
+                resource:(id)identifier
+         willSendRequest:(NSURLRequest *)request
+        redirectResponse:(NSURLResponse *)redirectResponse
+          fromDataSource:(WebDataSource *)dataSource
+{
+    if ([request cachePolicy] != NSURLRequestReloadIgnoringCacheData)
+    {
+        return [NSURLRequest requestWithURL:[request URL]
+                                cachePolicy:NSURLRequestReloadIgnoringCacheData
+                            timeoutInterval:[request timeoutInterval]];
+    } else {
+        return request;
+    }
+}
+
+- (void)webView:(WebView *)webView
+decidePolicyForNavigationAction:(NSDictionary *)action
+        request:(NSURLRequest *)request
+          frame:(WebFrame *)frame
+decisionListener:(id <WebPolicyDecisionListener>)listener
+{
+	NSString			*path;
+    NSURL               *url;
+	WIURL				*wiredURL;
+	WCFile				*file;
+    NSData              *fileData;
+    NSImage             *droppedImage;
+	BOOL				handled     = NO;
+	BOOL                isDirectory = NO;
+    
+    if([[action objectForKey:WebActionNavigationTypeKey] unsignedIntegerValue] == WebNavigationTypeLinkClicked) {
+        [listener ignore];
+        
+        url         = [action objectForKey:WebActionOriginalURLKey];
+		wiredURL    = [WIURL URLWithURL:url];
+        
+        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;
+		
+		if([[wiredURL scheme] isEqualToString:@"wired"] || [[wiredURL scheme] isEqualToString:@"wiredp7"]) {
+			if([[wiredURL host] length] == 0) {
+				if([self connection] && [[self connection] isConnected]) {
+                    path = [[wiredURL path] stringByRemovingPercentEncoding];
+					
+					if(isDirectory) {
+                        [WCFiles filesWithConnection:[self connection]
+                                                file:[WCFile fileWithDirectory:[path stringByDeletingLastPathComponent] connection:[self connection]]
+                                          selectFile:[WCFile fileWithDirectory:path connection:[self connection]]];
+                        
+					} else {
+                        file = [WCFile fileWithFile:path connection:[self connection]];
+                        [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file]
+                                                      toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
+					}
+				}
+				
+				handled = YES;
+			}
+		}
+		
+		if(!handled)
+			[[NSWorkspace sharedWorkspace] openURL:[action objectForKey:WebActionOriginalURLKey]];
+        
+    } else {
+        url = [action objectForKey:WebActionOriginalURLKey];
+        
+        if (![[url pathExtension] isEqualToString:@"html"]) {
+            [listener ignore];
+            
+            fileData        = [NSData dataWithContentsOfURL:url];
+            droppedImage    = [NSImage imageWithData:fileData];
+            
+            if (droppedImage) {
+                [self _sendLocalImage:url];
+            }
+        }
+        
+        [listener use];
+    }
+}
+
+- (void)webView:(WebView *)sender mouseDidMoveOverElement:(NSDictionary *)elementInformation modifierFlags:(NSUInteger)modifierFlags {
+    // useless but required
+}
+    
+- (NSUInteger)webView:(WebView *)webView
+dragDestinationActionMaskForDraggingInfo:(id<NSDraggingInfo>)draggingInfo {
+    return WebDragDestinationActionLoad;
+}
+    
+
+#pragma mark -
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+	return [_shownUsers count];
 }
 
 
@@ -2508,143 +2592,101 @@ typedef enum _WCChatFormat					WCChatFormat;
                   row:(NSInteger)row {
     
     NSDictionary            *theme;
+    WCUserTableCellView     *cellView;
     WCUser                  *user;
-    NSColor                 *timestampColor;
     
-    if(tableView == _userListTableView) {
-        WCUserTableCellView     *cellView;
-        
-        theme       = [self _currentTheme];
-        user        = [self userAtIndex:row];
-        
-        switch([[theme objectForKey:WCThemesUserListIconSize] integerValue]) {
-            case WCThemesUserListIconSizeLarge: {
-                if([[user status] length] > 0)
-                    cellView = [tableView makeViewWithIdentifier:@"WCLargeUserWithStatusTableCellView" owner:tableView];
-                else
-                    cellView = [tableView makeViewWithIdentifier:@"WCLargeUserTableCellView" owner:tableView];
-            } break;
-                
-            case WCThemesUserListIconSizeSmall: {
-                if([[user status] length] > 0)
-                    cellView = [tableView makeViewWithIdentifier:@"WCSmallUserWithStatusTableCellView" owner:tableView];
-                else
-                    cellView = [tableView makeViewWithIdentifier:@"WCSmallUserTableCellView" owner:tableView];
-            } break;
-        }
-        
-        //if(row != [tableView selectedRow])
-            cellView.nickTextField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
-        //else
-        //  cellView.nickTextField.textColor = [NSColor whiteColor];
-        
-        [cellView.nickTextField setAllowsEditingTextAttributes:YES];
-        
-        NSDictionary *attributes;
-        
-        if([user isIgnored]) {
-            attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [NSNumber numberWithInteger:NSUnderlinePatternSolid | NSUnderlineStyleSingle],
-                          NSStrikethroughStyleAttributeName,
-                          nil];
-        } else {
-            attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [NSNumber numberWithInteger:NSUnderlinePatternSolid | NSUnderlineStyleNone],
-                          NSStrikethroughStyleAttributeName,
-                          nil];
-        }
-        
-        cellView.nickTextField.attributedStringValue = [NSAttributedString attributedStringWithString:[user nick]
-                                                                                       attributes:attributes];
-        cellView.nickTextField.toolTip = [user nick];
-        cellView.statusTextField.toolTip = [user status];
-        cellView.statusTextField.stringValue = [user status];
-        
-        
-        NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
-        if (osxMode == nil) {
-            cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1.0]; //Light mode
-        } else {
-          cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:130.0/255.0 green:130.0/255.0 blue:130.0/255.0 alpha:0.7 ] ; //Dark mode
-        }
+    theme       = [self _currentTheme];
+    user        = [self userAtIndex:row];
+    
+    switch([[theme objectForKey:WCThemesUserListIconSize] integerValue]) {
+		case WCThemesUserListIconSizeLarge: {
+            if([[user status] length] > 0)
+                cellView = [tableView makeViewWithIdentifier:@"WCLargeUserWithStatusTableCellView" owner:tableView];
+            else
+                cellView = [tableView makeViewWithIdentifier:@"WCLargeUserTableCellView" owner:tableView];
+        } break;
+            
+		case WCThemesUserListIconSizeSmall: {
+            if([[user status] length] > 0)
+                cellView = [tableView makeViewWithIdentifier:@"WCSmallUserWithStatusTableCellView" owner:tableView];
+            else
+                cellView = [tableView makeViewWithIdentifier:@"WCSmallUserTableCellView" owner:tableView];
+        } break;
+	}
+    
+    //if(row != [tableView selectedRow])
+        cellView.nickTextField.textColor = [WCUser colorForColor:[user color] idleTint:[user isIdle]];
+    //else
+    //  cellView.nickTextField.textColor = [NSColor whiteColor];
+    
+    [cellView.nickTextField setAllowsEditingTextAttributes:YES];
+    
+    NSDictionary *attributes;
+    
+    if([user isIgnored]) {
+        attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                      [NSNumber numberWithInteger:NSUnderlinePatternSolid | NSUnderlineStyleSingle],
+                      NSStrikethroughStyleAttributeName,
+                      nil];
+    } else {
+        attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                      [NSNumber numberWithInteger:NSUnderlinePatternSolid | NSUnderlineStyleNone],
+                      NSStrikethroughStyleAttributeName,
+                      nil];
+    }
+    
+    cellView.nickTextField.attributedStringValue = [NSAttributedString attributedStringWithString:[user nick]
+                                                                                   attributes:attributes];
+    cellView.nickTextField.toolTip = [user nick];
+    cellView.statusTextField.toolTip = [user status];
+    cellView.statusTextField.stringValue = [user status];
+    
+    
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    if (osxMode == nil) {
+        cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1.0]; //Light mode
+    } else {
+      cellView.statusTextField.textColor = [NSColor colorWithCalibratedRed:130.0/255.0 green:130.0/255.0 blue:130.0/255.0 alpha:0.7 ] ; //Dark mode
+    }
 
-        cellView.imageView.image = [user iconWithIdleTint:YES];
-        
-        return cellView;
-    }
-    else if (tableView == _chatTableView) {
-        NSDictionary *message = [_messages objectAtIndex:row];
-        
-        if ([[message valueForKey:@"me"] isEqualTo:@"true"]) {
-            WCChatTableCellView *cell = [tableView makeViewWithIdentifier:@"WCChatMeTableCellView" owner:tableView];
-                    
-            if(message) {
-                cell.messageTextField.stringValue = [message valueForKey:@"message"];
-                cell.iconImageView.image = [message valueForKey:@"icon"];
-            }
-            
-            [cell layoutSubtreeIfNeeded];
-            
-            return cell;
-        }
-        if ([[message valueForKey:@"event"] isEqualTo:@"true"]) {
-            WCChatTableCellView *cell = [tableView makeViewWithIdentifier:@"WCChatEventTableCellView" owner:tableView];
-                    
-            if(message) {
-                cell.messageTextField.stringValue = [message valueForKey:@"message"];
-            }
-            
-            [cell layoutSubtreeIfNeeded];
-            
-            return cell;
-            
-        } else {
-            WCChatTableCellView *cell = [tableView makeViewWithIdentifier:@"WCChatTableCellView" owner:tableView];
-                    
-            theme = [self _currentTheme];
-            
-            if(message) {
-                cell.nickTextField.stringValue = [message valueForKey:@"nick"];
-                cell.messageTextField.stringValue = [message valueForKey:@"message"];
-                cell.iconImageView.image = [message valueForKey:@"icon"];
-                
-                if([theme boolForKey:WCThemesChatTimestampEveryLine]) {
-                    timestampColor = WIColorFromString([theme objectForKey:WCThemesChatTimestampEveryLineColor]);
-                    
-                    cell.timeTextField.stringValue  = [message valueForKey:@"timestamp"];
-                    cell.timeTextField.textColor    = timestampColor;
-                } else {
-                    cell.timeTextField.stringValue = @"";
-                }
-            }
-            
-            [cell layoutSubtreeIfNeeded];
-            
-            return cell;
-        }
-    }
+    cellView.imageView.image = [user iconWithIdleTint:YES];
     
-    return nil;
+    return cellView;
+    
 }
 
 
 
 
+
+- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)column row:(NSInteger)row {
+    if(tableView == _userListTableView)
+        NSLog(@"willDisplayCell");
+//	WCUser		*user;
+//	
+//	if(column == _nickTableColumn) {
+//		user = [self userAtIndex:row];
+//		
+//		[cell setTextColor:[WCUser colorForColor:[user color] idleTint:[user isIdle]]];
+//		[cell setIgnored:[user isIgnored]];
+//	}
+}
+
+
+
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)column row:(NSInteger)row {
-    if(tableView == _userListTableView) {
-        WCUser        *user;
-        
-        user = [self userAtIndex:row];
-        
-        if(column == _iconTableColumn)
-            return [user iconWithIdleTint:YES];
-        else if(column == _nickTableColumn) {
-            return [NSDictionary dictionaryWithObjectsAndKeys:
-                    [user nick],        WCUserCellNickKey,
-                    [user status],        WCUserCellStatusKey,
-                    NULL];
-        }
-    }
+	WCUser		*user;
+	
+	user = [self userAtIndex:row];
+	
+	if(column == _iconTableColumn)
+		return [user iconWithIdleTint:YES];
+	else if(column == _nickTableColumn) {
+		return [NSDictionary dictionaryWithObjectsAndKeys:
+				[user nick],		WCUserCellNickKey,
+				[user status],		WCUserCellStatusKey,
+				NULL];
+	}
 	
 	return NULL;
 }
@@ -2652,11 +2694,7 @@ typedef enum _WCChatFormat					WCChatFormat;
 
 
 - (NSString *)tableView:(NSTableView *)tableView stringValueForRow:(NSInteger)row {
-    if(tableView == _userListTableView) {
-        return [[self userAtIndex:row] nick];
-    }
-    
-    return nil;
+	return [[self userAtIndex:row] nick];
 }
 
 
@@ -2665,17 +2703,13 @@ typedef enum _WCChatFormat					WCChatFormat;
 	NSMutableString		*toolTip;
 	WCUser				*user;
 	
-    if(tableView == _userListTableView) {
-        user = [self userAtIndex:row];
-        toolTip = [[[user nick] mutableCopy] autorelease];
-        
-        if([[user status] length] > 0)
-            [toolTip appendFormat:@"\n%@", [user status]];
-        
-        return toolTip;
-    }
-    
-    return nil;
+	user = [self userAtIndex:row];
+	toolTip = [[[user nick] mutableCopy] autorelease];
+	
+	if([[user status] length] > 0)
+		[toolTip appendFormat:@"\n%@", [user status]];
+	
+	return toolTip;
 }
 
 
@@ -2683,72 +2717,28 @@ typedef enum _WCChatFormat					WCChatFormat;
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard {
 	WCUser		*user;
 	
-    if(tableView == _userListTableView) {
-        user = [self userAtIndex:[indexes firstIndex]];
-        
-        [pasteboard declareTypes:[NSArray arrayWithObjects:WCUserPboardType, NSStringPboardType, NULL] owner:NULL];
-        [pasteboard setString:[NSSWF:@"%lu", (unsigned long)[user userID]] forType:WCUserPboardType];
-        [pasteboard setString:[user nick] forType:NSStringPboardType];
-            
-        
-        return YES;
-    }
-    
-    return NO;
+	user = [self userAtIndex:[indexes firstIndex]];
+	
+	[pasteboard declareTypes:[NSArray arrayWithObjects:WCUserPboardType, NSStringPboardType, NULL] owner:NULL];
+	[pasteboard setString:[NSSWF:@"%lu", (unsigned long)[user userID]] forType:WCUserPboardType];
+	[pasteboard setString:[user nick] forType:NSStringPboardType];
+	
+	return YES;
 }
 
 
 
 - (void)tableViewShouldCopyInfo:(NSTableView *)tableView {
-    if(tableView == _userListTableView) {
-        NSPasteboard    *pasteboard;
-        WCUser            *user;
-        
-        user = [self selectedUser];
-        
-        pasteboard = [NSPasteboard generalPasteboard];
-        [pasteboard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, NULL] owner:NULL];
-        [pasteboard setString:[user nick] forType:NSStringPboardType];
-    }
+	NSPasteboard	*pasteboard;
+	WCUser			*user;
+	
+	user = [self selectedUser];
+	
+	pasteboard = [NSPasteboard generalPasteboard];
+	[pasteboard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, NULL] owner:NULL];
+	[pasteboard setString:[user nick] forType:NSStringPboardType];
 }
 
-
-
-#pragma mark -
-
-- (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation {
-    if(tableView == _chatTableView) {
-        NSArray *draggedFilenames = [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType];
-        NSString *filepath = [draggedFilenames firstObject];
-        NSImage *image = [NSImage imageWithContentsOfFile:filepath];
-        
-        if (!image) return NO;
-        
-        NSURL *url = [NSURL fileURLWithPath:filepath];
-        
-        [self _sendLocalImage:url];
-        
-        return YES;
-    }
-    
-    return NO;
-}
-
-
-- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row
-       proposedDropOperation:(NSTableViewDropOperation)dropOperation {
-    if(tableView == _chatTableView) {
-        NSArray *draggedFilenames = [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType];
-        
-        if (![NSImage isImageAtPath:[draggedFilenames firstObject]]) {
-            return NSDragOperationNone;
-        }
-            
-        return NSDragOperationCopy;
-    }
-    
-    return NSDragOperationNone;
-}
 
 
 
@@ -2764,8 +2754,8 @@ typedef enum _WCChatFormat					WCChatFormat;
     
     if([[url absoluteString] containsSubstring:@"wired:///"] || [[url absoluteString] containsSubstring:@"wiredp7:///"]) {
         
-        path = [[url path] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];      
-        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;  
+        path = [[url path] stringByRemovingPercentEncoding]; // Updated method
+        isDirectory = [[url absoluteString] hasSuffix:@"/"] ? YES : NO;
         
         if(isDirectory) {
             
@@ -2776,16 +2766,17 @@ typedef enum _WCChatFormat					WCChatFormat;
         } else {
             
             file = [WCFile fileWithFile:path connection:[self connection]];
-            [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file] 
+            [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file]
                                           toFolder:[[[WCSettings settings] objectForKey:WCDownloadFolder] stringByStandardizingPath]];
         }
         
     } else {
-        success = [[NSWorkspace sharedWorkspace] openURL: url];   
+        success = [[NSWorkspace sharedWorkspace] openURL: url];
     }
     
     return success;
 }
+
 
 
 

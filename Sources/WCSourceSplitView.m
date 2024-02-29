@@ -30,21 +30,21 @@
 
 @implementation WCSourceSplitView
 
-//- (CGFloat)dividerThickness {
-//    if(self.isVertical)
-//        return 1.0;
-//    else
-//        return 0;
-//    
-//    return 1.0;
-//}
-//
-//
-//
-//- (void)drawDividerInRect:(NSRect)rect {
-//	[[NSColor darkGrayColor] set];
-//
-//	NSRectFill(rect);
-//}
+- (CGFloat)dividerThickness {
+    if(self.isVertical)
+        return 1.0;
+    else
+        return 0;
+    
+    return 1.0;
+}
+
+
+
+- (void)drawDividerInRect:(NSRect)rect {
+	[[NSColor darkGrayColor] set];
+
+	NSRectFill(rect);
+}
 
 @end

@@ -34,7 +34,7 @@
 - (void)sendEvent:(NSEvent *)event {
 	BOOL	handled = NO;
 	
-	if([event type] == NSKeyDown) {
+    if([event type] == NSEventTypeKeyDown) {
 		if([event character] == ' ') {
 			if([event shiftKeyModifier])
 				handled = [(WCBoards *)[self delegate] showPreviousUnreadThread];

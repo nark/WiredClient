@@ -538,14 +538,12 @@
 		thread = [_threadsArray objectAtIndex:i];
 
 		if(!connection || [thread connection] == connection) {
-            count2 = [[thread posts] count];
-            
-            // we count the thread only if 0 replies
-			if([thread isUnread] && count2 == 0)
+			if([thread isUnread])
 				unread++;
 			
-            // we start counting posts at 1
-            for(j = 1; j < count2; j++) {
+			count2 = [[thread posts] count];
+			
+			for(j = 0; j < count2; j++) {
 				post = [thread postAtIndex:j];
 				
 				if([post isUnread])

@@ -1752,8 +1752,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 												 target:self
 												 action:@selector(search:)];
 		
-		[item setMinSize:NSMakeSize(50.0, [_searchField frame].size.height)];
-		[item setMaxSize:NSMakeSize(250.0, [_searchField frame].size.height)];
+		//[item setMinSize:NSMakeSize(50.0, [_searchField frame].size.height)];
+		//[item setMaxSize:NSMakeSize(250.0, [_searchField frame].size.height)];
 		
 		return item;
 	}
@@ -2265,7 +2265,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 			break;
 		
 		default:
-			return [NSSWF:NSLS(@"Delete %u Items\u2026", @"Delete menu item (count)"), [files count]];
+            return [NSSWF:NSLS(@"Delete %lu Items\u2026", @"Delete menu item (count)"), (unsigned long)[files count]];
 			break;
 	}
 }
@@ -2296,7 +2296,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 			break;
 		
 		default:
-			return [NSSWF:NSLS(@"Quick Look %u Items", @"Quick Look menu item (count)"), [files count]];
+            return [NSSWF:NSLS(@"Quick Look %lu Items", @"Quick Look menu item (count)"), (unsigned long)[files count]];
 			break;
 	}
 }
@@ -2586,8 +2586,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 				NSLS(@"This file is large and make take a while to load.", @"Confirm Quick Look dialog description")];
 		} else {
 			[alert setMessageText:[NSSWF:
-				NSLS(@"Are you sure you want to Quick Look %u items?", @"Confirm Quick Look dialog title"),
-				[files count]]];
+                                   NSLS(@"Are you sure you want to Quick Look %lu items?", @"Confirm Quick Look dialog title"),
+                                   (unsigned long)[files count]]];
 			[alert setInformativeText:
 				NSLS(@"Some of the files are large and make take a while to load.", @"Confirm Quick Look dialog description")];
 		}

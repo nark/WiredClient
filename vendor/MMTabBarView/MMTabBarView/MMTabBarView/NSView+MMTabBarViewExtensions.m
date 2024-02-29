@@ -38,13 +38,13 @@ NS_ASSUME_NONNULL_BEGIN
             *mouseUp = nil;
     BOOL dragIt = NO;
     
-    while ((nextEvent = [self.window nextEventMatchingMask:(NSLeftMouseUpMask | NSLeftMouseDraggedMask) untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
+    while ((nextEvent = [self.window nextEventMatchingMask:(NSEventMaskLeftMouseUp | NSEventMaskLeftMouseDragged) untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
     
         if (firstEvent == nil) {
             firstEvent = nextEvent;
         }
         
-        if (nextEvent.type == NSLeftMouseDragged) {
+        if (nextEvent.type == NSEventTypeLeftMouseDragged) {
             CGFloat deltaX = ABS(nextEvent.locationInWindow.x - mouseDownEvent.locationInWindow.x);
             CGFloat deltaY = ABS(nextEvent.locationInWindow.y - mouseDownEvent.locationInWindow.y);
             dragEvent = nextEvent;
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
                 dragIt = YES;
                 break;
             }
-        } else if (nextEvent.type == NSLeftMouseUp) {
+        } else if (nextEvent.type == NSEventTypeLeftMouseUp) {
             mouseUp = nextEvent;
             break;
         }

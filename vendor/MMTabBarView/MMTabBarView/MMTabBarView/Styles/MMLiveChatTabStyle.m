@@ -429,7 +429,7 @@ NS_ASSUME_NONNULL_BEGIN
 		// rollover
 		if (cell.mouseHovered) {
 			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+            NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
 		}
 
 		// frame

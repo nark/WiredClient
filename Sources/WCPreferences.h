@@ -84,7 +84,6 @@ extern NSString * const								WCIconDidChangeNotification;
 	
 	IBOutlet NSButton								*_themesShowSmileysButton;
 	IBOutlet NSButton								*_themesChatTimestampEveryLineButton;
-    IBOutlet NSButton                               *_themesChatSeparateEveryLineButton;
 	IBOutlet NSMatrix								*_themesUserListIconSizeMatrix;
 	IBOutlet NSButton								*_themesUserListAlternateRowsButton;
 	IBOutlet NSMatrix								*_themesFileListIconSizeMatrix;
@@ -141,6 +140,9 @@ extern NSString * const								WCIconDidChangeNotification;
     IBOutlet NSButton                               *_networkCompressionButton;
     
 	IBOutlet NSView									*_bookmarksExportView;
+        
+	WITemplateBundleManager							*_privateTemplateManager;
+	WITemplateBundleManager							*_publicTemplateManager;
 	
 	NSString										*_bookmarksPassword;
 	NSString										*_trackerBookmarksPassword;
@@ -148,6 +150,7 @@ extern NSString * const								WCIconDidChangeNotification;
 
 + (WCPreferences *)preferences;
 
+- (BOOL)importTemplateFromFile:(NSString *)path;
 - (BOOL)importBookmarksFromFile:(NSString *)path;
 - (BOOL)importTrackerBookmarksFromFile:(NSString *)path;
 - (NSImage *)imageForTheme:(NSDictionary *)theme size:(NSSize)size;
@@ -156,6 +159,12 @@ extern NSString * const								WCIconDidChangeNotification;
 
 - (IBAction)changeTheme:(id)sender;
 - (IBAction)changeThemeFont:(id)sender;
+
+- (IBAction)selectThemeTemplate:(id)sender;
+- (IBAction)addThemeTemplate:(id)sender;
+- (IBAction)manageThemeTemplates:(id)sender;
+- (IBAction)closeManageThemeTemplates:(id)sender;
+- (IBAction)deleteThemeTemplate:(id)sender;
 
 - (IBAction)exportBookmarks:(id)sender;
 - (IBAction)importBookmarks:(id)sender;

@@ -95,26 +95,24 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 #pragma mark -
 
 - (void)_updateTheme:(NSMutableDictionary *)theme {
-    [theme setObject:WIStringFromColor([_themesChatEventsColorWell color]) forKey:WCThemesChatEventsColor];
-    [theme setObject:WIStringFromColor([_themesChatTimestampEveryLineColorWell color]) forKey:WCThemesChatTimestampEveryLineColor];
-    [theme setObject:WIStringFromColor([_themesChatURLsColorWell color]) forKey:WCThemesChatURLsColor];
-    [theme setBool:[_themesShowSmileysButton state] forKey:WCThemesShowSmileys];
-    [theme setBool:[_themesChatTimestampEveryLineButton state] forKey:WCThemesChatTimestampEveryLine];
-    [theme setBool:[_themesChatSeparateEveryLineButton state] forKey:WCThemesChatSeparateEveryLine];
-    
-    [theme setInteger:[_themesUserListIconSizeMatrix selectedTag] forKey:WCThemesUserListIconSize];
-    [theme setBool:[_themesUserListAlternateRowsButton state] forKey:WCThemesUserListAlternateRows];
+  [theme setObject:WIStringFromColor([_themesChatEventsColorWell color]) forKey:WCThemesChatEventsColor];
+  [theme setObject:WIStringFromColor([_themesChatTimestampEveryLineColorWell color]) forKey:WCThemesChatTimestampEveryLineColor];
+  [theme setObject:WIStringFromColor([_themesChatURLsColorWell color]) forKey:WCThemesChatURLsColor];
+  [theme setBool:[_themesShowSmileysButton state] forKey:WCThemesShowSmileys];
+  [theme setBool:[_themesChatTimestampEveryLineButton state] forKey:WCThemesChatTimestampEveryLine];
+  [theme setInteger:[_themesUserListIconSizeMatrix selectedTag] forKey:WCThemesUserListIconSize];
+  [theme setBool:[_themesUserListAlternateRowsButton state] forKey:WCThemesUserListAlternateRows];
+  
+  [theme setInteger:[_themesFileListIconSizeMatrix selectedTag] forKey:WCThemesFileListIconSize];
+  [theme setBool:[_themesFileListAlternateRowsButton state] forKey:WCThemesFileListAlternateRows];
+  
+  [theme setBool:[_themesTransferListShowProgressBarButton state] forKey:WCThemesTransferListShowProgressBar];
+  [theme setBool:[_themesTransferListAlternateRowsButton state] forKey:WCThemesTransferListAlternateRows];
+  
+  [theme setBool:[_themesTrackerListAlternateRowsButton state] forKey:WCThemesTrackerListAlternateRows];
 
-    [theme setInteger:[_themesFileListIconSizeMatrix selectedTag] forKey:WCThemesFileListIconSize];
-    [theme setBool:[_themesFileListAlternateRowsButton state] forKey:WCThemesFileListAlternateRows];
-
-    [theme setBool:[_themesTransferListShowProgressBarButton state] forKey:WCThemesTransferListShowProgressBar];
-    [theme setBool:[_themesTransferListAlternateRowsButton state] forKey:WCThemesTransferListAlternateRows];
-
-    [theme setBool:[_themesTrackerListAlternateRowsButton state] forKey:WCThemesTrackerListAlternateRows];
-
-    [theme setInteger:[_themesMonitorIconSizeMatrix selectedTag] forKey:WCThemesMonitorIconSize];
-    [theme setBool:[_themesMonitorAlternateRowsButton state] forKey:WCThemesMonitorAlternateRows];
+  [theme setInteger:[_themesMonitorIconSizeMatrix selectedTag] forKey:WCThemesMonitorIconSize];
+  [theme setBool:[_themesMonitorAlternateRowsButton state] forKey:WCThemesMonitorAlternateRows];
 }
 
 
@@ -153,7 +151,6 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
     [_themesShowSmileysButton setState:[theme boolForKey:WCThemesShowSmileys]];
 
     [_themesChatTimestampEveryLineButton setState:[theme boolForKey:WCThemesChatTimestampEveryLine]];
-    [_themesChatSeparateEveryLineButton setState:[theme boolForKey:WCThemesChatSeparateEveryLine]];
     
     [_themesUserListIconSizeMatrix selectCellWithTag:[theme integerForKey:WCThemesUserListIconSize]];
     [_themesUserListAlternateRowsButton setState:[theme boolForKey:WCThemesUserListAlternateRows]];
@@ -415,7 +412,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (id)init {
 	self = [super initWithWindowNibName:@"Preferences"];
-    
+	
+	_privateTemplateManager	= [[WITemplateBundleManager templateManagerForPath:[[NSBundle mainBundle] resourcePath]] retain];
+	_publicTemplateManager	= [[WITemplateBundleManager templateManagerForPath:[WCApplicationSupportPath stringByStandardizingPath] isPrivate:NO] retain];
+	
 	[self window];
     
 	[[NSNotificationCenter defaultCenter]
@@ -445,7 +445,10 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
+	
+	[_privateTemplateManager release];
+	[_publicTemplateManager release];
+	
 	[super dealloc];
 }
 
@@ -490,7 +493,9 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	[_highlightsTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	[_ignoresTableView registerForDraggedTypes:[NSArray arrayWithObject:WCIgnorePboardType]];
 	
+	//[self _reloadThemes];
 	[self _reloadTheme];
+	//[self _reloadTemplates];
 	[self _reloadChatLogsFolder];
 	[self _reloadEvents];
 	[self _reloadEvent];
@@ -795,29 +800,37 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 
 
+- (NSUInteger)_selectedThemeRow {
+    // Implementierung der Methode hier
+    return 0; // Beispielrückgabewert, passen Sie ihn entsprechend an
+}
+
 - (IBAction)changeThemeFont:(id)sender {
-	NSDictionary		*theme;
-	NSFontManager		*fontManager;
-	
-	theme			= [[WCSettings settings] themeWithName:@"Wired"];
-	fontManager		= [NSFontManager sharedFontManager];
+    NSDictionary *theme;
+    NSFontManager *fontManager;
+    
+    // Konvertierung des Rückgabewerts von [self _selectedThemeRow] in NSUInteger
+    NSUInteger selectedThemeRow = (NSUInteger)[self _selectedThemeRow];
+    
+    theme = [[[WCSettings settings] objectForKey:WCThemes] objectAtIndex:selectedThemeRow];
+    fontManager = [NSFontManager sharedFontManager];
     
     [fontManager setTarget:self];
-	
-	if(sender == _themesChatFontButton) {
-		[fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesChatFont]) isMultiple:NO];
-		[fontManager setAction:@selector(setChatFont:)];
-	}
-	else if(sender == _themesMessagesFontButton) {
-		[fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesMessagesFont]) isMultiple:NO];
-		[fontManager setAction:@selector(setMessagesFont:)];
-	}
-	else if(sender == _themesBoardsFontButton) {
-		[fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont]) isMultiple:NO];
-		[fontManager setAction:@selector(setBoardsFont:)];
-	}
-	
-	[fontManager orderFrontFontPanel:self];
+    
+    if(sender == _themesChatFontButton) {
+        [fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesChatFont]) isMultiple:NO];
+        [fontManager setAction:@selector(setChatFont:)];
+    }
+    else if(sender == _themesMessagesFontButton) {
+        [fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesMessagesFont]) isMultiple:NO];
+        [fontManager setAction:@selector(setMessagesFont:)];
+    }
+    else if(sender == _themesBoardsFontButton) {
+        [fontManager setSelectedFont:WIFontFromString([theme objectForKey:WCThemesBoardsFont]) isMultiple:NO];
+        [fontManager setAction:@selector(setBoardsFont:)];
+    }
+    
+    [fontManager orderFrontFontPanel:self];
 }
 
 
@@ -1421,6 +1434,27 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 	}
 	
 	return NO;
+}
+
+- (void)addThemeTemplate:(id)sender __attribute__((ibaction)) {
+}
+
+- (void)deleteThemeTemplate:(id)sender __attribute__((ibaction)) {
+}
+
+- (NSImage *)imageForTheme:(NSDictionary *)theme size:(NSSize)size {
+}
+
+- (BOOL)importTemplateFromFile:(NSString *)path {
+}
+
+- (void)manageThemeTemplates:(id)sender __attribute__((ibaction)) {
+}
+
+- (void)selectThemeTemplate:(id)sender __attribute__((ibaction)) {
+}
+
+- (void)closeManageThemeTemplates:(id)sender __attribute__((ibaction)) {
 }
 
 @end

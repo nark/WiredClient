@@ -226,137 +226,116 @@
 
 
 - (void)deletePasswordForURL:(WIURL *)url {
-	SecKeychainItemRef	item;
-	OSStatus			err;
-	SecProtocolType		type;
-	
-	if([[url scheme] isEqualToString:@"wiredp7"])
-		type = kSecProtocolTypeWired;
-	else
-		type = kSecProtocolTypeHTTP;
+    OSStatus err;
+    SecProtocolType type;
+    
+    if ([[url scheme] isEqualToString:@"wiredp7"])
+        type = kSecProtocolTypeWired;
+    else
+        type = kSecProtocolTypeHTTP;
 
-	//NSLog(@"'%@' -> NULL", url);
+    // Create a dictionary with the query parameters
+    NSDictionary *query = @{
+        (__bridge id)kSecClass: (__bridge id)kSecClassInternetPassword,
+        (__bridge id)kSecAttrProtocol: @(type),
+        (__bridge id)kSecAttrServer: [url host],
+        (__bridge id)kSecAttrAccount: [url user],
+        (__bridge id)kSecAttrPath: [url path],
+        (__bridge id)kSecAttrPort: @([url port] != WCServerPort ? [url port] : 0)
+    };
 
-	err = SecKeychainFindInternetPassword(NULL,
-										  [[url host] UTF8StringLength],
-										  [[url host] UTF8String],
-										  0,
-										  NULL,
-										  [[url user] UTF8StringLength],
-										  [[url user] UTF8String],
-										  [[url path] UTF8StringLength],
-										  [[url path] UTF8String],
-										  [url port] != WCServerPort ? [url port] : 0,
-										  type,
-										  kSecAuthenticationTypeDefault,
-										  0,
-										  NULL,
-										  &item);
+    // Try to find the password item
+    SecKeychainItemRef item = NULL;
+    err = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&item);
+    if (err != errSecSuccess) {
+        NSLog(@"Error while finding password item: %d", (int)err);
+        return;
+    }
 
-	if(err != noErr)
-		return;
+    // Delete the password item
+    err = SecKeychainItemDelete(item);
+    CFRelease(item);
 
-	err = SecKeychainItemDelete(item);
-
-	if(err != noErr) {
-		NSLog(@"SecKeychainItemDelete: %d", err);
-
-		return;
-	}
+    if (err != errSecSuccess) {
+        NSLog(@"Error while deleting password item: %d", (int)err);
+    }
 }
+
 
 
 
 #pragma mark -
 
 - (void)setSecretKey:(NSString *)string {
-    void                *password;
-    NSData				*data;
-    NSString            *accountName, *serviceName;
-    SecKeychainRef      keychain;
-    SecKeychainItemRef	item;
-    OSStatus            status;
-    u_int32_t           passwordLen;
-    
-    passwordLen         = 0;
-    keychain            = NULL;
-    password            = NULL;
-    accountName         = @"wiredclient";
-    serviceName         = @"wiredclient";
-    data                = [string dataUsingEncoding:NSUTF8StringEncoding];
-    
-    status = SecKeychainFindGenericPassword(keychain,
-                                            [serviceName UTF8StringLength],
-                                            [serviceName UTF8String],
-                                            [accountName UTF8StringLength],
-                                            [accountName UTF8String],
-                                            &passwordLen,
-                                            &password,
-                                            &item);
-    
-    if (status == noErr) {
-        status = SecKeychainItemModifyAttributesAndData(item,
-                                                        NULL,
-                                                        [data length],
-                                                        [data bytes]);
-        
-		if(status != noErr) {
-			NSLog(@"Error while SecKeychainItemModifyAttributesAndData: %d", status);
-            
-			return;
-		}
-    } else {
-        status = SecKeychainAddGenericPassword(keychain,
-                                               [serviceName UTF8StringLength],
-                                               [serviceName UTF8String],
-                                               [accountName UTF8StringLength],
-                                               [accountName UTF8String],
-                                               [data length],
-                                               [data bytes],
-                                               NULL);
-        
-        if (status != noErr) {
-            NSLog(@"Error while setting Secret Key");
-            
-            return;
-        }
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *accountName = @"wiredclient";
+    NSString *serviceName = @"wiredclient";
+    NSDictionary *query;
+    OSStatus status;
+
+    query = @{
+        (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService: serviceName,
+        (__bridge id)kSecAttrAccount: accountName,
+    };
+
+    // Check if the item already exists
+    CFTypeRef result = NULL;
+    status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
+    if (status == errSecSuccess) {
+        // Item exists, update the password
+        NSDictionary *updateAttributes = @{
+            (__bridge id)kSecValueData: data
+        };
+        status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)updateAttributes);
+    } else if (status == errSecItemNotFound) {
+        // Item doesn't exist, add it
+        NSMutableDictionary *addQuery = [query mutableCopy];
+        [addQuery setObject:data forKey:(__bridge id)kSecValueData];
+        status = SecItemAdd((__bridge CFDictionaryRef)addQuery, NULL);
     }
+
+    if (status != errSecSuccess) {
+        NSLog(@"Error while setting Secret Key: %@", [self errorMessageForStatus:status]);
+    }
+}
+
+- (NSString *)errorMessageForStatus:(OSStatus)status {
+    CFStringRef errorMessageString = SecCopyErrorMessageString(status, NULL);
+    NSString *errorMessage = ( NSString *)errorMessageString;
+    return errorMessage;
 }
 
 
 - (NSString *)secretKey {
-    NSString            *result, *accountName, *serviceName;
-    NSData              *data;
-    void                *password;
-    SecKeychainRef      keychain;
-    u_int32_t           passwordLen;
-    OSStatus            status;
-    
-    passwordLen         = 0;
-    keychain            = NULL;
-    result              = NULL;
-    password            = NULL;
-    accountName         = @"wiredclient";
-    serviceName         = @"wiredclient";
-    status              = SecKeychainFindGenericPassword(keychain,
-                                                         [serviceName UTF8StringLength],
-                                                         [serviceName UTF8String],
-                                                         [accountName UTF8StringLength],
-                                                         [accountName UTF8String],
-                                                         &passwordLen,
-                                                         &password,
-                                                         NULL);
-    
-    if (status == noErr) {
-        data    = [NSData dataWithBytes:password length:passwordLen];
-        result  = [NSString stringWithData:data encoding:NSUTF8StringEncoding];
-        
-        SecKeychainItemFreeContent(NULL, (void*)password);
+    NSString *result, *accountName, *serviceName;
+    NSDictionary *query;
+    CFTypeRef resultData = NULL;
+    OSStatus status;
+
+    result = nil;
+    accountName = @"wiredclient";
+    serviceName = @"wiredclient";
+
+    query = @{
+        (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService: serviceName,
+        (__bridge id)kSecAttrAccount: accountName,
+        (__bridge id)kSecReturnData: @YES
+    };
+
+    status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &resultData);
+
+    if (status == noErr && resultData != NULL) {
+        NSData *data = ( NSData *)resultData;
+        result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     } else {
-        NSLog(@"Error while getting Secret Key");
+        NSLog(@"Error while getting Secret Key: %d", (int)status);
     }
+
     return result;
 }
+
 
 
 

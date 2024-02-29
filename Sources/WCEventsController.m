@@ -655,7 +655,7 @@ typedef enum _WCEventType		WCEventType;
 	
 	while([date compare:weekDate] == NSOrderedDescending) {
 		components	= [[NSCalendar currentCalendar] components:NSCalendarUnitYear | NSCalendarUnitWeekOfYear fromDate:weekDate];
-		title		= [NSSWF:NSLS(@"Week %u, %u", @"Event archive (week, year)"), [components weekOfYear], [components year]];
+        title		= [NSSWF:NSLS(@"Week %ld, %ld", @"Event archive (week, year)"), (long)[components weekOfYear], (long)[components year]];
 
 		[menuItems addObject:[NSMenuItem itemWithTitle:title representedObject:weekDate]];
 		

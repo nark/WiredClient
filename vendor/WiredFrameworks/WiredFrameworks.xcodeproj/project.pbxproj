@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2AD4278A2B8931B200DF59CA /* OpenSSL in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD427892B8931B200DF59CA /* OpenSSL */; };
+		2AD427942B89325C00DF59CA /* OpenSSL in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD427932B89325C00DF59CA /* OpenSSL */; };
 		4C0F438316F1419F00735AC3 /* NSTreeController+WIAppKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0F438116F1419F00735AC3 /* NSTreeController+WIAppKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C0F438416F1419F00735AC3 /* NSTreeController+WIAppKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F438216F1419F00735AC3 /* NSTreeController+WIAppKit.m */; };
 		4C297AE61778840E002ED699 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C297AE41778840E002ED699 /* Localizable.strings */; };
@@ -237,8 +239,6 @@
 		4C57B678154EBD7B00C9BAA5 /* WIP7Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C57B676154EBD7B00C9BAA5 /* WIP7Connection.m */; };
 		4C57B67B154EBF1600C9BAA5 /* WIP7Link.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C57B679154EBF1600C9BAA5 /* WIP7Link.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C57B67C154EBF1600C9BAA5 /* WIP7Link.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C57B67A154EBF1600C9BAA5 /* WIP7Link.m */; };
-		4C782BC2246078AD00970844 /* WISourceListColoredView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C782BC0246078AD00970844 /* WISourceListColoredView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C782BC3246078AD00970844 /* WISourceListColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C782BC1246078AD00970844 /* WISourceListColoredView.m */; };
 		4C7967C216DC256200E36A03 /* wi-assert.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C79674716DC256100E36A03 /* wi-assert.c */; };
 		4C7967C516DC256200E36A03 /* wi-assert.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C79674816DC256100E36A03 /* wi-assert.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7967C816DC256200E36A03 /* wi-base.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C79674916DC256100E36A03 /* wi-base.c */; };
@@ -762,8 +762,6 @@
 		4C667F6D147B02E400AAA5C7 /* WISocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WISocket.m; sourceTree = "<group>"; };
 		4C667F6E147B02E400AAA5C7 /* WIThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WIThread.h; sourceTree = "<group>"; };
 		4C667F6F147B02E400AAA5C7 /* WIThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WIThread.m; sourceTree = "<group>"; };
-		4C782BC0246078AD00970844 /* WISourceListColoredView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WISourceListColoredView.h; sourceTree = "<group>"; };
-		4C782BC1246078AD00970844 /* WISourceListColoredView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WISourceListColoredView.m; sourceTree = "<group>"; };
 		4C79674716DC256100E36A03 /* wi-assert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "wi-assert.c"; sourceTree = "<group>"; };
 		4C79674816DC256100E36A03 /* wi-assert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "wi-assert.h"; sourceTree = "<group>"; };
 		4C79674916DC256100E36A03 /* wi-base.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "wi-base.c"; sourceTree = "<group>"; };
@@ -957,6 +955,7 @@
 				B1F944A62191BA2600641324 /* AppKit.framework in Frameworks */,
 				B1F9448B2191B77900641324 /* Carbon.framework in Frameworks */,
 				4CE151E617FDFD62004DA093 /* WiredFoundation.framework in Frameworks */,
+				2AD427942B89325C00DF59CA /* OpenSSL in Frameworks */,
 				B1F944942191B8B900641324 /* Cocoa.framework in Frameworks */,
 				4CA9B2E01807228000FDDB3A /* wired.a in Frameworks */,
 				B130E08D2195D83400C4E225 /* libxml2.2.dylib in Frameworks */,
@@ -983,6 +982,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AD4278A2B8931B200DF59CA /* OpenSSL in Frameworks */,
 				B1F9448E2191B86900641324 /* Security.framework in Frameworks */,
 				B130E08B2195D80600C4E225 /* libxml2.2.dylib in Frameworks */,
 				B130E0892195D7F600C4E225 /* libz.1.dylib in Frameworks */,
@@ -1248,8 +1248,6 @@
 				4CB43B8E158C7F2200C09100 /* WIChatPluginManager.m */,
 				4CB43B88158C7EA100C09100 /* WIChatPlugin.h */,
 				4CB43B89158C7EA100C09100 /* WIChatPlugin.m */,
-				4C782BC0246078AD00970844 /* WISourceListColoredView.h */,
-				4C782BC1246078AD00970844 /* WISourceListColoredView.m */,
 				4C417305147EDF1000DC0A9A /* Supporting Files */,
 			);
 			path = WiredAppKit;
@@ -1888,7 +1886,6 @@
 				4C3A412815F5691600C9B136 /* WIStatusMenuManager.h in Headers */,
 				4CAC224516ED515D00BDB650 /* WIView.h in Headers */,
 				4C0F438316F1419F00735AC3 /* NSTreeController+WIAppKit.h in Headers */,
-				4C782BC2246078AD00970844 /* WISourceListColoredView.h in Headers */,
 				4C4FDEA917799F1200FADB95 /* WISheetController.h in Headers */,
 				4C4FDEAD17799F5300FADB95 /* WIConfigManager.h in Headers */,
 				4C9B2A9D17E797FC007B0962 /* CTBadge.h in Headers */,
@@ -2002,6 +1999,9 @@
 				4C417284147DC46A00DC0A9A /* PBXTargetDependency */,
 			);
 			name = WiredNetworking;
+			packageProductDependencies = (
+				2AD427932B89325C00DF59CA /* OpenSSL */,
+			);
 			productName = WiredNetworking;
 			productReference = 4C41725C147DC40900DC0A9A /* WiredNetworking.framework */;
 			productType = "com.apple.product-type.framework";
@@ -2042,6 +2042,9 @@
 			dependencies = (
 			);
 			name = "libwired-osx";
+			packageProductDependencies = (
+				2AD427892B8931B200DF59CA /* OpenSSL */,
+			);
 			productName = wired;
 			productReference = 4CBDAD14147AF94F00D0C51A /* wired.a */;
 			productType = "com.apple.product-type.library.static";
@@ -2087,6 +2090,9 @@
 				Base,
 			);
 			mainGroup = 4CBDABF1147AF52E00D0C51A;
+			packageReferences = (
+				2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */,
+			);
 			productRefGroup = 4CBDABFD147AF52E00D0C51A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2299,7 +2305,6 @@
 				4C4173F6147EE00900DC0A9A /* WITreeResizer.m in Sources */,
 				4C4173F8147EE00900DC0A9A /* WITreeScroller.m in Sources */,
 				4C4173FA147EE00900DC0A9A /* WITreeScrollView.m in Sources */,
-				4C782BC3246078AD00970844 /* WISourceListColoredView.m in Sources */,
 				4C4173FC147EE00900DC0A9A /* WITreeTableView.m in Sources */,
 				4C4173FE147EE00900DC0A9A /* WITreeView.m in Sources */,
 				4C417400147EE00900DC0A9A /* WIUnclickableProgressIndicator.m in Sources */,
@@ -2525,7 +2530,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -2562,7 +2567,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -2596,7 +2601,7 @@
 				INFOPLIST_FILE = "WiredNetworking/WiredNetworking-Info.plist";
 				INSTALL_PATH = "@rpath";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -2627,7 +2632,7 @@
 				INFOPLIST_FILE = "WiredNetworking/WiredNetworking-Info.plist";
 				INSTALL_PATH = "@rpath";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -2660,7 +2665,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -2698,7 +2703,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -2829,7 +2834,7 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(PROJECT_DIR)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2870,7 +2875,7 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(PROJECT_DIR)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2903,7 +2908,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "ChatHistory-default/ChatHistory-default-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2929,7 +2934,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "ChatHistory-default/ChatHistory-default-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.read-write.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -2995,6 +3000,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzyzanowskim/OpenSSL.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.1.180;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2AD427892B8931B200DF59CA /* OpenSSL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */;
+			productName = OpenSSL;
+		};
+		2AD427932B89325C00DF59CA /* OpenSSL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AD427882B8931B200DF59CA /* XCRemoteSwiftPackageReference "OpenSSL" */;
+			productName = OpenSSL;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		4C14ABB7181EAA4000A4435D /* Model.xcdatamodeld */ = {

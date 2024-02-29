@@ -38,47 +38,41 @@
 @implementation WCFilterButtonCell(Private)
 
 - (void)_drawWithFrame:(NSRect)frame inButton:(NSButton *)button {
-	NSAttributedString	*string;
-	NSShadow			*shadow;
-	NSDictionary		*attributes;
-	
-	if(!_leftImage) {
-		_leftImage		= [[NSImage imageNamed:@"FilterButtonLeft"] retain];
-		_middleImage	= [[NSImage imageNamed:@"FilterButtonMiddle"] retain];
-		_rightImage		= [[NSImage imageNamed:@"FilterButtonRight"] retain];
-	}
-	
-	[_leftImage setFlipped:YES];
-	[_leftImage drawAtPoint:NSMakePoint(frame.origin.x, frame.origin.y)
-				   fromRect:NSZeroRect
-				  operation:NSCompositeSourceOver
-				   fraction:1.0];
-	
-	[_middleImage setFlipped:YES];
-	[_middleImage drawInRect:NSMakeRect(frame.origin.x + 7.0, frame.origin.y, frame.size.width - 14.0, 17.0)
-					fromRect:NSZeroRect
-				   operation:NSCompositeSourceOver
-					fraction:1.0];
-	
-	[_rightImage setFlipped:YES];
-	[_rightImage drawAtPoint:NSMakePoint(frame.size.width - 7.0, frame.origin.y)
-					fromRect:NSZeroRect
-				   operation:NSCompositeSourceOver
-					fraction:1.0];
-	
-	shadow = [[[NSShadow alloc] init] autorelease];
-	[shadow setShadowColor:[NSColor darkGrayColor]];
-	[shadow setShadowOffset:NSMakeSize(0.0, -1.0)];
-	
-	attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-		[NSColor whiteColor],		NSForegroundColorAttributeName,
-		[self font],				NSFontAttributeName,
-		shadow,						NSShadowAttributeName,
-		NULL];
-	
-	string = [NSAttributedString attributedStringWithString:[self title] attributes:attributes];
-	
-	[string drawAtPoint:NSMakePoint(frame.origin.x + 7.0, frame.origin.y + 1.0)];
+    NSAttributedString *string;
+    NSShadow *shadow;
+    NSDictionary *attributes;
+
+    if (!_leftImage) {
+        _leftImage = [NSImage imageNamed:@"FilterButtonLeft"];
+        _middleImage = [NSImage imageNamed:@"FilterButtonMiddle"];
+        _rightImage = [NSImage imageNamed:@"FilterButtonRight"];
+    }
+
+    NSRect leftImageRect = NSMakeRect(frame.origin.x, frame.origin.y, _leftImage.size.width, _leftImage.size.height);
+    [_leftImage drawInRect:leftImageRect];
+
+    NSRect middleImageRect = NSMakeRect(frame.origin.x + _leftImage.size.width, frame.origin.y, frame.size.width - _leftImage.size.width - _rightImage.size.width, _middleImage.size.height);
+    [_middleImage drawInRect:middleImageRect];
+
+    NSRect rightImageRect = NSMakeRect(frame.origin.x + frame.size.width - _rightImage.size.width, frame.origin.y, _rightImage.size.width, _rightImage.size.height);
+    [_rightImage drawInRect:rightImageRect];
+
+    shadow = [[NSShadow alloc] init];
+    [shadow setShadowColor:[NSColor darkGrayColor]];
+    [shadow setShadowOffset:NSMakeSize(0.0, -1.0)];
+
+    attributes = @{NSForegroundColorAttributeName: [NSColor whiteColor],
+                   NSFontAttributeName: [self font],
+                   NSShadowAttributeName: shadow};
+
+    string = [[NSAttributedString alloc] initWithString:[self title] attributes:attributes];
+
+    NSSize stringSize = [string size];
+    NSRect stringRect = NSMakeRect(frame.origin.x + (_middleImage.size.width - stringSize.width) / 2.0, frame.origin.y + (_middleImage.size.height - stringSize.height) / 2.0, stringSize.width, stringSize.height);
+    [string drawInRect:stringRect];
+
+    [shadow release];
+    [string release];
 }
 
 @end

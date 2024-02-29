@@ -242,37 +242,37 @@
 
 
 + (NSString *)kindForFolderType:(WCFileType)type {
-	static NSString		*folder, *uploads, *dropbox;
-	
-	switch(type) {
-		case WCFileDirectory:
-			if(!folder)
-				LSCopyKindStringForTypeInfo('fold', kLSUnknownCreator, NULL, (CFStringRef *) &folder);
-			return folder;
-			break;
-			
-		case WCFileUploads:
-			if(!uploads)
-				uploads = [NSLS(@"Uploads Folder", @"Uploads folder kind") retain];
+    static NSString *folder = nil;
+    static NSString *uploads = nil;
+    static NSString *dropbox = nil;
 
-			return uploads;
-			break;
-			
-		case WCFileDropBox:
-			if(!dropbox)
-				dropbox = [NSLS(@"Drop Box Folder", @"Drop box folder kind") retain];
-
-			return dropbox;
-			break;
-
-		case WCFileFile:
-		default:
-			return NULL;
-			break;
-	}
-		
-	return NULL;
+    switch(type) {
+        case WCFileDirectory:
+            if (!folder)
+                folder = (NSString *)UTTypeCopyDescription(CFSTR("public.folder"));
+            return folder;
+            break;
+        
+        case WCFileUploads:
+            if (!uploads)
+                uploads = NSLocalizedString(@"Uploads Folder", @"Uploads folder kind");
+            return uploads;
+            break;
+        
+        case WCFileDropBox:
+            if (!dropbox)
+                dropbox = NSLocalizedString(@"Drop Box Folder", @"Drop box folder kind");
+            return dropbox;
+            break;
+        
+        case WCFileFile:
+        default:
+            return nil;
+            break;
+    }
+    return nil;
 }
+
 
 
 
@@ -529,26 +529,24 @@
 
 
 - (NSString *)kind {
-	if(!_kind) {
-		if([self isLink]) {
-			_kind = [NSLS(@"Alias", @"Alias kind") retain];
-		}
-		else if([self isExecutable]) {
-			_kind = [NSLS(@"Executable File", @"Executable kind") retain];
-		}
-		else if([self isFolder]) {
-			_kind = [[[self class] kindForFolderType:[self type]] retain];
-		}
-		else {
-			LSCopyKindStringForTypeInfo(kLSUnknownType,
-										kLSUnknownCreator,
-										(CFStringRef) [self extension],
-										(CFStringRef *) &_kind);
-		}
-	}
-		
-	return _kind;
+    if (!_kind) {
+        if ([self isLink]) {
+            _kind = [NSLocalizedString(@"Alias", @"Alias kind") retain];
+        } else if ([self isExecutable]) {
+            _kind = [NSLocalizedString(@"Executable File", @"Executable kind") retain];
+        } else if ([self isFolder]) {
+            _kind = [[[self class] kindForFolderType:[self type]] retain];
+        } else {
+            CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[self extension], NULL);
+            if (uti) {
+                _kind = ( NSString *)UTTypeCopyDescription(uti);
+                CFRelease(uti);
+            }
+        }
+    }
+    return _kind;
 }
+
 
 
 
@@ -687,16 +685,20 @@
 
 
 - (NSString *)internalURLString {
-    NSString    *urlString = nil;
+    NSString *urlString = nil;
     
-    urlString = [[@"wiredp7://" stringByAppendingString:[self path]]
-                 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *encodedPath = [self path];
+    NSString *encodedURLString = [NSString stringWithFormat:@"wiredp7://%@", encodedPath];
+    NSCharacterSet *allowedCharacterSet = [NSCharacterSet URLPathAllowedCharacterSet];
+    urlString = [encodedURLString stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
     
-    if([self isFolder] && ![[self path] hasSuffix:@"/"])
+    if ([self isFolder] && ![encodedPath hasSuffix:@"/"]) {
         urlString = [urlString stringByAppendingString:@"/"];
-        
-    return [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    }
+    
+    return urlString;
 }
+
 
 
 - (NSString *)externalURLString {

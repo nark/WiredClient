@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -95,7 +95,7 @@
                             <menuItem isSeparatorItem="YES" id="446">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Informations du serveur" keyEquivalent="I" id="646">
+                            <menuItem title="Server Info" keyEquivalent="I" id="646">
                                 <connections>
                                     <action selector="serverInfo:" target="248" id="853"/>
                                 </connections>
@@ -171,7 +171,7 @@ CA
                     </menu>
                 </menuItem>
                 <menuItem title="Éditer" id="163">
-                    <menu key="submenu" title="Éditer" id="169">
+                    <menu key="submenu" title="Edit" id="169">
                         <items>
                             <menuItem title="Annuler" keyEquivalent="z" id="158">
                                 <connections>
@@ -388,7 +388,7 @@ CA
                             <menuItem isSeparatorItem="YES" id="749">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Connexion suivante" keyEquivalent="" id="750">
+                            <menuItem title="Next Connection" keyEquivalent="" id="750">
                                 <connections>
                                     <action selector="nextConnection:" target="248" id="752"/>
                                 </connections>
@@ -430,8 +430,8 @@ CA
                         </connections>
                     </menu>
                 </menuItem>
-                <menuItem title="Aide" id="788">
-                    <menu key="submenu" title="Aide" id="789">
+                <menuItem title="Help" id="788">
+                    <menu key="submenu" title="Help" id="789">
                         <items>
                             <menuItem title="Notes de version" id="790">
                                 <connections>
@@ -474,7 +474,6 @@ CA
                 <outlet property="_quickLookMenuItem" destination="892" id="901"/>
                 <outlet property="_reloadDocumentMenuItem" destination="881" id="899"/>
                 <outlet property="_saveDocumentMenuItem" destination="648" id="903"/>
-                <outlet property="_updater" destination="832" id="833"/>
                 <outlet property="_windowMenu" destination="24" id="857"/>
             </connections>
         </customObject>
@@ -487,7 +486,7 @@ CA
             <rect key="frame" x="0.0" y="0.0" width="434" height="57"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="922">
+                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="922">
                     <rect key="frame" x="49" y="20" width="368" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ce fichier contiendra les mots de passe sous une forme non-encryptée." id="923">

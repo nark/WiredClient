@@ -518,7 +518,7 @@ NS_ASSUME_NONNULL_BEGIN
             // rollover
             if (lastAttachedButtonCell.mouseHovered) {
                 [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-                NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+                NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
             }
             
             if (tabBarView.showAddTabButton) {
@@ -634,7 +634,7 @@ NS_ASSUME_NONNULL_BEGIN
 					NSRectFill(aRect);
 				}
 			} else {
-				[_gradientImage drawInRect:NSMakeRect(NSMinX(aRect), NSMinY(aRect), NSWidth(aRect), NSHeight(aRect)) fromRect:NSMakeRect(0, 0, _gradientImage.size.width, _gradientImage.size.height) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+                [_gradientImage drawInRect:NSMakeRect(NSMinX(aRect), NSMinY(aRect), NSWidth(aRect), NSHeight(aRect)) fromRect:NSMakeRect(0, 0, _gradientImage.size.width, _gradientImage.size.height) operation:NSCompositingOperationSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 			}
 
                 // stroke
@@ -679,7 +679,7 @@ NS_ASSUME_NONNULL_BEGIN
                 // rollover
             if (drawRollovers && button.mouseHovered) {
                 [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-                NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+                NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
             }
 
                 // stroke

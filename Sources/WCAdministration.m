@@ -258,7 +258,7 @@
 
     [self _addAdministrationView:_accountsView
                             name:NSLS(@"Accounts", @"Accounts toolbar item")
-                           image:[NSImage imageNamed:@"Accounts"]
+                           image:[NSImage imageNamed:@"AccountsMainchat"]
                       identifier:@"Accounts"
                       controller:_accountsController];
 
@@ -270,15 +270,15 @@
                       controller:_banlistController];
     
     window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0.0, 0.0, 100.0, 100.0)
-                                         styleMask:NSTitledWindowMask |
-                                                   NSClosableWindowMask |
-                                                   NSMiniaturizableWindowMask |
-                                                   NSResizableWindowMask
-                                           backing:NSBackingStoreBuffered
-                                             defer:YES];
+                                             styleMask:NSWindowStyleMaskTitled |
+                                                       NSWindowStyleMaskClosable |
+                                                       NSWindowStyleMaskMiniaturizable |
+                                                       NSWindowStyleMaskResizable
+                                               backing:NSBackingStoreBuffered
+                                                 defer:YES];
     [window setDelegate:self];
     [self setWindow:window];
-    [window release];
+
     
     _errorQueue = [[WCErrorQueue alloc] initWithWindow:[self window]];
 
