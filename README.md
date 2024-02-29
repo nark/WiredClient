@@ -30,7 +30,7 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 		
 6. Open `WiredClient.xcworkspace` with Xcode
 
-7. Select scheme `Wired Client` and be sure to use "Debug" Build Configuration (Menu > Product > Schemes > Edit Schemes > Run > Info  Build configuration)
+7. Select scheme `Wired Client` and be sure to use "Release" Build Configuration (Menu > Product > Schemes > Edit Schemes > Run > Info  Build configuration)
 
 8. Launch Build, Wired Client.app should launch automatically when finished
 
