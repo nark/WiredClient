@@ -22,7 +22,6 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 3. Move into the sources directory:
 		
 		cd WiredClient
-		git clone https://github.com/ProfDrLuigi/libwired vendor/WiredFrameworks/libwired
 		
 5. Install pods:
 
