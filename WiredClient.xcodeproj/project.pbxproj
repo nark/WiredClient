@@ -1496,7 +1496,7 @@
 				4CF094B21559D529005D77BB /* Copy Templates */,
 				770B8A64075C86BD005327F5 /* Copy Frameworks */,
 				3CBAE6C8483B13A472995916 /* [CP] Embed Pods Frameworks */,
-				2A96789F2B8F9363008C7932 /* ShellScript */,
+				2A96789F2B8F9363008C7932 /* Prepare Publishing */,
 			);
 			buildRules = (
 			);
@@ -1670,7 +1670,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2A96789F2B8F9363008C7932 /* ShellScript */ = {
+		2A96789F2B8F9363008C7932 /* Prepare Publishing */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1679,13 +1679,14 @@
 			);
 			inputPaths = (
 			);
+			name = "Prepare Publishing";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#\n\ncp /Users/luigi/Documents/Xcode/WiredClient/wiredclient.html /Volumes/Homeshare/Xcode/WiredClient/upload/\nditto -c -k --sequesterRsrc --keepParent \"${TARGET_BUILD_DIR}\"/\"${PRODUCT_NAME}.app\" /Volumes/Homeshare/Xcode/WiredClient/upload/wiredclient.zip\n\nif [ -f /Users/luigi/Desktop/\"${PRODUCT_NAME}.app\" ]; then\n  rm -r /Users/luigi/Desktop/\"${PRODUCT_NAME}.app\"\nfi\n\ncp -r \"${TARGET_BUILD_DIR}\"/\"${PRODUCT_NAME}.app\" /Users/luigi/Desktop/.\n";
+			shellScript = "#!/bin/bash\n\nWIRED_USER=$(id -un)\n\nif [ -d \"/Volumes/Homeshare/Xcode/WiredClient/upload\" ]; then\n    cp \"/Users/$WIRED_USER/Documents/Xcode/WiredClient/wiredclient.html\" \"/Volumes/Homeshare/Xcode/WiredClient/upload/\"\n    ditto -c -k --sequesterRsrc --keepParent \"${TARGET_BUILD_DIR}/${PRODUCT_NAME}.app\" \"/Volumes/Homeshare/Xcode/WiredClient/upload/wiredclient.zip\"\nfi\n\nif [ -f \"/Users/$WIRED_USER/Desktop/${PRODUCT_NAME}.app\" ]; then\n    rm -r \"/Users/$WIRED_USER/Desktop/${PRODUCT_NAME}.app\"\nfi\n\ncp -r \"${TARGET_BUILD_DIR}/${PRODUCT_NAME}.app\" \"/Users/$WIRED_USER/Desktop/.\"\n";
 		};
 		3CBAE6C8483B13A472995916 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2342,7 +2343,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2616,7 +2617,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2722,7 +2723,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Wired Client.entitlements";
 				CODE_SIGN_IDENTITY = "-";
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
