@@ -36,9 +36,13 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 
 ## Troubleshooting
 
-If you encounter an error during compilation with Xcode crying about `wired.h` not found, got to Build Product folder and rename "libwired/" directory to "wired/". Then try to build again.
+- If you encounter an error during compilation with Xcode crying about `wired.h` not found, got to Build Product folder and rename "libwired/" directory to "wired/". Then try to build again.
 
-If you encounter any other problem, feel free to report it in the issues section here on GitHub.
+- If you got the error that the Application can not be opened because it's damaged you must put it out of the Quarantain. Type in Terminal:
+
+  		xattr -rc "/Applications/Wired Client.app"
+
+ (or another Path where you have the App) and you should be good to go.
 
 ## Contribute to the project
 
