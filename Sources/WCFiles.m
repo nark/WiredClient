@@ -236,25 +236,28 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 	
 	[_filesOutlineView setUsesAlternatingRowBackgroundColors:[theme boolForKey:WCThemesFileListAlternateRows]];
 
-	switch([[theme objectForKey:WCThemesFileListIconSize] integerValue]) {
-		case WCThemesFileListIconSizeLarge:
-			[_filesOutlineView setRowHeight:17.0];
-			[_filesOutlineView setFont:[NSFont systemFontOfSize:13.0]];
-			
-			[_filesTreeView setRowHeight:17.0];
-			[_filesTreeView setFont:[NSFont systemFontOfSize:13.0]];
-			
-			_iconWidth = 16.0;
-			break;
+    
+    // Luigi: Files Listing
+    
+    switch([[theme objectForKey:WCThemesFileListIconSize] integerValue]) {
+        case WCThemesFileListIconSizeLarge:
+            [_filesOutlineView setRowHeight:21.0];
+            [_filesOutlineView setFont:[NSFont systemFontOfSize:15.0]];
+            
+            [_filesTreeView setRowHeight:21.0];
+            [_filesTreeView setFont:[NSFont systemFontOfSize:15.0]];
+            
+            _iconWidth = 17.0;
+            break;
 
 		case WCThemesFileListIconSizeSmall:
-			[_filesOutlineView setRowHeight:14.0];
-			[_filesOutlineView setFont:[NSFont systemFontOfSize:10.0]];
+			[_filesOutlineView setRowHeight:16.0];
+			[_filesOutlineView setFont:[NSFont systemFontOfSize:12.0]];
 			
-			[_filesTreeView setRowHeight:14.0];
-			[_filesTreeView setFont:[NSFont systemFontOfSize:10.0]];
+			[_filesTreeView setRowHeight:16.0];
+			[_filesTreeView setFont:[NSFont systemFontOfSize:12.0]];
 			
-			_iconWidth = 12.0;
+			_iconWidth = 14.0;
 			break;
 	}
 }
@@ -972,18 +975,19 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 }
 
 
+// Luigi: Tree View does not work anymore. Disabled in .xib too
 
 - (void)_selectStyle:(NSUInteger)style {
 	if(style == WCFilesStyleList) {
 		[_filesTabView selectTabViewItemWithIdentifier:@"List"];
 		[[self window] makeFirstResponder:_filesOutlineView];
-	} else {
-		[_filesTabView selectTabViewItemWithIdentifier:@"Tree"];
-
-		if(_currentDirectory)
-			[_filesTreeView selectPath:[_currentDirectory path] byExtendingSelection:NO];
-
-		[[self window] makeFirstResponder:_filesTreeView];
+//	} else {
+//		[_filesTabView selectTabViewItemWithIdentifier:@"Tree"];
+//
+//		if(_currentDirectory)
+//			[_filesTreeView selectPath:[_currentDirectory path] byExtendingSelection:NO];
+//
+//		[[self window] makeFirstResponder:_filesTreeView];
 	}
 }
 
