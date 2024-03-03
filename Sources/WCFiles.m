@@ -230,37 +230,31 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 #pragma mark -
 
 - (void)_themeDidChange {
-	NSDictionary		*theme;
-	
-	theme = [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-	
-	[_filesOutlineView setUsesAlternatingRowBackgroundColors:[theme boolForKey:WCThemesFileListAlternateRows]];
-
+    NSDictionary *theme;
+    printf("Bla");
+    theme = [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
+    
+    [_filesOutlineView setUsesAlternatingRowBackgroundColors:[theme boolForKey:WCThemesFileListAlternateRows]];
+    
+    // Überprüfung und Setzen des Standardwerts für die Schriftgröße
+    NSNumber *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:@"FilesListFontSize"];
+    if (fontSize == nil) {
+        fontSize = @15.0; // Standardwert
+        [[NSUserDefaults standardUserDefaults] setObject:fontSize forKey:@"FilesListFontSize"]; // Schlüssel anlegen
+        [[NSUserDefaults standardUserDefaults] synchronize]; // Änderungen speichern
+    }
     
     // Luigi: Files Listing
-    
-    switch([[theme objectForKey:WCThemesFileListIconSize] integerValue]) {
-        case WCThemesFileListIconSizeLarge:
-            [_filesOutlineView setRowHeight:21.0];
-            [_filesOutlineView setFont:[NSFont systemFontOfSize:15.0]];
+            [_filesOutlineView setRowHeight:[fontSize doubleValue] + 4.0];
+            [_filesOutlineView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
             
-            [_filesTreeView setRowHeight:21.0];
-            [_filesTreeView setFont:[NSFont systemFontOfSize:15.0]];
+            //[_filesTreeView setRowHeight:21.0];
+            //[_filesTreeView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
             
-            _iconWidth = 17.0;
-            break;
-
-		case WCThemesFileListIconSizeSmall:
-			[_filesOutlineView setRowHeight:16.0];
-			[_filesOutlineView setFont:[NSFont systemFontOfSize:12.0]];
-			
-			[_filesTreeView setRowHeight:16.0];
-			[_filesTreeView setFont:[NSFont systemFontOfSize:12.0]];
-			
-			_iconWidth = 14.0;
-			break;
-	}
+            _iconWidth = [fontSize doubleValue] + 1.0;
 }
+
+
 
 
 

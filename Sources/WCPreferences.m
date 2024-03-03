@@ -788,7 +788,7 @@ NSString * const WCIconDidChangeNotification				= @"WCIconDidChangeNotification"
 
 - (IBAction)changeTheme:(id)sender {
     NSMutableDictionary     *theme;
-    
+
     theme = [[[[WCSettings settings] themeWithName:@"Wired"] mutableCopy] autorelease];
     
     [self _updateTheme:theme];

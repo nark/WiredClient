@@ -212,7 +212,22 @@ typedef enum _WCLogLevel			WCLogLevel;
 	[super dealloc];
 }
 
+#pragma mark -
 
+- (void)themeDidChange:(NSDictionary *)theme {
+    
+    // Überprüfung und Setzen des Standardwerts für die Schriftgröße
+    NSNumber *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:@"LogFontSize"];
+    if (fontSize == nil) {
+        fontSize = @15.0; // Standardwert
+        [[NSUserDefaults standardUserDefaults] setObject:fontSize forKey:@"LogFontSize"]; // Schlüssel anlegen
+        [[NSUserDefaults standardUserDefaults] synchronize]; // Änderungen speichern
+    }
+    
+    [_logTableView setRowHeight:[fontSize doubleValue] + 4.0];
+    [_logTableView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
+
+}
 
 #pragma mark -
 

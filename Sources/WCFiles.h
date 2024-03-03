@@ -55,7 +55,7 @@ extern NSString * const					WCPlacePboardType;
 
 	IBOutlet NSScrollView				*_filesScrollView;
 	IBOutlet WIOutlineView				*_filesOutlineView;
-	IBOutlet NSTableColumn				*_nameTableColumn;
+    IBOutlet NSTableColumn				*_nameTableColumn;
 	IBOutlet NSTableColumn				*_kindTableColumn;
 	IBOutlet NSTableColumn				*_createdTableColumn;
 	IBOutlet NSTableColumn				*_modifiedTableColumn;

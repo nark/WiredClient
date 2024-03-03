@@ -160,6 +160,7 @@ extern NSString * const								WCIconDidChangeNotification;
 - (IBAction)changeTheme:(id)sender;
 - (IBAction)changeThemeFont:(id)sender;
 
+
 - (IBAction)selectThemeTemplate:(id)sender;
 - (IBAction)addThemeTemplate:(id)sender;
 - (IBAction)manageThemeTemplates:(id)sender;

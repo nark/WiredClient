@@ -807,7 +807,22 @@ typedef enum _WCEventType		WCEventType;
 	[super dealloc];
 }
 
+#pragma mark -
 
+- (void)themeDidChange:(NSDictionary *)theme {
+    
+    // Überprüfung und Setzen des Standardwerts für die Schriftgröße
+    NSNumber *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:@"EventsFontSize"];
+    if (fontSize == nil) {
+        fontSize = @15.0; // Standardwert
+        [[NSUserDefaults standardUserDefaults] setObject:fontSize forKey:@"EventsFontSize"]; // Schlüssel anlegen
+        [[NSUserDefaults standardUserDefaults] synchronize]; // Änderungen speichern
+    }
+    
+    [_eventsTableView setRowHeight:[fontSize doubleValue] + 4.0];
+    [_eventsTableView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
+
+}
 
 #pragma mark -
 
