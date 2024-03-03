@@ -226,6 +226,7 @@ typedef enum _WCLogLevel			WCLogLevel;
     
     [_logTableView setRowHeight:[fontSize doubleValue] + 4.0];
     [_logTableView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
+    [_timeTableColumn setWidth:[fontSize doubleValue] * 9.0];
 
 }
 

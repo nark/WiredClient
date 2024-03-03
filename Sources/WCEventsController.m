@@ -820,9 +820,15 @@ typedef enum _WCEventType		WCEventType;
     }
     
     [_eventsTableView setRowHeight:[fontSize doubleValue] + 4.0];
+    [_timeTableColumn setWidth:[fontSize doubleValue] * 10.0];
+    [_nickTableColumn setWidth:[fontSize doubleValue] * 12.0];
+    [_loginTableColumn setWidth:[fontSize doubleValue] * 6.0];
+    [_ipTableColumn setWidth:[fontSize doubleValue] * 7.0];
+    [_messageTableColumn setWidth:[fontSize doubleValue] * 40.0];
     [_eventsTableView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
-
+    
 }
+
 
 #pragma mark -
 
