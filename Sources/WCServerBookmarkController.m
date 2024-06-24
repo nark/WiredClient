@@ -45,22 +45,16 @@
 	NSMenuItem		*item;
     NSDictionary    *schemes;
     NSArray         *schemeKeys;
-    NSString        *cipherName, *menuName;
-    BOOL            deprecated;
-    NSUInteger      options = 0;
+    
     [[_bookmarksCipherPopUpButton menu] removeAllItems];
         
     schemes     = [WCP7Spec encryptionSchemes];
     schemeKeys  = [[schemes allKeys] sortedArrayUsingSelector:@selector(compare:)];
         
     for(NSNumber *key in schemeKeys) {
-        options = 1 << ([key unsignedLongLongValue] + 1);
-        
-        cipherName  = [WCP7Spec nameForEncryptionSchemeID:[key stringValue]];
-        deprecated  = WI_P7_DEPRECATED_ENCRYPTION_CIPHER(options);
-        menuName    = [NSSWF:@"%@%@", cipherName, (deprecated ? @" (deprecated)": @"")];
-        item        = [NSMenuItem itemWithTitle:menuName tag:[key intValue]];
-        
+        NSString *name = [WCP7Spec nameForEncryptionSchemeID:[key stringValue]];
+        item = [NSMenuItem itemWithTitle:name tag:[key intValue]];
+
         [[_bookmarksCipherPopUpButton menu] addItem:item];
     }
 }

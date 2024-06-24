@@ -265,16 +265,16 @@
 			[_usersTableView setRowHeight:46.0];
 			
 			[_iconTableColumn setWidth:[_iconTableColumn maxWidth]];
-			[[_nickTableColumn dataCell] setControlSize:NSRegularControlSize];
-			[[_statusTableColumn dataCell] setControlSize:NSRegularControlSize];
+            [[_nickTableColumn dataCell] setControlSize:NSControlSizeRegular];
+            [[_statusTableColumn dataCell] setControlSize:NSControlSizeRegular];
 			break;
 
 		case WCThemesMonitorIconSizeSmall:
 			[_usersTableView setRowHeight:17.0];
 
 			[_iconTableColumn setWidth:[_iconTableColumn minWidth]];
-			[[_nickTableColumn dataCell] setControlSize:NSSmallControlSize];
-			[[_statusTableColumn dataCell] setControlSize:NSSmallControlSize];
+            [[_nickTableColumn dataCell] setControlSize:NSControlSizeSmall];
+            [[_statusTableColumn dataCell] setControlSize:NSControlSizeSmall];
 			break;
 	}
 }

@@ -655,7 +655,7 @@ typedef enum _WCEventType		WCEventType;
 	
 	while([date compare:weekDate] == NSOrderedDescending) {
 		components	= [[NSCalendar currentCalendar] components:NSCalendarUnitYear | NSCalendarUnitWeekOfYear fromDate:weekDate];
-		title		= [NSSWF:NSLS(@"Week %u, %u", @"Event archive (week, year)"), [components weekOfYear], [components year]];
+        title		= [NSSWF:NSLS(@"Week %ld, %ld", @"Event archive (week, year)"), (long)[components weekOfYear], (long)[components year]];
 
 		[menuItems addObject:[NSMenuItem itemWithTitle:title representedObject:weekDate]];
 		
@@ -807,6 +807,27 @@ typedef enum _WCEventType		WCEventType;
 	[super dealloc];
 }
 
+#pragma mark -
+
+- (void)themeDidChange:(NSDictionary *)theme {
+    
+    // Überprüfung und Setzen des Standardwerts für die Schriftgröße
+    NSNumber *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:@"EventsFontSize"];
+    if (fontSize == nil) {
+        fontSize = @15.0; // Standardwert
+        [[NSUserDefaults standardUserDefaults] setObject:fontSize forKey:@"EventsFontSize"]; // Schlüssel anlegen
+        [[NSUserDefaults standardUserDefaults] synchronize]; // Änderungen speichern
+    }
+    
+    [_eventsTableView setRowHeight:[fontSize doubleValue] + 4.0];
+    [_timeTableColumn setWidth:[fontSize doubleValue] * 10.0];
+    [_nickTableColumn setWidth:[fontSize doubleValue] * 12.0];
+    [_loginTableColumn setWidth:[fontSize doubleValue] * 6.0];
+    [_ipTableColumn setWidth:[fontSize doubleValue] * 7.0];
+    [_messageTableColumn setWidth:[fontSize doubleValue] * 40.0];
+    [_eventsTableView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
+    
+}
 
 
 #pragma mark -

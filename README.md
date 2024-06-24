@@ -1,11 +1,11 @@
 # Wired Client Source Code
 
-This repository hosts Wired Client source code. You will find an Xcode project named "WiredClient.xcworkspace" that contains a Wired Client target ready to deploy a 10.10+ compatible application (64-bit).
+This repository hosts Wired Client source code. You will find an Xcode project named "WiredClient.xcworkspace" that contains a Wired Client target ready to deploy a 10.13+ compatible application (64-bit).
 
 ## Prerequisites
 
 - Mac OS X 10.13+
-- Xcode 10.0+
+- Xcode 13.0+
 - Homebrew 1.8+
 - CocoaPods 1.5+
 
@@ -13,32 +13,36 @@ This repository hosts Wired Client source code. You will find an Xcode project n
 
 0. Install dependencies using [Homebrew](https://brew.sh):
 		
-		brew install mogenerator
+		brew install mogenerator cocoapods
 		
-1. Get sources on GitHub:
+2. Get sources on GitHub:
 
-		git clone https://github.com/nark/WiredClient.git
+		git clone https://github.com/profdrluigi/WiredClient.git
 		
-2. Move into the sources directory:
+3. Move into the sources directory:
 		
 		cd WiredClient
 		
-4. Install pods:
+5. Install pods:
 
 		pod install
 		
-5. Open `WiredClient.xcworkspace` with Xcode
+6. Open `WiredClient.xcworkspace` with Xcode
 
-6. Select scheme `Wired Client` and be sure to use "Debug" Build Configuration (Menu > Product > Schemes > Edit Schemes > Run > Info  Build configuration)
+7. Select scheme `Wired Client` and be sure to use "Release" Build Configuration (Menu > Product > Schemes > Edit Schemes > Run > Info  Build configuration)
 
-7. Launch Build, Wired Client.app should launch automatically when finished
+8. Launch Build, Wired Client.app should launch automatically when finished
 
 
 ## Troubleshooting
 
-If you encounter an error during compilation with Xcode crying about `wired.h` not found, got to Build Product folder and rename "libwired/" directory to "wired/". Then try to build again.
+- If you encounter an error during compilation with Xcode crying about `wired.h` not found, got to Build Product folder and rename "libwired/" directory to "wired/". Then try to build again.
 
-If you encounter any other problem, feel free to report it in the issues section here on GitHub.
+- If you got the error that the Application can not be opened because it's damaged you must put it out of the Quarantain. Type in Terminal:
+
+  		xattr -rc "/Applications/Wired Client.app"
+
+ (or another Path where you have the App) and you should be good to go.
 
 ## Contribute to the project
 

@@ -91,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)mouseEntered:(NSEvent *)event {
 
-    if (_simulateClickOnMouseHovered && event.modifierFlags & NSAlternateKeyMask) {
+    if (_simulateClickOnMouseHovered && event.modifierFlags & NSEventModifierFlagOption) {
         [self performClick:self];
         return;
     }

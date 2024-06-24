@@ -32,6 +32,4 @@
 
 - (BOOL)clickedHeader;
 
-- (void)scrollToBottomAnimated;
-
 @end

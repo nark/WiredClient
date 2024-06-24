@@ -184,7 +184,7 @@ NS_ASSUME_NONNULL_BEGIN
 	{
 		TruncatingTailParagraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
 		[TruncatingTailParagraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-		[TruncatingTailParagraphStyle setAlignment:NSCenterTextAlignment];
+        [TruncatingTailParagraphStyle setAlignment:NSTextAlignmentCenter];
 	}
 	[attrStr addAttribute:NSParagraphStyleAttributeName value:TruncatingTailParagraphStyle range:range];
 

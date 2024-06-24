@@ -44,7 +44,6 @@
 
 	BOOL								_unread;
 	BOOL								_loaded;
-    BOOL                                _firstLoad;
 	NSMutableArray						*_posts;
 	
 	NSButton							*_goToLatestReplyButton;
@@ -76,9 +75,6 @@
 - (BOOL)isUnread;
 - (void)setLoaded:(BOOL)loaded;
 - (BOOL)isLoaded;
-
-- (void)setFirstLoaded:(BOOL)firstLoad;
-- (BOOL)firstLoad;
 
 - (NSButton *)goToLatestReplyButton;
 

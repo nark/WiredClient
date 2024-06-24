@@ -192,7 +192,7 @@ StaticImage(TabNewMetalRollover)
 	if (!TruncatingTailParagraphStyle) {
 		TruncatingTailParagraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
 		[TruncatingTailParagraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-		[TruncatingTailParagraphStyle setAlignment:NSCenterTextAlignment];
+        [TruncatingTailParagraphStyle setAlignment:NSTextAlignmentCenter];
 	}
 	[attrStr addAttribute:NSParagraphStyleAttributeName value:TruncatingTailParagraphStyle range:range];
 
@@ -241,7 +241,7 @@ StaticImage(TabNewMetalRollover)
         [[NSColor colorWithCalibratedWhite:0.0 alpha:0.2] set];
     else
         [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-	NSRectFillUsingOperation(rect, NSCompositeSourceAtop);
+    NSRectFillUsingOperation(rect, NSCompositingOperationSourceAtop);
 	[NSColor.darkGrayColor set];
 
 	if (orientation == MMTabBarHorizontalOrientation) {
@@ -337,7 +337,7 @@ StaticImage(TabNewMetalRollover)
             // rollover
             if (lastAttachedButtonCell.mouseHovered) {
                 [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-                NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+                NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
             }
             
             if (tabBarView.showAddTabButton) {
@@ -399,7 +399,7 @@ StaticImage(TabNewMetalRollover)
                 // rollover
             if (button.mouseHovered) {
                 [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-                NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+                NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
             }
             
             // frame
@@ -449,7 +449,7 @@ StaticImage(TabNewMetalRollover)
                 // rollover
             if (button.mouseHovered) {
                 [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-                NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+                NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
             }
             
                 // stroke

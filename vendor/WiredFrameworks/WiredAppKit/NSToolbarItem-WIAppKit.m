@@ -31,34 +31,29 @@
 @implementation NSToolbarItem(WIAppKit)
 
 + (NSToolbarItem *)toolbarItemWithIdentifier:(NSString *)identifier name:(NSString *)name content:(id)content target:(id)target action:(SEL)action {
-	NSToolbarItem	*item;
+    NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
 
-	item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
+    if ([name length] > 0) {
+        [item setLabel:name];
+        [item setPaletteLabel:name];
+        [item setToolTip:name];
+    }
 
-	if([name length] > 0) {
-		[item setLabel:name];
-		[item setPaletteLabel:name];
-		[item setToolTip:name];
-	}
+    if ([content isKindOfClass:[NSControl class]]) {
+        [content setTarget:target];
+        [content setAction:action];
+        [item setView:content];
+    } else {
+        [item setTarget:target];
+        [item setAction:action];
+        if ([content isKindOfClass:[NSImage class]]) {
+            [item setImage:content];
+        } else if ([content isKindOfClass:[NSView class]]) {
+            [item setView:content];
+        }
+    }
 
-	if([content isKindOfClass:[NSControl class]]) {
-		[content setTarget:target];
-		[content setAction:action];
-	} else {
-		[item setTarget:target];
-		[item setAction:action];
-	}
-
-	if([content isKindOfClass:[NSImage class]]) {
-		[item setImage:content];
-	}
-	else if([content isKindOfClass:[NSView class]]) {
-		[item setView:content];
-		[item setMinSize:[content frame].size];
-		[item setMaxSize:[content frame].size];
-	}
-
-	return [item autorelease];
+    return [item autorelease];
 }
 
 @end

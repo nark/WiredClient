@@ -309,10 +309,10 @@ StaticImage(YosemiteTabNewPressed)
         // fill
     if (button.state == NSOnState) {
         [[NSColor colorWithCalibratedWhite:0.0 alpha:0.2] set];
-        NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);            
+        NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);            
     } else if (button.mouseHovered) {
         [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-        NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+        NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
     }
 }
 

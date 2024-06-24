@@ -146,7 +146,7 @@ NSString * const WCMonitorCellProgressIndicatorKey		= @"WCMonitorCellProgressInd
 	progressIndicator	= [(NSDictionary *) [self objectValue] objectForKey:WCMonitorCellProgressIndicatorKey];
 
 	if(transfer) {
-		if([self controlSize] == NSRegularControlSize) {
+        if([self controlSize] == NSControlSizeRegular) {
 			imageRect			= NSMakeRect(frame.origin.x + 2.0,
 											 frame.origin.y + 14.0,
 											 frame.size.width,
@@ -190,7 +190,7 @@ NSString * const WCMonitorCellProgressIndicatorKey		= @"WCMonitorCellProgressInd
 
 		image = [NSImage imageNamed:[transfer isKindOfClass:[WCDownloadTransfer class]] ? @"Download" : @"Upload"];
 		//[image compositeToPoint:imageRect.origin operation:NSCompositeSourceOver fraction:1.0];
-        [image drawAtPoint:imageRect.origin fromRect:imageRect operation:NSCompositeSourceOver fraction:1.0];
+        [image drawAtPoint:imageRect.origin fromRect:imageRect operation:NSCompositingOperationSourceOver fraction:1.0];
 		
 		[_statusAttributes setObject:_truncatingHeadParagraphStyle forKey:NSParagraphStyleAttributeName];
 		
@@ -222,7 +222,7 @@ NSString * const WCMonitorCellProgressIndicatorKey		= @"WCMonitorCellProgressInd
 		[_transferStatusCell drawWithFrame:transferStatusRect inView:view];
 	}
 	else if(status) {
-		if([self controlSize] == NSRegularControlSize)
+        if([self controlSize] == NSControlSizeRegular)
 			statusRect = NSMakeRect(frame.origin.x, frame.origin.y + 13.0, frame.size.width, 17.0);
 		else
 			statusRect = NSMakeRect(frame.origin.x, frame.origin.y - 1.0, frame.size.width, 17.0);

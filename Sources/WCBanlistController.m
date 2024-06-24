@@ -226,7 +226,22 @@
 	[super dealloc];
 }
 
+#pragma mark -
 
+- (void)themeDidChange:(NSDictionary *)theme {
+    
+    // Überprüfung und Setzen des Standardwerts für die Schriftgröße
+    NSNumber *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:@"BanlistFontSize"];
+    if (fontSize == nil) {
+        fontSize = @15.0; // Standardwert
+        [[NSUserDefaults standardUserDefaults] setObject:fontSize forKey:@"BanlistFontSize"]; // Schlüssel anlegen
+        [[NSUserDefaults standardUserDefaults] synchronize]; // Änderungen speichern
+    }
+    
+    [_banlistTableView setRowHeight:[fontSize doubleValue] + 4.0];
+    [_banlistTableView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
+
+}
 
 #pragma mark -
 
@@ -374,7 +389,7 @@
 			break;
 		
 		default:
-			return [NSSWF:NSLS(@"Delete %u Items\u2026", @"Delete menu item (count)"), [bans count]];
+            return [NSSWF:NSLS(@"Delete %lu Items\u2026", @"Delete menu item (count)"), (unsigned long)[bans count]];
 			break;
 	}
 }

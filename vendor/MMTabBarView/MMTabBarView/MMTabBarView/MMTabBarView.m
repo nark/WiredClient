@@ -2513,7 +2513,7 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
 		NSRange range = NSMakeRange(0, contents.length);
 		[attrStr addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:11.0] range:range];
 		NSMutableParagraphStyle *centeredParagraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
-        [centeredParagraphStyle setAlignment:NSCenterTextAlignment];
+        [centeredParagraphStyle setAlignment:NSTextAlignmentCenter];
         
 		[attrStr addAttribute:NSParagraphStyleAttributeName value:centeredParagraphStyle range:range];
 		[attrStr drawInRect:labelRect];
@@ -2550,7 +2550,7 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
 
 		if (window.showsResizeIndicator && NSIntersectsRect(self.frame, resizeWidgetFrame)) {
                 //the resize widgets are larger on metal windows
-			_resizeAreaCompensation = window.styleMask & NSTexturedBackgroundWindowMask ? 20 : 8;
+            _resizeAreaCompensation = window.styleMask & NSWindowStyleMaskTexturedBackground ? 20 : 8;
 		} else {
 			_resizeAreaCompensation = 0;
 		}
@@ -2717,13 +2717,13 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
     NSCursor *cursor = self.resizingMouseCursor;
     [cursor set];
             
-    while ((nextEvent = [self.window nextEventMatchingMask:NSLeftMouseUpMask | NSLeftMouseDraggedMask untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
+    while ((nextEvent = [self.window nextEventMatchingMask:NSEventMaskLeftMouseUp | NSEventMaskLeftMouseDragged untilDate:expiration inMode:NSEventTrackingRunLoopMode dequeue:YES]) != nil) {
 
         if (firstEvent == nil) {
             firstEvent = nextEvent;
         }
         
-        if (nextEvent.type == NSLeftMouseDragged) {
+        if (nextEvent.type == NSEventTypeLeftMouseDragged) {
             dragEvent = nextEvent;
 
             NSPoint currentPoint = [self convertPoint:nextEvent.locationInWindow fromView:nil];
@@ -2748,7 +2748,7 @@ static NSMutableDictionary<NSString*, Class <MMTabStyle>> *registeredStyleClasse
                 }
             }
                     
-        } else if (nextEvent.type == NSLeftMouseUp) {
+        } else if (nextEvent.type == NSEventTypeLeftMouseUp) {
             mouseUp = nextEvent;
             break;
         }

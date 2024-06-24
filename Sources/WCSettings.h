@@ -51,6 +51,7 @@ extern NSString * const						WCThemes;
 extern NSString * const						WCThemesName;
 extern NSString * const						WCThemesBuiltinName;
 extern NSString * const						WCThemesIdentifier;
+extern NSString * const						WCThemesTemplate;
 extern NSString * const						WCThemesShowSmileys;
 extern NSString * const						WCThemesChatFont;
 extern NSString * const						WCThemesChatTextColor;
@@ -59,7 +60,6 @@ extern NSString * const						WCThemesChatEventsColor;
 extern NSString * const						WCThemesChatURLsColor;
 extern NSString * const						WCThemesChatTimestampEveryLineColor;
 extern NSString * const						WCThemesChatTimestampEveryLine;
-extern NSString * const                     WCThemesChatSeparateEveryLine;
 extern NSString * const						WCThemesMessagesFont;
 extern NSString * const						WCThemesMessagesTextColor;
 extern NSString * const						WCThemesMessagesBackgroundColor;
@@ -216,6 +216,7 @@ extern NSString * const						WCMigrated20B;
 - (NSDictionary *)bookmarkForURL:(WIURL *)url;
 - (NSDictionary *)themeWithIdentifier:(NSString *)identifier;
 - (NSDictionary *)themeWithName:(NSString *)name;
+- (WITemplateBundle *)templateBundleWithIdentifier:(NSString *)identifier;
 - (NSDictionary *)eventWithTag:(NSUInteger)tag;
 
 @end

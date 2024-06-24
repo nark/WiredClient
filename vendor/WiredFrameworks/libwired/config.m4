@@ -23,7 +23,7 @@ AC_DEFUN([WI_APPEND_FLAG], [
 
 
 AC_DEFUN([WI_CHECK_SVN_REVISION], [
-	WI_REVISION=$(git describe --always)
+	WI_REVISION=$(cat version)
 	
 	if test -z "$WI_REVISION"; then
 		WI_REVISION=0

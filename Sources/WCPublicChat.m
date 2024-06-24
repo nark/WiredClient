@@ -216,7 +216,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	user			= [chatController userWithUserID:[[chatController connection] userID]];
 	
 	if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![chatController chatIsEmpty])
-		[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] addHistoryForMessages:[chatController messages]
+		[[[[WCApplicationController sharedController] logController] publicChatHistoryBundle] addHistoryForWebView:[chatController webView]
                                                                                                 withConnectionName:[[chatController connection] name]
                                                                                                           identity:[user nick]];
 	
@@ -573,7 +573,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	[_serversOutlineView setAutosaveName:@"Resources"];
 	[_serversOutlineView setAutosaveTableColumns:YES];
     [_serversOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:WCBookmarkPboardType, WCTrackerBookmarkPboardType, nil]];
-    
+	
 	[self _reloadServers];
 	
 	[_serversOutlineView expandItem:_bonjour];
@@ -655,7 +655,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 	else if([identifier isEqualToString:@"Files"]) {
 		return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Files", @"Files toolbar item")
-												content:[NSImage imageNamed:@"Folder"]
+												content:[NSImage imageNamed:@"FolderMainchat"]
 												 target:self
 												 action:@selector(files:)];
 	}
@@ -715,10 +715,10 @@ typedef enum _WCChatActivity				WCChatActivity;
 												 target:self
 												 action:@selector(chatHistory:)];
 	}
-	else if([identifier isEqualToString:@"Accounts"]) {
+	else if([identifier isEqualToString:@"AccountsMainchat"]) {
             return [NSToolbarItem toolbarItemWithIdentifier:identifier
 												   name:NSLS(@"Accounts", @"Accounts toolbar item")
-												content:[NSImage imageNamed:@"Accounts"]
+												content:[NSImage imageNamed:@"AccountsMainchat"]
 												 target:self
 												 action:@selector(accounts:)];
  	}
@@ -786,7 +786,7 @@ typedef enum _WCChatActivity				WCChatActivity;
             @"Monitor",
             @"Events",
             @"Log",
-            @"Accounts",
+            @"AccountsMainchat",
             @"Banlist",
             @"Clear",
             @"Now Playing",
@@ -1959,7 +1959,7 @@ typedef enum _WCChatActivity				WCChatActivity;
 		if([[WCSettings settings] boolForKey:WCChatLogsHistoryEnabled] && ![chatController chatIsEmpty]) {
             bundle      = [[[WCApplicationController sharedController] logController] publicChatHistoryBundle];
             
-            [bundle addHistoryForMessages:[chatController messages]
+            [bundle addHistoryForWebView:[chatController webView]
                       withConnectionName:[[chatController connection] name]
                                 identity:[user nick]];
         }

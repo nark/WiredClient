@@ -59,10 +59,10 @@
 	previousTooMuchLeft = previousTooMuchRight = NO;
 	
 	while(YES) {
-        nextEvent = [[self window] nextEventMatchingMask:NSLeftMouseUpMask | NSLeftMouseDraggedMask];
+        nextEvent = [[self window] nextEventMatchingMask:NSEventMaskLeftMouseUp | NSEventMaskLeftMouseDragged];
 		
 		switch([nextEvent type]) {
-			case NSLeftMouseDragged:
+            case NSEventTypeLeftMouseDragged:
 				frame = [view frame];
 				point = [nextEvent locationInWindow];
 				
@@ -114,7 +114,7 @@
 				[_splitView adjustSubviews];
 				break;
 		
-			case NSLeftMouseUp:
+            case NSEventTypeLeftMouseUp:
 				[NSCursor pop];
 				return;
 				break;

@@ -98,7 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
 		//Draw for our whole bounds; it'll be automatically clipped to fit the appropriate drawing area
 		rect = tabBarView.bounds;
 
-		[aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+        [aquaTabBg drawInRect:rect fromRect:NSMakeRect(0.0, 0.0, 1.0, 22.0) operation:NSCompositingOperationSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 	}
 }
 
@@ -151,7 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
             left = aquaDivider;
         }
 
-        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0,controlView.isFlipped);
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositingOperationSourceOver, 1.0,controlView.isFlipped);
 
 	} else { // Unselected Tab
 		NSRect aRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
@@ -159,7 +159,7 @@ NS_ASSUME_NONNULL_BEGIN
 		// Rollover
 		if (cell.mouseHovered) {
 			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+            NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
 		}
         
         if (button.shouldDisplayRightDivider)
@@ -168,7 +168,7 @@ NS_ASSUME_NONNULL_BEGIN
             left = aquaDivider;
         
         if (!button.isOverflowButton) {
-            NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0,controlView.isFlipped);
+            NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositingOperationSourceOver, 1.0,controlView.isFlipped);
         }
 	}
 }
@@ -222,7 +222,7 @@ NS_ASSUME_NONNULL_BEGIN
             right = aquaDivider;
         }
         
-        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0,tabBarView.isFlipped);
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositingOperationSourceOver, 1.0,tabBarView.isFlipped);
 
         // Draw unselected
 	} else {
@@ -232,13 +232,13 @@ NS_ASSUME_NONNULL_BEGIN
             // Rollover
 		if (lastAttachedButton.mouseHovered) {
 			[[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-			NSRectFillUsingOperation(aRect, NSCompositeSourceAtop);
+            NSRectFillUsingOperation(aRect, NSCompositingOperationSourceAtop);
 		}
         
         if (tabBarView.showAddTabButton)
             right = aquaDivider;
         
-        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositeSourceOver, 1.0,tabBarView.isFlipped);
+        NSDrawThreePartImage(aRect, left, center, right, NO, NSCompositingOperationSourceOver, 1.0,tabBarView.isFlipped);
 	}
 }
 

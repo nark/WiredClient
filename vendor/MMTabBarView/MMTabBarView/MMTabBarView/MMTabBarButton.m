@@ -322,7 +322,7 @@ static NSString *kMMTabBarButtonOberserverContext = @"MMTabBarView.MMTabBarButto
     _indicator = [[MMProgressIndicator alloc] initWithFrame:NSMakeRect(0.0, 0.0, kMMTabBarIndicatorWidth, kMMTabBarIndicatorWidth)];
     [_indicator setStyle:NSProgressIndicatorSpinningStyle];
     [_indicator setAutoresizingMask:NSViewMinYMargin];
-    [_indicator setControlSize: NSSmallControlSize];
+    [_indicator setControlSize: NSControlSizeSmall];
     NSRect indicatorRect = [self _indicatorRectForBounds:self.bounds];
     [_indicator setFrame:indicatorRect];
     [self addSubview:_indicator];

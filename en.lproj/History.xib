@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="10000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,20 +24,20 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="407" y="340" width="569" height="388"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="569" height="388"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <splitView autosaveName="WCChatHistorySplitView" dividerStyle="thin" vertical="YES" id="3">
+                    <splitView fixedFrame="YES" autosaveName="WCChatHistorySplitView" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3">
                         <rect key="frame" x="0.0" y="0.0" width="569" height="388"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <customView id="4">
+                            <customView fixedFrame="YES" id="4">
                                 <rect key="frame" x="0.0" y="0.0" width="154" height="388"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <scrollView focusRingType="none" borderType="none" autohidesScrollers="YES" horizontalLineScroll="20" horizontalPageScroll="10" verticalLineScroll="20" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="16">
+                                    <scrollView focusRingType="none" fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="20" horizontalPageScroll="10" verticalLineScroll="20" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="16">
                                         <rect key="frame" x="0.0" y="0.0" width="154" height="388"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="Pqd-GQ-vKm">
@@ -47,14 +46,13 @@
                                             <subviews>
                                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" indentationPerLevel="14" outlineTableColumn="21" id="17">
                                                     <rect key="frame" x="0.0" y="0.0" width="154" height="388"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="0.0"/>
                                                     <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn width="151" minWidth="16" maxWidth="1000" id="21">
+                                                        <tableColumn width="122" minWidth="16" maxWidth="1000" id="21">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -85,19 +83,19 @@
                                     </scrollView>
                                 </subviews>
                             </customView>
-                            <customView id="5">
+                            <customView fixedFrame="YES" id="5">
                                 <rect key="frame" x="155" y="0.0" width="414" height="388"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <splitView autosaveName="WCChatHistoryDetailSplitView" dividerStyle="paneSplitter" id="89">
+                                    <splitView fixedFrame="YES" autosaveName="WCChatHistoryDetailSplitView" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="89">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="388"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <customView id="90">
+                                            <customView fixedFrame="YES" id="90">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="127"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <scrollView focusRingType="none" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="121">
+                                                    <scrollView focusRingType="none" fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="121">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" id="wdm-hF-wki">
@@ -106,14 +104,13 @@
                                                             <subviews>
                                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" headerView="124" id="122" customClass="WITableView">
                                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="103"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                     <tableColumns>
-                                                                        <tableColumn identifier="Nick" width="138.94140625" minWidth="40" maxWidth="1000" id="126">
+                                                                        <tableColumn identifier="Nick" width="139" minWidth="40" maxWidth="1000" id="126">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Nick">
-                                                                                <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -124,9 +121,8 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="Server" width="140.94140625" minWidth="40" maxWidth="1000" id="184">
+                                                                        <tableColumn identifier="Server" width="141" minWidth="40" maxWidth="1000" id="184">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Server">
-                                                                                <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -137,9 +133,8 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="Date" width="125" minWidth="40" maxWidth="1000" id="127">
+                                                                        <tableColumn identifier="Date" width="96" minWidth="40" maxWidth="1000" id="127">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Date">
-                                                                                <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -167,18 +162,18 @@
                                                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
-                                                        <tableHeaderView key="headerView" id="124">
+                                                        <tableHeaderView key="headerView" wantsLayer="YES" id="124">
                                                             <rect key="frame" x="0.0" y="0.0" width="414" height="25"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </tableHeaderView>
                                                     </scrollView>
                                                 </subviews>
                                             </customView>
-                                            <customView id="91">
+                                            <customView fixedFrame="YES" id="91">
                                                 <rect key="frame" x="0.0" y="137" width="414" height="251"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <webView focusRingType="none" id="149">
+                                                    <webView focusRingType="none" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="149">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="251"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" javaEnabled="NO" javaScriptCanOpenWindowsAutomatically="NO" allowsAnimatedImages="NO" allowsAnimatedImageLooping="NO">
@@ -217,7 +212,7 @@
                         <nil key="toolTip"/>
                         <size key="minSize" width="96" height="22"/>
                         <size key="maxSize" width="96" height="22"/>
-                        <searchField key="view" verticalHuggingPriority="750" textCompletion="NO" id="187">
+                        <searchField key="view" focusRingType="none" verticalHuggingPriority="750" textCompletion="NO" id="187">
                             <rect key="frame" x="0.0" y="14" width="96" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="188">
@@ -232,12 +227,16 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="8C5CD934-9090-41D7-91E4-095FC8D4A7EB" label="Reveal in Finder" paletteLabel="Reveal in Finder" tag="-1" image="RevealInFinder" id="192">
                         <nil key="toolTip"/>
+                        <size key="minSize" width="22" height="22"/>
+                        <size key="maxSize" width="22" height="22"/>
                         <connections>
                             <action selector="revealInFinder:" target="-2" id="193"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="0E8958AD-BE41-4AA4-88A7-E367FD1DFCC6" label="Clear History" paletteLabel="Clear History" tag="-1" image="ClearMessages" id="196">
                         <nil key="toolTip"/>
+                        <size key="minSize" width="22" height="22"/>
+                        <size key="maxSize" width="22" height="22"/>
                         <connections>
                             <action selector="clear:" target="-2" id="198"/>
                         </connections>
@@ -253,6 +252,7 @@
                     <outlet property="delegate" destination="-2" id="194"/>
                 </connections>
             </toolbar>
+            <point key="canvasLocation" x="140" y="132"/>
         </window>
     </objects>
     <resources>

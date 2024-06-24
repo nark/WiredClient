@@ -26,11 +26,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import "WCWebDataSource.h"
+
 extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 
 @class WCBoardThreadController, WCErrorQueue, WCSourceSplitView, WCBoard, WCSmartBoard, WCBoardThread;
 
-@interface WCBoards : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, NSTextViewDelegate> {
+@interface WCBoards : WIWindowController <NSToolbarDelegate, NSOutlineViewDataSource, NSOutlineViewDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, WCWebDataSource> {
 	IBOutlet WCSourceSplitView						*_boardsSplitView;
     IBOutlet NSImageView                            *_boardsSplitViewImageView;
 	IBOutlet NSView									*_boardsView;
@@ -80,7 +82,6 @@ extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 	IBOutlet NSPopUpButton							*_postLocationPopUpButton;
 	IBOutlet NSTextField							*_subjectTextField;
 	IBOutlet NSTextView								*_postTextView;
-    IBOutlet NSTextView                             *_postPreviewTextView;
 	IBOutlet NSButton								*_postButton;
 	
 	IBOutlet NSPanel								*_smartBoardPanel;
@@ -172,9 +173,5 @@ extern NSString * const         WCBoardsDidChangeUnreadCountNotification;
 - (void)wiredBoardGetThreadsReply:(WIP7Message *)message;
 - (void)wiredBoardSubscribeBoardsReply:(WIP7Message *)message;
 
-- (void)replyToThread;
-- (void)replyToPostWithID:(NSString *)postID selectedText:(NSString *)selectedText;
-- (void)editPostWithID:(NSString *)postID;
-- (void)deletePostWithID:(NSString *)postID;
 
 @end

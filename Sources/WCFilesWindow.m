@@ -35,7 +35,7 @@
 	unichar		key;
 	BOOL		handled = NO;
 	
-	if([event type] == NSKeyDown) {
+    if([event type] == NSEventTypeKeyDown) {
 		if([event commandKeyModifier]) {
 			key = [event character];
 			

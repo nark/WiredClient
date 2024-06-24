@@ -116,11 +116,9 @@ static NSArray *_systemSounds;
 
 - (void)_update {
 	if([[WCSettings settings] boolForKey:WCConfirmDisconnect])
-		[_disconnectMenuItem setTitle:NSLS(@"Disconnect…", @"Disconnect menu item")];
+		[_disconnectMenuItem setTitle:NSLS(@"Disconnect\u2026", @"Disconnect menu item")];
 	else
 		[_disconnectMenuItem setTitle:NSLS(@"Disconnect", @"Disconnect menu item")];
-	
-	[_updater setAutomaticallyChecksForUpdates:[[WCSettings settings] boolForKey:WCCheckForUpdate]];
 }
 
 
@@ -162,15 +160,15 @@ static NSArray *_systemSounds;
 		
 		if(i <= 10) {
 			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 10) ? 0 : i]];
-			[item setKeyEquivalentModifierMask:NSCommandKeyMask];
+            [item setKeyEquivalentModifierMask:NSEventModifierFlagCommand];
 		}
 		else if(i <= 20) {
 			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 20) ? 0 : i - 10]];
-			[item setKeyEquivalentModifierMask:NSCommandKeyMask | NSAlternateKeyMask];
+            [item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagOption];
 		}
 		else if(i <= 30) {
 			[item setKeyEquivalent:[NSSWF:@"%lu", (i == 30) ? 0 : i - 20]];
-			[item setKeyEquivalentModifierMask:NSCommandKeyMask | NSShiftKeyMask];
+            [item setKeyEquivalentModifierMask:NSEventModifierFlagCommand | NSEventModifierFlagShift];
 		}
 
 		[_bookmarksMenu addItem:item];
@@ -701,17 +699,6 @@ static WCApplicationController		*sharedController;
 	[WIDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 	[NSNumberFormatter setDefaultFormatterBehavior:NSNumberFormatterBehavior10_4];
 
-    
-    // set the auto-update feed URL regarding to the selected configuration (Debug or Release)
-#ifdef WCConfigurationRelease
-    [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/sparkle/wiredclient_cast.xml"]];
-#else
-   [_updater setFeedURL:[NSURL URLWithString:@"https://wired.read-write.fr/sparkle/wiredclient_debugcast.xml"]];
-#endif
-    
-     [_updater setSendsSystemProfile:YES];
-     [_updater performSelector:@selector(checkForUpdatesInBackground) afterDelay:5.0f];
-
 	path = [[NSBundle mainBundle] pathForResource:@"wired" ofType:@"xml"];
 
     // verify the P7 specification in debug mode
@@ -1066,44 +1053,6 @@ static WCApplicationController		*sharedController;
 }
 
 
-
-
-
-
-#pragma mark -
-
-
-- (BOOL)updaterShouldPromptForPermissionToCheckForUpdates:(SUUpdater *)updater {
-	return NO;
-}
-
-
-- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile {
-    NSMutableArray *params;
-    
-    params = [NSMutableArray array];
-    
-    [params addObject: @{
-       @"key":          @"debug",
-#ifdef WCConfigurationRelease
-       @"value":        @"false"
-#else
-       @"value":        @"true"
-#endif
-    }];
-    
-    [params addObject: @{
-       @"key":          @"appShortVersion",
-       @"value":        [[[NSApp bundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"],
-    }];
-    
-    return params;
-}
-
-
-
-
-
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item {
@@ -1179,18 +1128,6 @@ static WCApplicationController		*sharedController;
 }
 
 
-
-
-#pragma mark -
-
-- (void)checkForUpdate {
-	[_updater checkForUpdates:self];
-}
-
-
-
-
-
 #pragma mark -
 
 
@@ -1238,7 +1175,7 @@ static WCApplicationController		*sharedController;
     credits = [[[NSMutableAttributedString alloc] initWithRTF:rtf documentAttributes:NULL] autorelease];
     
     style = [[[NSMutableParagraphStyle alloc] init] autorelease];
-    [style setAlignment:NSCenterTextAlignment];
+    [style setAlignment:NSTextAlignmentCenter];
     
     attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                   [NSFont boldSystemFontOfSize:11.0],	NSFontAttributeName,

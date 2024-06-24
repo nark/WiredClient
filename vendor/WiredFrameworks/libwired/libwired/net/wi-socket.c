@@ -54,6 +54,9 @@
 #ifdef HAVE_OPENSSL_SSL_H
 #include <openssl/err.h>
 #include <openssl/ssl.h>
+#include <openssl/dh.h>
+#include <openssl/evp.h>
+#include <openssl/x509.h>
 #endif
 
 #ifdef HAVE_IFADDRS_H
@@ -331,31 +334,51 @@ wi_boolean_t wi_socket_tls_set_ciphers(wi_socket_tls_t *tls, wi_string_t *cipher
 	return true;
 }
 
-
+// Explizite Deklaration der DH-Struktur
+struct dh_st {
+    /* Prime number (shared) */
+    BIGNUM *p;
+    /* Generator of Z_p (shared) */
+    BIGNUM *g;
+    /* Private DH value x */
+    BIGNUM *priv_key;
+    /* Public DH value g^x */
+    BIGNUM *pub_key;
+    /* KDF */
+    int flags;
+    /* Shared secret key */
+    //BIGNUM *pub_key;
+    /* HMAC value */
+    //unsigned char *priv_key;
+    /* HMAC length */
+    int priv_key_length;
+    /* Key length */
+    int key_length;
+    /* TLS compatibility flag */
+    int tls_ver;
+};
 
 wi_boolean_t wi_socket_tls_set_dh(wi_socket_tls_t *tls, const unsigned char *p, size_t p_size, const unsigned char *g, size_t g_size) {
-	tls->dh = DH_new();
-	
-	if(!tls->dh) {
-		wi_error_set_openssl_error();
+    tls->dh = DH_new();
+    
+    if(!tls->dh) {
+        wi_error_set_openssl_error();
+        return false;
+    }
 
-		return false;
-	}
+    tls->dh->p = BN_bin2bn(p, (int)p_size, NULL);
+    tls->dh->g = BN_bin2bn(g, (int)g_size, NULL);
 
-	tls->dh->p = BN_bin2bn(p, (int)p_size, NULL);
-	tls->dh->g = BN_bin2bn(g, (int)g_size, NULL);
-
-	if(!tls->dh->p || !tls->dh->g) {
-		wi_error_set_openssl_error();
-
-		DH_free(tls->dh);
-		tls->dh = NULL;
-		
-		return false;
-	}
-	
-	return true;
+    if(!tls->dh->p || !tls->dh->g) {
+        wi_error_set_openssl_error();
+        DH_free(tls->dh);
+        tls->dh = NULL;
+        return false;
+    }
+    
+    return true;
 }
+
 
 #endif
 
@@ -580,49 +603,49 @@ wi_uinteger_t wi_socket_cipher_bits(wi_socket_t *socket) {
 
 
 
-wi_string_t * wi_socket_certificate_name(wi_socket_t *socket) {
+wi_string_t *wi_socket_certificate_name(wi_socket_t *socket) {
 #ifdef HAVE_OPENSSL_SSL_H
-	X509			*x509 = NULL;
-	EVP_PKEY		*pkey = NULL;
-	wi_string_t		*string = NULL;
+    X509            *x509 = NULL;
+    EVP_PKEY        *pkey = NULL;
+    wi_string_t        *string = NULL;
 
-	x509 = SSL_get_peer_certificate(socket->ssl);
+    x509 = SSL_get_peer_certificate(socket->ssl);
 
-	if(!x509)
-		goto end;
+    if (!x509)
+        goto end;
 
-	pkey = X509_get_pubkey(x509);
+    pkey = X509_get_pubkey(x509);
 
-	if(!pkey)
-		goto end;
-	
-	switch(EVP_PKEY_type(pkey->type)) {
-		case EVP_PKEY_RSA:
-			string = wi_string_init_with_cstring(wi_string_alloc(), "RSA");
-			break;
+    if (!pkey)
+        goto end;
+    
+    switch (EVP_PKEY_id(pkey)) {
+        case EVP_PKEY_RSA:
+            string = wi_string_init_with_cstring(wi_string_alloc(), "RSA");
+            break;
 
-		case EVP_PKEY_DSA:
-			string = wi_string_init_with_cstring(wi_string_alloc(), "DSA");
-			break;
+        case EVP_PKEY_DSA:
+            string = wi_string_init_with_cstring(wi_string_alloc(), "DSA");
+            break;
 
-		case EVP_PKEY_DH:
-			string = wi_string_init_with_cstring(wi_string_alloc(), "DH");
-			break;
+        case EVP_PKEY_DH:
+            string = wi_string_init_with_cstring(wi_string_alloc(), "DH");
+            break;
 
-		default:
-			break;
-	}
-	
+        default:
+            break;
+    }
+    
 end:
-	if(x509)
-		X509_free(x509);
+    if (x509)
+        X509_free(x509);
 
-	if(pkey)
-		EVP_PKEY_free(pkey);
+    if (pkey)
+        EVP_PKEY_free(pkey);
 
-	return wi_autorelease(string);
+    return wi_autorelease(string);
 #else
-	return NULL;
+    return NULL;
 #endif
 }
 

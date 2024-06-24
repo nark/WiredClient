@@ -454,8 +454,8 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 			description = NSLS(@"The file already exists on disk. Overwrite to delete it.",
 				@"Transfers overwrite alert description");
 		} else {
-			title = [NSSWF:NSLS(@"Overwrite %u files?", @"Transfers overwrite alert title (count)"),
-				[existingFiles count]];
+            title = [NSSWF:NSLS(@"Overwrite %lu files?", @"Transfers overwrite alert title (count)"),
+                     (unsigned long)[existingFiles count]];
 			description = NSLS(@"Some files already exist on disk. Overwrite to delete them.",
 				@"Transfers overwrite alert description");
 		}
@@ -1343,15 +1343,10 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 
 - (BOOL)_connectConnection:(WCTransferConnection *)connection forTransfer:(WCTransfer *)transfer error:(WCError **)error {
 	WIP7Message		*message;
-    
-    if([transfer bookmark]) {
-        if(![connection connectWithTimeout:30.0 bookmark:[transfer bookmark] error:error])
-            return NO;
-    } else {
-        if(![connection connectWithTimeout:30.0 error:error])
-        return NO;
-    }
-
+	
+	if(![connection connectWithTimeout:30.0 error:error])
+		return NO;
+	
 	if(![connection writeMessage:[connection clientInfoMessage] timeout:30.0 error:error] ||
 	   ![connection writeMessage:[connection setNickMessage] timeout:30.0 error:error] ||
 	   ![connection writeMessage:[connection setStatusMessage] timeout:30.0 error:error] ||
@@ -1951,16 +1946,18 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 + (BOOL)downloadFileAtPath:(NSString *)path forConnection:(WCServerConnection *)connection {
     WCFile  *file;
     
-    path    = [path stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    file    = [WCFile fileWithFile:path connection:connection];
+    // Using stringByRemovingPercentEncoding instead of stringByReplacingPercentEscapesUsingEncoding
+    path = [path stringByRemovingPercentEncoding];
+    file = [WCFile fileWithFile:path connection:connection];
     
     if(file && ![file isFolder]) {
-        [[WCTransfers transfers] downloadFiles:[NSArray arrayWithObject:file]];
+        [[WCTransfers transfers] downloadFiles:@[file]]; // Using modern array literal syntax
         return YES;
     }
     
     return NO;
 }
+
 
 
 
@@ -2056,7 +2053,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	NSToolbar		*toolbar;
 	NSData			*data;
 	WCTransfer		*transfer;
-	
+    
 	_errorQueue = [[WCErrorQueue alloc] initWithWindow:[self window]];
 	
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Transfers"];
@@ -2102,7 +2099,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	NSString		*title;
 	NSControl		*control;
 	SEL				selector;
-	
+
 	if([identifier isEqualToString:@"Start"]) {
 		selector	= @selector(start:);
 		title		= NSLS(@"Start", @"Start transfer toolbar item");
@@ -2162,7 +2159,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	[menuRepresentation setTarget:self];
 	[item setMenuFormRepresentation:menuRepresentation];
 	[menuRepresentation release];
-	
+
 	return item;
 }
 
@@ -2553,7 +2550,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	if([transfers count] == 1)
 		return [NSSWF:NSLS(@"Remove \u201c%@\u201d", @"Delete menu item (transfer"), [[transfers objectAtIndex:0] name]];
 	else if([transfers count] > 1)
-		return [NSSWF:NSLS(@"Remove %u Items", @"Delete menu item (count"), [transfers count]];
+        return [NSSWF:NSLS(@"Remove %lu Items", @"Delete menu item (count"), (unsigned long)[transfers count]];
 	else
 		return NSLS(@"Delete", @"Delete menu item");
 }
@@ -2568,7 +2565,7 @@ static inline NSTimeInterval _WCTransfersTimeInterval(void) {
 	if([transfers count] == 1)
 		return [NSSWF:NSLS(@"Quick Look \u201c%@\u201d", @"Quick Look menu item (transfer"), [[transfers objectAtIndex:0] name]];
 	else if([transfers count] > 1)
-		return [NSSWF:NSLS(@"Quick Look %u Items", @"Quick Look menu item (count"), [transfers count]];
+        return [NSSWF:NSLS(@"Quick Look %lu Items", @"Quick Look menu item (count"), (unsigned long)[transfers count]];
 	else
 		return NSLS(@"Quick Look", @"Quick Look menu item");
 }

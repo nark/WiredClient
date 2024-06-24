@@ -230,34 +230,31 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 #pragma mark -
 
 - (void)_themeDidChange {
-	NSDictionary		*theme;
-	
-	theme = [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
-	
-	[_filesOutlineView setUsesAlternatingRowBackgroundColors:[theme boolForKey:WCThemesFileListAlternateRows]];
-
-	switch([[theme objectForKey:WCThemesFileListIconSize] integerValue]) {
-		case WCThemesFileListIconSizeLarge:
-			[_filesOutlineView setRowHeight:17.0];
-			[_filesOutlineView setFont:[NSFont systemFontOfSize:13.0]];
-			
-			[_filesTreeView setRowHeight:17.0];
-			[_filesTreeView setFont:[NSFont systemFontOfSize:13.0]];
-			
-			_iconWidth = 16.0;
-			break;
-
-		case WCThemesFileListIconSizeSmall:
-			[_filesOutlineView setRowHeight:14.0];
-			[_filesOutlineView setFont:[NSFont systemFontOfSize:10.0]];
-			
-			[_filesTreeView setRowHeight:14.0];
-			[_filesTreeView setFont:[NSFont systemFontOfSize:10.0]];
-			
-			_iconWidth = 12.0;
-			break;
-	}
+    NSDictionary *theme;
+    printf("Bla");
+    theme = [[WCSettings settings] themeWithIdentifier:[[WCSettings settings] objectForKey:WCTheme]];
+    
+    [_filesOutlineView setUsesAlternatingRowBackgroundColors:[theme boolForKey:WCThemesFileListAlternateRows]];
+    
+    // Überprüfung und Setzen des Standardwerts für die Schriftgröße
+    NSNumber *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:@"FilesListFontSize"];
+    if (fontSize == nil) {
+        fontSize = @15.0; // Standardwert
+        [[NSUserDefaults standardUserDefaults] setObject:fontSize forKey:@"FilesListFontSize"]; // Schlüssel anlegen
+        [[NSUserDefaults standardUserDefaults] synchronize]; // Änderungen speichern
+    }
+    
+    // Luigi: Files Listing
+            [_filesOutlineView setRowHeight:[fontSize doubleValue] + 4.0];
+            [_filesOutlineView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
+            
+            //[_filesTreeView setRowHeight:21.0];
+            //[_filesTreeView setFont:[NSFont systemFontOfSize:[fontSize doubleValue]]];
+            
+            _iconWidth = [fontSize doubleValue] + 1.0;
 }
+
+
 
 
 
@@ -972,18 +969,19 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 }
 
 
+// Luigi: Tree View does not work anymore. Disabled in .xib too
 
 - (void)_selectStyle:(NSUInteger)style {
 	if(style == WCFilesStyleList) {
 		[_filesTabView selectTabViewItemWithIdentifier:@"List"];
 		[[self window] makeFirstResponder:_filesOutlineView];
-	} else {
-		[_filesTabView selectTabViewItemWithIdentifier:@"Tree"];
-
-		if(_currentDirectory)
-			[_filesTreeView selectPath:[_currentDirectory path] byExtendingSelection:NO];
-
-		[[self window] makeFirstResponder:_filesTreeView];
+//	} else {
+//		[_filesTabView selectTabViewItemWithIdentifier:@"Tree"];
+//
+//		if(_currentDirectory)
+//			[_filesTreeView selectPath:[_currentDirectory path] byExtendingSelection:NO];
+//
+//		[[self window] makeFirstResponder:_filesTreeView];
 	}
 }
 
@@ -1752,8 +1750,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 												 target:self
 												 action:@selector(search:)];
 		
-		[item setMinSize:NSMakeSize(50.0, [_searchField frame].size.height)];
-		[item setMaxSize:NSMakeSize(250.0, [_searchField frame].size.height)];
+		//[item setMinSize:NSMakeSize(50.0, [_searchField frame].size.height)];
+		//[item setMaxSize:NSMakeSize(250.0, [_searchField frame].size.height)];
 		
 		return item;
 	}
@@ -2265,7 +2263,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 			break;
 		
 		default:
-			return [NSSWF:NSLS(@"Delete %u Items\u2026", @"Delete menu item (count)"), [files count]];
+            return [NSSWF:NSLS(@"Delete %lu Items\u2026", @"Delete menu item (count)"), (unsigned long)[files count]];
 			break;
 	}
 }
@@ -2296,7 +2294,7 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 			break;
 		
 		default:
-			return [NSSWF:NSLS(@"Quick Look %u Items", @"Quick Look menu item (count)"), [files count]];
+            return [NSSWF:NSLS(@"Quick Look %lu Items", @"Quick Look menu item (count)"), (unsigned long)[files count]];
 			break;
 	}
 }
@@ -2586,8 +2584,8 @@ NSString * const							WCPlacePboardType = @"WCPlacePboardType";
 				NSLS(@"This file is large and make take a while to load.", @"Confirm Quick Look dialog description")];
 		} else {
 			[alert setMessageText:[NSSWF:
-				NSLS(@"Are you sure you want to Quick Look %u items?", @"Confirm Quick Look dialog title"),
-				[files count]]];
+                                   NSLS(@"Are you sure you want to Quick Look %lu items?", @"Confirm Quick Look dialog title"),
+                                   (unsigned long)[files count]]];
 			[alert setInformativeText:
 				NSLS(@"Some of the files are large and make take a while to load.", @"Confirm Quick Look dialog description")];
 		}
